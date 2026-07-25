@@ -145,35 +145,35 @@ export default function LandingPage({ onOpenApp }) {
         </div>
 
         {/* The Elastically Responsive Architectural Grid Overlay */}
-        <div className="relative z-10 h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2">
+        <div className="hero-grid">
           {/* Cell 1: Top-Left */}
-          <div className="border-b border-zinc-800/50 md:border-r p-6 md:p-10 flex items-end relative overflow-hidden">
-            <span className="mono-label absolute top-4 left-4 md:top-6 md:left-6">QUADRANTE_01 // NÚCLEO</span>
-            <h1 className="font-headline leading-none text-white m-0" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85 }}>
+          <div className="hero-cell hero-cell-1" style={{ alignItems: 'flex-end' }}>
+            <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px' }}>QUADRANTE_01 // NÚCLEO</span>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
               RE
             </h1>
           </div>
 
           {/* Cell 2: Top-Right */}
-          <div className="border-b border-zinc-800/50 p-6 md:p-10 flex items-end relative overflow-hidden">
-            <span className="mono-label absolute top-4 left-4 md:top-6 md:left-6">QUADRANTE_02 // SISTEMA</span>
-            <h1 className="font-headline leading-none text-white m-0" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85 }}>
+          <div className="hero-cell hero-cell-2" style={{ alignItems: 'flex-end' }}>
+            <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px' }}>QUADRANTE_02 // SISTEMA</span>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
               PASS
             </h1>
           </div>
 
           {/* Cell 3: Bottom-Left */}
-          <div className="border-b border-zinc-800/50 md:border-b-0 md:border-r p-6 md:p-10 flex items-start relative overflow-hidden">
-            <span className="mono-label absolute bottom-4 left-4 md:bottom-6 md:left-6">QUADRANTE_03 // NEURAL</span>
-            <h1 className="font-headline leading-none text-white m-0" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85 }}>
+          <div className="hero-cell hero-cell-3" style={{ alignItems: 'flex-start' }}>
+            <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px' }}>QUADRANTE_03 // NEURAL</span>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
               A
             </h1>
           </div>
 
           {/* Cell 4: Bottom-Right */}
-          <div className="p-6 md:p-10 flex items-start relative overflow-hidden">
-            <span className="mono-label absolute bottom-4 left-4 md:bottom-6 md:left-6">QUADRANTE_04 // OSINT</span>
-            <h1 className="font-headline leading-none text-white m-0" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85 }}>
+          <div className="hero-cell hero-cell-4" style={{ alignItems: 'flex-start' }}>
+            <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px' }}>QUADRANTE_04 // OSINT</span>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
               I
             </h1>
           </div>
