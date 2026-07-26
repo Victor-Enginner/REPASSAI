@@ -38,8 +38,19 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
   };
 
   return (
-    <div style={{ padding: '32px 40px', maxWidth: '1600px', margin: '0 auto', animation: 'fadeIn 0.3s ease' }}>
+    <div style={{ position: 'relative', padding: '32px 40px', maxWidth: '1600px', margin: '0 auto', animation: 'fadeIn 0.3s ease' }}>
       
+      {/* Ambient Background Grid para sangrar sob a Sidebar glassmórfica */}
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100vw',
+        height: '100vh',
+        opacity: 0.2,
+        pointerEvents: 'none',
+        zIndex: 0,
+        background: 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.25) 0%, transparent 70%)'
+      }} />
       {/* Header Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
@@ -136,15 +147,27 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
 
                       {/* Quick Action Buttons */}
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
-                        <a 
-                          href={waLink} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="btn-secondary" 
-                          style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', textDecoration: 'none' }}
-                        >
-                          <MessageSquare size={12} color="#22c55e" /> WhatsApp
-                        </a>
+                        {waLink ? (
+                          <a
+                            href={waLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-secondary"
+                            style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', textDecoration: 'none' }}
+                          >
+                            <MessageSquare size={12} color="#22c55e" /> WhatsApp
+                          </a>
+                        ) : (
+                          /* Sem telefone verificado não há link — botão morto
+                             leva o operador a achar que o contato existe. */
+                          <span
+                            title={lead.is_demo ? 'Lead de demonstração' : 'Sem telefone no perfil do Google'}
+                            className="btn-secondary"
+                            style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', opacity: 0.4, cursor: 'not-allowed' }}
+                          >
+                            <MessageSquare size={12} color="#64748b" /> Sem telefone
+                          </span>
+                        )}
 
                         <button 
                           onClick={() => setSelectedLeadForScript(lead)}
