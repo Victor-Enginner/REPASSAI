@@ -17,7 +17,7 @@ import FaultyTerminal from './components/ui/FaultyTerminal';
 import { INITIAL_LEADS } from './mock/leadsData';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState('landing');
+  const [currentTab, setCurrentTab] = useState('leads');
   const [leads, setLeads] = useState(INITIAL_LEADS);
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
 
