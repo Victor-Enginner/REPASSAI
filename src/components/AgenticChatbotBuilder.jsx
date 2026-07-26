@@ -10,6 +10,7 @@ import {
   Terminal, Shield, Cpu, Layers, ChevronDown, ChevronRight, MessageSquare, 
   Trash2, X, Search, FileText, CheckCircle2, AlertTriangle, ArrowRight, Menu, Sidebar as SidebarIcon
 } from 'lucide-react';
+import { apiUrl } from '../config';
 import { executeAgenticLoop } from '../services/agenticPlanner';
 import { DocumentDatabase } from '../mock/documentDB';
 import PixelTetris from './ui/PixelTetris';
@@ -237,7 +238,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
   const handleCloneSiteByUrl = async (urlToClone) => {
     setAgentState('searching');
     try {
-      const res = await fetch('http://localhost:8000/api/site/clone', {
+      const res = await fetch(apiUrl('/api/site/clone'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: urlToClone })
@@ -354,15 +355,91 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
         {/* Conversation Viewport (Flex: 1) */}
         <div ref={viewportRef} style={{ flex: 1, padding: '14px 12px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           
-          {/* Empty State Banner */}
+          {/* Modelo Game de Decisões de Fundação (Cards Estilo Lovable / Replit) */}
           {messages.length === 1 && (
-            <div style={{ padding: '14px', background: 'rgba(16, 17, 24, 0.7)', border: TOKENS.border, borderRadius: '4px' }}>
-              <h3 className="font-headline" style={{ fontSize: '14px', color: TOKENS.textPrimary, marginBottom: '4px' }}>
-                CENTRAL OPERACIONAL AGÊNTICA
-              </h3>
-              <p style={{ fontSize: '11.5px', color: TOKENS.textSecondary, lineHeight: 1.5, margin: 0 }}>
-                Digite instruções ou cole uma URL para compilar ou clonar o site em tempo real via Roteador de IA.
-              </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '4px 0 12px 0' }}>
+              <div style={{ padding: '10px 12px', background: 'rgba(99, 102, 241, 0.12)', border: '0.5px solid rgba(99, 102, 241, 0.3)', borderRadius: '6px' }}>
+                <span className="mono-label" style={{ fontSize: '9px', color: TOKENS.indigo }}>🎮 DECISÕES DE FUNDAÇÃO DO PROJETO</span>
+                <h3 className="font-headline" style={{ fontSize: '14px', color: '#ffffff', margin: '4px 0 2px 0' }}>
+                  Como você quer iniciar {lead ? `o site de ${lead.nome}?` : 'o projeto?'}
+                </h3>
+                <p style={{ fontSize: '11px', color: TOKENS.textSecondary, margin: 0 }}>
+                  Escolha uma das 3 direções estratégicas recomendadas pelo Maestro para compilar a página:
+                </p>
+              </div>
+
+              {/* 3 Decision Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '8px' }}>
+                <button
+                  onClick={() => handleSendMessage(`Geração Procedural 77lib 3D para ${lead?.nome || 'nosso projeto'} com fotos reais do Google Business e tradução RAG em Português`)}
+                  style={{
+                    textAlign: 'left',
+                    background: 'linear-gradient(135deg, rgba(16, 17, 24, 0.9) 0%, rgba(99, 102, 241, 0.15) 100%)',
+                    border: '0.5px solid rgba(99, 102, 241, 0.4)',
+                    padding: '12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#6366f1'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)'}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>1. 🏆 Template 77lib 3D + Fotos Reais</span>
+                    <span className="mono-label" style={{ fontSize: '8px', color: '#22c55e', background: 'rgba(34,197,94,0.15)', padding: '2px 6px', borderRadius: '3px' }}>RECOMENDADO</span>
+                  </div>
+                  <p style={{ fontSize: '10.5px', color: TOKENS.textSecondary, margin: 0, lineHeight: 1.4 }}>
+                    Compilação no padrão 77lib com fotos de alta resolução do Google Business e botões de conversão.
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => handleSendMessage(`Criar Cardápio Digital RAG com fotos de pratos reais e botão flutuante de pedidos no WhatsApp de ${lead?.cidade || 'nossa cidade'}`)}
+                  style={{
+                    textAlign: 'left',
+                    background: 'rgba(16, 17, 24, 0.8)',
+                    border: '0.5px solid rgba(255, 255, 255, 0.15)',
+                    padding: '12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#ec4899'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>2. 🍔 Cardápio & Pedidos no WhatsApp</span>
+                    <span className="mono-label" style={{ fontSize: '8px', color: '#ec4899', background: 'rgba(236,72,153,0.15)', padding: '2px 6px', borderRadius: '3px' }}>VENDAS RÁPIDAS</span>
+                  </div>
+                  <p style={{ fontSize: '10.5px', color: TOKENS.textSecondary, margin: 0, lineHeight: 1.4 }}>
+                    Focado em conversão direta pelo WhatsApp com vitrine dos itens mais bem avaliados no Google.
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => handleSendMessage(`Aplicar estilo Systemista Glitch Dark Tech B2B para ${lead?.nome || 'o projeto'} com formulário de lead`)}
+                  style={{
+                    textAlign: 'left',
+                    background: 'rgba(16, 17, 24, 0.8)',
+                    border: '0.5px solid rgba(255, 255, 255, 0.15)',
+                    padding: '12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#38bdf8'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>3. ⚡ Estética Systemista Dark Tech B2B</span>
+                    <span className="mono-label" style={{ fontSize: '8px', color: '#38bdf8', background: 'rgba(56,189,248,0.15)', padding: '2px 6px', borderRadius: '3px' }}>CYBERPUNK</span>
+                  </div>
+                  <p style={{ fontSize: '10.5px', color: TOKENS.textSecondary, margin: 0, lineHeight: 1.4 }}>
+                    Visual dark minimalista com linhas tecnológicas, estatísticas animadas e prova social.
+                  </p>
+                </button>
+              </div>
             </div>
           )}
 
