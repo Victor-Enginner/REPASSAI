@@ -73,83 +73,96 @@ export default function App() {
         <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
       )}
 
-      <main style={{ flex: 1, minWidth: 0, overflowY: 'auto', position: 'relative', zIndex: 10 }}>
+      <main style={{
+        flex: 1,
+        minWidth: 0,
+        overflowY: 'auto',
+        position: 'relative',
+        zIndex: 10,
+        transform: 'translateZ(0)',
+        willChange: 'contents'
+      }}>
         {currentTab === 'landing' && (
           <LandingPage onOpenApp={() => setCurrentTab('dashboard')} />
         )}
 
-        {currentTab === 'dashboard' && (
-          <DashboardView 
-            leads={leads} 
-            onNavigateLeads={() => setCurrentTab('leads')} 
-            onNavigateCRM={() => setCurrentTab('crm')} 
-          />
-        )}
+        {/* System Keep-Alive Tab Cache - Transição instantânea 0ms de troca de abas sem recarregar o DOM */}
+        {currentTab !== 'landing' && (
+          <>
+            <div style={{ display: currentTab === 'dashboard' ? 'block' : 'none' }}>
+              <DashboardView 
+                leads={leads} 
+                onNavigateLeads={() => setCurrentTab('leads')} 
+                onNavigateCRM={() => setCurrentTab('crm')} 
+              />
+            </div>
 
-        {currentTab === 'leads' && (
-          <LeadsView 
-            leads={leads} 
-            onSendToCRM={handleSendToCRM} 
-            onGenerateSite={handleGenerateSite} 
-          />
-        )}
+            <div style={{ display: currentTab === 'leads' ? 'block' : 'none' }}>
+              <LeadsView 
+                leads={leads} 
+                onSendToCRM={handleSendToCRM} 
+                onGenerateSite={handleGenerateSite} 
+              />
+            </div>
 
-        {currentTab === 'wizard' && (
-          <CreateSiteWizardView 
-            onClose={() => setCurrentTab('leads')}
-            onGenerate={(customLead) => {
-              setSelectedLeadForEditor(customLead);
-              setCurrentTab('editor');
-            }}
-          />
-        )}
+            <div style={{ display: currentTab === 'wizard' ? 'block' : 'none' }}>
+              <CreateSiteWizardView 
+                onClose={() => setCurrentTab('leads')}
+                onGenerate={(customLead) => {
+                  setSelectedLeadForEditor(customLead);
+                  setCurrentTab('editor');
+                }}
+              />
+            </div>
 
-        {currentTab === 'editor' && (
-          <SiteEditorView 
-            lead={selectedLeadForEditor} 
-            onBack={() => setCurrentTab('leads')} 
-          />
-        )}
+            <div style={{ display: currentTab === 'editor' ? 'block' : 'none' }}>
+              <SiteEditorView 
+                lead={selectedLeadForEditor} 
+                onBack={() => setCurrentTab('leads')} 
+              />
+            </div>
 
-        {currentTab === 'crm' && (
-          <CRMView 
-            leads={leads} 
-            setLeads={setLeads} 
-            onGenerateSite={handleGenerateSite} 
-          />
-        )}
+            <div style={{ display: currentTab === 'crm' ? 'block' : 'none' }}>
+              <CRMView 
+                leads={leads} 
+                setLeads={setLeads} 
+                onGenerateSite={handleGenerateSite} 
+              />
+            </div>
 
-        {currentTab === 'engine' && (
-          <AIEngineView />
-        )}
+            <div style={{ display: currentTab === 'engine' ? 'block' : 'none' }}>
+              <AIEngineView />
+            </div>
 
-        {currentTab === 'bulk_whatsapp' && (
-          <BulkWhatsAppView leads={leads} onBack={() => setCurrentTab('crm')} />
-        )}
+            <div style={{ display: currentTab === 'bulk_whatsapp' ? 'block' : 'none' }}>
+              <BulkWhatsAppView leads={leads} onBack={() => setCurrentTab('crm')} />
+            </div>
 
-        {currentTab === 'templates' && (
-          <TemplatesView 
-            onSelectTemplate={(tpl) => {
-              setSelectedLeadForEditor({ id: tpl.id, nome: tpl.title, categoria: tpl.nicho, cidade: 'Goiânia' });
-              setCurrentTab('editor');
-            }}
-          />
-        )}
+            <div style={{ display: currentTab === 'templates' ? 'block' : 'none' }}>
+              <TemplatesView 
+                onSelectTemplate={(tpl) => {
+                  setSelectedLeadForEditor({ id: tpl.id, nome: tpl.title, categoria: tpl.nicho, cidade: 'Goiânia' });
+                  setCurrentTab('editor');
+                }} 
+              />
+            </div>
 
-        {currentTab === 'projetos' && (
-          <ProjectsView onEditSite={handleGenerateSite} />
-        )}
+            <div style={{ display: currentTab === 'projetos' ? 'block' : 'none' }}>
+              <ProjectsView onGenerateSite={handleGenerateSite} />
+            </div>
 
-        {currentTab === 'agendamentos' && (
-          <AppointmentsView leads={leads} />
-        )}
+            <div style={{ display: currentTab === 'agendamentos' ? 'block' : 'none' }}>
+              <AppointmentsView />
+            </div>
 
-        {currentTab === 'cobrar' && (
-          <BillingView />
-        )}
+            <div style={{ display: currentTab === 'cobrar' ? 'block' : 'none' }}>
+              <BillingView />
+            </div>
 
-        {currentTab === 'afiliado' && (
-          <AffiliateView />
+            <div style={{ display: currentTab === 'ranking' ? 'block' : 'none' }}>
+              <AffiliateView />
+            </div>
+          </>
         )}
       </main>
 
