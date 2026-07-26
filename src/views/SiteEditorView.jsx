@@ -160,165 +160,58 @@ export default function SiteEditorView({ lead, onBack }) {
           onSchemaGenerated={(updatedSchema) => setDocSchema(updatedSchema)} 
         />
 
-        {/* Right Side: Live Website Preview (Systemista Glitch or React Bits) */}
-        <div style={{ padding: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'auto', background: '#050711', gap: '20px' }}>
-
-          {/* Motor agêntico: catálogo real + validação anti-alucinação */}
-          <div style={{ width: '100%', maxWidth: '840px' }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              gap: '12px', flexWrap: 'wrap', marginBottom: schemaAgentico ? '16px' : 0,
-            }}>
-              <span className="mono-label" style={{ color: '#6366f1' }}>
-                MOTOR AGÊNTICO // CATÁLOGO VALIDADO
+        {/* Right Side: Full Live Interactive Iframe Preview (Estilo Emergent / Lovable) */}
+        <div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#050711', padding: '20px', boxSizing: 'border-box' }}>
+          
+          {/* Viewport Header Controls */}
+          <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="mono-label" style={{ color: '#22c55e', background: 'rgba(34,197,94,0.1)', padding: '4px 8px', borderRadius: '4px' }}>
+                ● PREVIEW AO VIVO // 77LIB ENGINE
               </span>
-              <button
-                onClick={() => gerarComMotorAgentico()}
-                disabled={gerando}
-                className="btn-primary"
-                style={{ padding: '9px 18px', fontSize: '11px', opacity: gerando ? 0.6 : 1 }}
-              >
-                {gerando ? <RefreshCw size={13} className="animate-spin" /> : <Zap size={13} />}
-                {gerando ? 'Gerando...' : 'Gerar com IA'}
-              </button>
+              <span style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
+                {targetLead.nome} ({targetLead.cidade} - {targetLead.estado})
+              </span>
             </div>
 
-            {schemaAgentico && (
-              <>
-                <SchemaRenderer schema={schemaAgentico} lead={targetLead} />
-
-                {traceGeracao.length > 0 && (
-                  <details style={{ marginTop: '12px' }}>
-                    <summary style={{ cursor: 'pointer', fontSize: '11px', color: '#64748b', fontFamily: 'var(--font-mono, monospace)' }}>
-                      Rastro da geração ({traceGeracao.length} passos)
-                    </summary>
-                    <div style={{
-                      marginTop: '8px', background: '#05070f', padding: '12px',
-                      border: '0.5px solid rgba(255,255,255,0.12)', fontSize: '11px',
-                      color: '#94a3b8', fontFamily: 'var(--font-mono, monospace)',
-                      lineHeight: 1.7, maxHeight: '180px', overflowY: 'auto',
-                    }}>
-                      {traceGeracao.map((t, i) => <div key={i}>{t}</div>)}
-                    </div>
-                  </details>
-                )}
-              </>
-            )}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={() => {
+                  const slug = targetLead.nome.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                  window.open(apiUrl(`/api/site/preview_html?file=generated_${slug}.html`), '_blank');
+                }}
+                className="btn-secondary"
+                style={{ padding: '6px 12px', fontSize: '11px' }}
+              >
+                <ExternalLink size={12} /> Abrir em Nova Aba
+              </button>
+            </div>
           </div>
 
+          {/* Live Interactive Iframe Frame */}
           <div style={{
             width: '100%',
-            maxWidth: '840px',
-            background: '#0a0e1a',
-            color: '#ffffff',
-            border: '0.5px solid rgba(255,255,255,0.15)',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.7)',
+            maxWidth: '1200px',
+            height: 'calc(100vh - 140px)',
+            background: '#ffffff',
+            borderRadius: '12px',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
             overflow: 'hidden',
             position: 'relative'
           }}>
-            
-            {/* If Systemista Glitch Theme is active */}
-            {systemista ? (
-              <div>
-                {/* Nav */}
-                <div style={{ padding: '20px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '0.5px solid rgba(255,255,255,0.1)' }}>
-                  <div className="font-headline" style={{ fontSize: '18px', color: '#fff', letterSpacing: '-0.04em' }}>
-                    ■ {systemista.brandName}
-                  </div>
-                  <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-mono)' }}>
-                    <span>Serviços</span>
-                    <span>Como funciona</span>
-                    <span>Cases</span>
-                    <span>Preços</span>
-                  </div>
-                  <button className="btn-solid-white" style={{ padding: '8px 16px', fontSize: '10px' }}>
-                    FALE CONOSCO →
-                  </button>
-                </div>
-
-                {/* Systemista Hero */}
-                <div style={{ padding: '60px 32px', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '32px', borderBottom: '0.5px solid rgba(255,255,255,0.1)' }}>
-                  <div>
-                    <span className="mono-label" style={{ border: '0.5px solid rgba(255,255,255,0.2)', padding: '4px 10px', fontSize: '9px', marginBottom: '20px', display: 'inline-block' }}>
-                      ● AGORA ACEITANDO NOVOS PROJETOS
-                    </span>
-
-                    <h1 className="font-headline" style={{ fontSize: '38px', lineHeight: 0.95, color: '#ffffff', margin: '20px 0' }}>
-                      {systemista.heroH1Lines[0]} <br />
-                      {systemista.heroH1Lines[1]} <br />
-                      <span style={{ color: '#ec4899' }}>{systemista.heroH1Lines[2]}</span> <br />
-                      {systemista.heroH1Lines[3]}
-                    </h1>
-
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '24px' }}>
-                      <input type="text" placeholder="voce@empresa.com" className="font-mono" style={{ padding: '10px 14px', background: '#111726', border: '0.5px solid rgba(255,255,255,0.2)', color: '#fff', fontSize: '11px', width: '220px' }} />
-                      <button className="btn-solid-white" style={{ padding: '10px 20px', fontSize: '10px' }}>AGENDAR CALL →</button>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, textAlign: 'right' }}>
-                      {systemista.heroSideCopy}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Stats Bar */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderBottom: '0.5px solid rgba(255,255,255,0.1)' }}>
-                  {systemista.stats.map(([num, lbl], i) => (
-                    <div key={i} className="hairline-r" style={{ padding: '20px', textAlign: 'center' }}>
-                      <div className="font-headline" style={{ fontSize: '28px', color: '#6366f1' }}>{num}</div>
-                      <div className="mono-label" style={{ fontSize: '8px', marginTop: '4px' }}>{lbl}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Services Grid */}
-                <div style={{ padding: '40px 32px' }}>
-                  <span className="mono-label" style={{ marginBottom: '20px', display: 'block' }}>01 // NOSSOS SERVIÇOS</span>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    {systemista.services.map(s => (
-                      <div key={s.tag} style={{ background: '#111726', border: '0.5px solid rgba(255,255,255,0.1)', padding: '20px' }}>
-                        <span className="mono-label" style={{ fontSize: '8px', color: '#ec4899' }}>{s.tag}</span>
-                        <h3 className="font-headline" style={{ fontSize: '18px', color: '#fff', margin: '8px 0' }}>{s.title}</h3>
-                        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>{s.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
-            ) : (
-              /* React Bits Standard Canvas Preview */
-              <div>
-                <ReactBitsCanvas particleCount={45} speed={1.2} />
-                <div style={{ position: 'relative', zIndex: 10, padding: '40px 32px' }}>
-                  <div style={{ padding: '24px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span className="font-headline" style={{ fontSize: '20px', color: '#fff' }}>
-                      {heroComponent?.title || targetLead.nome}
-                    </span>
-                    <button className="btn-primary" style={{ fontSize: '11px' }}>
-                      {heroComponent?.ctaText || 'Pedir no WhatsApp'}
-                    </button>
-                  </div>
-
-                  <div style={{ padding: '60px 0', textAlign: 'center' }}>
-                    <h1 className="font-headline" style={{ fontSize: '38px', color: '#fff', marginBottom: '16px' }}>
-                      {heroComponent?.title || targetLead.nome}
-                    </h1>
-                    <p style={{ fontSize: '15px', color: '#94a3b8', maxWidth: '520px', margin: '0 auto 28px auto', lineHeight: 1.6 }}>
-                      {heroComponent?.subtitle || `Referência em ${targetLead.categoria} em ${targetLead.cidade}.`}
-                    </p>
-                    <button className="btn-primary" style={{ padding: '14px 32px', fontSize: '13px' }}>
-                      💬 {heroComponent?.ctaText || 'Pedir no WhatsApp'}
-                    </button>
-                  </div>
-
-                  <OriginKitBentoGrid items={bentoItems} />
-                </div>
-              </div>
-            )}
-
+            <iframe
+              key={targetLead.id || targetLead.nome}
+              src={docSchema?.previewUrl ? apiUrl(docSchema.previewUrl) : apiUrl(`/api/site/preview_html?file=generated_${targetLead.nome.toLowerCase().replace(/[^a-z0-9]/g, '_')}.html`)}
+              srcDoc={docSchema?.htmlContent || undefined}
+              title={`Preview de ${targetLead.nome}`}
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                background: '#ffffff'
+              }}
+            />
           </div>
 
         </div>
