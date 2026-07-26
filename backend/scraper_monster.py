@@ -1,8 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-REPASS AI - MÓDULO LEADS_OSINT_02 & PIPELINE DE ENRIQUECIMENTO DE MÍDIA GOOGLE PLACES (Production Ready)
-Scanner de Leads OSINT de Alta Performance com Geolocalização, Algoritmo de Pontuação de Oportunidade, Motor de KPIs
-e Pipeline de Extração de Fotos do Google Business / Media RAG Fallback.
+REPASS AI - MÓDULO LEADS_OSINT_02.
+
+Varredura de leads locais com dados REAIS da Google Places API e pipeline
+de enriquecimento de mídia (fotos do Google Business com fallback).
+
+GARANTIA DE INTEGRIDADE DE DADOS
+--------------------------------
+Este módulo não fabrica dado de contato em nenhuma hipótese.
+Telefone, site, nota e quantidade de avaliações vêm exclusivamente da
+Places API. Quando um campo não existe, ele vai como `None` e a UI mostra
+ausência.
+
+Sem `GOOGLE_PLACES_API_KEY` configurada, a varredura entra em MODO DEMO:
+devolve exemplos de layout com `is_demo: True` e `telefone: None`. Leads
+de demo são bloqueados para disparo comercial no frontend.
 """
 
 import os
@@ -10,19 +22,29 @@ import sys
 import json
 import time
 import re
-import random
-import urllib.request
 import urllib.parse
+import urllib.request
+
+import places_engine
+from places_engine import PlacesIndisponivel
 
 # Força codificação UTF-8 no Windows
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
 
+def base_publica():
+    """
+    URL pública do backend, usada para montar links do proxy de mídia.
+
+    Precisa ser configurável: gravar `http://localhost:8000` dentro do
+    lead quebra todas as imagens assim que o app sai da máquina do dev.
+    """
+    return os.environ.get("PUBLIC_BASE_URL", "http://localhost:8000").rstrip("/")
+
+
 class GooglePlacesMediaEnricher:
-    """
-    Pipeline de Enriquecimento de Mídia do Google Places API + Proxy & Fallback Inteligente (Media RAG Engine)
-    """
+    """Enriquecimento de mídia via Google Places com fallback por nicho."""
 
     NICHO_FALLBACK_IMAGES = {
         'barbearia': [
@@ -63,341 +85,345 @@ class GooglePlacesMediaEnricher:
         ]
     }
 
-    def __init__(self):
-        self.api_key = os.environ.get('GOOGLE_PLACES_API_KEY', '')
-
-    def obter_midias_empresa(self, company_name, city, nicho="barbearia"):
-        """
-        1. Busca Place ID único no Google Places API
-        2. Baixa referências das fotos do local real
-        3. Se não houver fotos, aciona o Fallback Inteligente (Media RAG)
-        """
-        nicho_clean = (nicho or 'padrao').lower().strip()
-        fallback_list = self.NICHO_FALLBACK_IMAGES.get(nicho_clean, self.NICHO_FALLBACK_IMAGES['padrao'])
-
-        if not self.api_key:
-            print(f"[GooglePlacesEnricher] Sem GOOGLE_PLACES_API_KEY configurada. Usando Media RAG Fallback...")
-            return {
-                "companyName": company_name,
-                "location": city,
-                "designSystem": {
-                    "theme": "dark_modern",
-                    "heroBackground": fallback_list[0],
-                    "gallery": fallback_list[1:]
-                },
-                "fallbacks": {
-                    "useAgnesAiIfEmpty": True,
-                    "nichoPrompt": f"Estilo {nicho_clean} profissional com iluminação premium"
-                }
+    def _fallback(self, company_name, city, nicho_clean, motivo):
+        """Monta o pacote de mídia de fallback por nicho."""
+        lista = self.NICHO_FALLBACK_IMAGES.get(
+            nicho_clean, self.NICHO_FALLBACK_IMAGES['padrao']
+        )
+        return {
+            "companyName": company_name,
+            "location": city,
+            "isRealMedia": False,
+            "motivo": motivo,
+            "designSystem": {
+                "theme": "dark_modern",
+                "heroBackground": lista[0],
+                "gallery": lista[1:]
             }
-
-        try:
-            # 1. Busca o Place ID usando Text Query
-            query = f"{company_name} {city}"
-            search_url = f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={urllib.parse.quote(query)}&inputtype=textquery&fields=place_id&key={self.api_key}"
-            req = urllib.request.Request(search_url)
-            with urllib.request.urlopen(req, timeout=5) as res:
-                data = json.loads(res.read().decode('utf-8'))
-                candidates = data.get('candidates', [])
-                if not candidates:
-                    raise Exception("Lugar não localizado no Google Business")
-                place_id = candidates[0].get('place_id')
-
-            # 2. Busca os detalhes e referências das fotos do local
-            details_url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=photos&key={self.api_key}"
-            req_det = urllib.request.Request(details_url)
-            with urllib.request.urlopen(req_det, timeout=5) as res_det:
-                data_det = json.loads(res_det.read().decode('utf-8'))
-                photos = data_det.get('result', {}).get('photos', [])
-                if not photos:
-                    raise Exception("Sem fotos no perfil do Google Business")
-
-                # Converte para URLs de proxy mascaradas
-                proxy_photos = [f"http://localhost:8000/api/media/proxy?ref={p.get('photo_reference')}" for p in photos[:5]]
-                
-                return {
-                    "companyName": company_name,
-                    "location": city,
-                    "designSystem": {
-                        "theme": "google_business_real",
-                        "heroBackground": proxy_photos[0],
-                        "gallery": proxy_photos[1:] if len(proxy_photos) > 1 else fallback_list[1:]
-                    },
-                    "fallbacks": {
-                        "useAgnesAiIfEmpty": False,
-                        "nichoPrompt": f"Fotos reais capturadas do perfil Google Business de {company_name}"
-                    }
-                }
-
-        except Exception as e:
-            print(f"[GooglePlacesEnricher] Falha na chamada Google Places ({e}). Ativando Agnes AI / Media RAG Fallback...")
-            return {
-                "companyName": company_name,
-                "location": city,
-                "designSystem": {
-                    "theme": "dark_modern",
-                    "heroBackground": fallback_list[0],
-                    "gallery": fallback_list[1:]
-                },
-                "fallbacks": {
-                    "useAgnesAiIfEmpty": True,
-                    "nichoPrompt": f"Estilo {nicho_clean} aconchegante com iluminação profissional"
-                }
-            }
-
-
-class GeoScraper:
-    """Gerencia a busca por geolocalização (País, Estado, Cidade, Bairro)"""
-    def __init__(self):
-        self.headers = {
-            'User-Agent': 'RepassAI-OSINT/2.0 (Contact: admin@repassai.com)'
         }
 
-    def buscar_locais(self, estado, cidade, nicho, bairro="", max_results=40):
-        query = f"{nicho} em {cidade}, {estado}, Brasil"
-        if bairro:
-            query = f"{nicho} em {bairro}, {cidade}, {estado}, Brasil"
+    def obter_midias_empresa(self, company_name, city, nicho="barbearia", place_id=None, photos_data=None):
+        """
+        Busca fotos reais do perfil Google Business.
+        Reaproveita o array `photos_data` já vindo do Place Details para economia de API.
+        """
+        nicho_clean = (nicho or 'padrao').lower().strip()
 
-        url = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(query)}&format=json&addressdetails=1&limit={max_results}"
+        if photos_data and len(photos_data) > 0:
+            base = base_publica()
+            proxy_photos = [
+                f"{base}/api/media/proxy?ref={urllib.parse.quote(p.get('photo_reference', ''))}"
+                for p in photos_data[:10]
+            ]
+            return {
+                "companyName": company_name,
+                "location": city,
+                "isRealMedia": True,
+                "motivo": "google_business_real",
+                "designSystem": {
+                    "theme": "google_business_real",
+                    "heroBackground": proxy_photos[0],
+                    "gallery": proxy_photos[1:] if len(proxy_photos) > 1 else [proxy_photos[0]]
+                }
+            }
+
+        if not places_engine.places_configurado():
+            return self._fallback(
+                company_name, city, nicho_clean, "sem_api_key"
+            )
 
         try:
-            req = urllib.request.Request(url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=5) as response:
-                if response.status == 200:
-                    data = json.loads(response.read().decode('utf-8'))
-                    if data and len(data) > 0:
-                        return data
+            if not place_id:
+                return self._fallback(
+                    company_name, city, nicho_clean, "sem_place_id"
+                )
+
+            url = (
+                f"{places_engine.PLACES_BASE}/details/json?place_id={place_id}"
+                f"&fields=photos&language=pt-BR&key={places_engine.api_key()}"
+            )
+            data = places_engine._get_json(url, timeout=8)
+            photos = data.get('result', {}).get('photos', [])
+            if not photos:
+                return self._fallback(
+                    company_name, city, nicho_clean, "perfil_sem_fotos"
+                )
+
+            base = base_publica()
+            proxy_photos = [
+                f"{base}/api/media/proxy?ref={urllib.parse.quote(p.get('photo_reference', ''))}"
+                for p in photos[:10]
+            ]
+            return {
+                "companyName": company_name,
+                "location": city,
+                "isRealMedia": True,
+                "motivo": "google_business",
+                "designSystem": {
+                    "theme": "google_business_real",
+                    "heroBackground": proxy_photos[0],
+                    "gallery": proxy_photos[1:] if len(proxy_photos) > 1 else [proxy_photos[0]]
+                }
+            }
         except Exception as e:
-            print(f"[GeoScraper] Nominatim offline ou com rate limit: {e}. Acionando motor resiliente...")
-        
-        return []
+            return self._fallback(
+                company_name, city, nicho_clean, f"erro_api_{e}"
+            )
 
 
 class NicheFilter:
-    """Aplica os filtros de nicho selecionados e enforça limites de rate-limit (máx 6 nichos ativos)"""
-    NICHOS_PESOS = {
-        'salão de unhas': 1.2,
-        'barbearia': 1.1,
-        'hamburgueria': 1.3,
-        'estética facial': 1.2,
-        'pet shop': 1.1,
-        'academia': 1.4,
-        'odontologia': 1.5,
-        'oficina mecânica': 1.2,
-        'pizzaria': 1.3,
-        'imobiliária': 1.6
-    }
+    """Normaliza e limita a lista de nichos ativos por varredura."""
+
+    MAX_NICHOS = 6
+    MAX_CHARS = 80
 
     def processar_nichos(self, nichos_raw):
+        """Aceita string separada por vírgula ou lista. Deduplica e limita."""
         if isinstance(nichos_raw, str):
-            lista = [n.strip().lower() for n in nichos_raw.split(',') if n.strip()]
+            lista = [n.strip().lower() for n in nichos_raw.split(',')]
         else:
-            lista = [str(n).strip().lower() for n in nichos_raw]
-        return lista[:6]
+            lista = [str(n).strip().lower() for n in (nichos_raw or [])]
+
+        vistos = []
+        for n in lista:
+            if n and len(n) <= self.MAX_CHARS and n not in vistos:
+                vistos.append(n)
+        return vistos[:self.MAX_NICHOS]
 
 
 class LeadParser:
-    """Extrai e normaliza dados brutos do lead (Nome, Telefone, Site, WhatsApp)"""
-    
-    @staticmethod
-    def formatar_telefone(cidade, index):
-        ddd_map = {
-            'Franca': '16',
-            'São Paulo': '11',
-            'Goiânia': '62',
-            'Campinas': '19',
-            'Ribeirão Preto': '16',
-            'Rio de Janeiro': '21',
-            'Belo Horizonte': '31'
-        }
-        ddd = ddd_map.get(cidade, '11')
-        sufixo = 1000 + (index * 73) % 8999
-        return f"({ddd}) 9 9{sufixo:04d}-{random.randint(1000, 9999)}"
+    """Normalização de dados de contato REAIS. Nunca gera dado."""
 
     @staticmethod
     def gerar_link_whatsapp(telefone_raw):
-        clean_num = re.sub(r'\D', '', telefone_raw)
-        if not clean_num.startswith('55'):
-            clean_num = f"55{clean_num}"
-        return f"https://wa.me/{clean_num}"
+        """
+        Converte um telefone real em link wa.me.
+
+        Retorna None se o telefone não existir ou não tiver quantidade de
+        dígitos compatível com número brasileiro (10 = fixo, 11 = móvel).
+        Melhor não oferecer botão do que oferecer um link quebrado.
+        """
+        if not telefone_raw:
+            return None
+
+        digitos = re.sub(r'\D', '', telefone_raw)
+        if digitos.startswith('55'):
+            digitos = digitos[2:]
+        if len(digitos) not in (10, 11):
+            return None
+        return f"https://wa.me/55{digitos}"
 
 
 class KPIEngine:
-    """Calcula métricas de funil em tempo real (Conversion, Approach, Booking, Follow-up, Loss Rate)"""
+    """Calcula métricas de funil (conversão, abordagem, agendamento, perda)."""
 
     @staticmethod
-    def calcular_kpis(total_leads, abordados=0, agendados=0, follow_up=0, perdidos=0, convertidos=0):
+    def calcular_kpis(total_leads, abordados=0, agendados=0, follow_up=0,
+                      perdidos=0, convertidos=0):
+        """Retorna as taxas do funil em porcentagem, protegido contra /0."""
         if total_leads <= 0:
             return {
-                "conversion_rate": 0.0,
-                "approach_rate": 0.0,
-                "booking_rate": 0.0,
-                "followup_rate": 0.0,
-                "loss_rate": 0.0
+                "conversion_rate": 0.0, "approach_rate": 0.0,
+                "booking_rate": 0.0, "followup_rate": 0.0, "loss_rate": 0.0
             }
 
-        approach_rate = round((abordados / total_leads) * 100, 1)
-        booking_rate = round((agendados / abordados) * 100, 1) if abordados > 0 else 0.0
-        followup_rate = round((follow_up / abordados) * 100, 1) if abordados > 0 else 0.0
-        loss_rate = round((perdidos / abordados) * 100, 1) if abordados > 0 else 0.0
-        conversion_rate = round((convertidos / total_leads) * 100, 1)
+        def pct(num, den):
+            return round((num / den) * 100, 1) if den > 0 else 0.0
 
         return {
-            "conversion_rate": conversion_rate,
-            "approach_rate": approach_rate,
-            "booking_rate": booking_rate,
-            "followup_rate": followup_rate,
-            "loss_rate": loss_rate
+            "conversion_rate": pct(convertidos, total_leads),
+            "approach_rate": pct(abordados, total_leads),
+            "booking_rate": pct(agendados, abordados),
+            "followup_rate": pct(follow_up, abordados),
+            "loss_rate": pct(perdidos, abordados),
         }
 
 
+# Exemplos de layout do MODO DEMO. Nomes genéricos e sem telefone, de
+# propósito: servem para conferir a UI, não para prospectar.
+DEMO_POR_NICHO = {
+    'salão de unhas': ['Studio Bella Nails', 'Esmalteria VIP'],
+    'barbearia': ['Imperial Cut Barbers', 'Dom Barba'],
+    'hamburgueria': ['Kraft Burger Artesanal', 'Smash & Co.'],
+    'estética facial': ['Clínica Glow Estética', 'DermoSkin Studio'],
+    'pet shop': ['Pet Care & Cia', 'AuAu Banho e Tosa'],
+    'academia': ['FitLife Academia', 'CrossBox Training'],
+    'odontologia': ['Odonto VIP Riso', 'Oral Care'],
+    'oficina mecânica': ['Auto Center Precision', 'Mecânica MotorTech'],
+    'pizzaria': ['Pizzaria Bella Napoli', 'Forno & Lenha'],
+    'imobiliária': ['Imobiliária Prime', 'Corretora Solidez'],
+}
+
+
 class OSINTCore:
-    """Orquestrador do Módulo LEADS_OSINT_02 com Enriquecimento de Mídia"""
+    """Orquestrador do módulo LEADS_OSINT_02."""
+
+    # A Places API pede espaçamento entre chamadas de Details.
+    DELAY_ENTRE_DETALHES = 0.15
 
     def __init__(self):
-        self.geo_scraper = GeoScraper()
         self.niche_filter = NicheFilter()
         self.media_enricher = GooglePlacesMediaEnricher()
 
-    def calcular_osint_score(self, tem_site, tem_whatsapp, avaliacao):
-        score = 50
-        if not tem_site:
-            score += 35
-        if tem_whatsapp:
-            score += 10
-        if avaliacao >= 4.5:
-            score += 5
-        return min(score, 100)
+    def _montar_lead(self, detalhes, nicho, cidade, estado, bairro, idx):
+        """Constrói o objeto de lead a partir de detalhes REAIS do Places."""
+        score, motivo = places_engine.score_oportunidade(detalhes)
+        mensagem = places_engine.gerar_mensagem(detalhes, motivo, cidade, nicho)
 
-    def executar_varredura(self, estado="SP", cidade="Franca", bairro="", nichos="barbearia, hamburgueria", max_results=40):
-        nichos_ativos = self.niche_filter.processar_nichos(nichos)
-        if not nichos_ativos:
-            nichos_ativos = ['barbearia']
+        telefone = detalhes.get("formatted_phone_number")
+        site = detalhes.get("website")
+        whatsapp = LeadParser.gerar_link_whatsapp(telefone)
 
-        leads_finais = []
+        media = self.media_enricher.obter_midias_empresa(
+            detalhes.get("name", ""), cidade, nicho,
+            place_id=detalhes.get("place_id"),
+            photos_data=detalhes.get("photos")
+        )
 
-        print(f"[OSINTCore] Iniciando varredura em '{cidade}, {estado}' para nichos: {nichos_ativos}...")
+        geometry = (detalhes.get("geometry") or {}).get("location") or {}
 
-        idx = 1
+        return {
+            "id": detalhes.get("place_id"),
+            "lead_id": detalhes.get("place_id"),
+            "place_id": detalhes.get("place_id"),
+            "is_demo": False,
+            "nome": detalhes.get("name"),
+            "categoria": nicho.title(),
+            "cidade": cidade,
+            "estado": estado,
+            "bairro": bairro or "",
+            "endereco": detalhes.get("formatted_address"),
+            "telefone": telefone,
+            "whatsapp": whatsapp,
+            "site": site,
+            "status_site": "sem_site" if not site else "tem_site",
+            "score": score,
+            "osint_score": score,
+            "motivo_abordagem": motivo,
+            "avaliacao": detalhes.get("rating"),
+            "reviewsCount": detalhes.get("user_ratings_total"),
+            "temperatura": "Quente" if score >= 70 else "Morno",
+            "status_crm": "Base",
+            "status_pipeline": "NOVO",
+            "orientacao": places_engine.OPORTUNIDADE.get(motivo, ""),
+            "mensagem_sugerida": mensagem,
+            "mediaEnrichment": media,
+            "geo": {
+                "pais": "BR", "estado": estado, "cidade": cidade,
+                "bairro": bairro or "",
+                "lat": geometry.get("lat"), "lon": geometry.get("lng"),
+            },
+        }
+
+    def _montar_demo(self, nome, nicho, cidade, estado, idx):
+        """
+        Lead de demonstração de layout.
+
+        `telefone`/`whatsapp`/`avaliacao` ficam nulos de propósito: nunca
+        apresentamos contato inventado como se fosse resultado de varredura.
+        """
+        media = self.media_enricher.obter_midias_empresa(nome, cidade, nicho)
+        return {
+            "id": f"DEMO_{estado}_{idx:03d}",
+            "lead_id": f"DEMO_{estado}_{idx:03d}",
+            "place_id": None,
+            "is_demo": True,
+            "nome": nome,
+            "categoria": nicho.title(),
+            "cidade": cidade,
+            "estado": estado,
+            "bairro": "",
+            "endereco": None,
+            "telefone": None,
+            "whatsapp": None,
+            "site": None,
+            "status_site": "desconhecido",
+            "score": 0,
+            "osint_score": 0,
+            "motivo_abordagem": "demo",
+            "avaliacao": None,
+            "reviewsCount": None,
+            "temperatura": "Demo",
+            "status_crm": "Base",
+            "status_pipeline": "DEMO",
+            "orientacao": "Exemplo de layout. Configure a GOOGLE_PLACES_API_KEY para varrer leads reais.",
+            "mensagem_sugerida": None,
+            "mediaEnrichment": media,
+            "geo": {"pais": "BR", "estado": estado, "cidade": cidade,
+                    "bairro": "", "lat": None, "lon": None},
+        }
+
+    def executar_varredura(self, estado="SP", cidade="Franca", bairro="",
+                           nichos="barbearia, hamburgueria", max_results=40):
+        """
+        Executa a varredura e devolve (leads, meta).
+
+        `meta` informa se o resultado é real ou demo e por quê, para a UI
+        poder deixar isso explícito ao operador.
+        """
+        nichos_ativos = self.niche_filter.processar_nichos(nichos) or ['barbearia']
+        local = f"{bairro}, {cidade}, {estado}" if bairro else f"{cidade}, {estado}"
+
+        if not places_engine.places_configurado():
+            print("[OSINTCore] Sem GOOGLE_PLACES_API_KEY. Entrando em MODO DEMO.")
+            leads, idx = [], 1
+            for nicho in nichos_ativos:
+                for nome in DEMO_POR_NICHO.get(nicho, [f"{nicho.title()} Exemplo"]):
+                    leads.append(self._montar_demo(nome, nicho, cidade, estado, idx))
+                    idx += 1
+            return leads[:max_results], {
+                "modo": "demo",
+                "motivo": "GOOGLE_PLACES_API_KEY não configurada em backend/.env",
+                "dados_reais": False,
+            }
+
+        print(f"[OSINTCore] Varredura REAL em '{local}' | nichos: {nichos_ativos}")
+
+        leads, erros = [], []
+        por_nicho = max(1, max_results // len(nichos_ativos))
+        vistos = set()
+
         for nicho in nichos_ativos:
-            locais_raw = self.geo_scraper.buscar_locais(estado, cidade, nicho, bairro, max_results=10)
+            try:
+                resultados = places_engine.buscar_nicho(nicho, local, por_nicho)
+                print(f"[OSINTCore] '{nicho}': {len(resultados)} lugares encontrados.")
+            except PlacesIndisponivel as e:
+                erros.append(f"nicho '{nicho}': {e}")
+                print(f"[OSINTCore] Falha ao buscar '{nicho}': {e}")
+                continue
 
-            if locais_raw:
-                for item in locais_raw:
-                    display_name = item.get('display_name', '')
-                    nome_fantasia = display_name.split(',')[0]
-                    tem_site = False
-                    site_url = None
+            for idx, r in enumerate(resultados, start=1):
+                pid = r.get("place_id")
+                if not pid or pid in vistos:
+                    continue
+                vistos.add(pid)
+                try:
+                    detalhes = places_engine.detalhes_do_lugar(pid)
+                    if places_engine.negocio_encerrado(detalhes.get("business_status")):
+                        continue
+                    leads.append(self._montar_lead(
+                        detalhes, nicho, cidade, estado, bairro, idx
+                    ))
+                    time.sleep(self.DELAY_ENTRE_DETALHES)
+                except Exception as e:
+                    erros.append(f"place_id {pid}: {e}")
 
-                    tel = LeadParser.formatar_telefone(cidade, idx)
-                    wa = LeadParser.gerar_link_whatsapp(tel)
-                    avaliacao = round(random.uniform(4.2, 4.9), 1)
-                    score = self.calcular_osint_score(tem_site, True, avaliacao)
-                    
-                    # Enriquecimento de Mídia Google Business / Fallback
-                    media_data = self.media_enricher.obter_midias_empresa(nome_fantasia, cidade, nicho)
+        leads.sort(key=lambda x: x.get("score") or 0, reverse=True)
+        print(f"[OSINTCore] Varredura concluída: {len(leads)} leads reais.")
 
-                    lead_obj = {
-                        "id": f"OSINT_02_{estado}_{idx:03d}",
-                        "lead_id": f"OSINT_02_{estado}_{idx:03d}",
-                        "nome": nome_fantasia,
-                        "categoria": nicho.title(),
-                        "cidade": cidade,
-                        "estado": estado,
-                        "bairro": bairro or "Centro",
-                        "telefone": tel,
-                        "whatsapp": wa,
-                        "site": site_url,
-                        "status_site": "sem_site" if not tem_site else "tem_site",
-                        "score": score,
-                        "avaliacao": avaliacao,
-                        "temperatura": "Quente" if score >= 80 else "Morno",
-                        "status_crm": "Base",
-                        "orientacao": "Sem presença web. Alta probabilidade de conversão para site promocional.",
-                        "mediaEnrichment": media_data,
-                        "geo": {
-                            "pais": "BR",
-                            "estado": estado,
-                            "cidade": cidade,
-                            "bairro": bairro or "Centro"
-                        },
-                        "dados_contato": {
-                            "nome_fantasia": nome_fantasia,
-                            "telefone": tel,
-                            "site": site_url,
-                            "instagram": f"@{nome_fantasia.lower().replace(' ', '')}"
-                        },
-                        "osint_score": score,
-                        "status_pipeline": "NOVO",
-                        "metrics_snapshot": KPIEngine.calcular_kpis(max_results)
-                    }
-                    leads_finais.append(lead_obj)
-                    idx += 1
-            else:
-                exemplos_por_nicho = {
-                    'salão de unhas': ['Studio Bella Nails', 'Unhas de Luxo', 'Esmalteria VIP', 'Manicure D Gold'],
-                    'barbearia': ['Barbearia Zé Gotinha', 'Imperial Cut Barbers', 'Dom Barba', 'Barbearia Vintage'],
-                    'hamburgueria': ['Kraft Burger Artesanal', 'Smash & Co.', 'Melt Hamburgueria', 'O Brabo Burger'],
-                    'estética facial': ['Clínica Glow Estética', 'Facial Care VIP', 'DermoSkin Studio', 'Harmoniza Center'],
-                    'pet shop': ['Pet Care & Cia', 'AuAu Banho e Tosa', 'Veterinária Amigo Fiel', 'PetShop Central'],
-                    'academia': ['FitLife Academia', 'CrossBox Training', 'Studio Pilates Core', 'Iron Gym Center'],
-                    'odontologia': ['Odonto VIP Riso', 'Sorriso Real Consultório', 'Clínica OdontoDental', 'Oral Care'],
-                    'oficina mecânica': ['Auto Center Franca', 'Oficina Mecânica Precision', 'Mecânica MotorTech', 'Funilaria Express'],
-                    'pizzaria': ['Pizzaria Bella Napoli', 'Forno & Lenha Pizza', 'Pizza Express 24h', 'Pizzaria Mamma Mia'],
-                    'imobiliária': ['Imobiliária Prime', 'Corretora Solidez', 'Imóveis & Cia', 'Residencial Imóveis']
-                }
-
-                nomes_base = exemplos_por_nicho.get(nicho, [f"{nicho.title()} Premium", f"Centro de {nicho.title()}"])
-                for i, nome in enumerate(nomes_base):
-                    tel = LeadParser.formatar_telefone(cidade, idx)
-                    wa = LeadParser.gerar_link_whatsapp(tel)
-                    tem_site = i % 2 == 1
-                    avaliacao = round(random.uniform(4.3, 4.9), 1)
-                    score = self.calcular_osint_score(tem_site, True, avaliacao)
-                    
-                    media_data = self.media_enricher.obter_midias_empresa(nome, cidade, nicho)
-
-                    lead_obj = {
-                        "id": f"OSINT_02_{estado}_{idx:03d}",
-                        "lead_id": f"OSINT_02_{estado}_{idx:03d}",
-                        "nome": f"{nome} ({cidade})",
-                        "categoria": nicho.title(),
-                        "cidade": cidade,
-                        "estado": estado,
-                        "bairro": bairro or "Centro",
-                        "telefone": tel,
-                        "whatsapp": wa,
-                        "site": f"https://www.{nome.lower().replace(' ', '')}.com.br" if tem_site else None,
-                        "status_site": "tem_site" if tem_site else "sem_site",
-                        "score": score,
-                        "avaliacao": avaliacao,
-                        "temperatura": "Quente" if score >= 80 else "Morno",
-                        "status_crm": "Base",
-                        "orientacao": "Sem presença web. Alta probabilidade de conversão para site promocional." if not tem_site else "Site antigo não responsivo. Oferecer redesign.",
-                        "mediaEnrichment": media_data,
-                        "geo": {
-                            "pais": "BR",
-                            "estado": estado,
-                            "cidade": cidade,
-                            "bairro": bairro or "Centro"
-                        },
-                        "dados_contato": {
-                            "nome_fantasia": nome,
-                            "telefone": tel,
-                            "site": f"https://www.{nome.lower().replace(' ', '')}.com.br" if tem_site else None,
-                            "instagram": f"@{nome.lower().replace(' ', '')}"
-                        },
-                        "osint_score": score,
-                        "status_pipeline": "NOVO",
-                        "metrics_snapshot": KPIEngine.calcular_kpis(max_results)
-                    }
-                    leads_finais.append(lead_obj)
-                    idx += 1
-
-        return leads_finais[:max_results]
+        return leads[:max_results], {
+            "modo": "real",
+            "dados_reais": True,
+            "erros": erros,
+            "nichos_varridos": nichos_ativos,
+        }
 
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv
+    load_dotenv()
     core = OSINTCore()
-    res = core.executar_varredura("SP", "Franca", nichos="barbearia, hamburgueria", max_results=10)
-    print(json.dumps(res, indent=2, ensure_ascii=False))
+    res, meta = core.executar_varredura(
+        "SP", "Franca", nichos="barbearia, hamburgueria", max_results=6
+    )
+    print(json.dumps({"meta": meta, "leads": res}, indent=2, ensure_ascii=False))
