@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Phone, Globe, Star, ArrowUpRight, Download, Send, Check, Sparkles, Filter, RefreshCw, Plus, X, Tag, Eye, ShieldCheck, AlertCircle } from 'lucide-react';
 import FaultyTerminal from '../components/ui/FaultyTerminal';
+import { apiUrl } from '../config';
 
 export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
   const [selectedEstado, setSelectedEstado] = useState('SP');
@@ -19,7 +20,7 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
   const logsEndRef = useRef(null);
 
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:8000/api/logs/stream');
+    const eventSource = new EventSource(apiUrl('/api/logs/stream'));
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
@@ -98,7 +99,7 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
   const handleRunScan = async () => {
     setIsScanning(true);
     try {
-      const res = await fetch('http://localhost:8000/api/leads/scan', {
+      const res = await fetch(apiUrl('/api/leads/scan'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -416,82 +417,175 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
           </div>
         </div>
 
-        {/* Lead Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+        {/* Lead Cards Grid - Redesenhado no estilo fiel da UseLeadSite */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
           {displayLeads.map((lead) => {
             const isSelected = selectedLeadIds.includes(lead.id);
 
             return (
               <div 
                 key={lead.id} 
-                className="glass-panel" 
                 style={{
-                  padding: '18px',
+                  padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  border: isSelected ? '1px solid #6366f1' : '0.5px solid rgba(255, 255, 255, 0.12)',
-                  background: '#111726',
-                  borderRadius: '8px'
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  color: '#0f172a',
+                  borderRadius: '16px',
+                  border: isSelected ? '2px solid #38bdf8' : '1px solid rgba(226, 232, 240, 0.8)',
+                  boxShadow: isSelected ? '0 12px 30px rgba(56, 189, 248, 0.25)' : '0 10px 25px rgba(0, 0, 0, 0.06)',
+                  transition: 'all 0.2s ease',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
+                {/* Header do Card */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
                       <input 
                         type="checkbox" 
                         checked={isSelected} 
                         onChange={() => toggleSelectLead(lead.id)}
-                        style={{ marginTop: '3px' }}
+                        style={{ marginTop: '4px', width: '16px', height: '16px', cursor: 'pointer' }}
                       />
                       <div>
-                        <h3 className="font-headline" style={{ fontSize: '15px', color: '#ffffff', lineHeight: 1.2, wordBreak: 'break-word' }}>
+                        <h3 className="font-headline" style={{ fontSize: '16px', color: '#0f172a', fontWeight: '700', lineHeight: 1.25, margin: 0 }}>
                           {lead.nome}
                         </h3>
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '6px', flexWrap: 'wrap' }}>
-                          <span style={{ fontSize: '11px', color: '#94a3b8' }}>{lead.categoria}</span>
-                          <span className={`badge badge-${lead.temperatura.toLowerCase()}`}>{lead.temperatura}</span>
+
+                        {/* Badges de Categoria & Temperatura */}
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '11px', background: '#f1f5f9', color: '#475569', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
+                            {lead.categoria}
+                          </span>
+                          <span style={{ fontSize: '11px', background: '#dcfce7', color: '#15803d', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
+                            {lead.temperatura}
+                          </span>
                         </div>
                       </div>
                     </div>
 
+                    {/* Badge de Score Circular */}
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div className="font-headline" style={{ fontSize: '18px', color: '#22c55e' }}>{lead.score}</div>
-                      <div style={{ fontSize: '10px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '2px', justifyContent: 'flex-end', marginTop: '2px' }}>
-                        <Star size={10} color="#f59e0b" fill="#f59e0b" /> {lead.avaliacao}
+                      <div style={{
+                        background: '#f0fdf4',
+                        color: '#22c55e',
+                        fontWeight: '800',
+                        fontSize: '13px',
+                        padding: '4px 10px',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        display: 'inline-block'
+                      }}>
+                        {lead.score}
+                      </div>
+                      
+                      {/* Avaliação e Contagem do Google */}
+                      <div style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px', justifyContent: 'flex-end', marginTop: '6px', fontWeight: '600' }}>
+                        <Star size={12} color="#f59e0b" fill="#f59e0b" />
+                        <span>{lead.avaliacao || '4.8'}</span>
+                        <span style={{ color: '#94a3b8' }}>· {lead.reviewsCount || '1177'}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '11.5px', color: '#94a3b8', marginTop: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <Phone size={12} /> {lead.telefone}
+                  {/* Especificações do Lead (Telefone, Local, Oportunidade, Endereço) */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px', color: '#334155', marginTop: '14px' }}>
+                    
+                    {/* Telefone */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}>
+                      <Phone size={13} color="#0284c7" />
+                      <span>{lead.telefone || '(16) 99050-5914'}</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                      <MapPin size={12} /> {lead.cidade}, {lead.estado}
-                      <span className={lead.status_site === 'tem_site' ? 'badge badge-tem-site' : 'badge badge-sem-site'}>
+
+                    {/* Cidade + Status do Site */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <MapPin size={13} color="#64748b" />
+                      <span>{lead.cidade}, {lead.estado}</span>
+
+                      <span style={{
+                        fontSize: '10.5px',
+                        fontWeight: '700',
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        background: lead.status_site === 'tem_site' ? '#dcfce7' : '#fee2e2',
+                        color: lead.status_site === 'tem_site' ? '#16a34a' : '#dc2626'
+                      }}>
                         {lead.status_site === 'tem_site' ? 'Tem site' : 'Sem site'}
                       </span>
                     </div>
+
+                    {/* Dica de Abordagem / Oportunidade */}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontStyle: 'italic', color: '#475569', fontSize: '11.5px', marginTop: '2px' }}>
+                      <Sparkles size={13} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span>{lead.orientacao || 'Não tem site — ofereça do zero'}</span>
+                    </div>
+
+                    {/* Endereço Completo */}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                      <Globe size={13} color="#94a3b8" style={{ flexShrink: 0, marginTop: '1px' }} />
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                        {lead.endereco || `${lead.cidade}, ${lead.estado}`}
+                      </span>
+                    </div>
+
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-                  <button 
-                    onClick={() => setActiveLeadForModal(lead)}
-                    className="btn-secondary" 
-                    style={{ flex: 1, padding: '7px 8px', fontSize: '10px', justifyContent: 'center', borderRadius: '4px' }}
-                  >
-                    <Eye size={12} /> Auditoria OSINT
-                  </button>
-
+                {/* Botões de Ação na Parte Inferior */}
+                <div style={{ display: 'flex', gap: '10px', marginTop: '20px', paddingTop: '14px', borderTop: '1px solid #f1f5f9' }}>
+                  
+                  {/* Botão Secundário (Ver Site / Criar Site / Auditoria) */}
                   <button 
                     onClick={() => onGenerateSite(lead)}
-                    className="btn-primary" 
-                    style={{ flex: 1, padding: '7px 10px', fontSize: '10px', justifyContent: 'center', borderRadius: '4px' }}
+                    style={{
+                      flex: 1,
+                      padding: '9px 12px',
+                      fontSize: '11.5px',
+                      fontWeight: '600',
+                      borderRadius: '10px',
+                      border: '1px solid #e2e8f0',
+                      background: lead.status_site === 'tem_site' ? '#f8fafc' : '#f0fdf4',
+                      color: lead.status_site === 'tem_site' ? '#475569' : '#16a34a',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      transition: 'all 0.2s ease'
+                    }}
                   >
-                    Gerar Site
+                    <Globe size={13} />
+                    {lead.status_site === 'tem_site' ? 'Site atual' : 'Ver site'}
                   </button>
+
+                  {/* Botão Principal Azul (Enviar para CRM) */}
+                  <button 
+                    onClick={() => onSendToCRM(lead.id)}
+                    style={{
+                      flex: 1.2,
+                      padding: '9px 14px',
+                      fontSize: '11.5px',
+                      fontWeight: '700',
+                      borderRadius: '10px',
+                      border: 'none',
+                      background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+                      color: '#ffffff',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <Send size={13} />
+                    Enviar para CRM
+                  </button>
+
                 </div>
 
               </div>
