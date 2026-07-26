@@ -48,8 +48,8 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
       padding: 0,
       zIndex: 40,
       flexShrink: 0,
-      background: 'rgba(9, 10, 15, 0.92)',
-      backdropFilter: 'blur(20px)',
+      background: 'rgba(5, 7, 15, 0.1)',
+      backdropFilter: 'blur(2px)',
       borderRight: '0.5px solid rgba(255, 255, 255, 0.1)',
       userSelect: 'none'
     }}>
