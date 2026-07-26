@@ -1,4 +1,15 @@
-export const INITIAL_LEADS = [
+/**
+ * Base de exemplo para a interface abrir com conteúdo.
+ *
+ * ATENÇÃO: estes registros correspondem a negócios REAIS, com telefones
+ * reais. Eles servem para conferir layout — não são resultado de varredura
+ * e não foram verificados. Por isso são marcados `is_demo: true` no export
+ * abaixo, o que bloqueia o disparo comercial em `whatsappBulkEngine.js`.
+ *
+ * Leads de verdade chegam do backend via /api/leads/scan, já com
+ * `is_demo: false` e telefone vindo da Places API.
+ */
+const LEADS_DE_EXEMPLO = [
   {
     id: "lead-1",
     nome: "Marmitaria Sabor Caseiro",
@@ -53,7 +64,7 @@ export const INITIAL_LEADS = [
     score: 100,
     temperatura: "Quente",
     avaliacao: 4.8,
-    reviewsCount: 877,
+    reviewsCount: 1177,
     endereco: "Anexo ao posto Mário Roberto - Av. Alonso Y Alonso, 940 - Jardim Veneza, Franca",
     orientacao: "Site antigo sem mobile — vender redesign",
     status_crm: "Em Negociação",
@@ -200,6 +211,17 @@ export const INITIAL_LEADS = [
     criado_em: "2026-07-24T18:00:00Z"
   }
 ];
+
+/**
+ * Marca todo lead de exemplo como demo, de forma centralizada.
+ *
+ * Fazer isso no export (e não campo a campo) garante que nenhum registro
+ * novo colado aqui escape da trava por esquecimento.
+ */
+export const INITIAL_LEADS = LEADS_DE_EXEMPLO.map((lead) => ({
+  ...lead,
+  is_demo: true,
+}));
 
 export const STATS_SUMMARY = {
   totalAnalisados: "12.000+",
