@@ -31,14 +31,39 @@ export default function App() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: '#05070f' }}>
       
-      {/* Sidebar is shown on all application views except public landing page */}
+      {/* Background Matrix Grid Fixo Global - Sangra atrás da Sidebar Transparente em TODAS as abas */}
+      {currentTab !== 'landing' && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 0,
+          pointerEvents: 'none',
+          backgroundImage: `
+            linear-gradient(to right, rgba(34, 197, 94, 0.07) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(34, 197, 94, 0.07) 1px, transparent 1px)
+          `,
+          backgroundSize: '36px 36px',
+          opacity: 0.85
+        }}>
+          {/* Radial Ambient Dark Blur Gradient */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(circle at 15% 25%, rgba(34, 197, 94, 0.08) 0%, rgba(5, 7, 15, 0.85) 60%, rgba(5, 7, 15, 0.98) 100%)'
+          }} />
+        </div>
+      )}
+
+      {/* Sidebar Transparente em TODAS as sessões do aplicativo */}
       {currentTab !== 'landing' && (
         <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
       )}
 
-      <main style={{ flex: 1, minWidth: 0, overflowY: 'auto' }}>
+      <main style={{ flex: 1, minWidth: 0, overflowY: 'auto', position: 'relative', zIndex: 10 }}>
         {currentTab === 'landing' && (
           <LandingPage onOpenApp={() => setCurrentTab('dashboard')} />
         )}

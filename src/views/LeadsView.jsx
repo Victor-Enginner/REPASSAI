@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Phone, Globe, Star, ArrowUpRight, Download, Send, Check, Sparkles, Filter, RefreshCw, Plus, X, Tag, Eye, ShieldCheck, AlertCircle } from 'lucide-react';
-import FaultyTerminal from '../components/ui/FaultyTerminal';
 import { apiUrl } from '../config';
 
 export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
@@ -162,40 +161,7 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
   };
 
   return (
-    <div style={{ position: 'relative', padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', animation: 'fadeIn 0.3s ease', minHeight: '100vh' }}>
-      
-      {/* Fundo Animação Tela Inteira FaultyTerminal WebGL Shader React Bits */}
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        width: '100vw',
-        height: '100vh',
-        opacity: 0.32,
-        pointerEvents: 'none',
-        zIndex: 0,
-        overflow: 'hidden'
-      }}>
-        <FaultyTerminal
-          scale={1.5}
-          gridMul={[2, 1]}
-          digitSize={1.2}
-          timeScale={0.5}
-          pause={false}
-          scanlineIntensity={0.8}
-          glitchAmount={1}
-          flickerAmount={1}
-          noiseAmp={1}
-          chromaticAberration={0}
-          dither={0}
-          curvature={0.1}
-          tint="#A7EF9E"
-          mouseReact={true}
-          mouseStrength={0.8}
-          pageLoadAnimation={false}
-          brightness={0.8}
-        />
-      </div>
-
+    <div style={{ position: 'relative', padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', minHeight: '100vh' }}>
       <div style={{ position: 'relative', zIndex: 10 }}>
         
         {/* Header Bar */}
