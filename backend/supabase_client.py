@@ -49,11 +49,20 @@ def url_base():
 
 
 def service_key():
-    return os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    # Projetos novos do Supabase usam `sb_secret_...`; projetos antigos ainda
+    # exibem a JWT `service_role`. Ambas são exclusivas do backend.
+    return (
+        os.environ.get("SUPABASE_SECRET_KEY", "").strip()
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    )
 
 
 def anon_key():
-    return os.environ.get("SUPABASE_ANON_KEY", "").strip()
+    # `sb_publishable_...` substitui gradualmente a antiga JWT `anon`.
+    return (
+        os.environ.get("SUPABASE_PUBLISHABLE_KEY", "").strip()
+        or os.environ.get("SUPABASE_ANON_KEY", "").strip()
+    )
 
 
 def configurado():
@@ -161,10 +170,15 @@ def usuario_do_token(token):
 
 def _headers_servico(extra=None):
     """Headers com service_role. NUNCA devem chegar ao navegador."""
-    h = {
-        "apikey": service_key(),
-        "Authorization": f"Bearer {service_key()}",
-    }
+    chave = service_key()
+    h = {"apikey": chave}
+
+    # As novas chaves `sb_secret_...` não são JWTs. Enviá-las como Bearer faz
+    # o PostgREST tentar decodificá-las como JWT e responder 401. A antiga
+    # `service_role`, por outro lado, continua precisando do Authorization.
+    if not chave.startswith("sb_secret_"):
+        h["Authorization"] = f"Bearer {chave}"
+
     h.update(extra or {})
     return h
 
@@ -290,8 +304,19 @@ def consumir_site(user_id):
 
 def status():
     """Estado da integração, para o painel. Não expõe chave nenhuma."""
+    projeto_configurado = bool(url_base() and anon_key())
+    backend_configurado = configurado()
     return {
-        "configurado": configurado(),
+        "configurado": backend_configurado,
+        "projeto_configurado": projeto_configurado,
+        "backend_configurado": backend_configurado,
         "auth_ativo": auth_configurado(),
         "modo": "multiusuario" if auth_configurado() else "single_user",
+        "motivo": (
+            None
+            if auth_configurado()
+            else "chave_secreta_ausente"
+            if projeto_configurado
+            else "projeto_supabase_incompleto"
+        ),
     }

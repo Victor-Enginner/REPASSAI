@@ -3,7 +3,7 @@
   "document": {
     "id": "repass-ai-architecture",
     "title": "REPASS AI — Mapa Vivo de Arquitetura",
-    "version": "1.2.0",
+    "version": "1.3.1",
     "snapshot_at": "2026-07-27",
     "language": "pt-BR",
     "source_of_truth": "Código e documentação presentes no repositório",
@@ -15,6 +15,7 @@
       "runtime_diagnostics": true,
       "diagnostic_endpoints": [
         "/api/health",
+        "/api/system/status",
         "/api/auth/status",
         "/api/ai/status",
         "/api/templates",
@@ -221,6 +222,7 @@
       "summary": "Servidor HTTP principal, CORS, autenticação opcional, rotas REST e SSE.",
       "endpoints": [
         "GET /api/health",
+        "GET /api/system/status",
         "GET /api/ai/status",
         "GET /api/logs/stream",
         "GET /api/auth/status",
@@ -300,8 +302,8 @@
       "kind": "engine",
       "status": "partial",
       "path": "backend/r2_storage_engine.py",
-      "summary": "Grava HTML em backend/data/r2_bucket; credenciais R2 existem, mas upload e URL pública reais ainda não.",
-      "invariants": ["publicado=false enquanto não houver upload", "cdn_url=null enquanto não houver domínio real"]
+      "summary": "Preserva o HTML localmente e envia ao Cloudflare R2 pela API S3-compatible quando configurado.",
+      "invariants": ["Falha remota nunca apaga a cópia local", "publicado=false e cdn_url=null enquanto não houver domínio público real"]
     },
     {
       "id": "engine-tools",
@@ -361,8 +363,8 @@
       "layer": "data-external",
       "label": "Cloudflare R2 + CDN",
       "kind": "external",
-      "status": "planned",
-      "summary": "Destino planejado para publicação real de sites, ainda sem upload e domínio público conectados."
+      "status": "partial",
+      "summary": "Bucket e upload S3-compatible ativos; falta conectar uma URL pública real ao bucket para concluir a publicação."
     }
   ],
   "edges": [
@@ -392,7 +394,7 @@
     {"id": "e24", "from": "engine-lib77", "to": "engine-storage", "type": "writes", "label": "HTML"},
     {"id": "e25", "from": "engine-clone", "to": "engine-storage", "type": "writes", "label": "preview"},
     {"id": "e26", "from": "engine-storage", "to": "storage-local", "type": "writes", "label": "atual"},
-    {"id": "e27", "from": "engine-storage", "to": "storage-r2", "type": "planned", "label": "upload futuro"},
+    {"id": "e27", "from": "engine-storage", "to": "storage-r2", "type": "writes", "label": "upload real; CDN pendente"},
     {"id": "e28", "from": "front-config", "to": "api-server", "type": "http", "label": "JWT"},
     {"id": "e29", "from": "api-server", "to": "db-adapter", "type": "uses", "label": "auth/dados"},
     {"id": "e30", "from": "db-adapter", "to": "db-supabase", "type": "api", "label": "service role"},
@@ -450,7 +452,7 @@
     {
       "priority": "P0",
       "title": "Publicação real",
-      "detail": "R2 ainda grava localmente; falta upload S3-compatible, domínio público e contrato de URL.",
+      "detail": "O upload S3-compatible para o R2 está ativo; falta ligar um domínio público ao bucket e preencher R2_PUBLIC_BASE_URL.",
       "affected_nodes": ["engine-storage", "storage-r2"]
     },
     {

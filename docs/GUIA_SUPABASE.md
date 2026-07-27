@@ -44,12 +44,15 @@ O arquivo é idempotente: pode rodar de novo sem quebrar nada.
 | Campo no painel | Vai para |
 |---|---|
 | Project URL | `SUPABASE_URL` |
-| `anon` `public` | `SUPABASE_ANON_KEY` |
-| `service_role` `secret` | `SUPABASE_SERVICE_ROLE_KEY` |
+| `Publishable key` (`sb_publishable_...`) | `SUPABASE_PUBLISHABLE_KEY` |
+| `Secret key` (`sb_secret_...`) | `SUPABASE_SECRET_KEY` |
+
+Projetos antigos podem continuar usando `SUPABASE_ANON_KEY` e
+`SUPABASE_SERVICE_ROLE_KEY`; o backend aceita os dois formatos.
 
 Cole em `backend/.env`.
 
-> **Sobre a `service_role`:** ela ignora o RLS e lê o banco inteiro. Só o
+> **Sobre a chave secreta:** ela possui acesso privilegiado. Só o
 > backend usa. Nunca coloque numa variável `VITE_*` — tudo que começa com
 > `VITE_` é embutido no bundle e fica visível para qualquer visitante.
 >

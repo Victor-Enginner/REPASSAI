@@ -9,6 +9,7 @@ e prepara o roteamento de domínios customizados (CNAME) via Cloudflare Workers.
 import os
 import sys
 import json
+import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STORAGE_DIR = os.path.join(BASE_DIR, "data", "r2_bucket")
@@ -17,57 +18,146 @@ os.makedirs(STORAGE_DIR, exist_ok=True)
 
 class R2StorageEngine:
     def __init__(self, account_id=None, access_key=None, secret_key=None):
-        self.account_id = account_id or os.environ.get("CLOUDFLARE_R2_ACCOUNT_ID", "")
-        self.access_key = access_key or os.environ.get("CLOUDFLARE_R2_ACCESS_KEY", "")
-        self.secret_key = secret_key or os.environ.get("CLOUDFLARE_R2_SECRET_KEY", "")
-        self.bucket_name = "repass-ai-beta"
+        # Aceita os nomes documentados e os nomes legados já presentes no
+        # ambiente do projeto. Assim nenhuma credencial precisa ser copiada
+        # ou exposta só para migrar a configuração.
+        self.account_id = account_id or self._env(
+            "CLOUDFLARE_R2_ACCOUNT_ID", "R2_ACCOUNT_ID"
+        )
+        self.access_key = access_key or self._env(
+            "CLOUDFLARE_R2_ACCESS_KEY", "R2_ACCESS_KEY_ID"
+        )
+        self.secret_key = secret_key or self._env(
+            "CLOUDFLARE_R2_SECRET_KEY", "R2_SECRET_ACCESS_KEY"
+        )
+        self.bucket_name = self._env("CLOUDFLARE_R2_BUCKET", "R2_BUCKET_NAME") or "repass-ai-beta"
+        self.public_base_url = self._env(
+            "CLOUDFLARE_R2_PUBLIC_BASE_URL", "R2_PUBLIC_BASE_URL"
+        ).rstrip("/")
+
+    @staticmethod
+    def _env(*nomes):
+        for nome in nomes:
+            valor = os.environ.get(nome, "").strip()
+            if valor:
+                return valor
+        return ""
 
     def configurado(self):
         """True se há credenciais R2 completas para upload real."""
-        return bool(self.account_id and self.access_key and self.secret_key)
+        return bool(
+            self.account_id
+            and self.access_key
+            and self.secret_key
+            and self.bucket_name
+        )
+
+    def status(self):
+        """Estado público do storage, sem revelar credenciais."""
+        try:
+            import boto3  # noqa: F401
+            cliente_disponivel = True
+        except ImportError:
+            cliente_disponivel = False
+        return {
+            "local_operacional": os.path.isdir(STORAGE_DIR),
+            "r2_configurado": self.configurado(),
+            "cliente_s3_disponivel": cliente_disponivel,
+            "publicacao_configurada": bool(self.public_base_url),
+        }
+
+    @staticmethod
+    def _slug_seguro(valor):
+        limpo = re.sub(r"[^a-z0-9_-]+", "-", str(valor).lower()).strip("-")
+        return limpo[:100] or "site"
+
+    def _upload_r2(self, file_name, html_content):
+        """Envia o HTML ao R2 pela API S3-compatible."""
+        try:
+            import boto3
+        except ImportError as exc:
+            raise RuntimeError(
+                "Cliente S3 indisponível. Instale as dependências do backend."
+            ) from exc
+
+        endpoint = f"https://{self.account_id}.r2.cloudflarestorage.com"
+        cliente = boto3.client(
+            "s3",
+            endpoint_url=endpoint,
+            aws_access_key_id=self.access_key,
+            aws_secret_access_key=self.secret_key,
+            region_name="auto",
+        )
+        cliente.put_object(
+            Bucket=self.bucket_name,
+            Key=file_name,
+            Body=html_content.encode("utf-8"),
+            ContentType="text/html; charset=utf-8",
+            CacheControl="public, max-age=300",
+        )
 
     def salvar_site_compilado(self, client_slug, html_content):
         """
         Grava o site compilado.
 
-        ESTADO ATUAL: apenas armazenamento LOCAL. O upload para o Cloudflare
-        R2 ainda não está implementado — as credenciais são lidas mas nenhuma
-        chamada de API é feita.
+        A cópia local é sempre gravada primeiro. Quando as credenciais e o
+        cliente S3 estão disponíveis, o mesmo HTML é enviado ao Cloudflare R2.
+        A falha remota nunca apaga nem invalida a cópia local.
 
-        Por isso `cdn_url` volta como None. A versão anterior devolvia
-        "https://cdn.repass.ai/{arquivo}", um domínio que não existe
-        (NXDOMAIN): mandar esse link a um cliente entrega uma página morta.
-
-        Enquanto `publicado` for False, a interface deve oferecer download
-        do HTML, nunca um link público.
+        `publicado` só fica True quando o upload termina E existe uma base URL
+        pública configurada. Upload privado no bucket não é publicação.
 
         Returns:
             dict com status, caminho local, `publicado` (bool) e `cdn_url`
             (str|None). `cdn_url` só deixa de ser None quando houver upload
             real e um domínio efetivamente servindo os arquivos.
         """
+        client_slug = self._slug_seguro(client_slug)
         file_name = f"{client_slug}.html"
         local_path = os.path.join(STORAGE_DIR, file_name)
 
         with open(local_path, "w", encoding="utf-8") as f:
             f.write(html_content)
 
+        enviado_r2 = False
+        erro_r2 = None
         if self.configurado():
-            print(
-                f"[R2StorageEngine] Credenciais R2 presentes, mas o upload não "
-                f"está implementado. '{file_name}' ficou apenas local."
-            )
+            try:
+                self._upload_r2(file_name, html_content)
+                enviado_r2 = True
+                print(f"[R2StorageEngine] '{file_name}' enviado ao R2.")
+            except Exception as exc:
+                erro_r2 = f"{type(exc).__name__}: {exc}"
+                print(
+                    f"[R2StorageEngine] Upload R2 falhou; cópia local preservada "
+                    f"({type(exc).__name__})."
+                )
         else:
             print(f"[R2StorageEngine] Site '{client_slug}' salvo localmente em: {local_path}")
 
+        cdn_url = (
+            f"{self.public_base_url}/{file_name}"
+            if enviado_r2 and self.public_base_url
+            else None
+        )
         return {
             "status": "success",
             "bucket": self.bucket_name,
             "file_name": file_name,
             "local_path": local_path,
-            "publicado": False,
-            "cdn_url": None,
-            "motivo": "upload_r2_nao_implementado",
+            "enviado_r2": enviado_r2,
+            "publicado": bool(cdn_url),
+            "cdn_url": cdn_url,
+            "motivo": (
+                None
+                if cdn_url
+                else "dominio_publico_nao_configurado"
+                if enviado_r2
+                else "upload_r2_falhou"
+                if erro_r2
+                else "r2_nao_configurado"
+            ),
+            "erro_r2": erro_r2,
         }
 
     def gerar_script_worker_cname(self, client_slug, custom_domain):

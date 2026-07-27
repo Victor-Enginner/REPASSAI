@@ -71,7 +71,7 @@
   <aside class="drawer" id="drawer" aria-live="polite"><button class="btn drawer-close" id="close">Fechar</button><div id="drawer-content"></div></aside>
   <footer class="footer">FONTE: CÓDIGO LOCAL + DOCUMENTAÇÃO DO REPOSITÓRIO · REGRA: MUDOU A ARQUITETURA, MUDE O JSON NO MESMO COMMIT.</footer>
   <script>
-  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.2.0","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
+  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.3.1","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
   let DATA, activeStatus='all', query='', live=true, rafId=0, selectedFlow=null, runtimeState={};
   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
   async function load(){
@@ -148,7 +148,7 @@
     localStorage.setItem('repass-map-api-base',base);button.classList.add('diagnose-running');button.textContent='Testando…';runtimeState={};
     $$('.runtime-badge').forEach(e=>e.remove());$$('.node').forEach(n=>[...n.classList].filter(c=>c.startsWith('runtime-')).forEach(c=>n.classList.remove(c)));
     $('#diagnostic-summary').innerHTML=diagnosticPill('Backend','unknown');
-    const [health,auth,ai,templates,sse]=await Promise.all([probeJson(base,'/api/health'),probeJson(base,'/api/auth/status'),probeJson(base,'/api/ai/status'),probeJson(base,'/api/templates'),probeSse(base)]);
+    const [health,system,auth,ai,templates,sse]=await Promise.all([probeJson(base,'/api/health'),probeJson(base,'/api/system/status'),probeJson(base,'/api/auth/status'),probeJson(base,'/api/ai/status'),probeJson(base,'/api/templates'),probeSse(base)]);
     const apiState=health.ok?'online':'offline';
     ['api-server','front-config'].forEach(id=>setRuntime(id,apiState,health.error||`${health.latency}ms`));
     setRuntime('api-sse',sse.ok?'online':'offline',sse.error||'canal aberto');
@@ -158,16 +158,19 @@
     }else ['front-llm','engine-llm','external-llms'].forEach(id=>setRuntime(id,'offline',ai.error));
     const tplState=templates.ok?'online':'offline';['ui-templates','engine-templates','storage-local'].forEach(id=>setRuntime(id,tplState,templates.error||`${templates.data.templates?.length||0} templates`));
     if(auth.ok){
-      const supaState=auth.data.configurado?'unknown':'unconfigured';
-      setRuntime('db-adapter',supaState,auth.data.configurado?'variáveis presentes; banco não consultado':'variáveis ausentes');
-      setRuntime('db-supabase',supaState,auth.data.configurado?'configurado, conectividade do banco não comprovada':'Supabase não configurado');
+      const supaState=auth.data.auth_ativo?'unknown':auth.data.projeto_configurado?'degraded':'unconfigured';
+      const supaDetail=auth.data.auth_ativo?'backend configurado; banco não consultado':auth.data.projeto_configurado?'projeto e chave pública válidos; chave secreta pendente':'projeto Supabase incompleto';
+      setRuntime('db-adapter',supaState,supaDetail);
+      setRuntime('db-supabase',supaState,supaDetail);
       setRuntime('front-config','online',auth.data.modo||'single_user');
     }else{setRuntime('db-adapter','offline',auth.error);setRuntime('db-supabase','offline',auth.error)}
     setRuntime('front-local-store','online','fallback local disponível');
-    setRuntime('engine-storage','online','armazenamento local');
-    setRuntime('storage-r2','unconfigured','publicação real ainda planejada');
-    setRuntime('external-places','unknown','teste exigiria uma busca real e consumo de API');
-    setRuntime('engine-osint',health.ok?'unknown':'offline',health.ok?'não executado para evitar consumo':'backend offline');
+    setRuntime('engine-storage','online',system.data?.storage?.r2_configurado?'cópia local + upload R2 configurado':'armazenamento local');
+    const r2State=system.ok&&system.data.storage?.r2_configurado?(system.data.storage.publicacao_configurada?'online':'degraded'):'unconfigured';
+    setRuntime('storage-r2',r2State,r2State==='online'?'upload e URL pública configurados':r2State==='degraded'?'upload configurado; URL pública pendente':'credenciais ausentes');
+    const placesState=system.ok&&system.data.places?.configurado?'unknown':'unconfigured';
+    setRuntime('external-places',placesState,placesState==='unknown'?'chave presente; teste real não executado para evitar consumo':'chave ausente; scanner em modo demo');
+    setRuntime('engine-osint',health.ok?placesState:'offline',health.ok?(placesState==='unknown'?'modo real configurado; varredura não executada':'modo demo'):'backend offline');
     const supabaseState=runtimeState['db-supabase'].state;
     $('#diagnostic-summary').innerHTML=[
       diagnosticPill('Backend',apiState,health.error||`${health.latency}ms`),
@@ -175,7 +178,7 @@
       diagnosticPill('Motor IA',runtimeState['engine-llm'].state,ai.error||''),
       diagnosticPill('Templates',tplState,templates.error||''),
       diagnosticPill('Supabase',supabaseState,runtimeState['db-supabase'].detail),
-      diagnosticPill('R2','unconfigured','planejado')
+      diagnosticPill('R2',r2State,runtimeState['storage-r2'].detail)
     ].join('');
     const failure=!health.ok?`O backend não respondeu (${health.error}). Abra o mapa por http://localhost:3000/docs/repass-architecture-map.html e confirme que a API está rodando em ${base}.`:supabaseState==='unconfigured'?'Supabase não está conectado. O REPASS AI permanece em modo single-user, mas login multiusuário, sincronização central e isolamento por user_id ficam indisponíveis.':'Diagnóstico concluído. Itens “não testados” exigem uma operação real ou um endpoint de saúde mais profundo.';
     $('#diagnostic-note').textContent=failure;button.classList.remove('diagnose-running');button.textContent='Executar novamente';drawWires();

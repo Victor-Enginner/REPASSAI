@@ -13,7 +13,7 @@ ferramenta boa achando que é código morto.
 | `scraper_monster.py` | Orquestrador da varredura OSINT + enriquecimento de mídia. |
 | `llm_gateway.py` | Cadeia de LLMs com rotação de chaves. Guarda as credenciais. |
 | `lib77_engine.py` | Compilador procedural de sites a partir do catálogo 77lib. |
-| `r2_storage_engine.py` | Armazenamento do HTML compilado. **Hoje só local** — ver abaixo. |
+| `r2_storage_engine.py` | Cópia local garantida + upload opcional para Cloudflare R2. |
 
 ## Ferramentas de linha de comando (rodadas à mão)
 
@@ -35,22 +35,20 @@ python backend/beta_live_runner.py    # pipeline completa: lead -> site -> stora
 
 ## Estado do armazenamento
 
-`r2_storage_engine.py` grava o HTML em `data/r2_bucket/` e **não faz upload
-para o Cloudflare R2** — as credenciais são lidas mas nenhuma chamada de API
-acontece.
+`r2_storage_engine.py` sempre grava uma cópia em `data/r2_bucket/`. Com
+credenciais completas e `boto3` instalado, também envia o HTML para o
+Cloudflare R2 pela API S3-compatible.
 
-Por isso `salvar_site_compilado()` devolve `publicado: False` e
-`cdn_url: None`. A versão anterior devolvia `https://cdn.repass.ai/...`, um
-domínio inexistente (NXDOMAIN) — mandar aquele link a um cliente entregava
-uma página morta.
+Upload no bucket e publicação são estados diferentes. `publicado` só fica
+`True` quando `R2_PUBLIC_BASE_URL` aponta para um domínio que realmente serve
+o bucket. Sem domínio, o arquivo pode estar no R2, mas a interface continua
+oferecendo preview/download em vez de inventar um link.
 
-**Enquanto `publicado` for `False`, a interface deve oferecer download do
-HTML, nunca um link público.**
+Instalação do backend:
 
-Para implementar o upload de verdade: R2 fala a API S3, então `boto3` com
-`endpoint_url=https://<account_id>.r2.cloudflarestorage.com` resolve. Depois
-é preciso um domínio público servindo o bucket antes de `cdn_url` deixar de
-ser `None`.
+```bash
+pip install -r backend/requirements.txt
+```
 
 ## Testes
 

@@ -110,6 +110,85 @@ class TestIntegridadeDeDados(unittest.TestCase):
         self.assertIn("Barbearia Teste", msg)
 
 
+class TestConfiguracaoDeMotores(unittest.TestCase):
+    """Contratos que impedem o ambiente de parecer configurado sem estar."""
+
+    def test_r2_aceita_nomes_existentes_sem_expor_segredos(self):
+        import os
+        from unittest import mock
+        from r2_storage_engine import R2StorageEngine
+
+        env = {
+            "R2_ACCOUNT_ID": "conta-teste",
+            "R2_ACCESS_KEY_ID": "acesso-teste",
+            "R2_SECRET_ACCESS_KEY": "segredo-teste",
+            "R2_BUCKET_NAME": "bucket-teste",
+            "R2_PUBLIC_BASE_URL": "",
+            "CLOUDFLARE_R2_ACCOUNT_ID": "",
+            "CLOUDFLARE_R2_ACCESS_KEY": "",
+            "CLOUDFLARE_R2_SECRET_KEY": "",
+        }
+        with mock.patch.dict(os.environ, env, clear=False):
+            r2 = R2StorageEngine()
+
+        self.assertTrue(r2.configurado())
+        self.assertEqual(r2.bucket_name, "bucket-teste")
+        self.assertFalse(r2.public_base_url)
+
+    def test_rodizio_llm_persiste_entre_requisicoes(self):
+        import llm_gateway
+
+        primeira = llm_gateway.provedores_ativos()
+        segunda = llm_gateway.provedores_ativos()
+        self.assertIs(
+            primeira, segunda,
+            "recriar provedores apaga a quarentena das chaves após HTTP 429",
+        )
+
+    def test_supabase_aceita_chaves_novas(self):
+        import os
+        from unittest import mock
+        import supabase_client
+
+        env = {
+            "SUPABASE_URL": "https://projeto.supabase.co",
+            "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_teste",
+            "SUPABASE_SECRET_KEY": "sb_secret_teste",
+            "SUPABASE_ANON_KEY": "",
+            "SUPABASE_SERVICE_ROLE_KEY": "",
+        }
+        with mock.patch.dict(os.environ, env, clear=False):
+            self.assertEqual(
+                supabase_client.anon_key(), "sb_publishable_teste"
+            )
+            self.assertEqual(
+                supabase_client.service_key(), "sb_secret_teste"
+            )
+            self.assertTrue(supabase_client.auth_configurado())
+            headers = supabase_client._headers_servico()
+            self.assertEqual(headers["apikey"], "sb_secret_teste")
+            self.assertNotIn(
+                "Authorization", headers,
+                "sb_secret não é JWT e não pode ser enviada como Bearer",
+            )
+
+    def test_supabase_service_role_legada_mantem_bearer(self):
+        import os
+        from unittest import mock
+        import supabase_client
+
+        env = {
+            "SUPABASE_SECRET_KEY": "",
+            "SUPABASE_SERVICE_ROLE_KEY": "jwt-service-role-teste",
+        }
+        with mock.patch.dict(os.environ, env, clear=False):
+            headers = supabase_client._headers_servico()
+            self.assertEqual(headers["apikey"], "jwt-service-role-teste")
+            self.assertEqual(
+                headers["Authorization"], "Bearer jwt-service-role-teste"
+            )
+
+
 class TestProtecaoSSRF(unittest.TestCase):
     """O proxy de mídia não pode virar proxy aberto para a rede interna."""
 

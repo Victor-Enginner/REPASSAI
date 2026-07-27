@@ -36,6 +36,10 @@ DESCANSO_APOS_429 = 60
 
 TIMEOUT_PADRAO = 45
 
+_CACHE_PROVEDORES = None
+_CACHE_ASSINATURA = None
+_CACHE_LOCK = threading.Lock()
+
 
 def _chaves(nome_var):
     """
@@ -146,19 +150,54 @@ def carregar_provedores():
             3,
         ),
         Provedor(
+            "mistral",
+            "Mistral AI",
+            "https://api.mistral.ai/v1/chat/completions",
+            os.environ.get("MISTRAL_MODEL", "codestral-latest"),
+            _chaves("MISTRAL_API_KEYS"),
+            "openai",
+            4,
+        ),
+        Provedor(
             "ollama",
             "Ollama Local",
             os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate"),
-            os.environ.get("OLLAMA_MODEL", "qwen2.5-coder"),
+            # Modelo leve já adequado a CPU. Para maior qualidade, instale
+            # qwen2.5-coder e sobrescreva OLLAMA_MODEL no ambiente.
+            os.environ.get("OLLAMA_MODEL", "qwen2.5:1.5b"),
             [],
             "ollama",
-            4,  # rede de segurança: custo zero, sem limite, sem internet
+            5,  # rede de segurança: custo zero, sem limite, sem internet
         ),
     ]
 
     ativos = [p for p in provedores if p.habilitado()]
     ativos.sort(key=lambda p: p.prioridade)
     return ativos
+
+
+def provedores_ativos():
+    """
+    Mantém as instâncias do rodízio vivas entre requisições.
+
+    Antes, cada chamada recriava `RotacaoDeChaves`, apagando imediatamente
+    a quarentena de uma chave que recebeu 429. O cache só é renovado quando
+    a configuração relevante do ambiente muda.
+    """
+    global _CACHE_PROVEDORES, _CACHE_ASSINATURA
+    nomes = (
+        "GROQ_API_KEYS", "GROQ_MODEL",
+        "GOOGLE_AI_API_KEYS", "GEMINI_MODEL",
+        "OPENROUTER_API_KEYS", "OPENROUTER_MODEL",
+        "MISTRAL_API_KEYS", "MISTRAL_MODEL",
+        "OLLAMA_URL", "OLLAMA_MODEL",
+    )
+    assinatura = tuple(os.environ.get(nome, "") for nome in nomes)
+    with _CACHE_LOCK:
+        if _CACHE_PROVEDORES is None or assinatura != _CACHE_ASSINATURA:
+            _CACHE_PROVEDORES = carregar_provedores()
+            _CACHE_ASSINATURA = assinatura
+        return _CACHE_PROVEDORES
 
 
 def _montar_corpo(provedor, prompt, system_prompt, temperature):
@@ -252,7 +291,7 @@ def gerar(prompt, system_prompt="Você é um assistente do REPASS AI.", temperat
         O retorno NÃO inclui provedor nem modelo: essa informação fica no
         servidor de propósito. Use `trace` só em log interno.
     """
-    provedores = carregar_provedores()
+    provedores = provedores_ativos()
     trace = []
 
     if not provedores:
@@ -312,7 +351,7 @@ def gerar(prompt, system_prompt="Você é um assistente do REPASS AI.", temperat
     }
 
 
-def _ollama_no_ar(url, timeout=1.5):
+def _ollama_no_ar(url, modelo=None, timeout=1.5):
     """
     Verifica se há um Ollama realmente atendendo.
 
@@ -322,8 +361,15 @@ def _ollama_no_ar(url, timeout=1.5):
     try:
         base = url.split("/api/")[0]
         req = urllib.request.Request(f"{base}/api/tags", method="GET")
-        with urllib.request.urlopen(req, timeout=timeout):
-            return True
+        with urllib.request.urlopen(req, timeout=timeout) as resposta:
+            if not modelo:
+                return True
+            dados = json.loads(resposta.read().decode("utf-8"))
+            nomes = {
+                item.get("name") or item.get("model")
+                for item in (dados.get("models") or [])
+            }
+            return modelo in nomes or f"{modelo}:latest" in nomes
     except Exception:
         return False
 
@@ -335,12 +381,12 @@ def status():
     O painel mostra só quantos motores estão prontos. Qual modelo roda por
     trás é informação do servidor.
     """
-    provedores = carregar_provedores()
+    provedores = provedores_ativos()
 
     prontos = 0
     for p in provedores:
         if p.formato == "ollama":
-            if _ollama_no_ar(p.url):
+            if _ollama_no_ar(p.url, p.modelo):
                 prontos += 1
         elif p.rotacao.disponivel():
             prontos += 1

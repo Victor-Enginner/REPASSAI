@@ -20,8 +20,12 @@ import threading
 from dotenv import load_dotenv
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
-# Carrega as variáveis do .env para o os.environ
-load_dotenv()
+# Carrega SEMPRE o .env que pertence ao backend, independentemente da pasta
+# usada para iniciar o processo (`python backend/app_api.py` ou `cd backend`).
+# Antes, `load_dotenv()` dependia do cwd e podia subir a API sem nenhuma chave.
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+BACKEND_ENV = os.path.join(BACKEND_DIR, ".env")
+load_dotenv(BACKEND_ENV)
 
 from scraper_monster import OSINTCore
 import llm_gateway
@@ -89,12 +93,18 @@ HOSTS_PERMITIDOS = (
 )
 
 # Origens autorizadas a chamar a API pelo navegador.
-ORIGENS_PERMITIDAS = [
-    o.strip() for o in os.environ.get(
-        # Porta 3000 é a do vite.config.js deste projeto; 4173 é o preview.
-        "CORS_ORIGINS", "http://localhost:3000,http://localhost:4173"
-    ).split(",") if o.strip()
-]
+ORIGENS_DESENVOLVIMENTO = {
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173",
+}
+ORIGENS_CONFIGURADAS = {
+    o.strip()
+    for o in os.environ.get("CORS_ORIGINS", "").split(",")
+    if o.strip()
+}
+ORIGENS_PERMITIDAS = sorted(ORIGENS_DESENVOLVIMENTO | ORIGENS_CONFIGURADAS)
 
 TAMANHO_MAX_BODY = 1 * 1024 * 1024  # 1MB de JSON é folgado para esta API
 
@@ -187,6 +197,28 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             self.end_headers()
             response = {"status": "ok", "message": "REPASS AI API Operacional", "version": "v20.0-STABLE"}
             self.wfile.write(json.dumps(response, ensure_ascii=False).encode('utf-8'))
+
+        elif path == "/api/system/status":
+            # Diagnóstico consolidado, somente com presença/estado. Nunca
+            # devolve valores de credenciais, nomes de modelos ou segredos.
+            from places_engine import places_configurado
+            from r2_storage_engine import R2StorageEngine
+
+            r2 = R2StorageEngine()
+            self._json(200, {
+                "api": {"operacional": True},
+                "ia": llm_gateway.status(),
+                "places": {
+                    "configurado": places_configurado(),
+                    "modo": "real" if places_configurado() else "demo",
+                },
+                "supabase": supabase_client.status(),
+                "storage": r2.status(),
+                "templates": {
+                    "operacional": True,
+                    "quantidade": len(templates_store.listar()),
+                },
+            })
 
         elif path == "/api/ai/status":
             # Só diz quantos motores estão prontos. Nunca qual modelo.
@@ -694,6 +726,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
     def handle_site_generate(self, body):
         """Compila o site real com o motor Lib77Engine e devolve o HTML5 procedural + URL para iframe."""
         from lib77_engine import Lib77Engine
+        from r2_storage_engine import R2StorageEngine
         lead_data = body.get("lead") or body
         lead_name = lead_data.get("nome", "Empresa Exemplo")
         categoria = lead_data.get("categoria", "Geral")
@@ -703,22 +736,34 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         
         output_file = os.path.basename(sintese.get("output_html_file", "generated_site.html"))
         html_content = sintese.get("html_content", "")
+        slug = lead_name.lower().replace(" ", "_")
+        storage_result = R2StorageEngine().salvar_site_compilado(slug, html_content)
 
         schema = {
-          "projectId": f"site_{lead_name.lower().replace(' ', '_')}",
+          "projectId": f"site_{slug}",
           "version": 1,
           "theme": "77lib_procedural",
           "meta": {"title": f"{lead_name} — Site Oficial", "nicho": categoria},
           "htmlContent": html_content,
           "outputFileName": output_file,
-          "previewUrl": f"/api/site/preview_html?file={output_file}"
+          "previewUrl": f"/api/site/preview_html?file={output_file}",
+          "deployment": {
+              "enviado_r2": storage_result["enviado_r2"],
+              "publicado": storage_result["publicado"],
+              "url_publica": storage_result["cdn_url"],
+              "motivo": storage_result["motivo"],
+          },
         }
 
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self._send_cors_headers()
         self.end_headers()
-        self.wfile.write(json.dumps({"status": "success", "schema": schema}, ensure_ascii=False).encode('utf-8'))
+        self.wfile.write(json.dumps({
+            "status": "success",
+            "schema": schema,
+            "storage": schema["deployment"],
+        }, ensure_ascii=False).encode('utf-8'))
 
     def handle_site_clone(self, body):
         url = body.get("url", "")
