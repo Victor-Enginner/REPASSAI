@@ -15,6 +15,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { generatePersonalizedScript, buildWhatsAppWebLink, podeAbordar } from '../services/whatsappBulkEngine';
+import GradualBlur from '../components/ui/GradualBlur';
 
 export default function CRMView({ leads, setLeads, onGenerateSite }) {
   const [selectedLeadForScript, setSelectedLeadForScript] = useState(null);
@@ -70,8 +71,8 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
         </div>
       </div>
 
-      {/* Kanban Board Columns */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', alignItems: 'flex-start' }}>
+      {/* Kanban Board Columns - Enquadramento Fixo com GradualBlur */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', alignItems: 'stretch' }}>
         {columns.map(col => {
           const colLeads = leads.filter(l => l.status_crm === col.id);
 
@@ -80,143 +81,171 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
               key={col.id}
               className="glass-panel"
               style={{
-                borderRadius: '0px',
-                padding: '16px',
-                minHeight: '600px',
+                borderRadius: '12px',
+                padding: '20px',
+                height: 'calc(100vh - 200px)',
+                display: 'flex',
+                flexDirection: 'column',
                 background: '#0a0e1a',
-                border: '0.5px solid rgba(255, 255, 255, 0.12)'
+                border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
-              {/* Column Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)' }}>
+              {/* Column Header (Fixo no topo da coluna) */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)', flexShrink: 0, zIndex: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: col.color }} />
                   <h2 className="font-mono" style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>
                     {col.title}
                   </h2>
                 </div>
-                <span className="mono-label" style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 8px', color: '#ffffff' }}>
+                <span className="mono-label" style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 8px', color: '#ffffff', borderRadius: '4px' }}>
                   {colLeads.length}
                 </span>
               </div>
 
-              {/* Column Cards */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {colLeads.map(lead => {
-                  const script = generatePersonalizedScript(lead);
-                  // Usa a MESMA trava do disparo em lote. Validar só o
-                  // formato do telefone deixava lead de demonstração com
-                  // botão funcional aqui, contornando o bloqueio.
-                  const { permitido } = podeAbordar(lead);
-                  const waLink = permitido
-                    ? buildWhatsAppWebLink(lead.telefone, script)
-                    : null;
+              {/* Column Cards (Scroll interno suave) */}
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                paddingRight: '4px',
+                paddingBottom: '5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
+                position: 'relative',
+                zIndex: 1
+              }}>
+                {colLeads.length === 0 ? (
+                  <div style={{ padding: '30px 10px', textAlign: 'center', color: '#64748b', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                    NENHUM LEAD NESTA ETAPA
+                  </div>
+                ) : (
+                  colLeads.map(lead => {
+                    const script = generatePersonalizedScript(lead);
+                    const { permitido } = podeAbordar(lead);
+                    const waLink = permitido
+                      ? buildWhatsAppWebLink(lead.telefone, script)
+                      : null;
 
-                  return (
-                    <div 
-                      key={lead.id}
-                      style={{
-                        background: '#111726',
-                        border: '0.5px solid rgba(255, 255, 255, 0.12)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                        position: 'relative'
-                      }}
-                    >
-                      {/* Top Row: Title & Temperature */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                        <div>
-                          <h3 className="font-headline" style={{ fontSize: '15px', color: '#ffffff', lineHeight: 1.2 }}>
-                            {lead.nome}
-                          </h3>
-                          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
-                            {lead.categoria} · {lead.cidade}
+                    return (
+                      <div 
+                        key={lead.id}
+                        className="cursor-target"
+                        style={{
+                          background: '#111726',
+                          border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                          borderRadius: '8px',
+                          padding: '16px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '12px',
+                          position: 'relative',
+                          transition: 'transform 0.15s ease, border-color 0.15s ease'
+                        }}
+                      >
+                        {/* Top Row: Title & Temperature */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
+                          <div>
+                            <h3 className="font-headline" style={{ fontSize: '15px', color: '#ffffff', lineHeight: 1.2 }}>
+                              {lead.nome}
+                            </h3>
+                            <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
+                              {lead.categoria} · {lead.cidade}
+                            </div>
                           </div>
+
+                          <span className={`badge badge-${lead.temperatura.toLowerCase()}`}>
+                            {lead.temperatura}
+                          </span>
                         </div>
 
-                        <span className={`badge badge-${lead.temperatura.toLowerCase()}`}>
-                          {lead.temperatura}
-                        </span>
-                      </div>
-
-                      {/* Phone & Status */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94a3b8' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Phone size={12} /> {lead.telefone}
-                        </span>
-                        <span className={lead.status_site === 'tem_site' ? 'badge badge-tem-site' : 'badge badge-sem-site'}>
-                          {lead.status_site === 'tem_site' ? 'Tem site' : 'Sem site'}
-                        </span>
-                      </div>
-
-                      {/* Quick Action Buttons */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
-                        {waLink ? (
-                          <a
-                            href={waLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-secondary"
-                            style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', textDecoration: 'none' }}
-                          >
-                            <MessageSquare size={12} color="#22c55e" /> WhatsApp
-                          </a>
-                        ) : (
-                          /* Sem telefone verificado não há link — botão morto
-                             leva o operador a achar que o contato existe. */
-                          <span
-                            title={lead.is_demo ? 'Lead de demonstração' : 'Sem telefone no perfil do Google'}
-                            className="btn-secondary"
-                            style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', opacity: 0.4, cursor: 'not-allowed' }}
-                          >
-                            <MessageSquare size={12} color="#64748b" /> Sem telefone
+                        {/* Phone & Status */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94a3b8' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Phone size={12} /> {lead.telefone}
                           </span>
-                        )}
+                          <span className={lead.status_site === 'tem_site' ? 'badge badge-tem-site' : 'badge badge-sem-site'}>
+                            {lead.status_site === 'tem_site' ? 'Tem site' : 'Sem site'}
+                          </span>
+                        </div>
 
-                        <button 
-                          onClick={() => setSelectedLeadForScript(lead)}
-                          className="btn-secondary" 
-                          style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center' }}
-                        >
-                          <Sparkles size={12} color="#6366f1" /> Script IA
-                        </button>
+                        {/* Quick Action Buttons */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
+                          {waLink ? (
+                            <a
+                              href={waLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-secondary"
+                              style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', textDecoration: 'none' }}
+                            >
+                              <MessageSquare size={12} color="#22c55e" /> WhatsApp
+                            </a>
+                          ) : (
+                            <span
+                              title={lead.is_demo ? 'Lead de demonstração' : 'Sem telefone no perfil do Google'}
+                              className="btn-secondary"
+                              style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', opacity: 0.4, cursor: 'not-allowed' }}
+                            >
+                              <MessageSquare size={12} color="#64748b" /> Sem telefone
+                            </span>
+                          )}
+
+                          <button 
+                            onClick={() => setSelectedLeadForScript(lead)}
+                            className="btn-secondary" 
+                            style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center' }}
+                          >
+                            <Sparkles size={12} color="#6366f1" /> Script IA
+                          </button>
+                        </div>
+
+                        {/* Move Stage Buttons */}
+                        <div style={{ display: 'flex', gap: '4px', paddingTop: '8px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+                          {col.id !== 'Em Negociação' && (
+                            <button 
+                              onClick={() => handleMoveStage(lead.id, 'Em Negociação')}
+                              style={{ flex: 1, padding: '4px', background: 'rgba(99, 102, 241, 0.15)', border: '0.5px solid rgba(99, 102, 241, 0.3)', color: '#a5b4fc', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                            >
+                              → Negociação
+                            </button>
+                          )}
+                          {col.id !== 'Agendados' && (
+                            <button 
+                              onClick={() => handleMoveStage(lead.id, 'Agendados')}
+                              style={{ flex: 1, padding: '4px', background: 'rgba(245, 158, 11, 0.15)', border: '0.5px solid rgba(245, 158, 11, 0.3)', color: '#fde047', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                            >
+                              → Agendar
+                            </button>
+                          )}
+                          {col.id !== 'Convertidos' && (
+                            <button 
+                              onClick={() => handleMoveStage(lead.id, 'Convertidos')}
+                              style={{ flex: 1, padding: '4px', background: 'rgba(34, 197, 94, 0.15)', border: '0.5px solid rgba(34, 197, 94, 0.3)', color: '#4ade80', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                            >
+                              ✓ Fechar
+                            </button>
+                          )}
+                        </div>
                       </div>
-
-                      {/* Move Stage Buttons */}
-                      <div style={{ display: 'flex', gap: '4px', paddingTop: '8px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
-                        {col.id !== 'Em Negociação' && (
-                          <button 
-                            onClick={() => handleMoveStage(lead.id, 'Em Negociação')}
-                            style={{ flex: 1, padding: '4px', background: 'rgba(99, 102, 241, 0.15)', border: '0.5px solid rgba(99, 102, 241, 0.3)', color: '#a5b4fc', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer' }}
-                          >
-                            → Negociação
-                          </button>
-                        )}
-                        {col.id !== 'Agendados' && (
-                          <button 
-                            onClick={() => handleMoveStage(lead.id, 'Agendados')}
-                            style={{ flex: 1, padding: '4px', background: 'rgba(245, 158, 11, 0.15)', border: '0.5px solid rgba(245, 158, 11, 0.3)', color: '#fde047', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer' }}
-                          >
-                            → Agendar
-                          </button>
-                        )}
-                        {col.id !== 'Convertidos' && (
-                          <button 
-                            onClick={() => handleMoveStage(lead.id, 'Convertidos')}
-                            style={{ flex: 1, padding: '4px', background: 'rgba(34, 197, 94, 0.15)', border: '0.5px solid rgba(34, 197, 94, 0.3)', color: '#86efac', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer' }}
-                          >
-                            ✓ Fechar
-                          </button>
-                        )}
-                      </div>
-
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
 
+              {/* GradualBlur no Rodapé da Coluna para desfoque gradual suave */}
+              <GradualBlur
+                target="parent"
+                position="bottom"
+                height="5rem"
+                strength={2.5}
+                divCount={6}
+                curve="bezier"
+                exponential={true}
+                opacity={1}
+              />
             </div>
           );
         })}
