@@ -7,7 +7,7 @@
  * desligado, o app segue single-user e esta tela nunca entra no caminho.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LogIn, UserPlus, RefreshCw, AlertCircle, MailCheck, ShieldCheck, KeyRound } from 'lucide-react';
 import { entrar, cadastrar, recuperarSenha } from '../services/authService';
 import FaultyTerminal from '../components/ui/FaultyTerminal';
@@ -19,6 +19,18 @@ export default function LoginView({ onAutenticado }) {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState(null);
   const [aviso, setAviso] = useState(null);
+
+  // Memoização estrita do fundo matriz para nunca re-renderizar nem piscar ao digitar
+  const backgroundFaulty = useMemo(() => (
+    <div aria-hidden="true" style={{ position: 'fixed', inset: 0, opacity: 0.85, pointerEvents: 'none', zIndex: 0 }}>
+      <FaultyTerminal
+        scale={1.5} gridMul={[2, 1]} digitSize={1.2} timeScale={0.5}
+        scanlineIntensity={0.8} glitchAmount={1} flickerAmount={1} noiseAmp={1}
+        curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={1.0}
+        pageLoadAnimation={false}
+      />
+    </div>
+  ), []);
 
   const enviar = async (e) => {
     e.preventDefault();
@@ -79,15 +91,8 @@ export default function LoginView({ onAutenticado }) {
   return (
     <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 5vw, 40px)', background: '#05070f' }}>
 
-      {/* TRAVA VISUAL DE IDENTIDADE: Fundo Matrix FaultyTerminal de Alta Visibilidade (NUNCA ALTERAR) */}
-      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, opacity: 0.85, pointerEvents: 'none', zIndex: 0 }}>
-        <FaultyTerminal
-          scale={1.5} gridMul={[2, 1]} digitSize={1.2} timeScale={0.5}
-          scanlineIntensity={0.8} glitchAmount={1} flickerAmount={1} noiseAmp={1}
-          curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={1.0}
-          pageLoadAnimation={false}
-        />
-      </div>
+      {/* TRAVA VISUAL DE IDENTIDADE MEMOIZADA: Fundo Matrix de Alta Visibilidade (ZERO PISCADA AO DIGITAR) */}
+      {backgroundFaulty}
 
       <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '410px' }}>
 
