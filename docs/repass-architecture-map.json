@@ -3,11 +3,26 @@
   "document": {
     "id": "repass-ai-architecture",
     "title": "REPASS AI — Mapa Vivo de Arquitetura",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "snapshot_at": "2026-07-27",
     "language": "pt-BR",
     "source_of_truth": "Código e documentação presentes no repositório",
     "update_policy": "Atualize este arquivo no mesmo commit de qualquer mudança arquitetural. Preserve IDs de nós e arestas para manter o histórico legível.",
+    "visualization": {
+      "mode": "living-system",
+      "animated_signals": true,
+      "flow_focus": true,
+      "runtime_diagnostics": true,
+      "diagnostic_endpoints": [
+        "/api/health",
+        "/api/auth/status",
+        "/api/ai/status",
+        "/api/templates",
+        "/api/logs/stream"
+      ],
+      "reduced_motion_supported": true,
+      "note": "Os pulsos representam conexões arquiteturais conhecidas; não são telemetria de produção até uma fonte de eventos ser conectada."
+    },
     "status_legend": {
       "implemented": "Existe e está ligado ao fluxo atual",
       "partial": "Existe, mas falta integração, persistência ou infraestrutura",

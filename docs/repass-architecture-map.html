@@ -13,15 +13,19 @@
     .brand{display:flex;align-items:center;gap:10px;min-width:max-content}.orb{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--lime) 8%,#24472c 34%,#080b0d 68%);box-shadow:0 0 24px rgba(167,239,158,.35)}
     .brand strong{letter-spacing:-.04em}.version{font:10px ui-monospace,monospace;color:var(--lime);border:1px solid rgba(167,239,158,.28);padding:3px 6px;border-radius:99px}
     .controls{display:flex;gap:8px;align-items:center;flex:1;justify-content:flex-end}.search{width:min(330px,40vw);background:#0b1119;border:1px solid #263345;color:var(--text);border-radius:8px;padding:9px 12px;outline:none}.search:focus{border-color:var(--lime)}
-    .btn,.chip{border:1px solid #2a3748;background:#0b1119;color:#c9d3df;border-radius:7px;padding:8px 11px;cursor:pointer}.btn:hover,.chip:hover,.chip.active{border-color:var(--lime);color:var(--lime)}.btn.primary{background:var(--lime);color:#071008;border-color:var(--lime);font-weight:750}
+    .btn,.chip{border:1px solid #2a3748;background:#0b1119;color:#c9d3df;border-radius:7px;padding:8px 11px;cursor:pointer}.btn:hover,.chip:hover,.chip.active{border-color:var(--lime);color:var(--lime)}.btn.primary{background:var(--lime);color:#071008;border-color:var(--lime);font-weight:750}.live-toggle{display:flex;align-items:center;gap:7px}.live-led{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:heartbeat 1.8s ease-in-out infinite}.paused .live-led{background:#657386;box-shadow:none;animation:none}.diagnose-running{pointer-events:none;opacity:.7}
     .hero{padding:36px 24px 22px;max-width:1600px;margin:auto;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{font:11px ui-monospace,monospace;color:var(--lime);letter-spacing:.13em;text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,70px);line-height:.93;letter-spacing:-.065em;margin:10px 0 14px;max-width:800px}.hero p{color:#9ca9b9;max-width:720px;line-height:1.6;margin:0}
     .score{display:grid;grid-template-columns:repeat(2,120px);gap:8px}.metric{background:rgba(11,16,24,.8);border:1px solid #202c3b;padding:13px;border-radius:9px}.metric b{display:block;font-size:25px;letter-spacing:-.05em}.metric span{color:var(--muted);font:10px ui-monospace,monospace;text-transform:uppercase}
-    .legend{max-width:1600px;margin:0 auto 16px;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap}.chip{padding:6px 10px;font-size:11px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}.implemented{--status:var(--lime)}.partial{--status:var(--amber)}.planned{--status:var(--cyan)}.legacy{--status:var(--red)}
+    .legend{max-width:1600px;margin:0 auto 10px;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap}.chip{padding:6px 10px;font-size:11px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}.implemented{--status:var(--lime)}.partial{--status:var(--amber)}.planned{--status:var(--cyan)}.legacy{--status:var(--red)}
+    .telemetry{max-width:1600px;margin:0 auto 16px;padding:0 24px;display:flex;gap:18px;align-items:center;color:#68778a;font:9px ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}.telemetry strong{color:#a9b5c4;font-weight:500}.signal-wave{display:flex;align-items:center;gap:3px;height:16px}.signal-wave i{display:block;width:2px;height:5px;background:var(--lime);box-shadow:0 0 5px rgba(167,239,158,.5);animation:wave 1.2s ease-in-out infinite}.signal-wave i:nth-child(2){animation-delay:.1s}.signal-wave i:nth-child(3){animation-delay:.2s}.signal-wave i:nth-child(4){animation-delay:.3s}.paused .signal-wave i{animation:none;height:3px;background:#526071;box-shadow:none}
+    .diagnostic{display:none;max-width:1552px;margin:0 auto 18px;padding:15px 16px;background:rgba(11,16,24,.92);border:1px solid #263548;border-radius:9px}.diagnostic.open{display:block}.diagnostic-head{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}.diagnostic-head h2{font-size:14px;margin:0}.api-field{display:flex;gap:7px;align-items:center;flex:1;justify-content:flex-end}.api-field label{font:9px ui-monospace,monospace;color:#7f8da0;text-transform:uppercase}.api-field input{width:min(310px,48vw);background:#070b11;border:1px solid #2a3a4e;color:#dce6f2;border-radius:6px;padding:7px 9px;outline:none}.diagnostic-summary{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.health-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #2a394c;border-radius:99px;font:9px ui-monospace,monospace;text-transform:uppercase;color:#9aa8b9}.health-pill::before{content:"";width:7px;height:7px;border-radius:50%;background:#64748b}.health-pill.online::before{background:var(--lime);box-shadow:0 0 9px var(--lime)}.health-pill.offline::before{background:var(--red);box-shadow:0 0 9px var(--red)}.health-pill.unconfigured::before{background:var(--amber)}.health-pill.degraded::before,.health-pill.unknown::before{background:var(--cyan)}.diagnostic-note{margin:11px 0 0;color:#8290a2;font-size:11px;line-height:1.5}
     .workspace{position:relative;overflow:auto;min-height:650px;border-block:1px solid #1b2634;background:rgba(4,7,10,.55)}.canvas{position:relative;display:grid;grid-template-columns:repeat(5,var(--node-w));gap:var(--gap);min-width:1450px;width:max-content;padding:58px 40px 100px;align-items:start}
     .layer{position:relative;display:flex;flex-direction:column;gap:14px;z-index:2}.layer-head{position:sticky;top:71px;z-index:4;background:#080d13;border:1px solid #273445;padding:10px 12px;border-radius:7px;font:11px ui-monospace,monospace;color:#aeb9c7;text-transform:uppercase;letter-spacing:.1em}.layer-head span{color:var(--lime);float:right}
-    .node{position:relative;background:linear-gradient(145deg,rgba(18,27,40,.97),rgba(8,13,20,.97));border:1px solid #29384a;border-left:3px solid var(--status);border-radius:9px;padding:13px 13px 12px;min-height:112px;box-shadow:0 10px 24px rgba(0,0,0,.25);cursor:pointer;transition:.18s transform,.18s border-color,.18s opacity}.node:hover,.node.selected{transform:translateY(-2px);border-color:var(--status);box-shadow:0 0 0 1px color-mix(in srgb,var(--status) 28%,transparent),0 14px 30px rgba(0,0,0,.38)}.node.dim{opacity:.14}.node h3{font-size:14px;margin:6px 0 7px;letter-spacing:-.02em}.node p{font-size:11px;line-height:1.45;color:#8f9daf;margin:0}.node-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;font:9px ui-monospace,monospace;text-transform:uppercase;color:var(--status)}.kind{color:#708096}.port{position:absolute;width:8px;height:8px;border-radius:50%;background:#0a0e14;border:1px solid #617085;top:50%}.port.in{left:-6px}.port.out{right:-6px}
-    #wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.wire{fill:none;stroke:#425268;stroke-width:1.2;opacity:.52}.wire.planned{stroke:var(--cyan);stroke-dasharray:5 5}.wire.legacy{stroke:var(--red);stroke-dasharray:3 5}.wire.active{stroke:var(--lime);stroke-width:2;opacity:1}.wire-label{fill:#728197;font:8px ui-monospace,monospace}
-    .section{max-width:1600px;margin:0 auto;padding:32px 24px}.section h2{font-size:25px;letter-spacing:-.04em;margin:0 0 8px}.section-intro{color:var(--muted);margin:0 0 18px}.flow-grid,.gap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:rgba(11,16,24,.8);border:1px solid #243142;border-radius:9px;padding:16px}.card h3{font-size:14px;margin:8px 0}.card p{font-size:12px;color:#94a1b2;line-height:1.55;margin:0}.step{font:10px ui-monospace,monospace;color:var(--lime)}.priority{font:10px ui-monospace,monospace;color:var(--red);border:1px solid rgba(251,113,133,.3);border-radius:4px;padding:2px 5px}
+    .node{position:relative;background:linear-gradient(145deg,rgba(18,27,40,.97),rgba(8,13,20,.97));border:1px solid #29384a;border-left:3px solid var(--status);border-radius:9px;padding:13px 13px 12px;min-height:112px;box-shadow:0 10px 24px rgba(0,0,0,.25);cursor:pointer;transition:.18s transform,.18s border-color,.18s opacity,.25s box-shadow}.node::after{content:"";position:absolute;inset:-1px;border-radius:9px;pointer-events:none;opacity:0;box-shadow:0 0 22px color-mix(in srgb,var(--status) 20%,transparent);animation:node-breathe 4.6s ease-in-out infinite;animation-delay:var(--breath-delay,0s)}.node:hover,.node.selected,.node.flow-active{transform:translateY(-2px);border-color:var(--status);box-shadow:0 0 0 1px color-mix(in srgb,var(--status) 28%,transparent),0 14px 30px rgba(0,0,0,.38)}.node.selected::after,.node.flow-active::after{opacity:1;animation-duration:1.6s}.node.runtime-online{box-shadow:inset 0 0 0 1px rgba(167,239,158,.2),0 10px 24px rgba(0,0,0,.25)}.node.runtime-offline{--runtime:#fb7185;border-color:var(--runtime);box-shadow:0 0 24px rgba(251,113,133,.18)}.node.runtime-unconfigured{--runtime:#f59e0b;border-color:var(--runtime);box-shadow:0 0 20px rgba(245,158,11,.12)}.node.runtime-degraded,.node.runtime-unknown{--runtime:#38bdf8;border-color:var(--runtime)}.runtime-badge{position:absolute;right:9px;bottom:8px;font:8px ui-monospace,monospace;text-transform:uppercase;color:var(--runtime,var(--lime));background:#080d14;padding:2px 4px;border-radius:3px}.node.dim{opacity:.14}.node h3{font-size:14px;margin:6px 0 7px;letter-spacing:-.02em}.node p{font-size:11px;line-height:1.45;color:#8f9daf;margin:0}.node-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;font:9px ui-monospace,monospace;text-transform:uppercase;color:var(--status)}.kind{color:#708096}.port{position:absolute;width:8px;height:8px;border-radius:50%;background:#0a0e14;border:1px solid #617085;top:50%}.port.in{left:-6px}.port.out{right:-6px}.node.flow-active .port,.node.selected .port{background:var(--status);border-color:var(--status);box-shadow:0 0 12px var(--status)}
+    #wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.wire{fill:none;stroke:#425268;stroke-width:1.2;opacity:.46;transition:.25s opacity,.25s stroke-width}.wire.planned{stroke:var(--cyan);stroke-dasharray:5 5}.wire.legacy{stroke:var(--red);stroke-dasharray:3 5}.wire.active,.wire.flow-active{stroke:var(--lime);stroke-width:2;opacity:1;filter:url(#softGlow)}.wire.runtime-offline{stroke:var(--red);stroke-width:2;stroke-dasharray:3 6;opacity:.9}.wire.runtime-unconfigured{stroke:var(--amber);stroke-dasharray:4 6;opacity:.8}.wire.runtime-degraded,.wire.runtime-unknown{stroke:var(--cyan);stroke-dasharray:3 5}.pulse{filter:url(#signalGlow);opacity:.92}.pulse.partial{fill:var(--amber)}.pulse.planned{fill:var(--cyan)}.pulse.legacy{fill:var(--red)}.pulse.implemented{fill:var(--lime)}.pulse.runtime-offline{fill:var(--red)}.pulse.runtime-unconfigured{fill:var(--amber)}.paused .pulse{display:none}.wire-label{fill:#728197;font:8px ui-monospace,monospace}
+    .section{max-width:1600px;margin:0 auto;padding:32px 24px}.section h2{font-size:25px;letter-spacing:-.04em;margin:0 0 8px}.section-intro{color:var(--muted);margin:0 0 18px}.flow-grid,.gap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:rgba(11,16,24,.8);border:1px solid #243142;border-radius:9px;padding:16px}.flow-card{cursor:pointer;text-align:left;color:inherit;font:inherit;transition:.2s transform,.2s border-color}.flow-card:hover,.flow-card.active{transform:translateY(-2px);border-color:var(--lime)}.card h3{font-size:14px;margin:8px 0}.card p{font-size:12px;color:#94a1b2;line-height:1.55;margin:0}.step{font:10px ui-monospace,monospace;color:var(--lime)}.priority{font:10px ui-monospace,monospace;color:var(--red);border:1px solid rgba(251,113,133,.3);border-radius:4px;padding:2px 5px}
+    @keyframes heartbeat{0%,100%{transform:scale(.72);opacity:.55}45%{transform:scale(1.28);opacity:1}58%{transform:scale(.9)}68%{transform:scale(1.08)}}@keyframes wave{0%,100%{height:4px;opacity:.45}50%{height:15px;opacity:1}}@keyframes node-breathe{0%,100%{opacity:0}50%{opacity:.62}}.paused .node::after{animation:none;opacity:0}
+    @media(prefers-reduced-motion:reduce){.live-led,.signal-wave i,.node::after{animation:none!important}.pulse{display:none}}
     .footer{max-width:1600px;margin:auto;padding:18px 24px 38px;color:#657386;font:10px ui-monospace,monospace;border-top:1px solid #1b2634}
     .drawer{position:fixed;z-index:40;right:0;top:0;height:100vh;width:min(430px,92vw);background:#080d14;border-left:1px solid #2b394b;padding:22px;transform:translateX(102%);transition:.22s;overflow:auto;box-shadow:-25px 0 60px rgba(0,0,0,.45)}.drawer.open{transform:none}.drawer-close{float:right}.drawer h2{font-size:25px;letter-spacing:-.04em;margin:30px 0 6px}.drawer .path{font:10px ui-monospace,monospace;color:var(--cyan);word-break:break-all}.drawer h4{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#7e8c9d;margin:24px 0 8px}.drawer ul{padding-left:18px;color:#aab5c3;font-size:12px;line-height:1.7}.drawer p{color:#aab5c3;line-height:1.6;font-size:13px}.status-pill{display:inline-flex;align-items:center;color:var(--status);border:1px solid color-mix(in srgb,var(--status) 35%,transparent);border-radius:99px;padding:5px 8px;font:10px ui-monospace,monospace;text-transform:uppercase}
     .empty{display:none;color:var(--muted);padding:80px;text-align:center}.empty.show{display:block}
@@ -33,6 +37,8 @@
     <div class="brand"><span class="orb"></span><strong>REPASS AI</strong><span class="version" id="version">MAP v1.0.0</span></div>
     <div class="controls">
       <input class="search" id="search" placeholder="Buscar módulo, arquivo, endpoint…" aria-label="Buscar no mapa">
+      <button class="btn live-toggle" id="live" aria-pressed="true"><span class="live-led"></span><span id="live-label">Sistema vivo</span></button>
+      <button class="btn" id="diagnose">Diagnosticar conexões</button>
       <button class="btn" id="fit">Centralizar</button>
       <button class="btn primary" id="download">Exportar JSON</button>
     </div>
@@ -49,6 +55,12 @@
       <button class="chip planned" data-status="planned"><span class="dot" style="background:var(--cyan)"></span>Planejado</button>
       <button class="chip legacy" data-status="legacy"><span class="dot" style="background:var(--red)"></span>Legado</button>
     </nav>
+    <div class="telemetry"><span class="signal-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Sinais ativos <strong id="signal-count">0</strong></span><span>Fluxo selecionado <strong id="active-flow">rede completa</strong></span><span>Relógio <strong id="clock">--:--:--</strong></span></div>
+    <section class="diagnostic" id="diagnostic" aria-live="polite">
+      <div class="diagnostic-head"><h2>Diagnóstico real de conectividade</h2><div class="api-field"><label for="api-base">Backend</label><input id="api-base" value="http://localhost:8000" aria-label="Endereço do backend REPASS AI"><button class="btn primary" id="run-diagnostic">Executar</button></div></div>
+      <div class="diagnostic-summary" id="diagnostic-summary"></div>
+      <p class="diagnostic-note" id="diagnostic-note">O teste é somente leitura. Nenhuma varredura, geração ou alteração de dados será executada.</p>
+    </section>
     <section class="workspace" id="workspace" aria-label="Grafo da arquitetura">
       <div class="canvas" id="canvas"><svg id="wires" aria-hidden="true"></svg></div>
       <div class="empty" id="empty">Nenhum módulo corresponde ao filtro.</div>
@@ -59,8 +71,8 @@
   <aside class="drawer" id="drawer" aria-live="polite"><button class="btn drawer-close" id="close">Fechar</button><div id="drawer-content"></div></aside>
   <footer class="footer">FONTE: CÓDIGO LOCAL + DOCUMENTAÇÃO DO REPOSITÓRIO · REGRA: MUDOU A ARQUITETURA, MUDE O JSON NO MESMO COMMIT.</footer>
   <script>
-  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.0.0","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
-  let DATA, activeStatus='all', query='';
+  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.1.0","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
+  let DATA, activeStatus='all', query='', live=true, rafId=0, selectedFlow=null, runtimeState={};
   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
   async function load(){
     try{const r=await fetch('./repass-architecture-map.json');if(!r.ok)throw 0;DATA=await r.json()}
@@ -75,24 +87,98 @@
       const col=document.createElement('div');col.className='layer';col.dataset.layer=layer.id;
       col.innerHTML=`<div class="layer-head">${layer.label}<span>${DATA.nodes.filter(n=>n.layer===layer.id).length}</span></div>`;
       DATA.nodes.filter(n=>n.layer===layer.id).forEach(n=>{
-        const el=document.createElement('article');el.className=`node ${n.status}`;el.id=`node-${n.id}`;el.tabIndex=0;
+      const el=document.createElement('article');el.className=`node ${n.status}`;el.id=`node-${n.id}`;el.tabIndex=0;el.style.setProperty('--breath-delay',`${(Math.random()*-4).toFixed(2)}s`);
         el.innerHTML=`<span class="port in"></span><span class="port out"></span><div class="node-meta"><span>${labelStatus(n.status)}</span><span class="kind">${n.kind}</span></div><h3>${n.label}</h3><p>${n.summary}</p>`;
         el.onclick=()=>openNode(n.id);el.onkeydown=e=>{if(e.key==='Enter')openNode(n.id)};col.appendChild(el);
       });$('#canvas').appendChild(col);
     });
-    $('#flows').innerHTML=DATA.flows.map((f,i)=>`<article class="card"><span class="step">0${i+1} · ${labelStatus(f.status)}</span><h3>${f.label}</h3><p>${f.success_condition}</p></article>`).join('');
+    $('#flows').innerHTML=DATA.flows.map((f,i)=>`<button class="card flow-card" data-flow="${f.id}"><span class="step">0${i+1} · ${labelStatus(f.status)}</span><h3>${f.label}</h3><p>${f.success_condition}</p></button>`).join('');
+    $$('.flow-card').forEach(b=>b.onclick=()=>selectFlow(b.dataset.flow));
     $('#gaps').innerHTML=DATA.current_gaps.map(g=>`<article class="card"><span class="priority">${g.priority}</span><h3>${g.title}</h3><p>${g.detail}</p></article>`).join('');
     requestAnimationFrame(drawWires);
   }
   function labelStatus(s){return({implemented:'implementado',partial:'parcial',planned:'planejado',legacy:'legado'})[s]||s}
   function drawWires(){
-    const svg=$('#wires'), canvas=$('#canvas'), cr=canvas.getBoundingClientRect();svg.innerHTML='';
+    const svg=$('#wires'), canvas=$('#canvas'), cr=canvas.getBoundingClientRect();svg.innerHTML='<defs><filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="signalGlow" x="-300%" y="-300%" width="700%" height="700%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
     DATA.edges.forEach(e=>{const a=$(`#node-${e.from}`),b=$(`#node-${e.to}`);if(!a||!b||a.classList.contains('dim')||b.classList.contains('dim'))return;
       const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();let x1=ar.right-cr.left,y1=ar.top+ar.height/2-cr.top,x2=br.left-cr.left,y2=br.top+br.height/2-cr.top;
       if(x2<x1){x1=ar.left-cr.left;x2=br.right-cr.left}
       const bend=Math.max(28,Math.abs(x2-x1)*.42),d=`M${x1},${y1} C${x1+(x2>x1?bend:-bend)},${y1} ${x2-(x2>x1?bend:-bend)},${y2} ${x2},${y2}`;
-      svg.insertAdjacentHTML('beforeend',`<path id="edge-${e.id}" class="wire ${e.type}" d="${d}"/>`);
+      const flowOn=selectedFlow&&DATA.flows.find(f=>f.id===selectedFlow)?.node_ids.includes(e.from)&&DATA.flows.find(f=>f.id===selectedFlow)?.node_ids.includes(e.to);
+      const targetStatus=DATA.nodes.find(n=>n.id===e.to)?.status||'implemented';
+      const runtime=connectionRuntime(e);
+      svg.insertAdjacentHTML('beforeend',`<path id="edge-${e.id}" class="wire ${e.type}${flowOn?' flow-active':''}${runtime?' runtime-'+runtime:''}" d="${d}"/><circle class="pulse ${targetStatus}${runtime?' runtime-'+runtime:''}" data-edge="${e.id}" r="${flowOn?3.4:2.3}"/>`);
     });
+    $('#signal-count').textContent=svg.querySelectorAll('.pulse').length;
+    startSignals();
+  }
+  function startSignals(){
+    cancelAnimationFrame(rafId);let last=performance.now();
+    const tick=now=>{if(live){const t=now/1000;$$('.pulse').forEach((p,i)=>{const path=$(`#edge-${p.dataset.edge}`);if(!path)return;const len=path.getTotalLength(),speed=selectedFlow&&path.classList.contains('flow-active')?0.19:0.07+(i%5)*.008,progress=(t*speed+i*.137)%1,pt=path.getPointAtLength(len*progress);p.setAttribute('cx',pt.x);p.setAttribute('cy',pt.y);p.style.opacity=.36+.64*Math.sin(progress*Math.PI)})}last=now;rafId=requestAnimationFrame(tick)};rafId=requestAnimationFrame(tick);
+  }
+  function connectionRuntime(edge){
+    const a=runtimeState[edge.from]?.state,b=runtimeState[edge.to]?.state;
+    if(a==='offline'||b==='offline')return'offline';
+    if(a==='unconfigured'||b==='unconfigured')return'unconfigured';
+    if(a==='degraded'||b==='degraded')return'degraded';
+    if(a==='unknown'||b==='unknown')return'unknown';
+    if(a==='online'&&b==='online')return'online';
+    return'';
+  }
+  function setRuntime(id,state,detail){
+    runtimeState[id]={state,detail};const node=$(`#node-${id}`);if(!node)return;
+    [...node.classList].filter(c=>c.startsWith('runtime-')).forEach(c=>node.classList.remove(c));
+    node.classList.add(`runtime-${state}`);
+    node.querySelector('.runtime-badge')?.remove();
+    node.insertAdjacentHTML('beforeend',`<span class="runtime-badge">${runtimeLabel(state)}</span>`);
+  }
+  function runtimeLabel(state){return({online:'online',offline:'offline',unconfigured:'não configurado',degraded:'degradado',unknown:'não testado'})[state]||state}
+  async function probeJson(base,path,timeout=4500){
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout),started=performance.now();
+    try{const response=await fetch(`${base}${path}`,{signal:controller.signal,headers:{Accept:'application/json'}});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.erro||`HTTP ${response.status}`);return{ok:true,data,latency:Math.round(performance.now()-started)}}
+    catch(error){return{ok:false,error:error.name==='AbortError'?'tempo esgotado':error.message,latency:Math.round(performance.now()-started)}}
+    finally{clearTimeout(timer)}
+  }
+  async function probeSse(base,timeout=3500){
+    return new Promise(resolve=>{let done=false;const es=new EventSource(`${base}/api/logs/stream`),finish=(ok,error='')=>{if(done)return;done=true;clearTimeout(timer);es.close();resolve({ok,error})},timer=setTimeout(()=>finish(false,'tempo esgotado'),timeout);es.onopen=()=>finish(true);es.onerror=()=>finish(false,'canal recusado')});
+  }
+  function diagnosticPill(label,state,detail=''){return`<span class="health-pill ${state}" title="${detail.replaceAll('"','&quot;')}">${label}: ${runtimeLabel(state)}</span>`}
+  async function runDiagnostic(){
+    const button=$('#run-diagnostic'),base=$('#api-base').value.trim().replace(/\/$/,'');if(!base)return;
+    localStorage.setItem('repass-map-api-base',base);button.classList.add('diagnose-running');button.textContent='Testando…';runtimeState={};
+    $$('.runtime-badge').forEach(e=>e.remove());$$('.node').forEach(n=>[...n.classList].filter(c=>c.startsWith('runtime-')).forEach(c=>n.classList.remove(c)));
+    $('#diagnostic-summary').innerHTML=diagnosticPill('Backend','unknown');
+    const [health,auth,ai,templates,sse]=await Promise.all([probeJson(base,'/api/health'),probeJson(base,'/api/auth/status'),probeJson(base,'/api/ai/status'),probeJson(base,'/api/templates'),probeSse(base)]);
+    const apiState=health.ok?'online':'offline';
+    ['api-server','front-config'].forEach(id=>setRuntime(id,apiState,health.error||`${health.latency}ms`));
+    setRuntime('api-sse',sse.ok?'online':'offline',sse.error||'canal aberto');
+    if(ai.ok){
+      const aiState=ai.data.operacional?'online':(ai.data.motores_configurados>0?'degraded':'unconfigured');
+      ['front-llm','engine-llm','external-llms'].forEach(id=>setRuntime(id,aiState,ai.data.operacional?'motor respondeu':'nenhum motor pronto'));
+    }else ['front-llm','engine-llm','external-llms'].forEach(id=>setRuntime(id,'offline',ai.error));
+    const tplState=templates.ok?'online':'offline';['ui-templates','engine-templates','storage-local'].forEach(id=>setRuntime(id,tplState,templates.error||`${templates.data.templates?.length||0} templates`));
+    if(auth.ok){
+      const supaState=auth.data.configurado?'unknown':'unconfigured';
+      setRuntime('db-adapter',supaState,auth.data.configurado?'variáveis presentes; banco não consultado':'variáveis ausentes');
+      setRuntime('db-supabase',supaState,auth.data.configurado?'configurado, conectividade do banco não comprovada':'Supabase não configurado');
+      setRuntime('front-config','online',auth.data.modo||'single_user');
+    }else{setRuntime('db-adapter','offline',auth.error);setRuntime('db-supabase','offline',auth.error)}
+    setRuntime('front-local-store','online','fallback local disponível');
+    setRuntime('engine-storage','online','armazenamento local');
+    setRuntime('storage-r2','unconfigured','publicação real ainda planejada');
+    setRuntime('external-places','unknown','teste exigiria uma busca real e consumo de API');
+    setRuntime('engine-osint',health.ok?'unknown':'offline',health.ok?'não executado para evitar consumo':'backend offline');
+    const supabaseState=runtimeState['db-supabase'].state;
+    $('#diagnostic-summary').innerHTML=[
+      diagnosticPill('Backend',apiState,health.error||`${health.latency}ms`),
+      diagnosticPill('SSE',runtimeState['api-sse'].state,sse.error||'aberto'),
+      diagnosticPill('Motor IA',runtimeState['engine-llm'].state,ai.error||''),
+      diagnosticPill('Templates',tplState,templates.error||''),
+      diagnosticPill('Supabase',supabaseState,runtimeState['db-supabase'].detail),
+      diagnosticPill('R2','unconfigured','planejado')
+    ].join('');
+    const failure=!health.ok?`O backend não respondeu (${health.error}). Abra o mapa por http://localhost:3000/docs/repass-architecture-map.html e confirme que a API está rodando em ${base}.`:supabaseState==='unconfigured'?'Supabase não está conectado. O REPASS AI permanece em modo single-user, mas login multiusuário, sincronização central e isolamento por user_id ficam indisponíveis.':'Diagnóstico concluído. Itens “não testados” exigem uma operação real ou um endpoint de saúde mais profundo.';
+    $('#diagnostic-note').textContent=failure;button.classList.remove('diagnose-running');button.textContent='Executar novamente';drawWires();
   }
   function openNode(id){
     const n=DATA.nodes.find(x=>x.id===id);if(!n)return;$$('.node').forEach(x=>x.classList.toggle('selected',x.id===`node-${id}`));
@@ -102,6 +188,13 @@
     $('#drawer-content').innerHTML=`<span class="status-pill ${n.status}"><span class="dot" style="background:var(--status)"></span>${labelStatus(n.status)}</span><h2>${n.label}</h2><div class="path">${n.path||n.paths?.join(' · ')||'Sem arquivo local direto'}</div><p>${n.summary}</p>${list('Responsabilidades',n.responsibilities)}${list('Entradas',n.inputs)}${list('Saídas',n.outputs)}${list('Endpoints',n.endpoints)}${list('Tabelas',n.tables)}${list('Regras que não podem quebrar',n.invariants)}${list('Riscos',n.risks)}${list('Conexões',connections)}`;
     $('#drawer').classList.add('open');
   }
+  function selectFlow(id){
+    selectedFlow=selectedFlow===id?null:id;const flow=DATA.flows.find(f=>f.id===selectedFlow);
+    $$('.flow-card').forEach(b=>b.classList.toggle('active',b.dataset.flow===selectedFlow));
+    $$('.node').forEach(n=>n.classList.toggle('flow-active',!!flow?.node_ids.includes(n.id.replace('node-',''))));
+    $('#active-flow').textContent=flow?.label||'rede completa';drawWires();
+    if(flow){const first=$(`#node-${flow.node_ids[0]}`);first?.scrollIntoView({behavior:'smooth',block:'center',inline:'center'})}
+  }
   function applyFilter(){
     let visible=0;DATA.nodes.forEach(n=>{const hay=JSON.stringify(n).toLowerCase(),ok=(activeStatus==='all'||n.status===activeStatus)&&(!query||hay.includes(query));$(`#node-${n.id}`).classList.toggle('dim',!ok);if(ok)visible++});
     $('#empty').classList.toggle('show',visible===0);drawWires();
@@ -110,7 +203,12 @@
   $('#search').oninput=e=>{query=e.target.value.trim().toLowerCase();applyFilter()};
   $('#close').onclick=()=>{$('#drawer').classList.remove('open');$$('.node').forEach(x=>x.classList.remove('selected'));drawWires()};
   $('#fit').onclick=()=>{$('#workspace').scrollTo({left:0,top:0,behavior:'smooth'})};
+  $('#diagnose').onclick=()=>{$('#diagnostic').classList.add('open');$('#diagnostic').scrollIntoView({behavior:'smooth',block:'center'})};
+  $('#run-diagnostic').onclick=runDiagnostic;
+  $('#live').onclick=()=>{live=!live;document.body.classList.toggle('paused',!live);$('#live').setAttribute('aria-pressed',String(live));$('#live-label').textContent=live?'Sistema vivo':'Animação pausada'};
   $('#download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'}));a.download='repass-architecture-map.json';a.click();URL.revokeObjectURL(a.href)};
+  setInterval(()=>{$('#clock').textContent=new Date().toLocaleTimeString('pt-BR')},1000);
+  $('#api-base').value=localStorage.getItem('repass-map-api-base')||'http://localhost:8000';
   addEventListener('resize',()=>requestAnimationFrame(drawWires));load();
   </script>
 </body>

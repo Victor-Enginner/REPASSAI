@@ -90,7 +90,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
     { id: 'dashboard',     nome: 'Painel',            indice: '01', icon: LayoutDashboard, badge: null },
     { id: 'leads',         nome: 'Scanner de Leads',  indice: '02', icon: Search,          badge: 'OSINT' },
     { id: 'crm',           nome: 'Funil de Vendas',   indice: '03', icon: Kanban,          badge: null },
-    { id: 'bulk_whatsapp', nome: 'Abordagem em Lote', indice: '04', icon: MessageSquare,   badge: 'HOT', highlight: true },
+    { id: 'bulk_whatsapp', nome: 'Abordagem 1-a-1',  indice: '04', icon: MessageSquare,   badge: 'EM BREVE', highlight: false },
     { id: 'engine',        nome: 'Motor Neural',      indice: '05', icon: Cpu,             badge: 'PRO', highlight: true },
     { id: 'agendamentos',  nome: 'Agenda',            indice: '06', icon: Calendar,        badge: null },
     { id: 'projetos',      nome: 'Meus Sites',        indice: '07', icon: FolderKanban,    badge: null },
