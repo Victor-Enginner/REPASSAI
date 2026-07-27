@@ -1,206 +1,105 @@
 /**
- * REPASS AI - Motor de IA Multi-Provedor com Roteamento e Fallback Automático (LLM Router Engine)
- * Provedores Suportados: OpenRouter (Free Models), Groq API, Hugging Face, Google Gemini, Ollama (Local)
+ * REPASS AI - Cliente do Motor Neural.
+ *
+ * MUDANÇA DE ARQUITETURA
+ * ----------------------
+ * Antes este arquivo chamava OpenRouter/Groq/Gemini direto do navegador,
+ * com as chaves digitadas pelo usuário. Isso tinha três problemas:
+ *
+ *   1. A chave trafegava no navegador e aparecia no DevTools → Network.
+ *      Num SaaS multi-tenant, qualquer cliente veria a chave.
+ *   2. O cliente descobria qual modelo estava sendo usado.
+ *   3. Sem rotação de chaves, um 429 derrubava a geração.
+ *
+ * Agora tudo isso vive em `backend/llm_gateway.py`. Este módulo só fala com
+ * o nosso próprio backend e recebe texto puro. O frontend não sabe — e não
+ * deve saber — qual provedor ou modelo respondeu.
  */
 
-export const DEFAULT_CONFIG = {
-  providers: [
-    {
-      id: 'openrouter',
-      name: 'OpenRouter (Modelos Free)',
-      enabled: true,
-      apiKey: '',
-      baseUrl: 'https://openrouter.ai/api/v1/chat/completions',
-      model: 'google/gemini-2.0-flash-exp:free',
-      rateLimitGenerous: true,
-      priority: 1
-    },
-    {
-      id: 'groq',
-      name: 'Groq API (Super Rápido)',
-      enabled: true,
-      apiKey: '',
-      baseUrl: 'https://api.groq.com/openai/v1/chat/completions',
-      model: 'llama-3.3-70b-versatile',
-      rateLimitGenerous: true,
-      priority: 2
-    },
-    {
-      id: 'huggingface',
-      name: 'Hugging Face Inference API',
-      enabled: true,
-      apiKey: '',
-      baseUrl: 'https://api-inference.huggingface.co/models/',
-      model: 'Qwen/Qwen2.5-Coder-32B-Instruct',
-      rateLimitGenerous: true,
-      priority: 3
-    },
-    {
-      id: 'gemini',
-      name: 'Google Gemini 2.0 Flash API',
-      enabled: true,
-      apiKey: '',
-      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-      model: 'gemini-2.0-flash',
-      rateLimitGenerous: true,
-      priority: 4
-    },
-    {
-      id: 'ollama',
-      name: 'Ollama / LM Studio (Local 100% Grátis & Sem Limite)',
-      enabled: true,
-      apiKey: 'local',
-      baseUrl: 'http://localhost:11434/api/generate',
-      model: 'qwen2.5-coder',
-      rateLimitGenerous: true,
-      priority: 5
+import { apiUrl } from '../config.js';
+
+/**
+ * Executa um prompt no motor de IA do servidor.
+ *
+ * @param {string} prompt
+ * @param {string} [systemPrompt]
+ * @param {object} [_configLegado] Ignorado. Mantido para não quebrar
+ *        chamadas antigas que passavam configuração de provedores.
+ * @param {object} [opcoes]
+ * @param {number} [opcoes.temperature=0] 0 = determinístico (padrão do
+ *        gerador de schema; o mesmo prompt sempre produz o mesmo site).
+ * @returns {Promise<{success:boolean, provider:string|null, model:string|null,
+ *          output:string, error?:string, logs:string[]}>}
+ */
+export async function executePromptWithFallback(
+  prompt,
+  systemPrompt = 'Você é o especialista em geração de landing pages do REPASS AI.',
+  _configLegado = null,
+  opcoes = {}
+) {
+  const temperature = typeof opcoes.temperature === 'number' ? opcoes.temperature : 0;
+  const logs = ['Consultando o motor neural do REPASS AI...'];
+
+  try {
+    const res = await fetch(apiUrl('/api/ai/generate'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, system_prompt: systemPrompt, temperature }),
+    });
+
+    const dados = await res.json().catch(() => ({}));
+
+    if (!res.ok || !dados.sucesso) {
+      const erro = dados.erro || `Motor indisponível (HTTP ${res.status}).`;
+      return {
+        success: false,
+        provider: null,
+        model: null,
+        output: '',
+        error: erro,
+        logs: [...logs, `Falha: ${erro}`],
+      };
     }
-  ]
-};
 
-async function callOpenRouter(config, prompt, systemPrompt) {
-  if (!config.apiKey) throw new Error('OpenRouter requer API Key configurada');
-  const res = await fetch(config.baseUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${config.apiKey}`,
-      'HTTP-Referer': 'https://repassai.com',
-      'X-Title': 'REPASS AI Engine'
-    },
-    body: JSON.stringify({
-      model: config.model || 'google/gemini-2.0-flash-exp:free',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7
-    })
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`OpenRouter HTTP ${res.status}: ${errorText}`);
+    return {
+      success: true,
+      // Provedor e modelo ficam no servidor de propósito. O rótulo genérico
+      // é o que a interface mostra.
+      provider: 'REPASS Neural Engine',
+      model: 'auto',
+      output: dados.texto || '',
+      logs: [...logs, 'Resposta recebida.'],
+    };
+  } catch (err) {
+    const erro = `Backend REPASS AI inacessível: ${err.message}`;
+    return {
+      success: false,
+      provider: null,
+      model: null,
+      output: '',
+      error: erro,
+      logs: [...logs, erro],
+    };
   }
-
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
 }
 
-async function callGroq(config, prompt, systemPrompt) {
-  if (!config.apiKey) throw new Error('Groq requer API Key configurada');
-  const res = await fetch(config.baseUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${config.apiKey}`
-    },
-    body: JSON.stringify({
-      model: config.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: prompt }
-      ]
-    })
-  });
-
-  if (!res.ok) throw new Error(`Groq HTTP ${res.status}`);
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
-}
-
-async function callHuggingFace(config, prompt, systemPrompt) {
-  if (!config.apiKey) throw new Error('HuggingFace requer API Key configurada');
-  const res = await fetch(`${config.baseUrl}${config.model}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${config.apiKey}`
-    },
-    body: JSON.stringify({
-      inputs: `${systemPrompt}\n\nUser: ${prompt}\nAssistant:`
-    })
-  });
-
-  if (!res.ok) throw new Error(`HuggingFace HTTP ${res.status}`);
-  const data = await res.json();
-  return Array.isArray(data) ? data[0]?.generated_text : data.generated_text || '';
-}
-
-async function callGemini(config, prompt, systemPrompt) {
-  if (!config.apiKey) throw new Error('Gemini requer API Key configurada');
-  const url = `${config.baseUrl}?key=${config.apiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{
-        parts: [{ text: `${systemPrompt}\n\nPrompt: ${prompt}` }]
-      }]
-    })
-  });
-
-  if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-}
-
-async function callOllama(config, prompt, systemPrompt) {
-  const res = await fetch(config.baseUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: config.model,
-      prompt: `${systemPrompt}\n\nUsuário: ${prompt}\n\nResposta:`,
-      stream: false
-    })
-  });
-
-  if (!res.ok) throw new Error(`Ollama local não respondeu na porta 11434`);
-  const data = await res.json();
-  return data.response || '';
-}
-
-export async function executePromptWithFallback(prompt, systemPrompt = "Você é o especialista em geração de landing pages do REPASS AI.", customConfig = null) {
-  const config = customConfig || DEFAULT_CONFIG;
-  const activeProviders = config.providers
-    .filter(p => p.enabled)
-    .sort((a, b) => a.priority - b.priority);
-
-  const logs = [];
-
-  for (const provider of activeProviders) {
-    try {
-      logs.push(`🔍 Tentando provedor: ${provider.name} (${provider.model})...`);
-      let result = '';
-
-      if (provider.id === 'openrouter') {
-        result = await callOpenRouter(provider, prompt, systemPrompt);
-      } else if (provider.id === 'groq') {
-        result = await callGroq(provider, prompt, systemPrompt);
-      } else if (provider.id === 'huggingface') {
-        result = await callHuggingFace(provider, prompt, systemPrompt);
-      } else if (provider.id === 'gemini') {
-        result = await callGemini(provider, prompt, systemPrompt);
-      } else if (provider.id === 'ollama') {
-        result = await callOllama(provider, prompt, systemPrompt);
-      }
-
-      logs.push(`✅ Sucesso via ${provider.name}!`);
-      return { success: true, provider: provider.name, model: provider.model, output: result, logs };
-
-    } catch (err) {
-      logs.push(`⚠️ Falha em ${provider.name}: ${err.message}. Acionando Fallback...`);
-      console.warn(`Fallback trigger em ${provider.id}:`, err);
-    }
+/**
+ * Consulta o status do motor, sem revelar provedores ou modelos.
+ *
+ * @returns {Promise<{motores_configurados:number, motores_prontos:number,
+ *          chaves_em_rotacao:number, operacional:boolean}>}
+ */
+export async function obterStatusDoMotor() {
+  try {
+    const res = await fetch(apiUrl('/api/ai/status'));
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch {
+    return {
+      motores_configurados: 0,
+      motores_prontos: 0,
+      chaves_em_rotacao: 0,
+      operacional: false,
+    };
   }
-
-  // Fallback final resiliente (Motor local de emergência)
-  return {
-    success: true,
-    provider: 'Motor Estático Resiliente (Local Engine)',
-    model: 'Rule-Based Fallback Engine',
-    output: `Ajuste processado com sucesso pelo Motor Resiliente do REPASS AI para o prompt: "${prompt}".`,
-    logs: [...logs, '🚀 Fallback final acionado: Processado localmente com 100% de disponibilidade.']
-  };
 }

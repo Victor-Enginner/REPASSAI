@@ -62,7 +62,7 @@ export default function DashboardView({ leads, onNavigateLeads, onNavigateCRM })
           </div>
 
           {/* Trapezoids Visual Funnel Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '12px', marginBottom: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))', gap: '12px', marginBottom: '28px' }}>
             
             {/* Total */}
             <div style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 100%)', padding: '20px 14px', textAlign: 'center', border: '0.5px solid rgba(255,255,255,0.12)' }}>

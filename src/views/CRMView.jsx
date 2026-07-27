@@ -14,7 +14,7 @@ import {
   Zap,
   ArrowRight
 } from 'lucide-react';
-import { generatePersonalizedScript, buildWhatsAppWebLink } from '../services/whatsappBulkEngine';
+import { generatePersonalizedScript, buildWhatsAppWebLink, podeAbordar } from '../services/whatsappBulkEngine';
 
 export default function CRMView({ leads, setLeads, onGenerateSite }) {
   const [selectedLeadForScript, setSelectedLeadForScript] = useState(null);
@@ -71,7 +71,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
       </div>
 
       {/* Kanban Board Columns */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', alignItems: 'flex-start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', alignItems: 'flex-start' }}>
         {columns.map(col => {
           const colLeads = leads.filter(l => l.status_crm === col.id);
 
@@ -104,7 +104,13 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {colLeads.map(lead => {
                   const script = generatePersonalizedScript(lead);
-                  const waLink = buildWhatsAppWebLink(lead.telefone, script);
+                  // Usa a MESMA trava do disparo em lote. Validar só o
+                  // formato do telefone deixava lead de demonstração com
+                  // botão funcional aqui, contornando o bloqueio.
+                  const { permitido } = podeAbordar(lead);
+                  const waLink = permitido
+                    ? buildWhatsAppWebLink(lead.telefone, script)
+                    : null;
 
                   return (
                     <div 
@@ -259,12 +265,27 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                 {copied ? 'Copiado!' : 'Copiar Texto'}
               </button>
 
-              <a 
-                href={buildWhatsAppWebLink(selectedLeadForScript.telefone, generatePersonalizedScript(selectedLeadForScript))}
-                target="_blank" 
-                rel="noreferrer"
-                className="btn-primary" 
-                style={{ flex: 1, justifyContent: 'center', textDecoration: 'none' }}
+              <a
+                href={
+                  podeAbordar(selectedLeadForScript).permitido
+                    ? buildWhatsAppWebLink(
+                        selectedLeadForScript.telefone,
+                        generatePersonalizedScript(selectedLeadForScript)
+                      )
+                    : undefined
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!podeAbordar(selectedLeadForScript).permitido}
+                title={podeAbordar(selectedLeadForScript).motivo || ''}
+                className="btn-primary"
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  textDecoration: 'none',
+                  opacity: podeAbordar(selectedLeadForScript).permitido ? 1 : 0.4,
+                  pointerEvents: podeAbordar(selectedLeadForScript).permitido ? 'auto' : 'none',
+                }}
               >
                 <Send size={14} /> Abrir WhatsApp Web
               </a>

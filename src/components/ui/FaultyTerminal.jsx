@@ -324,14 +324,35 @@ export default function FaultyTerminal({
     resizeObserver.observe(ctn);
     resize();
 
+    // Congela quando a prop `pause` está ativa OU quando a aba sai de foco.
+    //
+    // Antes, `pause` apenas travava o uniform de tempo: o renderer.render()
+    // continuava rodando todo quadro e a GPU seguia ocupada desenhando a
+    // MESMA imagem. Em notebook isso consome bateria à toa e em celular
+    // esquenta o aparelho.
+    //
+    // Agora, com a cena congelada e o quadro já desenhado uma vez, pulamos
+    // o render por completo. O loop de rAF continua vivo (é barato) para o
+    // retorno ser instantâneo quando a aba volta ao foco.
+    let quadroCongeladoDesenhado = false;
+
+    const aoMudarVisibilidade = () => {
+      // Ao voltar para a aba, força um redesenho no próximo quadro.
+      if (!document.hidden) quadroCongeladoDesenhado = false;
+    };
+    document.addEventListener('visibilitychange', aoMudarVisibilidade);
+
     const update = t => {
       rafRef.current = requestAnimationFrame(update);
+
+      const congelado = pause || document.hidden;
+      if (congelado && quadroCongeladoDesenhado) return;
 
       if (pageLoadAnimation && loadAnimationStartRef.current === 0) {
         loadAnimationStartRef.current = t;
       }
 
-      if (!pause) {
+      if (!congelado) {
         const elapsed = (t * 0.001 + timeOffsetRef.current) * timeScale;
         program.uniforms.iTime.value = elapsed;
         frozenTimeRef.current = elapsed;
@@ -359,6 +380,10 @@ export default function FaultyTerminal({
       }
 
       renderer.render({ scene: mesh });
+
+      // Marca que o quadro congelado já foi para a tela, permitindo pular
+      // os próximos renders enquanto nada mudar.
+      quadroCongeladoDesenhado = congelado;
     };
     rafRef.current = requestAnimationFrame(update);
     ctn.appendChild(gl.canvas);
@@ -370,6 +395,7 @@ export default function FaultyTerminal({
     return () => {
       cancelAnimationFrame(rafRef.current);
       resizeObserver.disconnect();
+      document.removeEventListener('visibilitychange', aoMudarVisibilidade);
       if (mouseReact) {
         window.removeEventListener('mousemove', handleMouseMove);
       }

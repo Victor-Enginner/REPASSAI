@@ -108,7 +108,7 @@ export default function CreateSiteWizardView({ leads, onProceedToEditor }) {
         {/* Top Segmented Tabs Bar */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
           gap: '6px',
           background: '#e2e8f0',
           padding: '4px',

@@ -37,6 +37,20 @@ body {
   position: relative;
 }
 
+/* Accessibility: Universal Focus Visible Outline */
+:focus-visible {
+  outline: 2px solid var(--accent-indigo);
+  outline-offset: 2px;
+}
+
+/* Universal Button Click Feedback 90ms (Sprint 3.5) */
+button, a.btn-primary, a.btn-secondary {
+  transition: transform 90ms ease, background 150ms ease, border-color 150ms ease;
+}
+button:active, a.btn-primary:active, a.btn-secondary:active {
+  transform: scale(0.97);
+}
+
 /* Global 5% Noise Texture Overlay */
 body::after {
   content: "";
@@ -298,3 +312,245 @@ body::after {
     border-bottom: none;
   }
 }
+
+
+/* ============================================================
+   SPRINT A — Robustez em telas pequenas
+   ============================================================ */
+
+/*
+  Nada pode vazar horizontalmente. Em 375px, um único elemento largo
+  cria scroll lateral na página inteira e o layout parece quebrado.
+*/
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1024px) {
+  /*
+    Alvo de toque mínimo de 44px.
+
+    Foram medidos 17 de 25 elementos interativos abaixo disso — o dedo
+    erra, o usuário culpa o produto. Vale só no toque: no desktop, onde
+    o alvo é o cursor, alvos menores continuam confortáveis.
+  */
+  button,
+  a.btn-primary,
+  a.btn-secondary,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  /* Ícone sozinho precisa de área clicável nos dois eixos. */
+  button:not(.btn-primary):not(.btn-secondary) {
+    min-width: 44px;
+  }
+
+  /*
+    iOS dá zoom automático em campo com fonte abaixo de 16px. O zoom
+    desloca o layout e o usuário precisa voltar na mão.
+  */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Respiro lateral menor: em tela estreita, 40px de padding come metade. */
+  main > * {
+    padding-left: clamp(14px, 4vw, 40px) !important;
+    padding-right: clamp(14px, 4vw, 40px) !important;
+  }
+
+  /*
+    Contenção de vazamento: iframe e mídia nunca ultrapassam o container.
+    Resolve o estouro medido em TEMPLATES_10 (+9px) e CRIAR_SITE_11 (+261px).
+  */
+  iframe,
+  img,
+  video,
+  canvas,
+  table,
+  pre {
+    max-width: 100%;
+  }
+
+  /* Tabela e bloco de código rolam dentro da própria caixa. */
+  pre,
+  table {
+    overflow-x: auto;
+  }
+}
+
+
+/* ============================================================
+   SPRINT 2 — Card de lead
+   ============================================================ */
+
+/*
+  O SpotlightCard vem com visual próprio (#111, raio 1.5rem, padding 2rem).
+  Aqui ele é realinhado ao design system do REPASS AI. A mecânica do
+  spotlight (as variáveis --mouse-x/--mouse-y) continua intacta.
+*/
+.card-spotlight.lead-card {
+  border-radius: 10px;
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  background: #0a0e1a;
+  padding: 16px 18px;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-spotlight.lead-card:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  transform: translateY(-2px);
+}
+
+/* O spotlight é resposta ao cursor: sem cursor, não faz sentido. */
+@media (hover: none) {
+  .card-spotlight.lead-card:hover {
+    transform: none;
+  }
+  .card-spotlight.lead-card::before {
+    display: none;
+  }
+}
+
+/* Quem prefere menos movimento não recebe deslocamento nenhum. */
+@media (prefers-reduced-motion: reduce) {
+  .card-spotlight.lead-card,
+  .card-spotlight.lead-card:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* ============================================================
+   SPRINT 3 — Navegação
+   ============================================================ */
+
+/*
+  Entrada de view.
+
+  Truque útil: elemento com `display: none` não executa animação. Quando o
+  keep-alive vira `display: block`, a animação reinicia sozinha — sem
+  JavaScript, sem key, sem AnimatePresence. E como as views que remontam
+  também entram no DOM do zero, o mesmo seletor cobre os dois casos.
+
+  180ms é o teto do "instantâneo". Acima de ~250ms a navegação começa a
+  parecer lenta em vez de fluida.
+*/
+@keyframes entradaDeView {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+main > div:not([hidden]),
+main > article:not([hidden]) {
+  animation: entradaDeView 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/*
+  Resposta ao clique.
+
+  É o detalhe que faz a interface parecer viva no toque: o elemento cede
+  levemente sob o dedo e volta. 90ms — rápido o bastante para parecer
+  físico, não animado.
+*/
+button:active,
+.btn-primary:active,
+.btn-secondary:active,
+a.btn-primary:active,
+a.btn-secondary:active {
+  transform: scale(0.97);
+  transition: transform 0.09s ease;
+}
+
+/* Transição de saída mais lenta que a de entrada: o retorno ao repouso
+   parece natural, o afundar parece imediato. */
+button,
+.btn-primary,
+.btn-secondary {
+  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/*
+  Foco visível.
+
+  Sem isso, navegar por teclado é caminhar no escuro. `:focus-visible`
+  mostra o anel só para quem está usando teclado — quem clica com o mouse
+  não vê nada, que é o comportamento esperado.
+*/
+:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/*
+  Preferência do sistema por menos movimento tem precedência sobre tudo.
+  Não é enfeite opcional: para quem tem sensibilidade vestibular,
+  animação de entrada causa desconforto real.
+*/
+@media (prefers-reduced-motion: reduce) {
+  main > div:not([hidden]),
+  main > article:not([hidden]) {
+    animation: none;
+  }
+  button:active,
+  .btn-primary:active,
+  .btn-secondary:active {
+    transform: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+  Respiro para o dock.
+
+  Ele é `position: fixed`, então não ocupa espaço no fluxo — sem isso, o
+  último card de qualquer lista fica escondido atrás dele.
+*/
+@media (max-width: 1024px) {
+  main {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/*
+  Cursor personalizado.
+
+  A classe é posta no <html> pelo próprio componente, e só enquanto ele
+  está montado. Assim, se qualquer guarda falhar (toque, tela estreita,
+  reduced-motion), o cursor nativo continua intacto — nunca ficamos com
+  uma tela sem cursor nenhum.
+*/
+.cursor-personalizado-ativo,
+.cursor-personalizado-ativo * {
+  cursor: none !important;
+}
+
+/* Campos de texto mantêm o cursor nativo: sem ele, não dá para ver onde
+   o texto vai ser inserido. */
+.cursor-personalizado-ativo input,
+.cursor-personalizado-ativo textarea,
+.cursor-personalizado-ativo select,
+.cursor-personalizado-ativo [contenteditable] {
+  cursor: auto !important;
+}
+
+/* Os alvos em que o cursor gruda. Classe explícita em vez de seletor
+   amplo: grudar em tudo faz o efeito perder sentido e virar ruído. */

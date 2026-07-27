@@ -2,9 +2,12 @@ import React from 'react';
 import { FolderKanban, Globe, ExternalLink, Download, Edit3, Trash2, CheckCircle2 } from 'lucide-react';
 import { DocumentDatabase } from '../mock/documentDB';
 import { downloadStandaloneHTML } from '../services/siteDeployer';
+import { urlPublicaDoSite } from '../config';
 
 export default function ProjectsView({ onEditSite }) {
-  const documents = DocumentDatabase.getAllDocuments();
+  // O método é listDocuments(). `getAllDocuments` não existe na classe e
+  // lançava TypeError, derrubando o app inteiro ao abrir esta aba.
+  const documents = DocumentDatabase.listDocuments() || [];
 
   return (
     <div style={{ padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', animation: 'fadeIn 0.3s ease' }}>
@@ -30,7 +33,8 @@ export default function ProjectsView({ onEditSite }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {documents.map(doc => {
           const meta = doc.meta || {};
-          const publicUrl = `https://${(meta.title || 'site').toLowerCase().replace(/[^a-z0-9]/g, '')}.sobresite.io`;
+          // null enquanto não houver motor de deploy configurado (Sprint 4).
+          const publicUrl = urlPublicaDoSite(meta.title);
 
           return (
             <div 
@@ -39,7 +43,7 @@ export default function ProjectsView({ onEditSite }) {
               style={{
                 padding: '20px 24px',
                 display: 'grid',
-                gridTemplateColumns: '1.5fr 2fr 140px 220px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
                 alignItems: 'center',
                 gap: '20px',
                 background: '#0a0e1a',

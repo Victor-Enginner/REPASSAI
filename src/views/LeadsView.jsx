@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Phone, Globe, Star, ArrowUpRight, Download, Send, Check, Sparkles, Filter, RefreshCw, Plus, X, Tag, Eye, ShieldCheck, AlertCircle } from 'lucide-react';
 import { apiUrl } from '../config';
+import LeadCard from '../components/LeadCard';
 
 export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
   const [selectedEstado, setSelectedEstado] = useState('SP');
@@ -123,10 +124,22 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
   };
 
   const nichosListActive = selectedNicho.split(',').map(n => n.trim().toLowerCase()).filter(Boolean);
-  const displayLeads = realScannedLeads.filter(l => {
-    const matchesNicho = nichosListActive.length > 0 ? nichosListActive.some(n => l.categoria.toLowerCase().includes(n)) : true;
-    const matchesSearch = searchTerm ? l.nome.toLowerCase().includes(searchTerm.toLowerCase()) || l.cidade.toLowerCase().includes(searchTerm.toLowerCase()) : true;
-    return matchesNicho && matchesSearch;
+
+  /**
+   * Leads exibidos.
+   *
+   * O seletor de nicho define O QUE VARRER, não o que mostrar. Antes esta
+   * lista refiltrava por nicho resultados que o backend JÁ tinha filtrado
+   * por nicho — e como a comparação era `categoria.includes(nicho)`, um
+   * lead de categoria "Restaurante" nunca casava com o nicho "hamburgueria"
+   * que o produziu. Resultado: "Todos os Nichos" exibia 0 encontrados.
+   *
+   * Aqui sobra apenas a busca textual, que é filtro de exibição de fato.
+   */
+  const displayLeads = realScannedLeads.filter((l) => {
+    if (!searchTerm) return true;
+    const alvo = `${l.nome || ''} ${l.cidade || ''} ${l.categoria || ''}`.toLowerCase();
+    return alvo.includes(searchTerm.toLowerCase());
   });
 
   const toggleSelectAll = () => {
@@ -347,7 +360,11 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div style={{ fontWeight: '700', color: '#ffffff' }}>
-                <span style={{ color: '#6366f1' }}>22 Sem site</span> · {displayLeads.length} Encontrados
+                {/* Contado dos dados reais. Antes era "22" fixo no código,
+                    que mentia para o operador em toda varredura. */}
+                <span style={{ color: '#6366f1' }}>
+                  {displayLeads.filter(l => l.status_site !== 'tem_site').length} Sem site
+                </span> · {displayLeads.length} Encontrados
               </div>
             </div>
           </div>
@@ -385,178 +402,16 @@ export default function LeadsView({ leads, onSendToCRM, onGenerateSite }) {
 
         {/* Lead Cards Grid - Redesenhado no estilo fiel da UseLeadSite */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
-          {displayLeads.map((lead) => {
-            const isSelected = selectedLeadIds.includes(lead.id);
-
-            return (
-              <div 
-                key={lead.id} 
-                style={{
-                  padding: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  background: 'rgba(255, 255, 255, 0.95)',
-                  color: '#0f172a',
-                  borderRadius: '16px',
-                  border: isSelected ? '2px solid #38bdf8' : '1px solid rgba(226, 232, 240, 0.8)',
-                  boxShadow: isSelected ? '0 12px 30px rgba(56, 189, 248, 0.25)' : '0 10px 25px rgba(0, 0, 0, 0.06)',
-                  transition: 'all 0.2s ease',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                {/* Header do Card */}
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={isSelected} 
-                        onChange={() => toggleSelectLead(lead.id)}
-                        style={{ marginTop: '4px', width: '16px', height: '16px', cursor: 'pointer' }}
-                      />
-                      <div>
-                        <h3 className="font-headline" style={{ fontSize: '16px', color: '#0f172a', fontWeight: '700', lineHeight: 1.25, margin: 0 }}>
-                          {lead.nome}
-                        </h3>
-
-                        {/* Badges de Categoria & Temperatura */}
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '8px', flexWrap: 'wrap' }}>
-                          <span style={{ fontSize: '11px', background: '#f1f5f9', color: '#475569', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
-                            {lead.categoria}
-                          </span>
-                          <span style={{ fontSize: '11px', background: '#dcfce7', color: '#15803d', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
-                            {lead.temperatura}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Badge de Score Circular */}
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{
-                        background: '#f0fdf4',
-                        color: '#22c55e',
-                        fontWeight: '800',
-                        fontSize: '13px',
-                        padding: '4px 10px',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(34, 197, 94, 0.3)',
-                        display: 'inline-block'
-                      }}>
-                        {lead.score}
-                      </div>
-                      
-                      {/* Avaliação e Contagem do Google */}
-                      <div style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px', justifyContent: 'flex-end', marginTop: '6px', fontWeight: '600' }}>
-                        <Star size={12} color="#f59e0b" fill="#f59e0b" />
-                        <span>{lead.avaliacao || '4.8'}</span>
-                        <span style={{ color: '#94a3b8' }}>· {lead.reviewsCount || '1177'}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Especificações do Lead (Telefone, Local, Oportunidade, Endereço) */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px', color: '#334155', marginTop: '14px' }}>
-                    
-                    {/* Telefone */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}>
-                      <Phone size={13} color="#0284c7" />
-                      <span>{lead.telefone || '(16) 99050-5914'}</span>
-                    </div>
-
-                    {/* Cidade + Status do Site */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <MapPin size={13} color="#64748b" />
-                      <span>{lead.cidade}, {lead.estado}</span>
-
-                      <span style={{
-                        fontSize: '10.5px',
-                        fontWeight: '700',
-                        padding: '2px 8px',
-                        borderRadius: '10px',
-                        background: lead.status_site === 'tem_site' ? '#dcfce7' : '#fee2e2',
-                        color: lead.status_site === 'tem_site' ? '#16a34a' : '#dc2626'
-                      }}>
-                        {lead.status_site === 'tem_site' ? 'Tem site' : 'Sem site'}
-                      </span>
-                    </div>
-
-                    {/* Dica de Abordagem / Oportunidade */}
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontStyle: 'italic', color: '#475569', fontSize: '11.5px', marginTop: '2px' }}>
-                      <Sparkles size={13} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
-                      <span>{lead.orientacao || 'Não tem site — ofereça do zero'}</span>
-                    </div>
-
-                    {/* Endereço Completo */}
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
-                      <Globe size={13} color="#94a3b8" style={{ flexShrink: 0, marginTop: '1px' }} />
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                        {lead.endereco || `${lead.cidade}, ${lead.estado}`}
-                      </span>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* Botões de Ação na Parte Inferior */}
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px', paddingTop: '14px', borderTop: '1px solid #f1f5f9' }}>
-                  
-                  {/* Botão Secundário (Ver Site / Criar Site / Auditoria) */}
-                  <button 
-                    onClick={() => onGenerateSite(lead)}
-                    style={{
-                      flex: 1,
-                      padding: '9px 12px',
-                      fontSize: '11.5px',
-                      fontWeight: '600',
-                      borderRadius: '10px',
-                      border: '1px solid #e2e8f0',
-                      background: lead.status_site === 'tem_site' ? '#f8fafc' : '#f0fdf4',
-                      color: lead.status_site === 'tem_site' ? '#475569' : '#16a34a',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <Globe size={13} />
-                    {lead.status_site === 'tem_site' ? 'Site atual' : 'Ver site'}
-                  </button>
-
-                  {/* Botão Principal Azul (Enviar para CRM) */}
-                  <button 
-                    onClick={() => onSendToCRM(lead.id)}
-                    style={{
-                      flex: 1.2,
-                      padding: '9px 14px',
-                      fontSize: '11.5px',
-                      fontWeight: '700',
-                      borderRadius: '10px',
-                      border: 'none',
-                      background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <Send size={13} />
-                    Enviar para CRM
-                  </button>
-
-                </div>
-
-              </div>
-            );
-          })}
+          {displayLeads.map((lead) => (
+            <LeadCard
+              key={lead.id}
+              lead={lead}
+              selecionado={selectedLeadIds.includes(lead.id)}
+              onAlternarSelecao={toggleSelectLead}
+              onEnviarCRM={onSendToCRM}
+              onGerarSite={onGenerateSite}
+            />
+          ))}
         </div>
 
       </div>

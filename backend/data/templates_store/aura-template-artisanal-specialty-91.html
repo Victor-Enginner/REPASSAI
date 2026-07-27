@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="fr">
+  <head><script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CØFF | Bar à Café de Spécialité</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link
+href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Manrope:wght@300;400&amp;family=Playfair+Display:ital,wght@0,400;0,500;1,400&amp;display=swap"
+rel="stylesheet"
+/>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Manrope', 'sans-serif'],
+serif: ['Playfair Display', 'serif'],
+mono: ['JetBrains Mono', 'monospace'],
+},
+colors: {
+cream: '#e0dcd1',
+surface: '#e2dcd0',
+dark: '#1d1d1c',
+moss: '#4f5343',
+sand: '#cebfa9',
+}
+}
+}
+}
+</script>
+<style>
+body { -webkit-font-smoothing: antialiased; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.matte-noise::before {
+content: "";
+position: absolute;
+inset: 0;
+opacity: 0.03;
+pointer-events: none;
+background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+z-index: 1;
+}
+.gradient-border-inset {
+box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+}
+.custom-curve { border-top-right-radius: 180px; }
+@media (max-width: 1024px) {
+.custom-curve { border-top-right-radius: 80px; }
+}
+/* Magnetic Button Wrapper */
+.magnetic-wrap { display: inline-block; position: relative; }
+</style><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body
+    class="relative bg-cream text-dark font-sans overflow-x-hidden selection:bg-moss selection:text-surface"
+  >
+    <!-- WebGL Background -->
+    <canvas
+      id="webgl-bg"
+      class="fixed inset-0 w-full h-full z-0 pointer-events-none opacity-60"
+    ></canvas>
+
+    <!-- Navigation -->
+    <nav
+      class="fixed top-0 left-0 w-full z-50 px-6 lg:px-12 flex justify-between items-center bg-transparent text-surface py-4 border-b border-white/10"
+    >
+      <div class="font-serif text-2xl tracking-tighter uppercase font-medium">
+        CØFF
+      </div>
+      <div
+        class="hidden lg:flex items-center gap-8 font-mono text-xs tracking-widest uppercase"
+      >
+        <a href="#story" class="transition-colors hover:text-white">
+          Notre Histoire
+        </a>
+        <a href="#experience" class="transition-colors hover:text-white">
+          L'Expérience
+        </a>
+        <a href="#shop" class="transition-colors hover:text-white">Boutique</a>
+      </div>
+      <button
+        class="magnetic-wrap w-12 h-12 rounded-full border flex items-center justify-center transition-colors border-white/20 hover:bg-white/10"
+      >
+        <iconify-icon
+          icon="solar:hamburger-menu-linear"
+          width="24"
+        ></iconify-icon>
+      </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="relative z-10 min-h-screen flex flex-col items-center justify-center pt-24 px-6 text-center bg-dark"
+    >
+      <img
+        class="absolute inset-0 w-full h-full object-cover z-0 opacity-50 pointer-events-none"
+        src="https://cdn.midjourney.com/e796b010-1fed-4709-bd1b-cc165351ee03/0_0.png"
+        alt="Hero Background"
+      />
+      <div
+        class="gsap-hero-el font-mono text-xs tracking-widest uppercase mb-8 relative z-10 text-surface/80"
+      >
+        Torréfaction Artisanale &amp; Extraction Douce
+      </div>
+      <h1
+        class="gsap-hero-el font-serif text-6xl lg:text-8xl xl:text-9xl tracking-tight leading-none mb-8 max-w-5xl relative z-10 text-surface"
+      >
+        L'Art de
+        <br class="hidden lg:block" />
+        l'Extraction.
+      </h1>
+      <p
+        class="gsap-hero-el font-sans text-base lg:text-lg max-w-xl font-light mb-12 relative z-10 text-surface/80"
+      >
+        Réveillez vos sens avec un café de spécialité sourcé avec éthique,
+        torréfié avec passion et servi dans un refuge urbain pensé pour
+        l'inspiration.
+      </p>
+
+      <div
+        class="gsap-hero-el flex flex-col sm:flex-row items-center gap-6 relative z-10"
+      >
+        <div class="magnetic-wrap">
+          <a
+            href="#shop"
+            class="inline-flex items-center justify-center gap-4 px-8 py-4 rounded-full transition-all duration-300 shadow-xl group bg-surface text-dark hover:bg-white"
+          >
+            <span class="font-mono text-xs tracking-widest uppercase">
+              Découvrir nos grains
+            </span>
+            <iconify-icon
+              icon="solar:arrow-right-linear"
+              width="18"
+              class="group-hover:translate-x-1 transition-transform"
+            ></iconify-icon>
+          </a>
+        </div>
+        <a
+          href="#experience"
+          class="font-mono text-xs tracking-widest uppercase border-b pb-1 transition-colors text-surface border-surface/30 hover:border-surface"
+        >
+          Réserver une table
+        </a>
+      </div>
+    </section>
+
+    <!-- Story / About Section -->
+    <section
+      id="story"
+      class="relative z-10 py-32 px-6 lg:px-12 bg-dark text-surface rounded-t-[44px] lg:rounded-t-[80px] overflow-hidden"
+    >
+      <div class="absolute inset-0 matte-noise"></div>
+      <div
+        class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+      >
+        <div class="gsap-fade-up">
+          <div
+            class="w-16 h-16 rounded-full border border-surface/20 flex items-center justify-center mb-12"
+          >
+            <iconify-icon icon="solar:cup-hot-linear" width="28"></iconify-icon>
+          </div>
+          <h2
+            class="font-serif text-4xl lg:text-6xl tracking-tight leading-tight mb-8"
+          >
+            De la ferme
+            <br />
+            à la tasse.
+          </h2>
+          <p class="text-surface/70 text-base font-light mb-6 leading-relaxed">
+            Nous parcourons les hautes altitudes d'Éthiopie, de Colombie et du
+            Costa Rica pour dénicher des lots d'exception. Une traçabilité
+            absolue garantit non seulement une qualité en tasse irréprochable,
+            mais aussi le respect du terroir et des producteurs.
+          </p>
+          <p class="text-surface/70 text-base font-light mb-12 leading-relaxed">
+            Notre atelier torréfie chaque semaine en petites quantités, révélant
+            la clarté, les notes florales et la sucrosité naturelle de chaque
+            grain.
+          </p>
+          <div class="grid grid-cols-2 gap-8 border-t border-surface/10 pt-8">
+            <div>
+              <div class="font-serif text-3xl mb-2">15+</div>
+              <div
+                class="font-mono text-xs tracking-widest uppercase text-surface/50"
+              >
+                Fermes partenaires
+              </div>
+            </div>
+            <div>
+              <div class="font-serif text-3xl mb-2">90+</div>
+              <div
+                class="font-mono text-xs tracking-widest uppercase text-surface/50"
+              >
+                Score SCA moyen
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative h-[600px] w-full rounded-[32px] overflow-hidden gsap-scale-up"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&amp;w=2000&amp;auto=format&amp;fit=crop"
+            alt="Torréfaction de café"
+            class="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            class="absolute inset-0 border border-white/10 rounded-[32px] gradient-border-inset z-10"
+          ></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Product Card Section (Re-engineered from source) -->
+    <section
+      id="shop"
+      class="relative z-10 py-32 flex justify-center bg-cream w-full"
+    >
+      <!-- Main Component Wrapper -->
+      <main
+        class="gsap-product-card relative w-full max-w-[1050px] bg-[#1d1d1c] matte-noise rounded-[32px] lg:rounded-[44px] shadow-2xl flex flex-col lg:flex-row overflow-hidden border border-white/5 mx-4 lg:mx-12"
+      >
+        <!-- Left Column: Image Area -->
+        <div
+          class="relative w-full lg:w-[46%] h-[400px] lg:h-auto min-h-[550px] p-4 lg:p-0"
+        >
+          <button class="magnetic-wrap absolute top-8 left-8 z-20">
+            <div
+              class="w-12 h-12 bg-[#31312d]/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#e2dcd0] hover:bg-[#4f5343] transition-colors border border-white/10 gradient-border-inset"
+            >
+              <iconify-icon
+                icon="solar:bookmark-linear"
+                width="22"
+              ></iconify-icon>
+            </div>
+          </button>
+
+          <!-- Image Mask -->
+          <div
+            class="gsap-card-image-wrapper absolute inset-0 lg:custom-curve overflow-hidden"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&amp;w=2000&amp;auto=format&amp;fit=crop"
+              alt="Sachet de café de spécialité"
+              class="w-full h-full object-cover transform scale-105 origin-center"
+              id="card-main-image"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent lg:hidden"
+            ></div>
+          </div>
+
+          <!-- Social Proof Avatars -->
+          <div class="absolute bottom-8 left-8 z-20 flex items-center gap-4">
+            <div class="flex -space-x-3">
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&amp;w=200&amp;auto=format&amp;fit=crop"
+                class="w-10 h-10 rounded-full border-2 border-[#d3cdc0] object-cover"
+                alt="Client 1"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&amp;w=200&amp;auto=format&amp;fit=crop"
+                class="w-10 h-10 rounded-full border-2 border-[#d3cdc0] object-cover"
+                alt="Client 2"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&amp;w=200&amp;auto=format&amp;fit=crop"
+                class="w-10 h-10 rounded-full border-2 border-[#d3cdc0] object-cover"
+                alt="Client 3"
+              />
+              <div
+                class="w-10 h-10 rounded-full bg-[#e8e4d9] border-2 border-[#d3cdc0] flex items-center justify-center text-[#1d1d1c]"
+              >
+                <iconify-icon icon="solar:add-linear" width="18"></iconify-icon>
+              </div>
+            </div>
+            <div
+              class="text-[#f5f1e8] font-light text-xs tracking-wide leading-tight drop-shadow-md lg:drop-shadow-none"
+            >
+              42 torréfiés
+              <br />
+              cette semaine
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Content Area -->
+        <div
+          class="relative w-full lg:w-[54%] flex flex-col justify-between pt-10 lg:pt-14 pb-0 pl-8 pr-8 lg:pl-12 lg:pr-0 z-10"
+        >
+          <button
+            class="absolute top-8 right-8 w-11 h-11 border border-white/20 rounded-full flex items-center justify-center text-[#e2dcd0] hover:bg-white/5 transition-colors"
+          >
+            <iconify-icon
+              icon="solar:menu-dots-circle-linear"
+              width="24"
+            ></iconify-icon>
+          </button>
+
+          <!-- Middle Content Wrapper -->
+          <div class="flex flex-col lg:flex-row w-full lg:pr-10 h-full">
+            <!-- Text Details -->
+            <div class="flex-1 pr-0 lg:pr-6 pt-4 relative z-20">
+              <div
+                class="inline-block bg-[#4d5240] text-[#ded9cc] text-xs tracking-widest font-medium uppercase px-4 py-2 rounded-full mb-6 lg:mb-8 gradient-border-inset"
+              >
+                Micro-Lot
+              </div>
+
+              <h3
+                class="font-serif text-5xl lg:text-7xl text-[#f3eee2] leading-[1.05] tracking-tight mb-6"
+              >
+                Finca
+                <br />
+                El Paraiso
+              </h3>
+
+              <!-- Decorative Divider -->
+              <div class="flex items-center gap-4 mb-6 opacity-60">
+                <div class="h-[1px] bg-[#4d5240] flex-1"></div>
+                <div
+                  class="w-2.5 h-2.5 bg-[#f3eee2] rotate-45 transform origin-center"
+                ></div>
+                <div class="h-[1px] bg-[#4d5240] w-16"></div>
+              </div>
+
+              <p
+                class="text-[#a8a7a2] text-sm lg:text-base font-light leading-relaxed max-w-[280px] mb-10 lg:mb-0"
+              >
+                Un traitement anaérobique exceptionnel offrant des notes
+                éclatantes de litchi, rose et pêche blanche. Idéal en filtre.
+              </p>
+            </div>
+
+            <!-- Specs Panel (Olive) -->
+            <div
+              class="w-full lg:w-[150px] bg-[#4f5343] rounded-[32px] p-6 flex flex-row lg:flex-col items-center justify-between lg:justify-start gap-0 lg:gap-6 mt-6 lg:mt-0 shadow-lg gradient-border-inset relative z-20"
+            >
+              <div
+                class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-[#e2dcd0] shrink-0 mb-0 lg:mb-2"
+              >
+                <iconify-icon
+                  icon="solar:map-point-linear"
+                  width="22"
+                ></iconify-icon>
+              </div>
+
+              <div class="flex flex-col items-start lg:items-center w-full">
+                <span
+                  class="text-[#b1b2a9] text-xs tracking-widest uppercase font-medium mb-1"
+                >
+                  Origine
+                </span>
+                <span class="text-[#e2dcd0] text-sm font-light text-center">
+                  Colombie
+                </span>
+              </div>
+
+              <div class="hidden lg:block w-full h-[1px] bg-white/10"></div>
+
+              <div
+                class="flex flex-col items-start lg:items-center w-full border-l lg:border-l-0 border-white/10 pl-4 lg:pl-0"
+              >
+                <span
+                  class="text-[#b1b2a9] text-xs tracking-widest uppercase font-medium mb-1"
+                >
+                  Process
+                </span>
+                <span class="text-[#e2dcd0] text-sm font-light text-center">
+                  Lavé
+                  <br />
+                  Anaérobique
+                </span>
+              </div>
+
+              <div class="hidden lg:block w-full h-[1px] bg-white/10"></div>
+
+              <div
+                class="flex flex-col items-start lg:items-center w-full border-l lg:border-l-0 border-white/10 pl-4 lg:pl-0"
+              >
+                <span
+                  class="text-[#b1b2a9] text-xs tracking-widest uppercase font-medium mb-2"
+                >
+                  Profil
+                </span>
+                <div class="flex gap-2">
+                  <div
+                    class="w-4 h-4 rounded-full bg-[#e8a598] ring-1 ring-white/30 ring-offset-1 ring-offset-[#4f5343]"
+                    title="Floral / Fruité"
+                  ></div>
+                  <div
+                    class="w-4 h-4 rounded-full bg-[#d4c19c] border border-white/20"
+                    title="Sucré"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Pricing & Action Area (Beige) -->
+          <div
+            class="relative w-auto lg:w-[calc(100%+3rem)] bg-[#eae5d9] mt-10 lg:mt-auto ml-[-2rem] lg:ml-[-3rem] pl-8 lg:pl-12 pr-6 py-6 lg:py-8 rounded-tr-[32px] rounded-br-[32px] lg:rounded-tr-none lg:rounded-tl-[44px] flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 shadow-[0_-10px_30px_rgba(0,0,0,0.15)] z-30"
+          >
+            <!-- Price & Status -->
+            <div
+              class="flex flex-row lg:flex-col items-center lg:items-start justify-between w-full lg:w-auto pr-6 lg:pr-10 lg:border-r border-[#cfcabf]"
+            >
+              <div
+                class="font-serif text-4xl lg:text-5xl text-[#222222] tracking-tight mb-0 lg:mb-2"
+              >
+                24.00€
+              </div>
+              <div
+                class="flex items-center gap-2 text-[#4f5343] font-medium text-xs tracking-widest uppercase"
+              >
+                <iconify-icon
+                  icon="solar:check-circle-bold"
+                  width="16"
+                ></iconify-icon>
+                250g
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div
+              class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end pl-0 lg:pl-6"
+            >
+              <!-- Quantity Adjuster -->
+              <div
+                class="flex items-center gap-4 bg-[#1f1e1d] text-[#e2dcd0] px-4 py-3 rounded-full h-[52px]"
+              >
+                <button class="hover:text-white transition-colors">
+                  <iconify-icon
+                    icon="solar:minus-linear"
+                    width="18"
+                  ></iconify-icon>
+                </button>
+                <span class="font-light text-sm w-4 text-center">1</span>
+                <button class="hover:text-white transition-colors">
+                  <iconify-icon
+                    icon="solar:add-linear"
+                    width="18"
+                  ></iconify-icon>
+                </button>
+              </div>
+
+              <!-- Add to Cart Button -->
+              <div class="magnetic-wrap">
+                <button
+                  class="group flex items-center justify-between gap-6 bg-[#4f5343] text-[#e2dcd0] pl-6 pr-2 py-2 rounded-full h-[52px] hover:bg-[#3a3d31] transition-all duration-300 gradient-border-inset"
+                >
+                  <span
+                    class="text-xs tracking-widest font-medium uppercase mt-[2px]"
+                  >
+                    Au panier
+                  </span>
+                  <div
+                    class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white/10 transition-colors"
+                  >
+                    <iconify-icon
+                      icon="solar:cart-large-minimalistic-linear"
+                      width="18"
+                    ></iconify-icon>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- Testimonials / Sensory Proof -->
+    <section
+      class="relative z-10 py-24 px-6 border-y border-dark/10 bg-cream/80 backdrop-blur-sm"
+    >
+      <div class="max-w-5xl mx-auto text-center">
+        <iconify-icon
+          icon="solar:quote-left-linear"
+          width="48"
+          class="text-moss/30 mb-8"
+        ></iconify-icon>
+        <p class="font-serif text-2xl lg:text-4xl text-dark leading-snug mb-8">
+          "Un refuge urbain où chaque tasse raconte une histoire. L'attention
+          portée à l'extraction révèle des profils aromatiques d'une clarté
+          absolue. Mon incontournable pour le télétravail ou un V60 du
+          dimanche."
+        </p>
+        <div class="flex flex-col items-center">
+          <div
+            class="font-mono text-xs tracking-widest uppercase text-dark font-medium"
+          >
+            Marc L.
+          </div>
+          <div class="text-dark/50 text-xs mt-1">
+            Avis certifié • Guide des Cafés Indépendants
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="relative z-10 bg-dark text-surface pt-24 pb-12 px-6 lg:px-12 rounded-t-[44px] lg:rounded-t-[80px] overflow-hidden"
+    >
+      <div class="absolute inset-0 matte-noise"></div>
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-8 mb-24">
+          <div class="col-span-1 lg:col-span-2">
+            <div
+              class="font-serif text-4xl tracking-tighter uppercase font-medium mb-6"
+            >
+              CØFF
+            </div>
+            <p class="text-surface/60 font-light max-w-sm mb-8 leading-relaxed">
+              Torréfacteur indépendant et bar à café de spécialité. Nous
+              cultivons l'art de l'hospitalité et l'excellence en tasse.
+            </p>
+            <div class="flex items-center gap-4">
+              <button
+                class="w-10 h-10 rounded-full border border-surface/20 flex items-center justify-center hover:bg-surface hover:text-dark transition-all"
+              >
+                <iconify-icon
+                  icon="solar:camera-linear"
+                  width="18"
+                ></iconify-icon>
+              </button>
+              <button
+                class="w-10 h-10 rounded-full border border-surface/20 flex items-center justify-center hover:bg-surface hover:text-dark transition-all"
+              >
+                <iconify-icon
+                  icon="solar:letter-linear"
+                  width="18"
+                ></iconify-icon>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h4
+              class="font-mono text-xs tracking-widest uppercase text-surface/50 mb-6"
+            >
+              Explorer
+            </h4>
+            <ul class="space-y-4 font-light">
+              <li>
+                <a href="#" class="hover:text-sand transition-colors">
+                  Notre Carte
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-sand transition-colors">
+                  La Torréfaction
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-sand transition-colors">
+                  Abonnement Grains
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-sand transition-colors">
+                  Masterclass Barista
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4
+              class="font-mono text-xs tracking-widest uppercase text-surface/50 mb-6"
+            >
+              Le Bar
+            </h4>
+            <ul class="space-y-4 font-light text-surface/80">
+              <li>
+                14 Rue des Arômes,
+                <br />
+                75011 Paris
+              </li>
+              <li class="pt-2">
+                Lun - Ven : 8h - 18h
+                <br />
+                Sam - Dim : 9h - 19h
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col lg:flex-row items-center justify-between pt-8 border-t border-surface/10 text-xs font-mono tracking-widest uppercase text-surface/40"
+        >
+          <p>© 2024 CØFF Roasters. Tous droits réservés.</p>
+          <div class="flex gap-6 mt-4 lg:mt-0">
+            <a href="#" class="hover:text-surface transition-colors">Légal</a>
+            <a href="#" class="hover:text-surface transition-colors">
+              Confidentialité
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          gsap.registerPlugin(ScrollTrigger);
+
+          // 1. Hero Animations
+          gsap.from(".gsap-hero-el", {
+              y: 30,
+              opacity: 0,
+              duration: 1.2,
+              stagger: 0.15,
+              ease: "power3.out",
+              delay: 0.2
+          });
+
+          // 2. Section Fade Ups
+          gsap.utils.toArray('.gsap-fade-up').forEach(section => {
+              gsap.from(section, {
+                  scrollTrigger: {
+                      trigger: section,
+                      start: "top 80%",
+                  },
+                  y: 40,
+                  opacity: 0,
+                  duration: 1,
+                  ease: "power3.out"
+              });
+          });
+
+          // 3. Image Scale Reveal
+          gsap.utils.toArray('.gsap-scale-up').forEach(img => {
+              gsap.from(img, {
+                  scrollTrigger: {
+                      trigger: img,
+                      start: "top 85%",
+                  },
+                  scale: 0.9,
+                  opacity: 0,
+                  duration: 1.2,
+                  ease: "expo.out"
+              });
+          });
+
+          // 4. Premium Product Card Animation (adapted from source)
+          const cardTl = gsap.timeline({
+              scrollTrigger: {
+                  trigger: ".gsap-product-card",
+                  start: "top 75%",
+              },
+              defaults: { ease: "power3.out" }
+          });
+
+          cardTl.fromTo(".gsap-product-card",
+              { opacity: 0, y: 50 },
+              { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }
+          )
+          .fromTo(".gsap-card-image-wrapper",
+              { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)" },
+              { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)", duration: 1.5, ease: "power4.inOut" },
+              "-=0.8"
+          )
+          .fromTo("#card-main-image",
+              { scale: 1.15 },
+              { scale: 1, duration: 2, ease: "power2.out" },
+              "-=1.5"
+          );
+
+          gsap.to("#card-main-image", {
+              scale: 1.03,
+              duration: 15,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut"
+          });
+
+          // 5. Magnetic Buttons (Awwwards Style)
+          const magneticElements = document.querySelectorAll('.magnetic-wrap');
+
+          magneticElements.forEach((el) => {
+              const target = el.children[0];
+
+              el.addEventListener('mousemove', (e) => {
+                  const rect = el.getBoundingClientRect();
+                  const x = e.clientX - rect.left - rect.width / 2;
+                  const y = e.clientY - rect.top - rect.height / 2;
+
+                  gsap.to(target, {
+                      x: x * 0.4,
+                      y: y * 0.4,
+                      duration: 0.4,
+                      ease: "power2.out"
+                  });
+              });
+
+              el.addEventListener('mouseleave', () => {
+                  gsap.to(target, {
+                      x: 0,
+                      y: 0,
+                      duration: 0.7,
+                      ease: "elastic.out(1, 0.3)"
+                  });
+              });
+          });
+      });
+
+      // WebGL Ambient Background (Maintained from source)
+      const initWebGL = () => {
+          const canvas = document.querySelector('#webgl-bg');
+          if(!canvas) return;
+
+          const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+          const scene = new THREE.Scene();
+          const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+          const geometry = new THREE.PlaneGeometry(2, 2);
+
+          const material = new THREE.ShaderMaterial({
+              uniforms: {
+                  u_time: { value: 0.0 },
+                  u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+              },
+              vertexShader: `
+                  varying vec2 vUv;
+                  void main() {
+                      vUv = uv;
+                      gl_Position = vec4(position, 1.0);
+                  }
+              `,
+              fragmentShader: `
+                  uniform float u_time;
+                  uniform vec2 u_resolution;
+                  varying vec2 vUv;
+
+                  vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                  vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                  vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+                  float cnoise(vec2 P) {
+                      vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+                      vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+                      Pi = mod289(Pi);
+                      vec4 ix = Pi.xzxz;
+                      vec4 iy = Pi.yyww;
+                      vec4 fx = Pf.xzxz;
+                      vec4 fy = Pf.yyww;
+                      vec4 i = permute(permute(ix) + iy);
+                      vec4 gx = fract(i * (1.0 / 41.0)) * 2.0 - 1.0 ;
+                      vec4 gy = abs(gx) - 0.5 ;
+                      vec4 tx = floor(gx + 0.5);
+                      gx = gx - tx;
+                      vec2 g00 = vec2(gx.x,gy.x);
+                      vec2 g10 = vec2(gx.y,gy.y);
+                      vec2 g01 = vec2(gx.z,gy.z);
+                      vec2 g11 = vec2(gx.w,gy.w);
+                      vec4 norm = 1.79284291400159 - 0.85373472095314 * vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
+                      g00 *= norm.x;  g01 *= norm.y;  g10 *= norm.z;  g11 *= norm.w;
+                      float n00 = dot(g00, vec2(fx.x, fy.x));
+                      float n10 = dot(g10, vec2(fx.y, fy.y));
+                      float n01 = dot(g01, vec2(fx.z, fy.z));
+                      float n11 = dot(g11, vec2(fx.w, fy.w));
+                      vec2 fade_xy = Pf.xy * Pf.xy * (3.0 - 2.0 * Pf.xy);
+                      vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+                      float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
+                      return 2.3 * n_xy;
+                  }
+
+                  void main() {
+                      vec2 st = gl_FragCoord.xy/u_resolution.xy;
+                      st.x *= u_resolution.x/u_resolution.y;
+
+                      vec2 pos = vec2(st * 1.5);
+                      float n = cnoise(pos + u_time * 0.1);
+                      n += cnoise(pos * 2.0 - u_time * 0.15) * 0.5;
+
+                      vec3 color1 = vec3(0.92, 0.90, 0.86);
+                      vec3 color2 = vec3(0.85, 0.83, 0.78);
+
+                      vec3 finalColor = mix(color1, color2, (n + 1.0) * 0.5);
+                      float dist = distance(vUv, vec2(0.5));
+                      finalColor = mix(finalColor, color2 * 0.9, smoothstep(0.4, 1.2, dist));
+
+                      gl_FragColor = vec4(finalColor, 1.0);
+                  }
+              `
+          });
+
+          const mesh = new THREE.Mesh(geometry, material);
+          scene.add(mesh);
+
+          let time = 0;
+          const animate = () => {
+              requestAnimationFrame(animate);
+              time += 0.01;
+              material.uniforms.u_time.value = time;
+              renderer.render(scene, camera);
+          };
+
+          animate();
+
+          window.addEventListener('resize', () => {
+              renderer.setSize(window.innerWidth, window.innerHeight);
+              material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
+          });
+      };
+
+      initWebGL();
+    </script>
+  </body>
+</html>

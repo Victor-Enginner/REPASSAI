@@ -33,7 +33,7 @@ export default function AppointmentsView({ leads }) {
             style={{
               padding: '20px 24px',
               display: 'grid',
-              gridTemplateColumns: '2fr 1.5fr 160px 180px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
               alignItems: 'center',
               gap: '20px',
               background: '#0a0e1a',

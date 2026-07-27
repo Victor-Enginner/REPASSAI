@@ -1,0 +1,50 @@
+{
+  "slug": "aura-template-digital-creative-30",
+  "titulo": "Creative Design Studio Landing Page Template",
+  "descricao": "A high-end, immersive digital studio template designed for creative agencies to showcase premium portfolios and brand experiences. Fonte: https://www.aura.build/templates/digital-creative-30",
+  "arquivo": "77lib/aura-template-digital-creative-30.html",
+  "tamanho_html": 25480,
+  "paleta": [
+    {
+      "cor": "#e0ccbb",
+      "usos": 14
+    },
+    {
+      "cor": "#070707",
+      "usos": 4
+    },
+    {
+      "cor": "#f8f8f8",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter"
+  ],
+  "secoes": [
+    "Digital Design Expérience",
+    "Réalisations",
+    "Voir la Vidéo",
+    "Faire Passer le Mot",
+    "Notre Histoire"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 8,
+  "preco_centavos": 1990,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-digital-creative-30?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Creative Design Studio Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-digital-creative-30`\n\n## Objetivo\nA high-end, immersive digital studio template designed for creative agencies to showcase premium portfolios and brand experiences. Fonte: https://www.aura.build/templates/digital-creative-30\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e0ccbb  (14x)\n- #070707  (4x)\n- #f8f8f8  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- Digital Design Expérience\n- Réalisations\n- Voir la Vidéo\n- Faire Passer le Mot\n- Notre Histoire\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Creative Design Studio Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Creative Design Studio Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-digital-creative-30`\n\n## Objetivo\nA high-end, immersive digital studio template designed for creative agencies to showcase premium portfolios and brand experiences. Fonte: https://www.aura.build/templates/digital-creative-30\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e0ccbb  (14x)\n- #070707  (4x)\n- #f8f8f8  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- Digital Design Expérience\n- Réalisations\n- Voir la Vidéo\n- Faire Passer le Mot\n- Notre Histoire\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-26T04:17:45"
+}

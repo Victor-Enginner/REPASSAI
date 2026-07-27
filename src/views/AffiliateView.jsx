@@ -51,7 +51,7 @@ export default function AffiliateView() {
       </div>
 
       {/* Metrics Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
         <div className="glass-panel" style={{ padding: '24px', background: '#0a0e1a' }}>
           <span className="mono-label">INDICAÇÕES ATIVAS</span>
           <div className="font-headline" style={{ fontSize: '36px', color: '#ffffff', marginTop: '8px' }}>14</div>

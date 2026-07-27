@@ -1,63 +1,222 @@
-import React, { useState } from 'react';
+/**
+ * REPASS AI - Navegação lateral.
+ *
+ * COMPORTAMENTO RESPONSIVO
+ * ------------------------
+ * Acima de 1024px: coluna fixa de 260px, como sempre foi.
+ *
+ * Abaixo disso: vira GAVETA. A largura fixa de 260px ocupava 69% de uma
+ * tela de 375px, sobrando 115px para o conteúdo — e os cards de lead
+ * renderizavam com 50px de largura. O público final deste produto (dono de
+ * barbearia, restaurante, salão) abre link no celular, então a tela
+ * precisava ser dele, não da navegação.
+ *
+ * A gaveta fecha ao navegar, ao tocar fora e no Esc.
+ */
+
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  LayoutDashboard, 
-  Search, 
-  Kanban, 
-  Cpu, 
-  Calendar, 
-  FolderKanban, 
-  CreditCard, 
-  Trophy, 
-  LayoutTemplate, 
+import {
+  LayoutDashboard,
+  Search,
+  Kanban,
+  Cpu,
+  Calendar,
+  FolderKanban,
+  CreditCard,
+  Trophy,
+  LayoutTemplate,
   PlusCircle,
   MessageSquare,
   Sparkles,
-  Zap,
   ChevronRight,
-  ShieldCheck
+  Menu,
+  X
 } from 'lucide-react';
 import logoOrb from '../assets/repass_logo_orb.jpg';
+import { useEhMobile } from '../hooks/useMediaQuery';
 
 export default function Sidebar({ currentTab, setCurrentTab }) {
   const [hoveredTab, setHoveredTab] = useState(null);
+  const ehMobile = useEhMobile();
+  const [gavetaAberta, setGavetaAberta] = useState(false);
+  const botaoAbrirRef = useRef(null);
 
+  // Ao voltar para desktop, zera o estado da gaveta para não deixar
+  // resquício de overlay quando a Sidebar volta a ser coluna fixa.
+  useEffect(() => {
+    if (!ehMobile) setGavetaAberta(false);
+  }, [ehMobile]);
+
+  // Esc fecha a gaveta e devolve o foco ao botão que a abriu.
+  useEffect(() => {
+    if (!gavetaAberta) return undefined;
+    const aoTeclar = (e) => {
+      if (e.key === 'Escape') {
+        setGavetaAberta(false);
+        botaoAbrirRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', aoTeclar);
+    return () => document.removeEventListener('keydown', aoTeclar);
+  }, [gavetaAberta]);
+
+  // Trava a rolagem do fundo enquanto a gaveta está aberta.
+  useEffect(() => {
+    if (!ehMobile) return undefined;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = gavetaAberta ? 'hidden' : original;
+    return () => { document.body.style.overflow = original; };
+  }, [gavetaAberta, ehMobile]);
+
+  /** Navega e, no celular, fecha a gaveta. */
+  const navegar = (id) => {
+    setCurrentTab(id);
+    if (ehMobile) setGavetaAberta(false);
+  };
+
+  /**
+   * Itens do menu.
+   *
+   * `nome` é o rótulo humano; `indice` é o número do módulo, renderizado
+   * pequeno e apagado ao lado.
+   *
+   * Antes o rótulo inteiro era `CRIAR_SITE_11` — nome de variável vazando
+   * na tela. A estética de terminal é boa e fica; o que muda é que
+   * terminal de verdade tem comando legível, e o número serve de índice,
+   * não de nome.
+   */
   const menuItems = [
-    { id: 'dashboard', label: 'PAINEL_01', icon: LayoutDashboard, badge: null },
-    { id: 'leads', label: 'LEADS_OSINT_02', icon: Search, badge: 'OSINT' },
-    { id: 'crm', label: 'CRM_VENDAS_03', icon: Kanban, badge: null },
-    { id: 'bulk_whatsapp', label: 'DISPARO_WHATSAPP_04', icon: MessageSquare, badge: 'HOT', highlight: true },
-    { id: 'engine', label: 'MOTOR_DE_IA_05', icon: Cpu, badge: 'PRO', highlight: true },
-    { id: 'agendamentos', label: 'AGENDA_06', icon: Calendar, badge: null },
-    { id: 'projetos', label: 'PROJETOS_07', icon: FolderKanban, badge: null },
-    { id: 'cobrar', label: 'FATURAMENTO_08', icon: CreditCard, badge: null },
-    { id: 'ranking', label: 'RANKING_09', icon: Trophy, badge: null },
-    { id: 'templates', label: 'TEMPLATES_10', icon: LayoutTemplate, badge: null },
-    { id: 'editor', label: 'CRIAR_SITE_11', icon: PlusCircle, badge: 'NEW' }
+    { id: 'dashboard',     nome: 'Painel',            indice: '01', icon: LayoutDashboard, badge: null },
+    { id: 'leads',         nome: 'Scanner de Leads',  indice: '02', icon: Search,          badge: 'OSINT' },
+    { id: 'crm',           nome: 'Funil de Vendas',   indice: '03', icon: Kanban,          badge: null },
+    { id: 'bulk_whatsapp', nome: 'Abordagem em Lote', indice: '04', icon: MessageSquare,   badge: 'HOT', highlight: true },
+    { id: 'engine',        nome: 'Motor Neural',      indice: '05', icon: Cpu,             badge: 'PRO', highlight: true },
+    { id: 'agendamentos',  nome: 'Agenda',            indice: '06', icon: Calendar,        badge: null },
+    { id: 'projetos',      nome: 'Meus Sites',        indice: '07', icon: FolderKanban,    badge: null },
+    { id: 'cobrar',        nome: 'Faturamento',       indice: '08', icon: CreditCard,      badge: null },
+    { id: 'ranking',       nome: 'Indicações',        indice: '09', icon: Trophy,          badge: null },
+    { id: 'templates',     nome: 'Loja de Templates', indice: '10', icon: LayoutTemplate,  badge: null },
+    { id: 'editor',        nome: 'Criar Site',        indice: '11', icon: PlusCircle,      badge: 'NEW' }
   ];
 
+  // No celular a gaveta fica fora da tela até ser aberta; no desktop é a
+  // coluna fixa de sempre.
+  const estiloAside = ehMobile
+    ? {
+        width: '272px',
+        maxWidth: '85vw',
+        height: '100dvh',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        transform: gavetaAberta ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.26s cubic-bezier(0.4, 0, 0.2, 1)',
+        zIndex: 60,
+        background: 'rgba(5, 7, 15, 0.97)',
+        backdropFilter: 'blur(16px)',
+        boxShadow: gavetaAberta ? '4px 0 32px rgba(0,0,0,0.6)' : 'none',
+      }
+    : {
+        width: '260px',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        flexShrink: 0,
+        background: 'rgba(5, 7, 15, 0.1)',
+        backdropFilter: 'blur(2px)',
+        zIndex: 40,
+      };
+
   return (
-    <aside className="sidebar-container" style={{
-      width: '260px',
-      height: '100vh',
-      position: 'sticky',
-      top: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      padding: 0,
-      zIndex: 40,
-      flexShrink: 0,
-      background: 'rgba(5, 7, 15, 0.1)',
-      backdropFilter: 'blur(2px)',
-      borderRight: '0.5px solid rgba(255, 255, 255, 0.1)',
-      userSelect: 'none'
-    }}>
+    <>
+      {/* Botão de abrir — só no celular, e só com a gaveta fechada. */}
+      {ehMobile && !gavetaAberta && (
+        <button
+          ref={botaoAbrirRef}
+          onClick={() => setGavetaAberta(true)}
+          aria-label="Abrir menu de navegação"
+          aria-expanded={false}
+          style={{
+            position: 'fixed',
+            top: '14px',
+            left: '14px',
+            zIndex: 55,
+            width: '46px',
+            height: '46px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(10, 14, 26, 0.94)',
+            border: '0.5px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
+          }}
+        >
+          <Menu size={21} color="#ffffff" />
+        </button>
+      )}
+
+      {/* Fundo escuro: fecha ao tocar fora. */}
+      {ehMobile && gavetaAberta && (
+        <div
+          onClick={() => setGavetaAberta(false)}
+          aria-hidden="true"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.62)',
+            backdropFilter: 'blur(2px)',
+            zIndex: 55,
+          }}
+        />
+      )}
+
+    <aside
+      className="sidebar-container"
+      aria-label="Navegação principal"
+      aria-hidden={ehMobile && !gavetaAberta}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 0,
+        borderRight: '0.5px solid rgba(255, 255, 255, 0.1)',
+        userSelect: 'none',
+        overflowY: 'auto',
+        ...estiloAside,
+      }}
+    >
       <div>
+        {/* Fechar — só aparece com a gaveta aberta. */}
+        {ehMobile && (
+          <button
+            onClick={() => setGavetaAberta(false)}
+            aria-label="Fechar menu de navegação"
+            style={{
+              position: 'absolute',
+              top: '14px',
+              right: '14px',
+              zIndex: 2,
+              width: '44px',
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <X size={20} color="#94a3b8" />
+          </button>
+        )}
         
         {/* Brand Header com a Logo da Imagem ao lado do texto REPASS AI */}
         <motion.div 
-          onClick={() => setCurrentTab('landing')}
+          onClick={() => navegar('landing')}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
           style={{
@@ -109,15 +268,18 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
             return (
               <motion.button
                 key={item.id}
-                onClick={() => setCurrentTab(item.id)}
+                onClick={() => navegar(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
                 onMouseLeave={() => setHoveredTab(null)}
                 whileHover={{ x: 4 }}
                 whileTap={{ scale: 0.98 }}
+                aria-current={isActive ? 'page' : undefined}
                 style={{
                   position: 'relative',
                   width: '100%',
-                  height: '42px',
+                  // 44px é o mínimo confortável para o dedo. No desktop,
+                  // onde o alvo é o cursor, 42px continua bom.
+                  height: ehMobile ? '48px' : '42px',
                   padding: '0 12px',
                   display: 'flex',
                   alignItems: 'center',
@@ -172,15 +334,27 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                       transform: isActive ? 'scale(1.1)' : 'scale(1)'
                     }}
                   />
-                  <span style={{ 
-                    fontSize: '11.5px', 
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: isActive ? '700' : '500',
+                  <span style={{
+                    fontSize: '13px',
+                    fontWeight: isActive ? '700' : '600',
                     color: isActive ? '#ffffff' : (isHovered ? '#f1f5f9' : '#cbd5e1'),
-                    letterSpacing: '0.2px',
-                    transition: 'color 0.2s ease'
+                    letterSpacing: '-0.01em',
+                    transition: 'color 0.2s ease',
+                    whiteSpace: 'nowrap'
                   }}>
-                    {item.label}
+                    {item.nome}
+                  </span>
+
+                  {/* Índice do módulo: mantém o DNA de terminal sem virar rótulo. */}
+                  <span style={{
+                    fontSize: '9px',
+                    fontFamily: 'var(--font-mono)',
+                    color: isActive ? '#6366f1' : '#ffffff',
+                    opacity: isActive ? 0.7 : 0.35,
+                    letterSpacing: '0.05em',
+                    transition: 'opacity 0.2s ease'
+                  }}>
+                    {item.indice}
                   </span>
                 </div>
 
@@ -208,7 +382,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
       {/* Upgrade Footer Card Português BR */}
       <div style={{ padding: '14px', borderTop: '0.5px solid rgba(255, 255, 255, 0.1)' }}>
         <motion.div 
-          onClick={() => setCurrentTab('engine')}
+          onClick={() => navegar('engine')}
           whileHover={{ scale: 1.02, translateY: -2 }}
           whileTap={{ scale: 0.98 }}
           style={{
@@ -238,5 +412,6 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         </motion.div>
       </div>
     </aside>
+    </>
   );
 }

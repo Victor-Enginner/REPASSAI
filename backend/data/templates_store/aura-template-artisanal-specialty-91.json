@@ -1,0 +1,104 @@
+{
+  "slug": "aura-template-artisanal-specialty-91",
+  "titulo": "Artisanal Coffee  Roastery Landing Page Template",
+  "descricao": "A premium, high-end landing page template for specialty coffee shops and roasteries featuring sophisticated animations and dark mode aesthetics. Fonte: https://www.aura.build/templates/artisanal-specialty-91",
+  "arquivo": "77lib/aura-template-artisanal-specialty-91.html",
+  "tamanho_html": 35167,
+  "paleta": [
+    {
+      "cor": "#e2dcd0",
+      "usos": 8
+    },
+    {
+      "cor": "#4f5343",
+      "usos": 6
+    },
+    {
+      "cor": "#d3cdc0",
+      "usos": 4
+    },
+    {
+      "cor": "#1d1d1c",
+      "usos": 3
+    },
+    {
+      "cor": "#4d5240",
+      "usos": 3
+    },
+    {
+      "cor": "#b1b2a9",
+      "usos": 3
+    },
+    {
+      "cor": "#f3eee2",
+      "usos": 2
+    },
+    {
+      "cor": "#e0dcd1",
+      "usos": 1
+    },
+    {
+      "cor": "#cebfa9",
+      "usos": 1
+    },
+    {
+      "cor": "#31312d",
+      "usos": 1
+    },
+    {
+      "cor": "#e8e4d9",
+      "usos": 1
+    },
+    {
+      "cor": "#f5f1e8",
+      "usos": 1
+    },
+    {
+      "cor": "#ded9cc",
+      "usos": 1
+    },
+    {
+      "cor": "#a8a7a2",
+      "usos": 1
+    },
+    {
+      "cor": "#e8a598",
+      "usos": 1
+    },
+    {
+      "cor": "#d4c19c",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "JetBrains Mono",
+    "Manrope",
+    "Playfair Display"
+  ],
+  "secoes": [
+    "L'Art de l'Extraction.",
+    "De la ferme à la tasse."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "GSAP",
+    "Three.js",
+    "Canvas"
+  ],
+  "imagens": 6,
+  "preco_centavos": 1990,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-artisanal-specialty-91?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Artisanal Coffee  Roastery Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-artisanal-specialty-91`\n\n## Objetivo\nA premium, high-end landing page template for specialty coffee shops and roasteries featuring sophisticated animations and dark mode aesthetics. Fonte: https://www.aura.build/templates/artisanal-specialty-91\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e2dcd0  (8x)\n- #4f5343  (6x)\n- #d3cdc0  (4x)\n- #1d1d1c  (3x)\n- #4d5240  (3x)\n- #b1b2a9  (3x)\n- #f3eee2  (2x)\n- #e0dcd1  (1x)\n- #cebfa9  (1x)\n- #31312d  (1x)\n- #e8e4d9  (1x)\n- #f5f1e8  (1x)\n- #ded9cc  (1x)\n- #a8a7a2  (1x)\n- #e8a598  (1x)\n- #d4c19c  (1x)\n\n## Tipografia detectada\n- JetBrains Mono\n- Manrope\n- Playfair Display\n\n## Estrutura de seções\n- L'Art de l'Extraction.\n- De la ferme à la tasse.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Artisanal Coffee  Roastery Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Artisanal Coffee  Roastery Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-artisanal-specialty-91`\n\n## Objetivo\nA premium, high-end landing page template for specialty coffee shops and roasteries featuring sophisticated animations and dark mode aesthetics. Fonte: https://www.aura.build/templates/artisanal-specialty-91\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e2dcd0  (8x)\n- #4f5343  (6x)\n- #d3cdc0  (4x)\n- #1d1d1c  (3x)\n- #4d5240  (3x)\n- #b1b2a9  (3x)\n- #f3eee2  (2x)\n- #e0dcd1  (1x)\n- #cebfa9  (1x)\n- #31312d  (1x)\n- #e8e4d9  (1x)\n- #f5f1e8  (1x)\n- #ded9cc  (1x)\n- #a8a7a2  (1x)\n- #e8a598  (1x)\n- #d4c19c  (1x)\n\n## Tipografia detectada\n- JetBrains Mono\n- Manrope\n- Playfair Display\n\n## Estrutura de seções\n- L'Art de l'Extraction.\n- De la ferme à la tasse.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-26T04:17:46"
+}

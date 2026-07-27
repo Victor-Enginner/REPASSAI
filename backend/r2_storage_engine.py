@@ -22,9 +22,29 @@ class R2StorageEngine:
         self.secret_key = secret_key or os.environ.get("CLOUDFLARE_R2_SECRET_KEY", "")
         self.bucket_name = "repass-ai-beta"
 
+    def configurado(self):
+        """True se há credenciais R2 completas para upload real."""
+        return bool(self.account_id and self.access_key and self.secret_key)
+
     def salvar_site_compilado(self, client_slug, html_content):
         """
-        Salva o site compilado no bucket R2 (ou fallback em storage local no ambiente dev).
+        Grava o site compilado.
+
+        ESTADO ATUAL: apenas armazenamento LOCAL. O upload para o Cloudflare
+        R2 ainda não está implementado — as credenciais são lidas mas nenhuma
+        chamada de API é feita.
+
+        Por isso `cdn_url` volta como None. A versão anterior devolvia
+        "https://cdn.repass.ai/{arquivo}", um domínio que não existe
+        (NXDOMAIN): mandar esse link a um cliente entrega uma página morta.
+
+        Enquanto `publicado` for False, a interface deve oferecer download
+        do HTML, nunca um link público.
+
+        Returns:
+            dict com status, caminho local, `publicado` (bool) e `cdn_url`
+            (str|None). `cdn_url` só deixa de ser None quando houver upload
+            real e um domínio efetivamente servindo os arquivos.
         """
         file_name = f"{client_slug}.html"
         local_path = os.path.join(STORAGE_DIR, file_name)
@@ -32,16 +52,22 @@ class R2StorageEngine:
         with open(local_path, "w", encoding="utf-8") as f:
             f.write(html_content)
 
-        print(f"[R2StorageEngine] Site '{client_slug}' armazenado com sucesso em: {local_path}")
-        
-        # URL pública simulada via Cloudflare Worker
-        cdn_url = f"https://cdn.repass.ai/{file_name}"
+        if self.configurado():
+            print(
+                f"[R2StorageEngine] Credenciais R2 presentes, mas o upload não "
+                f"está implementado. '{file_name}' ficou apenas local."
+            )
+        else:
+            print(f"[R2StorageEngine] Site '{client_slug}' salvo localmente em: {local_path}")
+
         return {
             "status": "success",
             "bucket": self.bucket_name,
             "file_name": file_name,
             "local_path": local_path,
-            "cdn_url": cdn_url
+            "publicado": False,
+            "cdn_url": None,
+            "motivo": "upload_r2_nao_implementado",
         }
 
     def gerar_script_worker_cname(self, client_slug, custom_domain):

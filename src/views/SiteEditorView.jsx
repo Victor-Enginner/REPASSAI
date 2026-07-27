@@ -8,7 +8,7 @@ import { downloadStandaloneHTML } from '../services/siteDeployer';
 import AgenticChatbotBuilder from '../components/AgenticChatbotBuilder';
 import ReactBitsCanvas from '../components/ui/ReactBitsCanvas';
 import { OriginKitBentoGrid } from '../components/ui/OriginKitComponents';
-import { urlPublicaDoSite } from '../config';
+import { urlPublicaDoSite, apiUrl } from '../config';
 
 export default function SiteEditorView({ lead, onBack }) {
   const targetLead = lead || {
@@ -101,6 +101,10 @@ export default function SiteEditorView({ lead, onBack }) {
       <header style={{
         background: '#0a0e1a',
         borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)',
+        // Também quebra linha: em tela estreita, título e ações não cabem
+        // lado a lado.
+        flexWrap: 'wrap',
+        gap: '12px',
         padding: '12px 24px',
         display: 'flex',
         alignItems: 'center',
@@ -119,8 +123,9 @@ export default function SiteEditorView({ lead, onBack }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button 
+        {/* flexWrap: 5 botões em linha somavam 636px e estouravam 375px. */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <button
             onClick={() => alert(`📱 ROTEIRO DE ABORDAGEM P/ WHATSAPP:\n\n"Oi, tudo bem? Encontrei o ${targetLead.nome} pesquisando ${targetLead.categoria} em ${targetLead.cidade}.\n\nMontei uma versão moderna e com fotos reais do estabelecimento de vocês para acelerar o atendimento pelo WhatsApp: ${window.location.href}\n\nO que achou do visual?"`)} 
             className="btn-secondary" 
             style={{ padding: '8px 14px', fontSize: '11px', color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
@@ -151,8 +156,19 @@ export default function SiteEditorView({ lead, onBack }) {
         </div>
       </header>
 
-      {/* Main Split Screen */}
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '420px 1fr', overflow: 'hidden' }}>
+      {/*
+        Split screen no desktop; empilhado no celular.
+
+        `420px 1fr` fixo espremia o preview a poucos pixels em tela
+        estreita. Com auto-fit, abaixo de ~840px as duas colunas viram
+        uma só, e o painel de comando fica acima do preview.
+      */}
+      <div style={{
+        flex: 1,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))',
+        overflow: 'auto',
+      }}>
         
         {/* Left Side: Agentic Chatbot Builder Interactive Panel */}
         <AgenticChatbotBuilder 

@@ -173,7 +173,7 @@ export default function BulkWhatsAppView({ leads = [], onBack }) {
                   style={{
                     padding: '20px 24px',
                     display: 'grid',
-                    gridTemplateColumns: 'minmax(160px, 1.8fr) minmax(0, 2.5fr) 160px',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                     alignItems: 'center',
                     gap: '20px',
                     background: '#0a0e1a',
