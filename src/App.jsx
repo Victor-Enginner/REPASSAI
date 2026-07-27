@@ -4,6 +4,7 @@ import FaultyTerminal from './components/ui/FaultyTerminal';
 import ViewErrorBoundary from './components/ViewErrorBoundary';
 import DockMobile from './components/DockMobile';
 import CursorPersonalizado from './components/CursorPersonalizado';
+import { useEhMobile } from './hooks/useMediaQuery';
 import { INITIAL_LEADS } from './mock/leadsData';
 import { obterConfig, limparCacheConfig } from './services/authService';
 
@@ -107,6 +108,7 @@ function PainelSimples({ children }) {
 }
 
 export default function App() {
+  const ehMobile = useEhMobile();
   const [currentTab, setCurrentTab] = useState('leads');
   const [leads, setLeads] = useState(INITIAL_LEADS);
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
@@ -222,8 +224,8 @@ export default function App() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: '#05070f' }}>
 
-      {/* Background Matrix Terminal Fixo Global (FaultyTerminal) - Permanece vivo em TODAS as abas sangrando atrás da Sidebar transparente */}
-      {currentTab !== 'landing' && (
+      {/* Background Matrix Terminal Fixo Global (FaultyTerminal) - Permanece vivo em TODAS as abas sangrando atrás da Sidebar no Desktop; desativado em celulares para 60fps lisos */}
+      {currentTab !== 'landing' && !ehMobile && (
         <div style={{
           position: 'fixed',
           inset: 0,
