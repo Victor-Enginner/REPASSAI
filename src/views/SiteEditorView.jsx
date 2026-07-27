@@ -7,6 +7,7 @@ import { DocumentDatabase } from '../mock/documentDB';
 import { downloadStandaloneHTML } from '../services/siteDeployer';
 import AgenticChatbotBuilder from '../components/AgenticChatbotBuilder';
 import ReactBitsCanvas from '../components/ui/ReactBitsCanvas';
+import GlowBorder from '../components/ui/GlowBorder';
 import { OriginKitBentoGrid } from '../components/ui/OriginKitComponents';
 import { urlPublicaDoSite, apiUrl } from '../config';
 
@@ -204,30 +205,37 @@ export default function SiteEditorView({ lead, onBack }) {
             </div>
           </div>
 
-          {/* Live Interactive Iframe Frame */}
-          <div style={{
-            width: '100%',
-            maxWidth: '1200px',
-            height: 'calc(100vh - 140px)',
-            background: '#ffffff',
-            borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
-            overflow: 'hidden',
-            position: 'relative'
-          }}>
-            <iframe
-              key={targetLead.id || targetLead.nome}
-              src={docSchema?.previewUrl ? apiUrl(docSchema.previewUrl) : apiUrl(`/api/site/preview_html?file=generated_${targetLead.nome.toLowerCase().replace(/[^a-z0-9]/g, '_')}.html`)}
-              srcDoc={docSchema?.htmlContent || undefined}
-              title={`Preview de ${targetLead.nome}`}
-              style={{
+          {/* Live Interactive Iframe Frame com GlowBorder */}
+          <div style={{ width: '100%', maxWidth: '1200px', height: 'calc(100vh - 140px)' }}>
+            <GlowBorder
+              duration={8}
+              color={['#38bdf8', '#22c55e', '#6366f1']}
+              borderRadius={12}
+              borderWidth={2}
+              style={{ width: '100%', height: '100%', background: '#050711' }}
+            >
+              <div style={{
                 width: '100%',
                 height: '100%',
-                border: 'none',
-                background: '#ffffff'
-              }}
-            />
+                background: '#ffffff',
+                borderRadius: '10px',
+                overflow: 'hidden',
+                position: 'relative'
+              }}>
+                <iframe
+                  key={targetLead.id || targetLead.nome}
+                  src={docSchema?.previewUrl ? apiUrl(docSchema.previewUrl) : apiUrl(`/api/site/preview_html?file=generated_${targetLead.nome.toLowerCase().replace(/[^a-z0-9]/g, '_')}.html`)}
+                  srcDoc={docSchema?.htmlContent || undefined}
+                  title={`Preview de ${targetLead.nome}`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    background: '#ffffff'
+                  }}
+                />
+              </div>
+            </GlowBorder>
           </div>
 
         </div>
