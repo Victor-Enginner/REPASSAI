@@ -109,7 +109,7 @@ function PainelSimples({ children }) {
 
 export default function App() {
   const ehMobile = useEhMobile();
-  const [currentTab, setCurrentTab] = useState('leads');
+  const [currentTab, setCurrentTab] = useState('landing');
   const [leads, setLeads] = useState(INITIAL_LEADS);
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
 
@@ -232,6 +232,7 @@ export default function App() {
       <main style={{
         flex: 1,
         minWidth: 0,
+        marginLeft: (currentTab !== 'landing' && !ehMobile) ? '260px' : 0,
         overflowY: 'auto',
         position: 'relative',
         zIndex: 10,

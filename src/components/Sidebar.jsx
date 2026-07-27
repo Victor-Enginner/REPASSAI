@@ -102,7 +102,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
   ];
 
   // No celular a gaveta fica fora da tela até ser aberta; no desktop é a
-  // coluna fixa de sempre.
+  // coluna fixa e imutável de 260px travada na viewport.
   const estiloAside = ehMobile
     ? {
         width: '272px',
@@ -121,11 +121,11 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
     : {
         width: '260px',
         height: '100vh',
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
+        left: 0,
         flexShrink: 0,
-        background: 'rgba(5, 7, 15, 0.1)',
-        backdropFilter: 'blur(2px)',
+        background: '#05070f',
         zIndex: 40,
       };
 
@@ -182,13 +182,10 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
         padding: 0,
         borderRight: '0.5px solid rgba(255, 255, 255, 0.1)',
         userSelect: 'none',
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        position: 'relative',
+        overflow: 'hidden',
         ...estiloAside,
       }}
     >
@@ -202,7 +199,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
         {/* Fechar — só aparece com a gaveta aberta. */}
         {ehMobile && (
           <button
@@ -227,7 +224,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           </button>
         )}
         
-        {/* Brand Header com a Logo da Imagem ao lado do texto REPASS AI */}
+        {/* Brand Header Fixo no Topo da Sidebar */}
         <motion.div 
           onClick={() => navegar('landing')}
           whileHover={{ scale: 1.01 }}
@@ -238,8 +235,9 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
             borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)',
             display: 'flex',
             alignItems: 'center',
-            justify: 'space-between',
-            cursor: 'pointer'
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            flexShrink: 0
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -271,8 +269,8 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           </span>
         </motion.div>
 
-        {/* Navigation Menu com Indicador Indigo Clássico */}
-        <nav style={{ display: 'flex', flexDirection: 'column', padding: '12px 8px', gap: '2px', position: 'relative' }}>
+        {/* Navigation Menu com Rolagem Interna Isolada (Não move a Sidebar) */}
+        <nav style={{ display: 'flex', flexDirection: 'column', padding: '12px 8px', gap: '2px', position: 'relative', flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
