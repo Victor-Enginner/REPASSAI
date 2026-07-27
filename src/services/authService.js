@@ -150,15 +150,52 @@ export async function entrar(email, senha) {
 }
 
 /**
- * Cria conta. Dependendo da configuração do projeto Supabase, pode exigir
- * confirmação por e-mail antes do primeiro login.
+ * Captura tokens vindos no hash da URL (quando o usuário clica no link de confirmação do e-mail).
+ */
+export function capturarSessaoUrlHash() {
+  if (typeof window === 'undefined') return null;
+  const hash = window.location.hash;
+  if (!hash || !hash.includes('access_token=')) return null;
+
+  try {
+    const params = new URLSearchParams(hash.replace(/^#/, ''));
+    const access_token = params.get('access_token');
+    const refresh_token = params.get('refresh_token');
+    const expires_in = params.get('expires_in');
+
+    if (access_token) {
+      const sessao = {
+        access_token,
+        refresh_token: refresh_token || '',
+        expires_at: Math.floor(Date.now() / 1000) + (parseInt(expires_in, 10) || 3600),
+        user: null
+      };
+      salvarSessao(sessao);
+      // Limpa a hash da URL sem dar reload
+      window.history.replaceState(null, '', window.location.pathname);
+      return sessao;
+    }
+  } catch {
+    // ignora erro de parse
+  }
+  return null;
+}
+
+/**
+ * Cria conta. Passa o emailRedirectTo dinâmico (window.location.origin) para
+ * que o link de confirmação do e-mail nunca redirecione pro localhost incorreto.
  *
  * @returns {Promise<{precisaConfirmar: boolean}>}
  */
 export async function cadastrar(email, senha) {
+  const redirectUrl = typeof window !== 'undefined' ? window.location.origin : 'https://repassai.vercel.app';
+  
   const dados = await chamarSupabaseAuth('signup', {
     email: email.trim(),
     password: senha,
+    options: {
+      emailRedirectTo: redirectUrl
+    }
   });
 
   // Com confirmação de e-mail ligada, o signup não devolve token.
@@ -181,8 +218,12 @@ export async function cadastrar(email, senha) {
  * @returns {Promise<void>}
  */
 export async function recuperarSenha(email) {
+  const redirectUrl = typeof window !== 'undefined' ? window.location.origin : 'https://repassai.vercel.app';
   await chamarSupabaseAuth('recover', {
     email: email.trim(),
+    options: {
+      emailRedirectTo: redirectUrl
+    }
   });
 }
 

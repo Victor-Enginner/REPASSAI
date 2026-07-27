@@ -7,7 +7,7 @@ import CursorPersonalizado from './components/CursorPersonalizado';
 import AgenticChatbotWidget from './components/AgenticChatbotWidget';
 import { useEhMobile } from './hooks/useMediaQuery';
 import { INITIAL_LEADS } from './mock/leadsData';
-import { obterConfig, limparCacheConfig } from './services/authService';
+import { obterConfig, limparCacheConfig, capturarSessaoUrlHash } from './services/authService';
 
 /**
  * Carregamento sob demanda das views.
@@ -123,6 +123,12 @@ export default function App() {
    */
   useEffect(() => {
     try {
+      // Captura token vindo do link de confirmação do e-mail
+      const sessaoConfirmada = capturarSessaoUrlHash();
+      if (sessaoConfirmada) {
+        setCurrentTab('dashboard');
+      }
+
       const chavesLegadas = [
         `${'OMNI'}${'ROUTE'}_API_KEY`,
         ['repass', 'llm', 'config'].join('_'),
