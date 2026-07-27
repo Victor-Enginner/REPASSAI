@@ -1,49 +1,104 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import './Cyber3DCard.css';
 
 /**
- * REPASS AI - Componente Cyber3DCard (Baseado no efeito 3D da Uiverse por 00Kubi)
+ * REPASS AI - Cyber3DCard Component
  * 
- * Envolve qualquer card com um efeito 3D responsivo ao cursor e cantos cibernéticos
- * iluminados sem sobrepor elementos visuais sobre o texto ou botões internos.
+ * Card 3D dinâmico, estável e fluído para desktop e mobile.
+ * Suporta rotação 3D interativa no cursor/toque sem bloqueio de cliques.
  */
 export default function Cyber3DCard({ children, isHot = false, className = '', style = {} }) {
-  // 25 células de rastreamento no grid 5x5
-  const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
+  const cardRef = useRef(null);
+  const [transformStyle, setTransformStyle] = useState('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+  const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Ângulo máximo de inclinação em graus (10 deg para estabilidade elegância)
+    const maxRotate = 10;
+    const rotateX = -((y - centerY) / centerY) * maxRotate;
+    const rotateY = ((x - centerX) / centerX) * maxRotate;
+
+    setTransformStyle(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`);
+    setGlarePos({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      opacity: 1
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTransformStyle('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+    setGlarePos((prev) => ({ ...prev, opacity: 0 }));
+  };
+
+  const handleTouchMove = (e) => {
+    if (!e.touches[0] || !cardRef.current) return;
+    const touch = e.touches[0];
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = -((y - centerY) / centerY) * 8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+
+    setTransformStyle(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.01, 1.01, 1.01)`);
+    setGlarePos({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      opacity: 0.8
+    });
+  };
 
   return (
-    <div className={`cyber-3d-container noselect ${className}`} style={style}>
-      <div className="cyber-3d-canvas">
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleMouseLeave}
+      className={`cyber-3d-wrapper ${className}`}
+      style={{
+        transform: transformStyle,
+        transition: 'transform 0.15s ease-out, box-shadow 0.3s ease',
+        ...style
+      }}
+    >
+      <div className={`cyber-3d-card-body ${isHot ? 'is-hot' : ''}`}>
+        
+        {/* Reflexo de Vidro (Glare) Dinâmico acompanhando a posição do cursor */}
+        <div
+          className="cyber-3d-glare-layer"
+          style={{
+            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 65%)`,
+            opacity: glarePos.opacity,
+            transition: 'opacity 0.3s ease'
+          }}
+        />
 
-        {/* Grid invisível de rastreamento do mouse para calcular a rotação 3D */}
-        <div className="cyber-3d-tracker-grid">
-          {trackers.map((num) => (
-            <div key={num} className={`cyber-3d-tr cyber-3d-tr-${num}`} />
-          ))}
+        {/* Marcadores Ciber de Canto Alinhados */}
+        <div className={`cyber-corners ${isHot ? 'corners-hot' : ''}`}>
+          <span className="corner-tl" />
+          <span className="corner-tr" />
+          <span className="corner-bl" />
+          <span className="corner-br" />
         </div>
 
-        {/* Card 3D propriamente dito */}
-        <div className={`cyber-3d-card ${isHot ? 'cyber-3d-card-hot' : ''}`}>
-          
-          {/* Brilho e reflexo de vidro (glare) ao passar o mouse */}
-          <div className="cyber-3d-glare" />
+        {/* Linha de Varredura Laser Fina no Fundo */}
+        <div className="cyber-laser-scan" />
 
-          {/* Cantoneiras Cibernéticas (Corner Elements) */}
-          <div className={`cyber-corner-elements ${isHot ? 'cyber-corner-elements-hot' : ''}`}>
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
-
-          {/* Varredura Laser Suave (Scan Line) */}
-          <div className="cyber-scan-line" />
-
-          {/* Conteúdo Interno Preservado */}
-          <div className="cyber-3d-content">
-            {children}
-          </div>
-
+        {/* Conteúdo Real do Card */}
+        <div className="cyber-card-inner">
+          {children}
         </div>
 
       </div>

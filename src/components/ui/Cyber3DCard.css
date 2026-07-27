@@ -1,164 +1,103 @@
-/* REPASS AI - Cyber3DCard CSS (Based on Uiverse 00Kubi 3D Cyber Effect) */
+/* REPASS AI - Cyber3DCard CSS */
 
-.cyber-3d-container {
+.cyber-3d-wrapper {
   position: relative;
   width: 100%;
-  transition: transform 200ms ease, box-shadow 300ms ease;
-  perspective: 1000px;
+  border-radius: 14px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  user-select: none;
 }
 
-.cyber-3d-canvas {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.cyber-3d-tracker-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  pointer-events: auto;
-}
-
-.cyber-3d-tr {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-/* Card Body */
-.cyber-3d-card {
+.cyber-3d-card-body {
   position: relative;
   width: 100%;
   height: 100%;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(17, 23, 38, 0.95), rgba(10, 14, 26, 0.98));
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   overflow: hidden;
-  transition: transform 140ms ease-out, filter 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
-  transform-style: preserve-3d;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cyber-3d-card-hot {
-  border-color: rgba(34, 197, 94, 0.4);
+.cyber-3d-card-body.is-hot {
+  border-color: rgba(34, 197, 94, 0.45);
   box-shadow: 0 10px 35px rgba(34, 197, 94, 0.15);
 }
 
-.cyber-3d-container:hover .cyber-3d-card-hot {
-  border-color: rgba(34, 197, 94, 0.8);
-  box-shadow: 0 15px 40px rgba(34, 197, 94, 0.25);
+.cyber-3d-wrapper:hover .cyber-3d-card-body {
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Glare & Cyber background elements */
-.cyber-3d-glare {
+.cyber-3d-wrapper:hover .cyber-3d-card-body.is-hot {
+  border-color: rgba(34, 197, 94, 0.85);
+  box-shadow: 0 15px 45px rgba(34, 197, 94, 0.25);
+}
+
+/* Camada de Reflexo de Vidro (Glare) */
+.cyber-3d-glare-layer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    125deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.03) 45%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 55%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  opacity: 0;
-  transition: opacity 300ms ease;
   pointer-events: none;
   z-index: 2;
+  border-radius: inherit;
 }
 
-.cyber-3d-container:hover .cyber-3d-glare {
-  opacity: 1;
-}
-
-/* Corner Elements */
-.cyber-corner-elements span {
+/* Cantoneiras Cibernéticas (Colchetes) */
+.cyber-corners span {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border: 1.5px solid rgba(99, 102, 241, 0.4);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   pointer-events: none;
   z-index: 5;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cyber-corner-elements-hot span {
-  border-color: rgba(34, 197, 94, 0.5);
+.cyber-corners.corners-hot span {
+  border-color: rgba(34, 197, 94, 0.6);
 }
 
-.cyber-corner-elements span:nth-child(1) { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
-.cyber-corner-elements span:nth-child(2) { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
-.cyber-corner-elements span:nth-child(3) { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
-.cyber-corner-elements span:nth-child(4) { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+.cyber-corners .corner-tl { top: 6px; left: 6px; border-right: 0; border-bottom: 0; border-top-left-radius: 4px; }
+.cyber-corners .corner-tr { top: 6px; right: 6px; border-left: 0; border-bottom: 0; border-top-right-radius: 4px; }
+.cyber-corners .corner-bl { bottom: 6px; left: 6px; border-right: 0; border-top: 0; border-bottom-left-radius: 4px; }
+.cyber-corners .corner-br { bottom: 6px; right: 6px; border-left: 0; border-top: 0; border-bottom-right-radius: 4px; }
 
-.cyber-3d-container:hover .cyber-corner-elements span {
+.cyber-3d-wrapper:hover .cyber-corners span {
   border-color: rgba(99, 102, 241, 0.9);
   box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
 }
 
-.cyber-3d-container:hover .cyber-corner-elements-hot span {
-  border-color: rgba(34, 197, 94, 0.9);
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+.cyber-3d-wrapper:hover .cyber-corners.corners-hot span {
+  border-color: rgba(34, 197, 94, 1);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
 }
 
-/* Scan line */
-.cyber-scan-line {
+/* Varredura Laser Fina */
+.cyber-laser-scan {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    transparent,
-    rgba(99, 102, 241, 0.08),
-    transparent
+    transparent 0%,
+    rgba(99, 102, 241, 0.06) 50%,
+    transparent 100%
   );
   transform: translateY(-100%);
-  animation: cyberScanMove 3s linear infinite;
+  animation: cyberLaserMove 4s linear infinite;
   pointer-events: none;
-  z-index: 3;
+  z-index: 1;
 }
 
-@keyframes cyberScanMove {
+@keyframes cyberLaserMove {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100%); }
 }
 
-/* 3D Rotations per Grid Cell */
-.cyber-3d-tr-1:hover ~ .cyber-3d-card { transform: rotateX(12deg) rotateY(-8deg); }
-.cyber-3d-tr-2:hover ~ .cyber-3d-card { transform: rotateX(12deg) rotateY(-4deg); }
-.cyber-3d-tr-3:hover ~ .cyber-3d-card { transform: rotateX(12deg) rotateY(0deg); }
-.cyber-3d-tr-4:hover ~ .cyber-3d-card { transform: rotateX(12deg) rotateY(4deg); }
-.cyber-3d-tr-5:hover ~ .cyber-3d-card { transform: rotateX(12deg) rotateY(8deg); }
-
-.cyber-3d-tr-6:hover ~ .cyber-3d-card { transform: rotateX(6deg) rotateY(-8deg); }
-.cyber-3d-tr-7:hover ~ .cyber-3d-card { transform: rotateX(6deg) rotateY(-4deg); }
-.cyber-3d-tr-8:hover ~ .cyber-3d-card { transform: rotateX(6deg) rotateY(0deg); }
-.cyber-3d-tr-9:hover ~ .cyber-3d-card { transform: rotateX(6deg) rotateY(4deg); }
-.cyber-3d-tr-10:hover ~ .cyber-3d-card { transform: rotateX(6deg) rotateY(8deg); }
-
-.cyber-3d-tr-11:hover ~ .cyber-3d-card { transform: rotateX(0deg) rotateY(-8deg); }
-.cyber-3d-tr-12:hover ~ .cyber-3d-card { transform: rotateX(0deg) rotateY(-4deg); }
-.cyber-3d-tr-13:hover ~ .cyber-3d-card { transform: rotateX(0deg) rotateY(0deg); }
-.cyber-3d-tr-14:hover ~ .cyber-3d-card { transform: rotateX(0deg) rotateY(4deg); }
-.cyber-3d-tr-15:hover ~ .cyber-3d-card { transform: rotateX(0deg) rotateY(8deg); }
-
-.cyber-3d-tr-16:hover ~ .cyber-3d-card { transform: rotateX(-6deg) rotateY(-8deg); }
-.cyber-3d-tr-17:hover ~ .cyber-3d-card { transform: rotateX(-6deg) rotateY(-4deg); }
-.cyber-3d-tr-18:hover ~ .cyber-3d-card { transform: rotateX(-6deg) rotateY(0deg); }
-.cyber-3d-tr-19:hover ~ .cyber-3d-card { transform: rotateX(-6deg) rotateY(4deg); }
-.cyber-3d-tr-20:hover ~ .cyber-3d-card { transform: rotateX(-6deg) rotateY(8deg); }
-
-.cyber-3d-tr-21:hover ~ .cyber-3d-card { transform: rotateX(-12deg) rotateY(-8deg); }
-.cyber-3d-tr-22:hover ~ .cyber-3d-card { transform: rotateX(-12deg) rotateY(-4deg); }
-.cyber-3d-tr-23:hover ~ .cyber-3d-card { transform: rotateX(-12deg) rotateY(0deg); }
-.cyber-3d-tr-24:hover ~ .cyber-3d-card { transform: rotateX(-12deg) rotateY(4deg); }
-.cyber-3d-tr-25:hover ~ .cyber-3d-card { transform: rotateX(-12deg) rotateY(8deg); }
-
-/* Internal Content Safety */
-.cyber-3d-content {
+/* Conteúdo Interno */
+.cyber-card-inner {
   position: relative;
   z-index: 10;
   height: 100%;
