@@ -232,8 +232,8 @@ gerados.
 
 | # | Task | Entregável |
 |---|---|---|
-| F1 | Upload real para o Cloudflare R2 (API S3) | arquivo no bucket |
-| F2 | Domínio servindo o bucket | `cdn_url` deixa de ser `null` |
+| F1 ✅ | Upload real para o Cloudflare R2 (API S3) | concluído; arquivo no bucket |
+| F2 🟡 | Domínio servindo o bucket | `r2.dev` ativo; falta domínio próprio de produção |
 | F3 | Worker de CNAME para domínio do cliente | `site.cliente.com.br` |
 | F4 | Botão "Publicar" com estado real | `publicado: true` só quando está no ar |
 | F5 | Pixel do Facebook e GTM injetáveis no `<head>` | rastreamento funcionando |

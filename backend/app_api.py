@@ -220,6 +220,17 @@ class RepassApiHandler(BaseHTTPRequestHandler):
                 },
             })
 
+        elif path == "/api/system/diagnostics":
+            # Provas reais, somente leitura, das raízes remotas. Esta rota é
+            # separada do status rápido porque pode aguardar rede externa.
+            # Nunca devolve credenciais, URLs ou registros.
+            from r2_storage_engine import R2StorageEngine
+
+            self._json(200, {
+                "supabase": supabase_client.diagnosticar_conexao(),
+                "r2": R2StorageEngine().diagnosticar_conexao(),
+            })
+
         elif path == "/api/ai/status":
             # Só diz quantos motores estão prontos. Nunca qual modelo.
             self.send_response(200)
@@ -814,4 +825,10 @@ def run_server(port=8000):
         print("\nServidor finalizado.")
 
 if __name__ == "__main__":
-    run_server()
+    try:
+        porta = int(os.environ.get("PORT", "8000"))
+    except ValueError:
+        raise SystemExit("PORT precisa ser um número inteiro.")
+    if not 1 <= porta <= 65535:
+        raise SystemExit("PORT precisa estar entre 1 e 65535.")
+    run_server(porta)

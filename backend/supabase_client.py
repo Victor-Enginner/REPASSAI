@@ -320,3 +320,37 @@ def status():
             else "projeto_supabase_incompleto"
         ),
     }
+
+
+def diagnosticar_conexao():
+    """
+    Faz uma leitura mínima e sem mutação para provar a conexão PostgREST.
+
+    A resposta é própria para telemetria: não contém URL, chave, usuário nem
+    conteúdo das tabelas.
+    """
+    inicio = time.perf_counter()
+    if not configurado():
+        return {
+            "conectado": False,
+            "latencia_ms": None,
+            "erro": "nao_configurado",
+        }
+    ultimo_erro = None
+    for tentativa in range(2):
+        try:
+            selecionar("perfis", colunas="user_id", limite=1)
+            return {
+                "conectado": True,
+                "latencia_ms": round((time.perf_counter() - inicio) * 1000),
+                "erro": None,
+            }
+        except Exception as exc:
+            ultimo_erro = exc
+            if tentativa == 0:
+                time.sleep(0.2)
+    return {
+        "conectado": False,
+        "latencia_ms": round((time.perf_counter() - inicio) * 1000),
+        "erro": type(ultimo_erro).__name__,
+    }

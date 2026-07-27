@@ -1,0 +1,19 @@
+.git
+.gitignore
+.claude
+.agents
+.codex
+.env
+.env.*
+!.env.example
+backend/.env
+node_modules
+dist
+logs
+*.log
+**/__pycache__
+**/*.pyc
+waitlist-agentic-ai-glitch-effect.zip
+modern-landing-page
+Backgrounds Animations
+Components Animations

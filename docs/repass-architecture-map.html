@@ -19,7 +19,7 @@
     .legend{max-width:1600px;margin:0 auto 10px;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap}.chip{padding:6px 10px;font-size:11px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}.implemented{--status:var(--lime)}.partial{--status:var(--amber)}.planned{--status:var(--cyan)}.legacy{--status:var(--red)}
     .telemetry{max-width:1600px;margin:0 auto 16px;padding:0 24px;display:flex;gap:18px;align-items:center;color:#68778a;font:9px ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}.telemetry strong{color:#a9b5c4;font-weight:500}.signal-wave{display:flex;align-items:center;gap:3px;height:16px}.signal-wave i{display:block;width:2px;height:5px;background:var(--lime);box-shadow:0 0 5px rgba(167,239,158,.5);animation:wave 1.2s ease-in-out infinite}.signal-wave i:nth-child(2){animation-delay:.1s}.signal-wave i:nth-child(3){animation-delay:.2s}.signal-wave i:nth-child(4){animation-delay:.3s}.paused .signal-wave i{animation:none;height:3px;background:#526071;box-shadow:none}
     .diagnostic{display:none;max-width:1552px;margin:0 auto 18px;padding:15px 16px;background:rgba(11,16,24,.92);border:1px solid #263548;border-radius:9px}.diagnostic.open{display:block}.diagnostic-head{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}.diagnostic-head h2{font-size:14px;margin:0}.api-field{display:flex;gap:7px;align-items:center;flex:1;justify-content:flex-end}.api-field label{font:9px ui-monospace,monospace;color:#7f8da0;text-transform:uppercase}.api-field input{width:min(310px,48vw);background:#070b11;border:1px solid #2a3a4e;color:#dce6f2;border-radius:6px;padding:7px 9px;outline:none}.diagnostic-summary{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.health-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #2a394c;border-radius:99px;font:9px ui-monospace,monospace;text-transform:uppercase;color:#9aa8b9}.health-pill::before{content:"";width:7px;height:7px;border-radius:50%;background:#64748b}.health-pill.online::before{background:var(--lime);box-shadow:0 0 9px var(--lime)}.health-pill.offline::before{background:var(--red);box-shadow:0 0 9px var(--red)}.health-pill.unconfigured::before{background:var(--amber)}.health-pill.degraded::before,.health-pill.unknown::before{background:var(--cyan)}.diagnostic-note{margin:11px 0 0;color:#8290a2;font-size:11px;line-height:1.5}
-    .workspace{position:relative;overflow:auto;min-height:650px;border-block:1px solid #1b2634;background:rgba(4,7,10,.55)}.canvas{position:relative;display:grid;grid-template-columns:repeat(5,var(--node-w));gap:var(--gap);min-width:1450px;width:max-content;padding:58px 40px 100px;align-items:start}
+    .workspace{position:relative;overflow:auto;min-height:650px;border-block:1px solid #1b2634;background:rgba(4,7,10,.55)}.canvas{position:relative;display:grid;grid-template-columns:repeat(var(--layer-count,5),var(--node-w));gap:var(--gap);min-width:max-content;width:max-content;padding:58px 40px 100px;align-items:start}
     .layer{position:relative;display:flex;flex-direction:column;gap:14px;z-index:2}.layer-head{position:sticky;top:71px;z-index:4;background:#080d13;border:1px solid #273445;padding:10px 12px;border-radius:7px;font:11px ui-monospace,monospace;color:#aeb9c7;text-transform:uppercase;letter-spacing:.1em}.layer-head span{color:var(--lime);float:right}
     .node{position:relative;background:linear-gradient(145deg,rgba(18,27,40,.97),rgba(8,13,20,.97));border:1px solid #29384a;border-left:3px solid var(--status);border-radius:9px;padding:13px 13px 12px;min-height:112px;box-shadow:0 10px 24px rgba(0,0,0,.25);cursor:pointer;transition:.18s transform,.18s border-color,.18s opacity,.25s box-shadow}.node::after{content:"";position:absolute;inset:-1px;border-radius:9px;pointer-events:none;opacity:0;box-shadow:0 0 22px color-mix(in srgb,var(--status) 20%,transparent);animation:node-breathe 4.6s ease-in-out infinite;animation-delay:var(--breath-delay,0s)}.node:hover,.node.selected,.node.flow-active{transform:translateY(-2px);border-color:var(--status);box-shadow:0 0 0 1px color-mix(in srgb,var(--status) 28%,transparent),0 14px 30px rgba(0,0,0,.38)}.node.selected::after,.node.flow-active::after{opacity:1;animation-duration:1.6s}.node.runtime-online{box-shadow:inset 0 0 0 1px rgba(167,239,158,.2),0 10px 24px rgba(0,0,0,.25)}.node.runtime-offline{--runtime:#fb7185;border-color:var(--runtime);box-shadow:0 0 24px rgba(251,113,133,.18)}.node.runtime-unconfigured{--runtime:#f59e0b;border-color:var(--runtime);box-shadow:0 0 20px rgba(245,158,11,.12)}.node.runtime-degraded,.node.runtime-unknown{--runtime:#38bdf8;border-color:var(--runtime)}.runtime-badge{position:absolute;right:9px;bottom:8px;font:8px ui-monospace,monospace;text-transform:uppercase;color:var(--runtime,var(--lime));background:#080d14;padding:2px 4px;border-radius:3px}.node.dim{opacity:.14}.node h3{font-size:14px;margin:6px 0 7px;letter-spacing:-.02em}.node p{font-size:11px;line-height:1.45;color:#8f9daf;margin:0}.node-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;font:9px ui-monospace,monospace;text-transform:uppercase;color:var(--status)}.kind{color:#708096}.port{position:absolute;width:8px;height:8px;border-radius:50%;background:#0a0e14;border:1px solid #617085;top:50%}.port.in{left:-6px}.port.out{right:-6px}.node.flow-active .port,.node.selected .port{background:var(--status);border-color:var(--status);box-shadow:0 0 12px var(--status)}
     #wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.wire{fill:none;stroke:#425268;stroke-width:1.2;opacity:.46;transition:.25s opacity,.25s stroke-width}.wire.planned{stroke:var(--cyan);stroke-dasharray:5 5}.wire.legacy{stroke:var(--red);stroke-dasharray:3 5}.wire.active,.wire.flow-active{stroke:var(--lime);stroke-width:2;opacity:1;filter:url(#softGlow)}.wire.runtime-offline{stroke:var(--red);stroke-width:2;stroke-dasharray:3 6;opacity:.9}.wire.runtime-unconfigured{stroke:var(--amber);stroke-dasharray:4 6;opacity:.8}.wire.runtime-degraded,.wire.runtime-unknown{stroke:var(--cyan);stroke-dasharray:3 5}.pulse{filter:url(#signalGlow);opacity:.92}.pulse.partial{fill:var(--amber)}.pulse.planned{fill:var(--cyan)}.pulse.legacy{fill:var(--red)}.pulse.implemented{fill:var(--lime)}.pulse.runtime-offline{fill:var(--red)}.pulse.runtime-unconfigured{fill:var(--amber)}.paused .pulse{display:none}.wire-label{fill:#728197;font:8px ui-monospace,monospace}
@@ -71,7 +71,7 @@
   <aside class="drawer" id="drawer" aria-live="polite"><button class="btn drawer-close" id="close">Fechar</button><div id="drawer-content"></div></aside>
   <footer class="footer">FONTE: CÓDIGO LOCAL + DOCUMENTAÇÃO DO REPOSITÓRIO · REGRA: MUDOU A ARQUITETURA, MUDE O JSON NO MESMO COMMIT.</footer>
   <script>
-  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.3.1","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
+  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.4.0","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
   let DATA, activeStatus='all', query='', live=true, rafId=0, selectedFlow=null, runtimeState={};
   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
   async function load(){
@@ -80,6 +80,7 @@
     render();
   }
   function render(){
+    $('#canvas').style.setProperty('--layer-count',DATA.layers.length);
     $('#version').textContent=`MAP v${DATA.document.version}`;
     const counts=Object.fromEntries(['implemented','partial','planned','legacy'].map(s=>[s,DATA.nodes.filter(n=>n.status===s).length]));
     $('#score').innerHTML=[['Módulos',DATA.nodes.length],['Conexões',DATA.edges.length],['Ativos',counts.implemented],['Gaps',DATA.current_gaps.length]].map(([l,v])=>`<div class="metric"><b>${v}</b><span>${l}</span></div>`).join('');
@@ -99,6 +100,7 @@
   }
   function labelStatus(s){return({implemented:'implementado',partial:'parcial',planned:'planejado',legacy:'legado'})[s]||s}
   function drawWires(){
+    if(!DATA?.edges)return;
     const svg=$('#wires'), canvas=$('#canvas'), cr=canvas.getBoundingClientRect();svg.innerHTML='<defs><filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="signalGlow" x="-300%" y="-300%" width="700%" height="700%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
     DATA.edges.forEach(e=>{const a=$(`#node-${e.from}`),b=$(`#node-${e.to}`);if(!a||!b||a.classList.contains('dim')||b.classList.contains('dim'))return;
       const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();let x1=ar.right-cr.left,y1=ar.top+ar.height/2-cr.top,x2=br.left-cr.left,y2=br.top+br.height/2-cr.top;
@@ -148,7 +150,7 @@
     localStorage.setItem('repass-map-api-base',base);button.classList.add('diagnose-running');button.textContent='Testando…';runtimeState={};
     $$('.runtime-badge').forEach(e=>e.remove());$$('.node').forEach(n=>[...n.classList].filter(c=>c.startsWith('runtime-')).forEach(c=>n.classList.remove(c)));
     $('#diagnostic-summary').innerHTML=diagnosticPill('Backend','unknown');
-    const [health,system,auth,ai,templates,sse]=await Promise.all([probeJson(base,'/api/health'),probeJson(base,'/api/system/status'),probeJson(base,'/api/auth/status'),probeJson(base,'/api/ai/status'),probeJson(base,'/api/templates'),probeSse(base)]);
+    const [health,system,deep,auth,ai,templates,sse]=await Promise.all([probeJson(base,'/api/health'),probeJson(base,'/api/system/status'),probeJson(base,'/api/system/diagnostics',15000),probeJson(base,'/api/auth/status'),probeJson(base,'/api/ai/status'),probeJson(base,'/api/templates'),probeSse(base)]);
     const apiState=health.ok?'online':'offline';
     ['api-server','front-config'].forEach(id=>setRuntime(id,apiState,health.error||`${health.latency}ms`));
     setRuntime('api-sse',sse.ok?'online':'offline',sse.error||'canal aberto');
@@ -158,16 +160,20 @@
     }else ['front-llm','engine-llm','external-llms'].forEach(id=>setRuntime(id,'offline',ai.error));
     const tplState=templates.ok?'online':'offline';['ui-templates','engine-templates','storage-local'].forEach(id=>setRuntime(id,tplState,templates.error||`${templates.data.templates?.length||0} templates`));
     if(auth.ok){
-      const supaState=auth.data.auth_ativo?'unknown':auth.data.projeto_configurado?'degraded':'unconfigured';
-      const supaDetail=auth.data.auth_ativo?'backend configurado; banco não consultado':auth.data.projeto_configurado?'projeto e chave pública válidos; chave secreta pendente':'projeto Supabase incompleto';
+      const supaState=auth.data.auth_ativo?(deep.ok&&deep.data.supabase?.conectado?'online':'offline'):auth.data.projeto_configurado?'degraded':'unconfigured';
+      const supaDetail=supaState==='online'?`PostgREST respondeu em ${deep.data.supabase.latencia_ms}ms`:auth.data.auth_ativo?(deep.error||deep.data.supabase?.erro||'PostgREST não respondeu'):auth.data.projeto_configurado?'projeto e chave pública válidos; chave secreta pendente':'projeto Supabase incompleto';
       setRuntime('db-adapter',supaState,supaDetail);
       setRuntime('db-supabase',supaState,supaDetail);
       setRuntime('front-config','online',auth.data.modo||'single_user');
     }else{setRuntime('db-adapter','offline',auth.error);setRuntime('db-supabase','offline',auth.error)}
     setRuntime('front-local-store','online','fallback local disponível');
     setRuntime('engine-storage','online',system.data?.storage?.r2_configurado?'cópia local + upload R2 configurado':'armazenamento local');
-    const r2State=system.ok&&system.data.storage?.r2_configurado?(system.data.storage.publicacao_configurada?'online':'degraded'):'unconfigured';
-    setRuntime('storage-r2',r2State,r2State==='online'?'upload e URL pública configurados':r2State==='degraded'?'upload configurado; URL pública pendente':'credenciais ausentes');
+    const r2State=system.ok&&system.data.storage?.r2_configurado?(deep.ok&&deep.data.r2?.r2_conectado&&deep.data.r2?.publicacao_conectada?'online':'offline'):'unconfigured';
+    const r2Detail=r2State==='online'?`bucket e HTML público responderam em ${deep.data.r2.latencia_ms}ms`:r2State==='offline'?(deep.error||deep.data.r2?.erro||'bucket ou publicação não respondeu'):'credenciais ausentes';
+    setRuntime('storage-r2',r2State,r2Detail);
+    setRuntime('infra-e2e',deep.ok&&supaState==='online'&&r2State==='online'?'online':'degraded','provas remotas somente leitura');
+    setRuntime('infra-compose','unknown','configuração versionada; runtime local não consultado');
+    setRuntime('infra-checkpoint','online','checkpoint e runbook versionados');
     const placesState=system.ok&&system.data.places?.configurado?'unknown':'unconfigured';
     setRuntime('external-places',placesState,placesState==='unknown'?'chave presente; teste real não executado para evitar consumo':'chave ausente; scanner em modo demo');
     setRuntime('engine-osint',health.ok?placesState:'offline',health.ok?(placesState==='unknown'?'modo real configurado; varredura não executada':'modo demo'):'backend offline');
@@ -205,7 +211,7 @@
   $$('.chip').forEach(b=>b.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeStatus=b.dataset.status;applyFilter()});
   $('#search').oninput=e=>{query=e.target.value.trim().toLowerCase();applyFilter()};
   $('#close').onclick=()=>{$('#drawer').classList.remove('open');$$('.node').forEach(x=>x.classList.remove('selected'));drawWires()};
-  $('#fit').onclick=()=>{$('#workspace').scrollTo({left:0,top:0,behavior:'smooth'})};
+  $('#fit').onclick=()=>{const w=$('#workspace');w.scrollTo({left:Math.max(0,(w.scrollWidth-w.clientWidth)/2),top:0,behavior:'smooth'})};
   $('#diagnose').onclick=()=>{$('#diagnostic').classList.add('open');$('#diagnostic').scrollIntoView({behavior:'smooth',block:'center'})};
   $('#run-diagnostic').onclick=runDiagnostic;
   $('#live').onclick=()=>{live=!live;document.body.classList.toggle('paused',!live);$('#live').setAttribute('aria-pressed',String(live));$('#live-label').textContent=live?'Sistema vivo':'Animação pausada'};

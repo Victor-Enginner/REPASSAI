@@ -9,6 +9,12 @@
 
 </div>
 
+> **Estado técnico atual (27/07/2026):** frontend React 18/Vite, API Python,
+> login e banco Supabase, publicação Cloudflare R2 e gateway multi-LLM estão
+> conectados. O mapa vivo em `docs/repass-architecture-map.html` é a fonte de
+> verdade; `docs/INFRASTRUCTURE.md` contém Docker, checkpoints e recuperação.
+> O runtime Modal e o sandbox para código não confiável continuam planejados.
+
 <div align="center">
 
 ## 💰 Prospecção Ilimitada & Sites Gerados por IA em Milissegundos
@@ -38,9 +44,9 @@
 
 ## 🧩 Funcionalidades (O que o motor entrega)
 
-[![React version](https://img.shields.io/badge/React-19.0_BETA-61DAFB?logo=react)](https://react.dev)
+[![React version](https://img.shields.io/badge/React-18.2-61DAFB?logo=react)](https://react.dev)
 [![Python Engine](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
-[![Modal Serverless](https://img.shields.io/badge/Powered_by-Modal-000000?logo=vercel&logoColor=white)](https://modal.com)
+[![Docker Compose](https://img.shields.io/badge/Runtime-Docker_Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 
 <table>
   <tr>
@@ -72,8 +78,9 @@ O REPASS AI foi blindado com a arquitetura **SaaS Premium**. Você configura sua
 # 1. Instale as dependências Python
 pip install -r backend/requirements.txt
 
-# 2. Insira sua chave do Google Places no .env
-echo "GOOGLE_PLACES_API_KEY=sua_chave_aqui" > backend/.env
+# 2. Crie a configuração apenas se ela ainda não existir
+if not exist backend\.env copy backend\.env.example backend\.env
+# Depois edite backend/.env e preencha só as integrações utilizadas
 
 # 3. Rode o Backend Paralelo (ThreadingHTTPServer)
 python backend/app_api.py

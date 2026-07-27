@@ -1,0 +1,53 @@
+name: repass-ai
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - ./backend/.env
+    environment:
+      PORT: "8000"
+      # Dentro do container, localhost é o próprio backend. Este endereço
+      # alcança o Ollama instalado na máquina do operador.
+      OLLAMA_URL: "${REPASS_DOCKER_OLLAMA_URL:-http://host.docker.internal:11434/api/generate}"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/backend/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    networks:
+      - repass-internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE: "/"
+        VITE_DEPLOY_DOMAIN: "${VITE_DEPLOY_DOMAIN:-}"
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    networks:
+      - repass-internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  repass-internal:
+    driver: bridge

@@ -3,7 +3,7 @@
   "document": {
     "id": "repass-ai-architecture",
     "title": "REPASS AI — Mapa Vivo de Arquitetura",
-    "version": "1.3.1",
+    "version": "1.4.0",
     "snapshot_at": "2026-07-27",
     "language": "pt-BR",
     "source_of_truth": "Código e documentação presentes no repositório",
@@ -16,6 +16,7 @@
       "diagnostic_endpoints": [
         "/api/health",
         "/api/system/status",
+        "/api/system/diagnostics",
         "/api/auth/status",
         "/api/ai/status",
         "/api/templates",
@@ -41,7 +42,7 @@
       "Leads reais entram no painel e no funil comercial",
       "Motor de IA seleciona componentes e produz um schema validado",
       "Renderer ou compilador gera a landing page",
-      "Hoje o resultado é visualizado ou baixado; publicação real permanece parcial"
+      "O HTML é preservado localmente, enviado ao R2 e recebe uma URL pública quando a conexão é confirmada"
     ],
     "runtime": {
       "frontend": "React 18 + Vite 5",
@@ -51,7 +52,7 @@
         "Google Places",
         "Supabase Auth/Database",
         "LLM providers via backend",
-        "Cloudflare R2 planejado/parcial"
+        "Cloudflare R2 ativo com publicação pública"
       ]
     }
   },
@@ -85,6 +86,12 @@
       "label": "Dados & Externos",
       "order": 5,
       "description": "Persistência e serviços fora do processo principal."
+    },
+    {
+      "id": "infrastructure",
+      "label": "Infra & Recuperação",
+      "order": 6,
+      "description": "Containers, testes de saúde, checkpoints e procedimentos de restauração."
     }
   ],
   "nodes": [
@@ -300,7 +307,7 @@
       "layer": "engines",
       "label": "Storage Engine",
       "kind": "engine",
-      "status": "partial",
+      "status": "implemented",
       "path": "backend/r2_storage_engine.py",
       "summary": "Preserva o HTML localmente e envia ao Cloudflare R2 pela API S3-compatible quando configurado.",
       "invariants": ["Falha remota nunca apaga a cópia local", "publicado=false e cdn_url=null enquanto não houver domínio público real"]
@@ -319,7 +326,7 @@
       "layer": "engines",
       "label": "Supabase Adapter",
       "kind": "service",
-      "status": "partial",
+      "status": "implemented",
       "path": "backend/supabase_client.py",
       "summary": "Ativa modo multiusuário quando configurado, valida JWT e acessa dados com service role."
     },
@@ -344,7 +351,7 @@
       "layer": "data-external",
       "label": "Supabase",
       "kind": "database",
-      "status": "partial",
+      "status": "implemented",
       "path": "supabase/schema.sql",
       "summary": "Schema idempotente para perfis, leads, sites e versões, com RLS fechado e service role no backend.",
       "tables": ["perfis", "leads", "sites", "site_versoes"]
@@ -363,8 +370,36 @@
       "layer": "data-external",
       "label": "Cloudflare R2 + CDN",
       "kind": "external",
+      "status": "implemented",
+      "summary": "Bucket, upload S3-compatible e URL pública r2.dev estão ativos e são testados por leitura; domínio próprio ainda é a etapa de produção."
+    },
+    {
+      "id": "infra-compose",
+      "layer": "infrastructure",
+      "label": "Docker Compose",
+      "kind": "infrastructure",
       "status": "partial",
-      "summary": "Bucket e upload S3-compatible ativos; falta conectar uma URL pública real ao bucket para concluir a publicação."
+      "paths": ["docker-compose.yml", "Dockerfile", "backend/Dockerfile", "docker/nginx.conf"],
+      "summary": "Define frontend Nginx, backend Python, rede interna, proxy SSE/API, healthchecks, logs limitados e persistência local por bind mount.",
+      "risks": ["Definição pronta, mas o Docker Desktop ainda não está instalado nesta máquina para validar os containers em execução"]
+    },
+    {
+      "id": "infra-e2e",
+      "layer": "infrastructure",
+      "label": "Teste Ponta a Ponta",
+      "kind": "test",
+      "status": "implemented",
+      "path": "scripts/e2e_smoke.py",
+      "summary": "Prova frontend, bundle, mapa, API, SSE, enforcement de JWT, templates, Supabase e publicação R2 sem gravar ou consumir APIs pagas."
+    },
+    {
+      "id": "infra-checkpoint",
+      "layer": "infrastructure",
+      "label": "Git & Recuperação",
+      "kind": "operations",
+      "status": "implemented",
+      "path": "docs/INFRASTRUCTURE.md",
+      "summary": "Checkpoint etiquetado, branch isolada e runbook para recuperar código, configuração, dados locais, Supabase e R2 sem reset destrutivo."
     }
   ],
   "edges": [
@@ -402,7 +437,15 @@
     {"id": "e32", "from": "ui-whatsapp", "to": "ui-dashboard", "type": "updates", "label": "status comercial"},
     {"id": "e33", "from": "front-legacy-ai", "to": "external-llms", "type": "legacy", "label": "chamada direta"},
     {"id": "e34", "from": "ui-business", "to": "front-local-store", "type": "reads-writes", "label": "protótipo"},
-    {"id": "e35", "from": "engine-tools", "to": "storage-local", "type": "offline", "label": "popula catálogos"}
+    {"id": "e35", "from": "engine-tools", "to": "storage-local", "type": "offline", "label": "popula catálogos"},
+    {"id": "e36", "from": "infra-compose", "to": "api-server", "type": "runs", "label": "container + healthcheck"},
+    {"id": "e37", "from": "infra-compose", "to": "ui-shell", "type": "runs", "label": "Nginx + SPA"},
+    {"id": "e38", "from": "infra-compose", "to": "storage-local", "type": "mounts", "label": "backend/data"},
+    {"id": "e39", "from": "infra-e2e", "to": "ui-shell", "type": "probes", "label": "HTML/bundle/mapa"},
+    {"id": "e40", "from": "infra-e2e", "to": "api-server", "type": "probes", "label": "REST/SSE/JWT"},
+    {"id": "e41", "from": "infra-e2e", "to": "db-supabase", "type": "probes", "label": "leitura PostgREST"},
+    {"id": "e42", "from": "infra-e2e", "to": "storage-r2", "type": "probes", "label": "HTML público"},
+    {"id": "e43", "from": "infra-checkpoint", "to": "infra-compose", "type": "versions", "label": "configuração reproduzível"}
   ],
   "flows": [
     {
@@ -422,16 +465,23 @@
     {
       "id": "flow-publish",
       "label": "Compilação e publicação",
-      "status": "partial",
+      "status": "implemented",
       "node_ids": ["ui-builder", "api-server", "engine-lib77", "engine-storage", "storage-local", "storage-r2"],
-      "success_condition": "Hoje: preview/download local. Futuro: upload R2 e URL pública real."
+      "success_condition": "HTML local preservado, upload R2 concluído e URL pública respondendo com conteúdo HTML."
     },
     {
       "id": "flow-auth",
       "label": "Autenticação multiusuário",
       "status": "partial",
       "node_ids": ["ui-shell", "front-config", "api-server", "db-adapter", "db-supabase"],
-      "success_condition": "Quando Supabase está configurado, toda API recebe JWT e filtra por user_id; sem configuração, opera single-user."
+      "success_condition": "Login e scanner usam JWT e isolamento por user_id; ainda falta aplicar o mesmo contrato às demais rotas mutáveis."
+    },
+    {
+      "id": "flow-operations",
+      "label": "Execução e recuperação",
+      "status": "partial",
+      "node_ids": ["infra-checkpoint", "infra-compose", "infra-e2e", "ui-shell", "api-server", "storage-local", "db-supabase", "storage-r2"],
+      "success_condition": "Código versionado, containers saudáveis, teste E2E verde e backups externos restauráveis; runtime Docker e backups externos ainda precisam ser ativados."
     }
   ],
   "invariants": [
@@ -439,7 +489,7 @@
     "Nenhum telefone, avaliação ou contato pode ser inventado.",
     "Leads de demonstração não podem ser persistidos nem abordados.",
     "Um componente fora do catálogo não pode chegar ao renderer.",
-    "Enquanto não existir deploy real, publicado deve ser false e a interface deve oferecer download.",
+    "Publicado só pode ser true depois de upload concluído e URL pública configurada.",
     "Toda nova mudança de arquitetura deve atualizar este JSON e a versão do documento."
   ],
   "current_gaps": [
@@ -450,10 +500,16 @@
       "affected_nodes": ["front-local-store", "db-adapter", "db-supabase"]
     },
     {
-      "priority": "P0",
-      "title": "Publicação real",
-      "detail": "O upload S3-compatible para o R2 está ativo; falta ligar um domínio público ao bucket e preencher R2_PUBLIC_BASE_URL.",
-      "affected_nodes": ["engine-storage", "storage-r2"]
+      "priority": "P1",
+      "title": "Ativar runtime Docker",
+      "detail": "Os containers e healthchecks estão definidos, mas Docker Desktop ainda precisa ser instalado para build e validação desta máquina.",
+      "affected_nodes": ["infra-compose", "infra-e2e"]
+    },
+    {
+      "priority": "P1",
+      "title": "Domínio de publicação",
+      "detail": "A URL r2.dev funciona para desenvolvimento, mas produção deve usar domínio próprio e política de cache controlada.",
+      "affected_nodes": ["engine-storage", "storage-r2", "front-config"]
     },
     {
       "priority": "P1",
@@ -468,15 +524,22 @@
       "affected_nodes": ["front-agentic", "front-registry", "engine-lib77", "engine-clone"]
     },
     {
+      "priority": "P1",
+      "title": "Proteção consistente de rotas",
+      "detail": "Login e scanner exigem JWT, porém geração de site, IA, clone e importação de templates ainda precisam de autorização e cota por usuário.",
+      "affected_nodes": ["front-config", "api-server", "db-adapter", "db-supabase"]
+    },
+    {
       "priority": "P2",
-      "title": "Testes de integração",
-      "detail": "Há testes da API, mas os fluxos navegador → API → banco/storage precisam de cobertura fim a fim.",
-      "affected_nodes": ["ui-shell", "api-server", "db-supabase", "engine-storage"]
+      "title": "Backups externos verificáveis",
+      "detail": "Git e cópia local estão protegidos; falta programar e testar restauração do Supabase e versionamento/backup do R2.",
+      "affected_nodes": ["infra-checkpoint", "db-supabase", "storage-r2"]
     }
   ],
   "agent_handoff": {
     "read_first": [
       "docs/repass-architecture-map.json",
+      "docs/INFRASTRUCTURE.md",
       "README.md",
       "backend/README.md",
       "docs/ENGINE_BLUEPRINT.md"

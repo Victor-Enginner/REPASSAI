@@ -332,7 +332,7 @@ Pendências conhecidas, fora de escopo aqui:
 |---|---|
 | Rate limit no `/api/leads/scan` | qualquer um queima a cota do Places |
 | `/api/site/clone` não clona | devolve schema fixo |
-| Upload real para o R2 | hoje só grava local |
+| Domínio próprio para o R2 | upload e `r2.dev` já funcionam; falta URL de produção |
 | Editor ainda salva no localStorage | tabela `sites` existe e não é usada |
 | `dispose()` de recursos WebGL | vaza memória de GPU na troca de rota |
 | Loops de animação separados | unificar no `gsap.ticker` |

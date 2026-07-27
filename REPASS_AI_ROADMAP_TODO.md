@@ -90,8 +90,10 @@
   - *Status*: ⏳ Em Planejamento para v9.0.
 
 - [ ] **Fase 9.2: Sandbox Serverless Docker / E2B Local**
-  - *Descrição*: Ambiente virtualizado para compilação de código React puro direto no container.
-  - *Status*: ⏳ Em Planejamento para v9.0.
+  - *Descrição*: Ambiente virtualizado e isolado para compilar código React não confiável.
+  - *Base concluída*: ✅ Docker Compose do produto, imagens separadas de frontend/backend, proxy Nginx, healthchecks, rede interna e persistência de `backend/data`.
+  - *Ainda pendente*: ⏳ O Compose atual executa o REPASS AI; ele **não** é sandbox para código gerado por usuário. Faltam isolamento efêmero, limites de CPU/RAM/tempo, bloqueio de rede e destruição segura do container por execução.
+  - *Status*: 🟡 Fundação de containers concluída; sandbox de compilação permanece em planejamento.
 
 - [ ] **Fase 9.3: Integração de Domínios Customizados via CNAME / Cloudflare Worker**
   - *Descrição*: Mapeamento automático de domínios dos clientes (`site.cliente.com.br`).

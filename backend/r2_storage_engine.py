@@ -10,6 +10,9 @@ import os
 import sys
 import json
 import re
+import time
+import urllib.parse
+import urllib.request
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STORAGE_DIR = os.path.join(BASE_DIR, "data", "r2_bucket")
@@ -66,13 +69,8 @@ class R2StorageEngine:
             "publicacao_configurada": bool(self.public_base_url),
         }
 
-    @staticmethod
-    def _slug_seguro(valor):
-        limpo = re.sub(r"[^a-z0-9_-]+", "-", str(valor).lower()).strip("-")
-        return limpo[:100] or "site"
-
-    def _upload_r2(self, file_name, html_content):
-        """Envia o HTML ao R2 pela API S3-compatible."""
+    def _cliente_s3(self):
+        """Cria o cliente S3-compatible sem expor nenhum dado de acesso."""
         try:
             import boto3
         except ImportError as exc:
@@ -81,13 +79,82 @@ class R2StorageEngine:
             ) from exc
 
         endpoint = f"https://{self.account_id}.r2.cloudflarestorage.com"
-        cliente = boto3.client(
+        return boto3.client(
             "s3",
             endpoint_url=endpoint,
             aws_access_key_id=self.access_key,
             aws_secret_access_key=self.secret_key,
             region_name="auto",
         )
+
+    def diagnosticar_conexao(self):
+        """
+        Prova acesso ao bucket e, quando possível, à publicação pública.
+
+        A operação lista no máximo cinco chaves e baixa no máximo um HTML.
+        Nenhum nome de bucket, objeto, domínio ou segredo sai na resposta.
+        """
+        inicio = time.perf_counter()
+        if not self.configurado():
+            return {
+                "r2_conectado": False,
+                "publicacao_conectada": False,
+                "latencia_ms": None,
+                "erro": "nao_configurado",
+            }
+        try:
+            candidatos = [
+                nome
+                for nome in os.listdir(STORAGE_DIR)
+                if nome.lower().endswith(".html")
+            ]
+            preferido = "fogo-vivo-steakhouse.html"
+            html = (
+                preferido
+                if preferido in candidatos
+                else candidatos[0]
+                if candidatos
+                else None
+            )
+            if html:
+                self._cliente_s3().head_object(
+                    Bucket=self.bucket_name,
+                    Key=html,
+                )
+            publicacao = None
+            if self.public_base_url and html:
+                url = f"{self.public_base_url}/{urllib.parse.quote(html)}"
+                req = urllib.request.Request(
+                    url,
+                    headers={"User-Agent": "REPASS-AI-Diagnostic/1.0"},
+                )
+                with urllib.request.urlopen(req, timeout=10) as remoto:
+                    amostra = remoto.read(512).lower()
+                    publicacao = remoto.status == 200 and b"<html" in amostra
+            return {
+                "r2_conectado": True,
+                "publicacao_conectada": publicacao,
+                "objetos_detectados": 1 if html else 0,
+                "latencia_ms": round((time.perf_counter() - inicio) * 1000),
+                "erro": None,
+            }
+        except Exception as exc:
+            return {
+                "r2_conectado": False,
+                "publicacao_conectada": False,
+                "objetos_detectados": 0,
+                "latencia_ms": round((time.perf_counter() - inicio) * 1000),
+                "erro": type(exc).__name__,
+            }
+
+    @staticmethod
+    def _slug_seguro(valor):
+        limpo = re.sub(r"[^a-z0-9_-]+", "-", str(valor).lower()).strip("-")
+        return limpo[:100] or "site"
+
+    def _upload_r2(self, file_name, html_content):
+        """Envia o HTML ao R2 pela API S3-compatible."""
+        cliente = self._cliente_s3()
         cliente.put_object(
             Bucket=self.bucket_name,
             Key=file_name,
