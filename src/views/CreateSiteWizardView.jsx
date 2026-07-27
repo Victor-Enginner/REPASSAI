@@ -36,22 +36,22 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
       id: 'simples',
       title: 'Site simples',
       icon: Zap,
-      desc: 'Rápido e econômico. Cria sites bonitos e diretos, ótimo pra começar.',
+      desc: 'Rápido e direto. Cria sites bonitos e focados em alta conversão.',
       locked: false
     },
     {
       id: 'completo',
       title: 'Site completo',
       icon: Sparkles,
-      desc: 'A opção ideal pra sites bonitos, com edições precisas e inúmeras possibilidades de efeitos.',
-      locked: true
+      desc: 'A opção ideal pra sites completos, com efeitos visuais e edições ilimitadas.',
+      locked: false
     },
     {
       id: 'sistema',
-      title: 'Sistema',
-      icon: Lock,
-      desc: 'Utilize quando precisar de um site completo que também contenha portal administrativo para seu cliente gerenciar agendamentos, pedidos, reservas e outros.',
-      locked: true
+      title: 'Sistema Agêntico',
+      icon: Zap,
+      desc: 'Site completo com portal de agendamentos, pedidos e atendimento via WhatsApp.',
+      locked: false
     }
   ];
 
@@ -137,7 +137,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
               transition: 'all 0.2s ease'
             }}
           >
-            <Sparkles size={14} /> Descrever <Lock size={12} opacity={0.6} />
+            <Sparkles size={14} /> Descrever
           </button>
 
           {/* Aba Link do Google */}
@@ -159,7 +159,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
               transition: 'all 0.2s ease'
             }}
           >
-            <LinkIcon size={14} /> Link do Google <Lock size={12} opacity={0.6} />
+            <LinkIcon size={14} /> Link do Google
           </button>
 
           {/* Aba Lead Existente (Ativa) */}
