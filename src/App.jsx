@@ -318,7 +318,7 @@ export default function App() {
 
             {currentTab === 'bulk_whatsapp' && (
               <PainelSimples>
-                <BulkWhatsAppView leads={leads} onBack={() => setCurrentTab('crm')} />
+                <BulkWhatsAppView leads={leads} setLeads={setLeads} onBack={() => setCurrentTab('crm')} />
               </PainelSimples>
             )}
 
