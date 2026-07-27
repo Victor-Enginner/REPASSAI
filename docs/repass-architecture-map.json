@@ -1,0 +1,485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "document": {
+    "id": "repass-ai-architecture",
+    "title": "REPASS AI — Mapa Vivo de Arquitetura",
+    "version": "1.0.0",
+    "snapshot_at": "2026-07-27",
+    "language": "pt-BR",
+    "source_of_truth": "Código e documentação presentes no repositório",
+    "update_policy": "Atualize este arquivo no mesmo commit de qualquer mudança arquitetural. Preserve IDs de nós e arestas para manter o histórico legível.",
+    "status_legend": {
+      "implemented": "Existe e está ligado ao fluxo atual",
+      "partial": "Existe, mas falta integração, persistência ou infraestrutura",
+      "planned": "Contrato ou planejamento existe, implementação ainda não",
+      "legacy": "Mantido como experimento, fallback antigo ou ferramenta fora do fluxo principal"
+    }
+  },
+  "system": {
+    "name": "REPASS AI",
+    "purpose": "SaaS de prospecção B2B que encontra leads locais, qualifica oportunidades, organiza o funil, cria abordagens e gera landing pages.",
+    "primary_flow": [
+      "Operador define nicho e localização",
+      "Frontend inicia varredura e acompanha logs SSE",
+      "Backend consulta Google Places e enriquece os resultados",
+      "Leads reais entram no painel e no funil comercial",
+      "Motor de IA seleciona componentes e produz um schema validado",
+      "Renderer ou compilador gera a landing page",
+      "Hoje o resultado é visualizado ou baixado; publicação real permanece parcial"
+    ],
+    "runtime": {
+      "frontend": "React 18 + Vite 5",
+      "backend": "Python 3 + ThreadingHTTPServer",
+      "database": "Supabase/PostgreSQL opcional",
+      "external_services": [
+        "Google Places",
+        "Supabase Auth/Database",
+        "LLM providers via backend",
+        "Cloudflare R2 planejado/parcial"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "experience",
+      "label": "Experiência",
+      "order": 1,
+      "description": "Telas usadas pelo operador e superfícies visuais."
+    },
+    {
+      "id": "frontend-core",
+      "label": "Núcleo Frontend",
+      "order": 2,
+      "description": "Estado, navegação, contratos e motores executados no navegador."
+    },
+    {
+      "id": "api",
+      "label": "API Python",
+      "order": 3,
+      "description": "Fronteira segura entre navegador, dados e provedores externos."
+    },
+    {
+      "id": "engines",
+      "label": "Motores",
+      "order": 4,
+      "description": "OSINT, IA, catálogos, compilação e armazenamento."
+    },
+    {
+      "id": "data-external",
+      "label": "Dados & Externos",
+      "order": 5,
+      "description": "Persistência e serviços fora do processo principal."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ui-shell",
+      "layer": "experience",
+      "label": "App Shell",
+      "kind": "ui",
+      "status": "implemented",
+      "path": "src/App.jsx",
+      "summary": "Orquestra navegação, estado de leads, lazy loading, keep-alive seletivo, autenticação e editor.",
+      "responsibilities": ["Selecionar views", "Compartilhar leads em memória", "Proteger cada view com Error Boundary", "Controlar login opcional"],
+      "risks": ["Leads começam em mock e parte do estado ainda vive somente no navegador"]
+    },
+    {
+      "id": "ui-dashboard",
+      "layer": "experience",
+      "label": "Dashboard & CRM",
+      "kind": "ui",
+      "status": "implemented",
+      "paths": ["src/views/DashboardView.jsx", "src/views/CRMView.jsx", "src/views/AppointmentsView.jsx"],
+      "summary": "Métricas do funil, quadro comercial e agenda derivados do estado de leads."
+    },
+    {
+      "id": "ui-scanner",
+      "layer": "experience",
+      "label": "Scanner OSINT",
+      "kind": "ui",
+      "status": "implemented",
+      "path": "src/views/LeadsView.jsx",
+      "summary": "Dispara a busca de leads e recebe o terminal em tempo real via SSE.",
+      "inputs": ["nicho", "cidade", "estado"],
+      "outputs": ["leads", "logs de execução"]
+    },
+    {
+      "id": "ui-builder",
+      "layer": "experience",
+      "label": "Editor & Wizard",
+      "kind": "ui",
+      "status": "implemented",
+      "paths": ["src/views/SiteEditorView.jsx", "src/views/CreateSiteWizardView.jsx", "src/components/AgenticChatbotBuilder.jsx", "src/components/SchemaRenderer.jsx"],
+      "summary": "Coleta briefing, executa geração/ajustes e renderiza schema com componentes permitidos."
+    },
+    {
+      "id": "ui-templates",
+      "layer": "experience",
+      "label": "Loja de Templates",
+      "kind": "ui",
+      "status": "implemented",
+      "path": "src/views/TemplatesView.jsx",
+      "summary": "Lista, detalha, importa, visualiza e baixa templates do catálogo do backend."
+    },
+    {
+      "id": "ui-whatsapp",
+      "layer": "experience",
+      "label": "Abordagem WhatsApp",
+      "kind": "ui",
+      "status": "partial",
+      "paths": ["src/views/BulkWhatsAppView.jsx", "src/services/whatsappBulkEngine.js"],
+      "summary": "Gera mensagens com dados verificáveis e abre links wa.me; não é um disparador automatizado oficial.",
+      "invariants": ["Bloquear leads demo", "Nunca inventar telefone", "Não prometer site publicado sem deploy real"]
+    },
+    {
+      "id": "ui-business",
+      "layer": "experience",
+      "label": "Comercial & Portfólio",
+      "kind": "ui",
+      "status": "partial",
+      "paths": ["src/views/BillingView.jsx", "src/views/AffiliateView.jsx", "src/views/ProjectsView.jsx"],
+      "summary": "Telas de faturamento, indicação e projetos; grande parte ainda é apresentação ou armazenamento local."
+    },
+    {
+      "id": "front-config",
+      "layer": "frontend-core",
+      "label": "Config & Auth Client",
+      "kind": "service",
+      "status": "implemented",
+      "paths": ["src/config.js", "src/services/authService.js"],
+      "summary": "Centraliza URL da API, domínio de deploy e sessão JWT do Supabase no localStorage."
+    },
+    {
+      "id": "front-agentic",
+      "layer": "frontend-core",
+      "label": "Loop Agêntico",
+      "kind": "service",
+      "status": "implemented",
+      "paths": ["src/services/agenticPlanner.js", "src/services/agenticGenerator.js", "src/services/componentRetrieval.js"],
+      "summary": "Expande intenção, recupera candidatos, consulta IA, valida JSON e tenta autocorreção antes do fallback local.",
+      "invariants": ["temperature 0", "saída JSON", "somente componentes do catálogo", "fallback determinístico"]
+    },
+    {
+      "id": "front-registry",
+      "layer": "frontend-core",
+      "label": "Catálogo & Renderer",
+      "kind": "registry",
+      "status": "implemented",
+      "paths": ["src/data/componentIndex.js", "src/components/ui/registry.js", "src/components/SchemaRenderer.jsx"],
+      "summary": "Índice gerado de componentes, registro executável e montagem segura do schema."
+    },
+    {
+      "id": "front-llm",
+      "layer": "frontend-core",
+      "label": "Cliente Neural",
+      "kind": "service",
+      "status": "implemented",
+      "path": "src/services/llmRouter.js",
+      "summary": "Envia prompts ao backend sem expor chaves, modelos ou provedores no navegador."
+    },
+    {
+      "id": "front-legacy-ai",
+      "layer": "frontend-core",
+      "label": "OmniRoute Direto",
+      "kind": "legacy",
+      "status": "legacy",
+      "path": "src/services/omniRouteGateway.js",
+      "summary": "Cliente antigo chama gateway externo no navegador e guarda chave em localStorage; não deve ser usado no fluxo SaaS seguro.",
+      "risks": ["Chave no navegador", "Schema paralelo ao contrato principal"]
+    },
+    {
+      "id": "front-local-store",
+      "layer": "frontend-core",
+      "label": "Estado Local / Mock",
+      "kind": "data",
+      "status": "partial",
+      "paths": ["src/mock/leadsData.js", "src/mock/documentDB.js", "localStorage"],
+      "summary": "Fallback e protótipo local para leads, projetos e sessão; não sincroniza dispositivos."
+    },
+    {
+      "id": "api-server",
+      "layer": "api",
+      "label": "API Gateway",
+      "kind": "api",
+      "status": "implemented",
+      "path": "backend/app_api.py",
+      "summary": "Servidor HTTP principal, CORS, autenticação opcional, rotas REST e SSE.",
+      "endpoints": [
+        "GET /api/health",
+        "GET /api/ai/status",
+        "GET /api/logs/stream",
+        "GET /api/auth/status",
+        "GET /api/templates",
+        "GET /api/templates/detail",
+        "GET /api/templates/preview",
+        "GET /api/templates/zip",
+        "GET /api/site/preview_html",
+        "GET /api/media/proxy",
+        "POST /api/templates/import",
+        "POST /api/ai/generate",
+        "POST /api/leads/scan",
+        "POST /api/site/generate",
+        "POST /api/site/clone"
+      ]
+    },
+    {
+      "id": "api-sse",
+      "layer": "api",
+      "label": "Canal SSE",
+      "kind": "realtime",
+      "status": "implemented",
+      "path": "backend/app_api.py",
+      "summary": "Transmite logs do scanner para o terminal do frontend."
+    },
+    {
+      "id": "engine-osint",
+      "layer": "engines",
+      "label": "OSINT Core",
+      "kind": "engine",
+      "status": "implemented",
+      "paths": ["backend/scraper_monster.py", "backend/places_engine.py"],
+      "summary": "Busca no Google Places, detalha negócios, normaliza leads, calcula KPI e enriquece mídia.",
+      "invariants": ["Não persistir lead demo", "Não fabricar contato", "Proxy de mídia protegido contra SSRF"]
+    },
+    {
+      "id": "engine-llm",
+      "layer": "engines",
+      "label": "LLM Gateway",
+      "kind": "engine",
+      "status": "implemented",
+      "path": "backend/llm_gateway.py",
+      "summary": "Mantém credenciais no servidor, alterna chaves e provedores e devolve resposta sem expor a infraestrutura."
+    },
+    {
+      "id": "engine-lib77",
+      "layer": "engines",
+      "label": "Compilador 77lib",
+      "kind": "engine",
+      "status": "implemented",
+      "path": "backend/lib77_engine.py",
+      "summary": "Compila sites HTML a partir do catálogo procedural 77lib."
+    },
+    {
+      "id": "engine-clone",
+      "layer": "engines",
+      "label": "Open Lovable Clone",
+      "kind": "engine",
+      "status": "implemented",
+      "path": "backend/app_api.py",
+      "summary": "Clona uma referência por URL e entrega preview HTML ao editor.",
+      "risks": ["Entrada por URL exige validação contínua contra SSRF e conteúdo hostil"]
+    },
+    {
+      "id": "engine-templates",
+      "layer": "engines",
+      "label": "Template Store",
+      "kind": "engine",
+      "status": "implemented",
+      "paths": ["backend/templates_store.py", "backend/data/templates_store"],
+      "summary": "Catálogo persistido em arquivos para listagem, detalhe, preview, importação e download."
+    },
+    {
+      "id": "engine-storage",
+      "layer": "engines",
+      "label": "Storage Engine",
+      "kind": "engine",
+      "status": "partial",
+      "path": "backend/r2_storage_engine.py",
+      "summary": "Grava HTML em backend/data/r2_bucket; credenciais R2 existem, mas upload e URL pública reais ainda não.",
+      "invariants": ["publicado=false enquanto não houver upload", "cdn_url=null enquanto não houver domínio real"]
+    },
+    {
+      "id": "engine-tools",
+      "layer": "engines",
+      "label": "Ferramentas Offline",
+      "kind": "tooling",
+      "status": "legacy",
+      "paths": ["backend/originkit_scraper.py", "backend/originkit_engine.py", "backend/basehub_engine.py", "backend/beta_live_runner.py", "backend/modal_engine.py"],
+      "summary": "Importadores, sintetizadores e runner manual; Modal está desconectado do servidor atual."
+    },
+    {
+      "id": "db-adapter",
+      "layer": "engines",
+      "label": "Supabase Adapter",
+      "kind": "service",
+      "status": "partial",
+      "path": "backend/supabase_client.py",
+      "summary": "Ativa modo multiusuário quando configurado, valida JWT e acessa dados com service role."
+    },
+    {
+      "id": "external-places",
+      "layer": "data-external",
+      "label": "Google Places",
+      "kind": "external",
+      "status": "implemented",
+      "summary": "Fonte verificável para negócio, contato, reputação, localização e fotos."
+    },
+    {
+      "id": "external-llms",
+      "layer": "data-external",
+      "label": "Provedores LLM",
+      "kind": "external",
+      "status": "implemented",
+      "summary": "Provedores configuráveis acessados exclusivamente pelo gateway do backend."
+    },
+    {
+      "id": "db-supabase",
+      "layer": "data-external",
+      "label": "Supabase",
+      "kind": "database",
+      "status": "partial",
+      "path": "supabase/schema.sql",
+      "summary": "Schema idempotente para perfis, leads, sites e versões, com RLS fechado e service role no backend.",
+      "tables": ["perfis", "leads", "sites", "site_versoes"]
+    },
+    {
+      "id": "storage-local",
+      "layer": "data-external",
+      "label": "Arquivos Locais",
+      "kind": "storage",
+      "status": "implemented",
+      "paths": ["backend/data/r2_bucket", "backend/data/templates_store", "backend/data/77lib_catalog", "backend/data/originkit_catalog"],
+      "summary": "Persistência local atual para HTML compilado e catálogos."
+    },
+    {
+      "id": "storage-r2",
+      "layer": "data-external",
+      "label": "Cloudflare R2 + CDN",
+      "kind": "external",
+      "status": "planned",
+      "summary": "Destino planejado para publicação real de sites, ainda sem upload e domínio público conectados."
+    }
+  ],
+  "edges": [
+    {"id": "e01", "from": "ui-shell", "to": "ui-dashboard", "type": "renders", "label": "navega"},
+    {"id": "e02", "from": "ui-shell", "to": "ui-scanner", "type": "renders", "label": "navega"},
+    {"id": "e03", "from": "ui-shell", "to": "ui-builder", "type": "renders", "label": "seleciona lead"},
+    {"id": "e04", "from": "ui-shell", "to": "front-config", "type": "uses", "label": "sessão/config"},
+    {"id": "e05", "from": "ui-dashboard", "to": "front-local-store", "type": "reads", "label": "estado atual"},
+    {"id": "e06", "from": "ui-scanner", "to": "api-server", "type": "http", "label": "POST scan"},
+    {"id": "e07", "from": "api-sse", "to": "ui-scanner", "type": "stream", "label": "logs SSE"},
+    {"id": "e08", "from": "api-server", "to": "api-sse", "type": "publishes", "label": "eventos"},
+    {"id": "e09", "from": "api-server", "to": "engine-osint", "type": "invokes", "label": "varredura"},
+    {"id": "e10", "from": "engine-osint", "to": "external-places", "type": "api", "label": "busca/detalhes/fotos"},
+    {"id": "e11", "from": "ui-builder", "to": "front-agentic", "type": "invokes", "label": "gerar/ajustar"},
+    {"id": "e12", "from": "front-agentic", "to": "front-registry", "type": "retrieves", "label": "candidatos/validação"},
+    {"id": "e13", "from": "front-agentic", "to": "front-llm", "type": "invokes", "label": "prompt JSON"},
+    {"id": "e14", "from": "front-llm", "to": "api-server", "type": "http", "label": "POST ai/generate"},
+    {"id": "e15", "from": "api-server", "to": "engine-llm", "type": "invokes", "label": "roteia"},
+    {"id": "e16", "from": "engine-llm", "to": "external-llms", "type": "api", "label": "fallback/rotação"},
+    {"id": "e17", "from": "front-registry", "to": "ui-builder", "type": "renders", "label": "React seguro"},
+    {"id": "e18", "from": "ui-templates", "to": "api-server", "type": "http", "label": "catálogo/import"},
+    {"id": "e19", "from": "api-server", "to": "engine-templates", "type": "invokes", "label": "templates"},
+    {"id": "e20", "from": "engine-templates", "to": "storage-local", "type": "reads-writes", "label": "JSON/HTML"},
+    {"id": "e21", "from": "ui-builder", "to": "api-server", "type": "http", "label": "generate/clone/preview"},
+    {"id": "e22", "from": "api-server", "to": "engine-lib77", "type": "invokes", "label": "compilar"},
+    {"id": "e23", "from": "api-server", "to": "engine-clone", "type": "invokes", "label": "clonar URL"},
+    {"id": "e24", "from": "engine-lib77", "to": "engine-storage", "type": "writes", "label": "HTML"},
+    {"id": "e25", "from": "engine-clone", "to": "engine-storage", "type": "writes", "label": "preview"},
+    {"id": "e26", "from": "engine-storage", "to": "storage-local", "type": "writes", "label": "atual"},
+    {"id": "e27", "from": "engine-storage", "to": "storage-r2", "type": "planned", "label": "upload futuro"},
+    {"id": "e28", "from": "front-config", "to": "api-server", "type": "http", "label": "JWT"},
+    {"id": "e29", "from": "api-server", "to": "db-adapter", "type": "uses", "label": "auth/dados"},
+    {"id": "e30", "from": "db-adapter", "to": "db-supabase", "type": "api", "label": "service role"},
+    {"id": "e31", "from": "front-config", "to": "db-supabase", "type": "auth", "label": "login público"},
+    {"id": "e32", "from": "ui-whatsapp", "to": "ui-dashboard", "type": "updates", "label": "status comercial"},
+    {"id": "e33", "from": "front-legacy-ai", "to": "external-llms", "type": "legacy", "label": "chamada direta"},
+    {"id": "e34", "from": "ui-business", "to": "front-local-store", "type": "reads-writes", "label": "protótipo"},
+    {"id": "e35", "from": "engine-tools", "to": "storage-local", "type": "offline", "label": "popula catálogos"}
+  ],
+  "flows": [
+    {
+      "id": "flow-osint",
+      "label": "Aquisição de leads",
+      "status": "implemented",
+      "node_ids": ["ui-scanner", "api-server", "api-sse", "engine-osint", "external-places", "db-adapter", "db-supabase"],
+      "success_condition": "Lead real retorna ao painel com contato verificável e score; demo nunca é persistido."
+    },
+    {
+      "id": "flow-generation",
+      "label": "Geração agêntica",
+      "status": "implemented",
+      "node_ids": ["ui-builder", "front-agentic", "front-registry", "front-llm", "api-server", "engine-llm", "external-llms"],
+      "success_condition": "Schema JSON passa pela validação e é renderizado somente com componentes registrados."
+    },
+    {
+      "id": "flow-publish",
+      "label": "Compilação e publicação",
+      "status": "partial",
+      "node_ids": ["ui-builder", "api-server", "engine-lib77", "engine-storage", "storage-local", "storage-r2"],
+      "success_condition": "Hoje: preview/download local. Futuro: upload R2 e URL pública real."
+    },
+    {
+      "id": "flow-auth",
+      "label": "Autenticação multiusuário",
+      "status": "partial",
+      "node_ids": ["ui-shell", "front-config", "api-server", "db-adapter", "db-supabase"],
+      "success_condition": "Quando Supabase está configurado, toda API recebe JWT e filtra por user_id; sem configuração, opera single-user."
+    }
+  ],
+  "invariants": [
+    "Credenciais privadas de LLM e a service role do Supabase ficam somente no backend.",
+    "Nenhum telefone, avaliação ou contato pode ser inventado.",
+    "Leads de demonstração não podem ser persistidos nem abordados.",
+    "Um componente fora do catálogo não pode chegar ao renderer.",
+    "Enquanto não existir deploy real, publicado deve ser false e a interface deve oferecer download.",
+    "Toda nova mudança de arquitetura deve atualizar este JSON e a versão do documento."
+  ],
+  "current_gaps": [
+    {
+      "priority": "P0",
+      "title": "Consolidar persistência",
+      "detail": "Parte do produto ainda usa mock/localStorage enquanto o schema Supabase já existe.",
+      "affected_nodes": ["front-local-store", "db-adapter", "db-supabase"]
+    },
+    {
+      "priority": "P0",
+      "title": "Publicação real",
+      "detail": "R2 ainda grava localmente; falta upload S3-compatible, domínio público e contrato de URL.",
+      "affected_nodes": ["engine-storage", "storage-r2"]
+    },
+    {
+      "priority": "P1",
+      "title": "Remover caminho de IA inseguro",
+      "detail": "OmniRoute direto no navegador duplica o gateway principal e expõe chave em localStorage.",
+      "affected_nodes": ["front-legacy-ai", "front-llm"]
+    },
+    {
+      "priority": "P1",
+      "title": "Unificar contratos de geração",
+      "detail": "Schema React validado, compilador 77lib e clone HTML são caminhos distintos e precisam de fronteiras explícitas.",
+      "affected_nodes": ["front-agentic", "front-registry", "engine-lib77", "engine-clone"]
+    },
+    {
+      "priority": "P2",
+      "title": "Testes de integração",
+      "detail": "Há testes da API, mas os fluxos navegador → API → banco/storage precisam de cobertura fim a fim.",
+      "affected_nodes": ["ui-shell", "api-server", "db-supabase", "engine-storage"]
+    }
+  ],
+  "agent_handoff": {
+    "read_first": [
+      "docs/repass-architecture-map.json",
+      "README.md",
+      "backend/README.md",
+      "docs/ENGINE_BLUEPRINT.md"
+    ],
+    "rules": [
+      "Antes de criar módulo novo, procure um nó com responsabilidade equivalente.",
+      "Declare quais nós e arestas a mudança altera.",
+      "Não trate partial ou planned como infraestrutura pronta.",
+      "Atualize snapshot_at e incremente document.version quando o mapa mudar.",
+      "Adicione endpoints, tabelas e integrações novas como dados estruturados, não apenas em texto."
+    ],
+    "change_template": {
+      "feature": "<nome>",
+      "affected_nodes": ["<node-id>"],
+      "added_nodes": [],
+      "added_edges": [],
+      "contracts_changed": [],
+      "migration_required": false,
+      "tests_required": [],
+      "rollback": "<como desfazer>"
+    }
+  }
+}

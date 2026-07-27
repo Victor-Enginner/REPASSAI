@@ -26,10 +26,10 @@
  * Se qualquer guarda falhar, o mouse do sistema continua normal.
  */
 
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useMediaQuery, useEhMobile } from '../hooks/useMediaQuery';
 
-const StickyCursor = lazy(() => import('./ui/StickyCursor'));
+const FluidGlitchCursor = lazy(() => import('./ui/FluidGlitchCursor'));
 
 /**
  * Elementos em que o cursor gruda.
@@ -57,73 +57,11 @@ export default function CursorPersonalizado() {
 
   const ativo = temMouse && !ehMobile && !preferMenosMovimento;
 
-  const [elementoAtivo, setElementoAtivo] = useState(null);
-
-  useEffect(() => {
-    if (!ativo) return undefined;
-
-    // Delegação: um listener para todos os alvos, presentes e futuros.
-    const aoEntrar = (e) => {
-      const alvo = e.target?.closest?.(SELETOR_ALVO) || null;
-      setElementoAtivo((atual) => (atual === alvo ? atual : alvo));
-    };
-
-    document.addEventListener('mouseover', aoEntrar, { passive: true });
-    return () => document.removeEventListener('mouseover', aoEntrar);
-  }, [ativo]);
-
-  /**
-   * Repassa a entrada/saída ao elemento.
-   *
-   * O `StickyCursor` escuta `mouseenter`/`mouseleave` no próprio alvo, e
-   * esses eventos NÃO borbulham — por isso a detecção acima usa
-   * `mouseover`. O problema é a ordem: quando descobrimos o alvo e o React
-   * monta o listener, o `mouseenter` real já aconteceu e se perdeu.
-   *
-   * Aqui reemitimos o par no momento certo, depois do listener existir.
-   * Assim o componente recebe exatamente os eventos que espera, sem
-   * precisar alterar a lógica dele.
-   */
-  useEffect(() => {
-    if (!ativo || !elementoAtivo) return undefined;
-
-    // `setTimeout(0)` e não `requestAnimationFrame`: o que precisamos é
-    // "depois do commit do React", não "no próximo quadro visual". rAF
-    // fica suspenso quando a aba não está compondo, o que atrasaria o
-    // repasse sem motivo.
-    const id = setTimeout(() => {
-      elementoAtivo.dispatchEvent(new MouseEvent('mouseenter'));
-    }, 0);
-
-    return () => {
-      clearTimeout(id);
-      elementoAtivo.dispatchEvent(new MouseEvent('mouseleave'));
-    };
-  }, [ativo, elementoAtivo]);
-
-  // Esconde o cursor nativo só enquanto este componente está no ar.
-  useEffect(() => {
-    if (!ativo) return undefined;
-    document.documentElement.classList.add('cursor-personalizado-ativo');
-    return () => document.documentElement.classList.remove('cursor-personalizado-ativo');
-  }, [ativo]);
-
   if (!ativo) return null;
-
-  // Objeto novo a cada mudança de alvo: o `StickyCursor` depende de
-  // `stickyElement` no array de dependências do efeito dele, então trocar
-  // a identidade é o que faz ele reassinar os listeners no elemento certo.
-  // Sem isso, mudar apenas `.current` não dispararia nada.
-  const refDoAlvo = { current: elementoAtivo };
 
   return (
     <Suspense fallback={null}>
-      <StickyCursor
-        stickyElement={refDoAlvo}
-        cor="#6366f1"
-        tamanho={12}
-        tamanhoHover={54}
-      />
+      <FluidGlitchCursor />
     </Suspense>
   );
 }

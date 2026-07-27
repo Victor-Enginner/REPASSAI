@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Mapa vivo e interativo da arquitetura do REPASS AI">
+  <title>REPASS AI · Mapa Vivo de Arquitetura</title>
+  <style>
+    :root{--bg:#05070a;--panel:#0b1018;--panel2:#0f1621;--line:#263345;--text:#eef4ff;--muted:#8491a3;--lime:#a7ef9e;--cyan:#38bdf8;--amber:#f59e0b;--red:#fb7185;--violet:#8b7cf6;--node-w:238px;--gap:34px}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+    body{background-image:radial-gradient(circle at 20% -10%,rgba(167,239,158,.10),transparent 30%),radial-gradient(circle at 85% 5%,rgba(139,124,246,.12),transparent 26%),linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:auto,auto,24px 24px,24px 24px}
+    button,input{font:inherit}.topbar{position:sticky;top:0;z-index:20;display:flex;gap:18px;align-items:center;padding:14px 22px;background:rgba(5,7,10,.88);backdrop-filter:blur(16px);border-bottom:1px solid #1d2836}
+    .brand{display:flex;align-items:center;gap:10px;min-width:max-content}.orb{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--lime) 8%,#24472c 34%,#080b0d 68%);box-shadow:0 0 24px rgba(167,239,158,.35)}
+    .brand strong{letter-spacing:-.04em}.version{font:10px ui-monospace,monospace;color:var(--lime);border:1px solid rgba(167,239,158,.28);padding:3px 6px;border-radius:99px}
+    .controls{display:flex;gap:8px;align-items:center;flex:1;justify-content:flex-end}.search{width:min(330px,40vw);background:#0b1119;border:1px solid #263345;color:var(--text);border-radius:8px;padding:9px 12px;outline:none}.search:focus{border-color:var(--lime)}
+    .btn,.chip{border:1px solid #2a3748;background:#0b1119;color:#c9d3df;border-radius:7px;padding:8px 11px;cursor:pointer}.btn:hover,.chip:hover,.chip.active{border-color:var(--lime);color:var(--lime)}.btn.primary{background:var(--lime);color:#071008;border-color:var(--lime);font-weight:750}
+    .hero{padding:36px 24px 22px;max-width:1600px;margin:auto;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{font:11px ui-monospace,monospace;color:var(--lime);letter-spacing:.13em;text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,70px);line-height:.93;letter-spacing:-.065em;margin:10px 0 14px;max-width:800px}.hero p{color:#9ca9b9;max-width:720px;line-height:1.6;margin:0}
+    .score{display:grid;grid-template-columns:repeat(2,120px);gap:8px}.metric{background:rgba(11,16,24,.8);border:1px solid #202c3b;padding:13px;border-radius:9px}.metric b{display:block;font-size:25px;letter-spacing:-.05em}.metric span{color:var(--muted);font:10px ui-monospace,monospace;text-transform:uppercase}
+    .legend{max-width:1600px;margin:0 auto 16px;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap}.chip{padding:6px 10px;font-size:11px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}.implemented{--status:var(--lime)}.partial{--status:var(--amber)}.planned{--status:var(--cyan)}.legacy{--status:var(--red)}
+    .workspace{position:relative;overflow:auto;min-height:650px;border-block:1px solid #1b2634;background:rgba(4,7,10,.55)}.canvas{position:relative;display:grid;grid-template-columns:repeat(5,var(--node-w));gap:var(--gap);min-width:1450px;width:max-content;padding:58px 40px 100px;align-items:start}
+    .layer{position:relative;display:flex;flex-direction:column;gap:14px;z-index:2}.layer-head{position:sticky;top:71px;z-index:4;background:#080d13;border:1px solid #273445;padding:10px 12px;border-radius:7px;font:11px ui-monospace,monospace;color:#aeb9c7;text-transform:uppercase;letter-spacing:.1em}.layer-head span{color:var(--lime);float:right}
+    .node{position:relative;background:linear-gradient(145deg,rgba(18,27,40,.97),rgba(8,13,20,.97));border:1px solid #29384a;border-left:3px solid var(--status);border-radius:9px;padding:13px 13px 12px;min-height:112px;box-shadow:0 10px 24px rgba(0,0,0,.25);cursor:pointer;transition:.18s transform,.18s border-color,.18s opacity}.node:hover,.node.selected{transform:translateY(-2px);border-color:var(--status);box-shadow:0 0 0 1px color-mix(in srgb,var(--status) 28%,transparent),0 14px 30px rgba(0,0,0,.38)}.node.dim{opacity:.14}.node h3{font-size:14px;margin:6px 0 7px;letter-spacing:-.02em}.node p{font-size:11px;line-height:1.45;color:#8f9daf;margin:0}.node-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;font:9px ui-monospace,monospace;text-transform:uppercase;color:var(--status)}.kind{color:#708096}.port{position:absolute;width:8px;height:8px;border-radius:50%;background:#0a0e14;border:1px solid #617085;top:50%}.port.in{left:-6px}.port.out{right:-6px}
+    #wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.wire{fill:none;stroke:#425268;stroke-width:1.2;opacity:.52}.wire.planned{stroke:var(--cyan);stroke-dasharray:5 5}.wire.legacy{stroke:var(--red);stroke-dasharray:3 5}.wire.active{stroke:var(--lime);stroke-width:2;opacity:1}.wire-label{fill:#728197;font:8px ui-monospace,monospace}
+    .section{max-width:1600px;margin:0 auto;padding:32px 24px}.section h2{font-size:25px;letter-spacing:-.04em;margin:0 0 8px}.section-intro{color:var(--muted);margin:0 0 18px}.flow-grid,.gap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:rgba(11,16,24,.8);border:1px solid #243142;border-radius:9px;padding:16px}.card h3{font-size:14px;margin:8px 0}.card p{font-size:12px;color:#94a1b2;line-height:1.55;margin:0}.step{font:10px ui-monospace,monospace;color:var(--lime)}.priority{font:10px ui-monospace,monospace;color:var(--red);border:1px solid rgba(251,113,133,.3);border-radius:4px;padding:2px 5px}
+    .footer{max-width:1600px;margin:auto;padding:18px 24px 38px;color:#657386;font:10px ui-monospace,monospace;border-top:1px solid #1b2634}
+    .drawer{position:fixed;z-index:40;right:0;top:0;height:100vh;width:min(430px,92vw);background:#080d14;border-left:1px solid #2b394b;padding:22px;transform:translateX(102%);transition:.22s;overflow:auto;box-shadow:-25px 0 60px rgba(0,0,0,.45)}.drawer.open{transform:none}.drawer-close{float:right}.drawer h2{font-size:25px;letter-spacing:-.04em;margin:30px 0 6px}.drawer .path{font:10px ui-monospace,monospace;color:var(--cyan);word-break:break-all}.drawer h4{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#7e8c9d;margin:24px 0 8px}.drawer ul{padding-left:18px;color:#aab5c3;font-size:12px;line-height:1.7}.drawer p{color:#aab5c3;line-height:1.6;font-size:13px}.status-pill{display:inline-flex;align-items:center;color:var(--status);border:1px solid color-mix(in srgb,var(--status) 35%,transparent);border-radius:99px;padding:5px 8px;font:10px ui-monospace,monospace;text-transform:uppercase}
+    .empty{display:none;color:var(--muted);padding:80px;text-align:center}.empty.show{display:block}
+    @media(max-width:850px){.topbar{align-items:flex-start;flex-wrap:wrap}.controls{width:100%;justify-content:flex-start}.search{width:100%;max-width:none}.hero{grid-template-columns:1fr}.score{grid-template-columns:repeat(4,1fr)}.workspace{overflow:visible}.canvas{display:block;min-width:0;width:auto;padding:20px 16px}.layer{margin-bottom:24px}.layer-head{position:static;margin-bottom:10px}.node{margin-bottom:10px}#wires{display:none}.flow-grid,.gap-grid{grid-template-columns:1fr}.score .metric{padding:9px}.score .metric b{font-size:18px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="orb"></span><strong>REPASS AI</strong><span class="version" id="version">MAP v1.0.0</span></div>
+    <div class="controls">
+      <input class="search" id="search" placeholder="Buscar módulo, arquivo, endpoint…" aria-label="Buscar no mapa">
+      <button class="btn" id="fit">Centralizar</button>
+      <button class="btn primary" id="download">Exportar JSON</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">Architecture control room · snapshot 27.07.2026</div><h1>O sistema inteiro.<br>Uma única visão.</h1><p>Mapa vivo do frontend ao banco, com fluxos, dependências, riscos e o estado real de cada parte. Clique em qualquer nó para inspecionar seu contrato.</p></div>
+      <div class="score" id="score"></div>
+    </section>
+    <nav class="legend" aria-label="Filtros de status">
+      <button class="chip active" data-status="all">Todos</button>
+      <button class="chip implemented" data-status="implemented"><span class="dot" style="background:var(--lime)"></span>Implementado</button>
+      <button class="chip partial" data-status="partial"><span class="dot" style="background:var(--amber)"></span>Parcial</button>
+      <button class="chip planned" data-status="planned"><span class="dot" style="background:var(--cyan)"></span>Planejado</button>
+      <button class="chip legacy" data-status="legacy"><span class="dot" style="background:var(--red)"></span>Legado</button>
+    </nav>
+    <section class="workspace" id="workspace" aria-label="Grafo da arquitetura">
+      <div class="canvas" id="canvas"><svg id="wires" aria-hidden="true"></svg></div>
+      <div class="empty" id="empty">Nenhum módulo corresponde ao filtro.</div>
+    </section>
+    <section class="section"><h2>Fluxos críticos</h2><p class="section-intro">Os caminhos que entregam valor — e o critério objetivo para considerar cada um concluído.</p><div class="flow-grid" id="flows"></div></section>
+    <section class="section"><h2>Gaps prioritários</h2><p class="section-intro">Pontos em que o código atual ainda não fecha a promessa do produto.</p><div class="gap-grid" id="gaps"></div></section>
+  </main>
+  <aside class="drawer" id="drawer" aria-live="polite"><button class="btn drawer-close" id="close">Fechar</button><div id="drawer-content"></div></aside>
+  <footer class="footer">FONTE: CÓDIGO LOCAL + DOCUMENTAÇÃO DO REPOSITÓRIO · REGRA: MUDOU A ARQUITETURA, MUDE O JSON NO MESMO COMMIT.</footer>
+  <script>
+  const FALLBACK_DATA = {"document":{"title":"REPASS AI — Mapa Vivo de Arquitetura","version":"1.0.0","snapshot_at":"2026-07-27"},"layers":[],"nodes":[],"edges":[],"flows":[],"current_gaps":[]};
+  let DATA, activeStatus='all', query='';
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  async function load(){
+    try{const r=await fetch('./repass-architecture-map.json');if(!r.ok)throw 0;DATA=await r.json()}
+    catch{DATA=FALLBACK_DATA; $('#canvas').insertAdjacentHTML('beforebegin','<p style="padding:20px;color:#f59e0b">Abra esta página por um servidor local para carregar o JSON ao lado. O arquivo está íntegro, mas o navegador bloqueou leitura via file://.</p>')}
+    render();
+  }
+  function render(){
+    $('#version').textContent=`MAP v${DATA.document.version}`;
+    const counts=Object.fromEntries(['implemented','partial','planned','legacy'].map(s=>[s,DATA.nodes.filter(n=>n.status===s).length]));
+    $('#score').innerHTML=[['Módulos',DATA.nodes.length],['Conexões',DATA.edges.length],['Ativos',counts.implemented],['Gaps',DATA.current_gaps.length]].map(([l,v])=>`<div class="metric"><b>${v}</b><span>${l}</span></div>`).join('');
+    DATA.layers.sort((a,b)=>a.order-b.order).forEach(layer=>{
+      const col=document.createElement('div');col.className='layer';col.dataset.layer=layer.id;
+      col.innerHTML=`<div class="layer-head">${layer.label}<span>${DATA.nodes.filter(n=>n.layer===layer.id).length}</span></div>`;
+      DATA.nodes.filter(n=>n.layer===layer.id).forEach(n=>{
+        const el=document.createElement('article');el.className=`node ${n.status}`;el.id=`node-${n.id}`;el.tabIndex=0;
+        el.innerHTML=`<span class="port in"></span><span class="port out"></span><div class="node-meta"><span>${labelStatus(n.status)}</span><span class="kind">${n.kind}</span></div><h3>${n.label}</h3><p>${n.summary}</p>`;
+        el.onclick=()=>openNode(n.id);el.onkeydown=e=>{if(e.key==='Enter')openNode(n.id)};col.appendChild(el);
+      });$('#canvas').appendChild(col);
+    });
+    $('#flows').innerHTML=DATA.flows.map((f,i)=>`<article class="card"><span class="step">0${i+1} · ${labelStatus(f.status)}</span><h3>${f.label}</h3><p>${f.success_condition}</p></article>`).join('');
+    $('#gaps').innerHTML=DATA.current_gaps.map(g=>`<article class="card"><span class="priority">${g.priority}</span><h3>${g.title}</h3><p>${g.detail}</p></article>`).join('');
+    requestAnimationFrame(drawWires);
+  }
+  function labelStatus(s){return({implemented:'implementado',partial:'parcial',planned:'planejado',legacy:'legado'})[s]||s}
+  function drawWires(){
+    const svg=$('#wires'), canvas=$('#canvas'), cr=canvas.getBoundingClientRect();svg.innerHTML='';
+    DATA.edges.forEach(e=>{const a=$(`#node-${e.from}`),b=$(`#node-${e.to}`);if(!a||!b||a.classList.contains('dim')||b.classList.contains('dim'))return;
+      const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();let x1=ar.right-cr.left,y1=ar.top+ar.height/2-cr.top,x2=br.left-cr.left,y2=br.top+br.height/2-cr.top;
+      if(x2<x1){x1=ar.left-cr.left;x2=br.right-cr.left}
+      const bend=Math.max(28,Math.abs(x2-x1)*.42),d=`M${x1},${y1} C${x1+(x2>x1?bend:-bend)},${y1} ${x2-(x2>x1?bend:-bend)},${y2} ${x2},${y2}`;
+      svg.insertAdjacentHTML('beforeend',`<path id="edge-${e.id}" class="wire ${e.type}" d="${d}"/>`);
+    });
+  }
+  function openNode(id){
+    const n=DATA.nodes.find(x=>x.id===id);if(!n)return;$$('.node').forEach(x=>x.classList.toggle('selected',x.id===`node-${id}`));
+    DATA.edges.filter(e=>e.from===id||e.to===id).forEach(e=>$(`#edge-${e.id}`)?.classList.add('active'));
+    const list=(title,items)=>items?.length?`<h4>${title}</h4><ul>${items.map(x=>`<li>${typeof x==='string'?x:JSON.stringify(x)}</li>`).join('')}</ul>`:'';
+    const connections=DATA.edges.filter(e=>e.from===id||e.to===id).map(e=>`${e.from===id?'→':'←'} ${e.label}: ${DATA.nodes.find(x=>x.id===(e.from===id?e.to:e.from))?.label}`);
+    $('#drawer-content').innerHTML=`<span class="status-pill ${n.status}"><span class="dot" style="background:var(--status)"></span>${labelStatus(n.status)}</span><h2>${n.label}</h2><div class="path">${n.path||n.paths?.join(' · ')||'Sem arquivo local direto'}</div><p>${n.summary}</p>${list('Responsabilidades',n.responsibilities)}${list('Entradas',n.inputs)}${list('Saídas',n.outputs)}${list('Endpoints',n.endpoints)}${list('Tabelas',n.tables)}${list('Regras que não podem quebrar',n.invariants)}${list('Riscos',n.risks)}${list('Conexões',connections)}`;
+    $('#drawer').classList.add('open');
+  }
+  function applyFilter(){
+    let visible=0;DATA.nodes.forEach(n=>{const hay=JSON.stringify(n).toLowerCase(),ok=(activeStatus==='all'||n.status===activeStatus)&&(!query||hay.includes(query));$(`#node-${n.id}`).classList.toggle('dim',!ok);if(ok)visible++});
+    $('#empty').classList.toggle('show',visible===0);drawWires();
+  }
+  $$('.chip').forEach(b=>b.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeStatus=b.dataset.status;applyFilter()});
+  $('#search').oninput=e=>{query=e.target.value.trim().toLowerCase();applyFilter()};
+  $('#close').onclick=()=>{$('#drawer').classList.remove('open');$$('.node').forEach(x=>x.classList.remove('selected'));drawWires()};
+  $('#fit').onclick=()=>{$('#workspace').scrollTo({left:0,top:0,behavior:'smooth'})};
+  $('#download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'}));a.download='repass-architecture-map.json';a.click();URL.revokeObjectURL(a.href)};
+  addEventListener('resize',()=>requestAnimationFrame(drawWires));load();
+  </script>
+</body>
+</html>
