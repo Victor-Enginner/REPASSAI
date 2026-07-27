@@ -4,7 +4,6 @@
  */
 
 import { executePromptWithFallback } from './llmRouter';
-import { generateSiteSchemaViaOmniRoute } from './omniRouteGateway';
 
 export const NICHE_DESIGN_TOKENS = {
   "restaurante": {
@@ -12,12 +11,12 @@ export const NICHE_DESIGN_TOKENS = {
     primaryColor: "#ef4444",
     accentColor: "#f59e0b",
     fontDisplay: "Outfit",
-    badge: "🍲 Comida Artesanal & Entrega Rápida",
+    badge: "🍲 Cardápio & Contato",
     defaultCTA: "Fazer Pedido no WhatsApp",
     features: [
-      { icon: "🍲", title: "Ingredientes Selecionados", desc: "Preparo artesanal diário com os melhores insumos." },
-      { icon: "⚡", title: "Entrega Rápida", desc: "Entregamos quentinho na sua porta ou trabalho." },
-      { icon: "⭐", title: "Nota 4.9/5", desc: "Aprovado por mais de 1.000 clientes da região." }
+      { icon: "🍲", title: "Cardápio em Destaque", desc: "Apresente pratos, opções e informações reais do estabelecimento." },
+      { icon: "⚡", title: "Contato Direto", desc: "Facilite pedidos e dúvidas pelos canais verificados do negócio." },
+      { icon: "📍", title: "Localização", desc: "Mostre endereço e região usando apenas os dados cadastrados." }
     ]
   },
   "barbearia": {
@@ -25,12 +24,12 @@ export const NICHE_DESIGN_TOKENS = {
     primaryColor: "#0070f3",
     accentColor: "#38bdf8",
     fontDisplay: "Inter",
-    badge: "💈 Estilo, Tradição & Atendimento VIP",
+    badge: "💈 Serviços & Agendamento",
     defaultCTA: "Agendar Horário no WhatsApp",
     features: [
-      { icon: "💈", title: "Corte & Barba Premium", desc: "Técnicas modernas e acabamento impecável." },
-      { icon: "🍺", title: "Cerveja Gelada Cortesia", desc: "Ambiente exclusivo para seu conforto." },
-      { icon: "📅", title: "Agendamento Sem Fila", desc: "Escolha seu horário e barbeiro de preferência." }
+      { icon: "💈", title: "Serviços em Destaque", desc: "Apresente os serviços reais oferecidos pela barbearia." },
+      { icon: "📞", title: "Contato Direto", desc: "Centralize os canais verificados para orçamento e dúvidas." },
+      { icon: "📅", title: "Agendamento", desc: "Direcione o cliente para o canal de atendimento disponível." }
     ]
   },
   "salao": {
@@ -38,12 +37,12 @@ export const NICHE_DESIGN_TOKENS = {
     primaryColor: "#ec4899",
     accentColor: "#f472b6",
     fontDisplay: "Outfit",
-    badge: "✨ Estética Facial & Cuidados Especiais",
+    badge: "✨ Procedimentos & Agendamento",
     defaultCTA: "Consultar Procedimentos no WhatsApp",
     features: [
-      { icon: "✨", title: "Especialistas Certificados", desc: "Profissionais qualificados em constante atualização." },
-      { icon: "💅", title: "Manicure & Pedicure VIP", desc: "Produtos de alta durabilidade e biossegurança." },
-      { icon: "💖", title: "Ambiente Aconchegante", desc: "Espaço pensado para a sua melhor experiência." }
+      { icon: "✨", title: "Procedimentos", desc: "Apresente apenas os procedimentos confirmados pelo estabelecimento." },
+      { icon: "💅", title: "Serviços", desc: "Organize os serviços reais em uma visualização clara." },
+      { icon: "📅", title: "Agendamento", desc: "Direcione o cliente para o canal de atendimento verificado." }
     ]
   },
   "padrao": {
@@ -51,12 +50,12 @@ export const NICHE_DESIGN_TOKENS = {
     primaryColor: "#0070f3",
     accentColor: "#38bdf8",
     fontDisplay: "Inter",
-    badge: "🚀 Qualidade & Excelência em Atendimento",
+    badge: "🚀 Serviços & Contato",
     defaultCTA: "Falar Conosco no WhatsApp",
     features: [
-      { icon: "⚡", title: "Atendimento Imediato", desc: "Resposta rápida e direta pelo WhatsApp." },
-      { icon: "⭐", title: "Avaliação 4.8 / 5.0", desc: "Empresa altamente recomendada pelos clientes." },
-      { icon: "🛡️", title: "Garantia de Satisfação", desc: "Compromisso total com o melhor serviço." }
+      { icon: "🧭", title: "Serviços", desc: "Apresente os serviços confirmados pelo negócio." },
+      { icon: "📞", title: "Contato", desc: "Use somente telefone e canais verificados." },
+      { icon: "📍", title: "Localização", desc: "Mostre endereço e região quando esses dados estiverem disponíveis." }
     ]
   }
 };
@@ -78,7 +77,7 @@ export function expandNichePrompt(leadData, userInstruction = '') {
 
   return {
     expandedTitle: leadData.nome,
-    expandedSubtitle: `${tokens.badge}. O melhor serviço de ${leadData.categoria} em ${leadData.cidade}.`,
+    expandedSubtitle: `${tokens.badge}. Conheça ${leadData.nome} em ${leadData.cidade}.`,
     primaryColor: tokens.primaryColor,
     ctaText: tokens.defaultCTA,
     theme: tokens.theme,
@@ -87,30 +86,65 @@ export function expandNichePrompt(leadData, userInstruction = '') {
 }
 
 /**
- * 2. Compilador de Documentos JSON com Loop de Autocorreção Agêntica Conectado ao Roteador de IA
+ * Estrutura visual confiável usada pelo editor clássico.
+ *
+ * A IA não escolhe tipos arbitrários aqui: o frontend monta somente os
+ * componentes conhecidos pelo editor. Isso substitui o antigo gateway
+ * externo direto e mantém o editor funcional mesmo sem rede.
+ */
+function gerarSchemaVisualLocal(leadData) {
+  return {
+    projectId: `site_${leadData.id || Date.now()}`,
+    theme: 'dark_modern',
+    meta: {
+      title: leadData.nome,
+      nicho: leadData.categoria,
+      cidade: leadData.cidade,
+    },
+    components: [
+      {
+        id: 'hero-1',
+        type: 'HeroAnimated',
+        props: {
+          title: leadData.nome,
+          subtitle: `${leadData.categoria || 'Negócio local'} em ${leadData.cidade || 'sua região'}.`,
+          ctaText: 'Entrar em contato',
+          ctaColor: '#0070f3',
+          particleBg: 'react_bits_starfield',
+        },
+      },
+      {
+        id: 'features-1',
+        type: 'BentoGridOriginKit',
+        props: { items: [] },
+      },
+    ],
+  };
+}
+
+/**
+ * 2. Orquestrador seguro do editor clássico.
+ *
+ * O gerador com retrieval, validação e autocorreção é agenticGenerator.js.
  */
 export async function executeAgenticLoop(leadData, userPrompt = '') {
-  // Passo 1: Carrega chaves de API salvas do localStorage pelo Motor de IA
-  let savedConfig = null;
-  try {
-    const raw = localStorage.getItem('repass_llm_config');
-    if (raw) savedConfig = JSON.parse(raw);
-  } catch (err) {
-    console.warn("Sem chaves customizadas no localStorage, utilizando motor de resiliência.", err);
-  }
-
-  // Passo 2: Executa inferência via Motor Multi-Provedor LLM (OpenRouter / Groq / Gemini / Ollama)
+  // Passo 1: a única chamada de IA vai ao backend REPASS. Nenhuma chave,
+  // provedor ou configuração privada é lida do navegador.
+  const promptSeguro = userPrompt.trim()
+    || `Crie uma apresentação comercial para ${leadData.nome}, do nicho ${leadData.categoria}, em ${leadData.cidade}.`;
   const llmResult = await executePromptWithFallback(
-    userPrompt,
-    `Você é o compilador de Landing Pages B2B do REPASS AI. O cliente é '${leadData.nome}' do nicho '${leadData.categoria}' em ${leadData.cidade}.`,
-    savedConfig
+    promptSeguro,
+    `Você cria textos para Landing Pages B2B do REPASS AI. Use apenas os dados fornecidos. Não invente avaliações, números, certificações, contatos ou promessas. O cliente é '${leadData.nome}' do nicho '${leadData.categoria}' em ${leadData.cidade}.`,
+    null,
+    { temperature: 0 }
   );
 
-  // Passo 3: Expansão de contexto e planejamento (Planner Mode)
+  // Passo 2: Expansão de contexto e planejamento (Planner Mode)
   const plan = expandNichePrompt(leadData, userPrompt);
 
-  // Passo 4: Geração da estrutura JSON declarativa
-  const initialSchema = await generateSiteSchemaViaOmniRoute(leadData, userPrompt);
+  // Passo 3: Estrutura declarativa local e determinística. O caminho moderno,
+  // com retrieval e validação de catálogo, vive em agenticGenerator.js.
+  const initialSchema = gerarSchemaVisualLocal(leadData);
 
   // Enriquecimento de Mídia (Fotos Google Places / Fallback)
   const mediaEnrichment = leadData.mediaEnrichment || {
@@ -183,15 +217,15 @@ export async function executeAgenticLoop(leadData, userPrompt = '') {
     components: validatedComponents,
     llmResponse: llmResult.output,
     providerInfo: {
-      provider: llmResult.provider,
-      model: llmResult.model,
+      provider: llmResult.provider || 'Motor local determinístico',
+      model: llmResult.model || 'rules',
       logs: llmResult.logs
     },
     plannerLog: [
       `🧠 [Planner Mode]: Contexto expandido para '${leadData.categoria}' em ${leadData.cidade}.`,
       `📷 [Google Places Enrichment]: Mídia capturada via Proxy Endpoint (/api/media/proxy).`,
-      `🤖 [Motor LLM]: ${llmResult.provider} (${llmResult.model})`,
-      `✅ [Self-Correction Loop]: Schema JSON e galeria de fotos integrados sem erros.`
+      `🤖 [Motor LLM]: ${llmResult.provider || 'fallback local'} (${llmResult.model || 'rules'})`,
+      `✅ [Schema Seguro]: Estrutura local e galeria integradas sem código arbitrário.`
     ]
   };
 

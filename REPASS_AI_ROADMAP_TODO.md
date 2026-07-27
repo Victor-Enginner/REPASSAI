@@ -25,10 +25,10 @@
 
 ---
 
-## 🧠 FASE 3: Roteador Multi-Provedor LLM & OmniRoute Gateway
+## 🧠 FASE 3: Roteador Multi-Provedor LLM & Gateway Seguro
 
-- [x] **Roteador LLM Multi-Provedor com Fallback em Grafo (`src/services/llmRouter.js`)**: Chaveamento transparente entre OpenRouter ➔ Groq ➔ HuggingFace ➔ Ollama Local.
-- [x] **Gateway de IA Unificado OmniRoute (`src/services/omniRouteGateway.js`)**: Cliente de comunicação via API key única.
+- [x] **Roteador LLM Multi-Provedor com fallback no backend (`backend/llm_gateway.py`)**: Chaveamento transparente entre os provedores configurados sem expor chaves ou modelos ao navegador.
+- [x] **Cliente neural seguro (`src/services/llmRouter.js`)**: Toda inferência do frontend passa por `/api/ai/generate`; o gateway externo direto e sua chave em `localStorage` foram removidos.
 - [x] **Console de Diagnóstico de Motores de IA (`AIEngineView.jsx`)**: Visualização em tempo real de latência, cota e consumo de tokens por provedor.
 
 ---

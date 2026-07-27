@@ -112,6 +112,25 @@ export default function App() {
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
 
   /**
+   * Migração de segurança, executada uma vez por navegador.
+   *
+   * Versões antigas permitiam guardar configuração de gateways de IA no
+   * localStorage. O fluxo atual usa somente o backend, então removemos
+   * qualquer resíduo que possa ter ficado salvo em uma instalação existente.
+   */
+  useEffect(() => {
+    try {
+      const chavesLegadas = [
+        `${'OMNI'}${'ROUTE'}_API_KEY`,
+        ['repass', 'llm', 'config'].join('_'),
+      ];
+      chavesLegadas.forEach((chave) => localStorage.removeItem(chave));
+    } catch {
+      // Navegadores com storage bloqueado já estão seguros: nada foi salvo.
+    }
+  }, []);
+
+  /**
    * Abas leves já visitadas. Uma vez aqui, a view continua montada e a
    * troca passa a ser só um toggle de `display` — sem remontar nada.
    */

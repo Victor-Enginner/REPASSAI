@@ -106,6 +106,5 @@ Desktop não está instalado nesta máquina.
 1. Adicionar backup agendado do Supabase e versionamento do bucket R2.
 2. Trocar o endereço `r2.dev` por domínio próprio de produção.
 3. Migrar CRM, projetos e faturamento do estado local para o Supabase.
-4. Remover o gateway OmniRoute legado do navegador.
-5. Adicionar teste com usuário temporário e escrita isolada em ambiente de
+4. Adicionar teste com usuário temporário e escrita isolada em ambiente de
    staging, separado dos dados de produção.

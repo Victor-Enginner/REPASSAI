@@ -3,7 +3,7 @@
   "document": {
     "id": "repass-ai-architecture",
     "title": "REPASS AI — Mapa Vivo de Arquitetura",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "snapshot_at": "2026-07-27",
     "language": "pt-BR",
     "source_of_truth": "Código e documentação presentes no repositório",
@@ -179,8 +179,8 @@
       "kind": "service",
       "status": "implemented",
       "paths": ["src/services/agenticPlanner.js", "src/services/agenticGenerator.js", "src/services/componentRetrieval.js"],
-      "summary": "Expande intenção, recupera candidatos, consulta IA, valida JSON e tenta autocorreção antes do fallback local.",
-      "invariants": ["temperature 0", "saída JSON", "somente componentes do catálogo", "fallback determinístico"]
+      "summary": "Expande intenção, consulta apenas o gateway seguro do backend e mantém fallback local; o gerador moderno recupera candidatos, valida JSON e tenta autocorreção.",
+      "invariants": ["temperature 0", "nenhuma chave no navegador", "somente componentes do catálogo", "fallback determinístico"]
     },
     {
       "id": "front-registry",
@@ -199,16 +199,6 @@
       "status": "implemented",
       "path": "src/services/llmRouter.js",
       "summary": "Envia prompts ao backend sem expor chaves, modelos ou provedores no navegador."
-    },
-    {
-      "id": "front-legacy-ai",
-      "layer": "frontend-core",
-      "label": "OmniRoute Direto",
-      "kind": "legacy",
-      "status": "legacy",
-      "path": "src/services/omniRouteGateway.js",
-      "summary": "Cliente antigo chama gateway externo no navegador e guarda chave em localStorage; não deve ser usado no fluxo SaaS seguro.",
-      "risks": ["Chave no navegador", "Schema paralelo ao contrato principal"]
     },
     {
       "id": "front-local-store",
@@ -435,7 +425,6 @@
     {"id": "e30", "from": "db-adapter", "to": "db-supabase", "type": "api", "label": "service role"},
     {"id": "e31", "from": "front-config", "to": "db-supabase", "type": "auth", "label": "login público"},
     {"id": "e32", "from": "ui-whatsapp", "to": "ui-dashboard", "type": "updates", "label": "status comercial"},
-    {"id": "e33", "from": "front-legacy-ai", "to": "external-llms", "type": "legacy", "label": "chamada direta"},
     {"id": "e34", "from": "ui-business", "to": "front-local-store", "type": "reads-writes", "label": "protótipo"},
     {"id": "e35", "from": "engine-tools", "to": "storage-local", "type": "offline", "label": "popula catálogos"},
     {"id": "e36", "from": "infra-compose", "to": "api-server", "type": "runs", "label": "container + healthcheck"},
@@ -510,12 +499,6 @@
       "title": "Domínio de publicação",
       "detail": "A URL r2.dev funciona para desenvolvimento, mas produção deve usar domínio próprio e política de cache controlada.",
       "affected_nodes": ["engine-storage", "storage-r2", "front-config"]
-    },
-    {
-      "priority": "P1",
-      "title": "Remover caminho de IA inseguro",
-      "detail": "OmniRoute direto no navegador duplica o gateway principal e expõe chave em localStorage.",
-      "affected_nodes": ["front-legacy-ai", "front-llm"]
     },
     {
       "priority": "P1",
