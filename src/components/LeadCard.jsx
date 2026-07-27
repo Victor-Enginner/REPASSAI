@@ -20,13 +20,10 @@
  * Lead de demonstração é marcado e tem as ações bloqueadas.
  */
 
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import { Phone, MapPin, Globe, Send, Star, Lightbulb, FlaskConical } from 'lucide-react';
 import SpotlightCard from './ui/SpotlightCard';
-
-// Borda elétrica é pesada (SVG + filtros animados) e só aparece em parte
-// dos cards — carrega sob demanda.
-const ElectricBorder = lazy(() => import('./ui/ElectricBorder'));
+import Cyber3DCard from './ui/Cyber3DCard';
 
 /** Score a partir do qual o lead é tratado como oportunidade quente. */
 const LIMIAR_QUENTE = 80;
@@ -177,14 +174,6 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
   );
 }
 
-/**
- * @param {object} props
- * @param {object} props.lead
- * @param {boolean} props.selecionado
- * @param {Function} props.onAlternarSelecao
- * @param {Function} props.onEnviarCRM
- * @param {Function} props.onGerarSite
- */
 export default function LeadCard(props) {
   const { lead, selecionado } = props;
   const ehQuente = (lead.score ?? 0) >= LIMIAR_QUENTE && !lead.is_demo;
@@ -193,38 +182,19 @@ export default function LeadCard(props) {
     ? 'rgba(99, 102, 241, 0.55)'
     : 'rgba(255, 255, 255, 0.12)';
 
-  const miolo = (
-    <SpotlightCard
-      className="lead-card cursor-target"
-      spotlightColor={ehQuente ? 'rgba(34, 197, 94, 0.14)' : 'rgba(99, 102, 241, 0.13)'}
-    >
-      <Conteudo {...props} />
-    </SpotlightCard>
-  );
-
   return (
     <article
       aria-label={`Lead: ${lead.nome}`}
       style={{
-        borderRadius: '10px',
-        // A borda de seleção fica no wrapper para não brigar com a borda
-        // elétrica, que desenha na própria moldura.
+        borderRadius: '14px',
         outline: selecionado ? `1.5px solid ${corDestaque}` : 'none',
         outlineOffset: '2px',
         transition: 'outline-color 0.18s ease',
       }}
     >
-      {ehQuente ? (
-        // Enquanto o chunk da borda carrega, mostra o card normal — nunca
-        // um espaço vazio.
-        <Suspense fallback={miolo}>
-          <ElectricBorder color="#22c55e" speed={0.7} chaos={0.35} borderRadius={10}>
-            {miolo}
-          </ElectricBorder>
-        </Suspense>
-      ) : (
-        miolo
-      )}
+      <Cyber3DCard isHot={ehQuente} style={{ padding: '20px' }}>
+        <Conteudo {...props} />
+      </Cyber3DCard>
     </article>
   );
 }
