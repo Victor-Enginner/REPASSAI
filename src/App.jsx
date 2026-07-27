@@ -4,6 +4,7 @@ import FaultyTerminal from './components/ui/FaultyTerminal';
 import ViewErrorBoundary from './components/ViewErrorBoundary';
 import DockMobile from './components/DockMobile';
 import CursorPersonalizado from './components/CursorPersonalizado';
+import AgenticChatbotWidget from './components/AgenticChatbotWidget';
 import { useEhMobile } from './hooks/useMediaQuery';
 import { INITIAL_LEADS } from './mock/leadsData';
 import { obterConfig, limparCacheConfig } from './services/authService';
@@ -345,6 +346,8 @@ export default function App() {
               </PainelKeepAlive>
             )}
         </ViewErrorBoundary>
+        {/* Widget Flutuante do Chatbot Agentico (Canto Inferior Direito) */}
+        <AgenticChatbotWidget />
       </main>
 
       {/* Atalho para as 4 telas do fluxo principal. Só no celular. */}

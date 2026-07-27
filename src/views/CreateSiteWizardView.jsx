@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
-import { Sparkles, Link as LinkIcon, Users, Lock, Zap, ChevronUp, ArrowUp, Check } from 'lucide-react';
+/**
+ * REPASS AI - MÓDULO // CRIAR SITE (Fiel à estrutura do useleadsite.com/criar)
+ * 
+ * Interface limpa, intuitiva e focada na seleção rápida de leads e modelos
+ * sem complexidade desnecessária.
+ */
 
-export default function CreateSiteWizardView({ leads, onProceedToEditor }) {
+import React, { useState } from 'react';
+import { Sparkles, Link as LinkIcon, Users, Lock, Zap, ChevronUp, ArrowUp, Check, Search } from 'lucide-react';
+
+export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBack }) {
   const [activeTab, setActiveTab] = useState('lead'); // 'descrever' | 'google' | 'lead'
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedLeadId, setSelectedLeadId] = useState(leads[0]?.id || '');
-  const [descriptionText, setDescriptionText] = useState('');
-  const [googleLink, setGoogleLink] = useState('');
   
   const [selectedModel, setSelectedModel] = useState('simples'); // 'simples' | 'completo' | 'sistema'
-  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(true); // Open by default as in screenshot
+  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
 
-  const handleGenerate = () => {
-    let targetLead = leads.find(l => l.id === selectedLeadId) || leads[0];
+  // Filtra lista de leads
+  const filteredLeads = leads.filter(l => 
+    (l.nome || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (l.cidade || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (l.categoria || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    if (activeTab === 'descrever' && descriptionText) {
-      targetLead = {
-        ...targetLead,
-        nome: descriptionText.split('\n')[0] || "Novo Negócio",
-        orientacao: descriptionText
-      };
+  const selectedLead = leads.find(l => l.id === selectedLeadId) || leads[0];
+
+  const handleExecuteGenerate = () => {
+    if (onGenerateSite) {
+      onGenerateSite(selectedLead);
     }
-
-    onProceedToEditor(targetLead);
   };
 
   const modelOptions = [
@@ -37,95 +44,91 @@ export default function CreateSiteWizardView({ leads, onProceedToEditor }) {
       title: 'Site completo',
       icon: Sparkles,
       desc: 'A opção ideal pra sites bonitos, com edições precisas e inúmeras possibilidades de efeitos.',
-      locked: false // Desbloqueado no nosso motor sem limites!
+      locked: true
     },
     {
       id: 'sistema',
       title: 'Sistema',
       icon: Lock,
       desc: 'Utilize quando precisar de um site completo que também contenha portal administrativo para seu cliente gerenciar agendamentos, pedidos, reservas e outros.',
-      locked: false // Desbloqueado no nosso motor sem limites!
+      locked: true
     }
   ];
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'radial-gradient(ellipse at 50% 20%, #f0f7ff 0%, #e2ecf7 100%)',
+      background: 'radial-gradient(ellipse at 50% 20%, #f4f7fb 0%, #e2e8f0 100%)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '40px 20px',
       position: 'relative',
+      color: '#0f172a',
       animation: 'fadeIn 0.3s ease'
     }}>
       
-      {/* Background Particles Grid */}
-      <div className="bg-particles" style={{ position: 'absolute', inset: 0, opacity: 0.5, pointerEvents: 'none' }} />
-
-      {/* Center Top Logo */}
-      <div style={{ marginBottom: '24px', position: 'relative', zIndex: 10 }}>
-        <div className="animate-glow" style={{
-          width: '72px',
-          height: '72px',
-          background: 'linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%)',
-          border: '1px solid rgba(0, 112, 243, 0.2)',
-          borderRadius: '24px',
+      {/* Estrela/Ícone Central do Topo */}
+      <div style={{ marginBottom: '20px', position: 'relative', zIndex: 10 }}>
+        <div style={{
+          width: '80px',
+          height: '80px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 16px 36px rgba(0, 112, 243, 0.15)'
+          justifyContent: 'center'
         }}>
-          <Sparkles size={38} color="#0f172a" />
+          <svg width="64" height="64" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 0 L58 42 L100 50 L58 58 L50 100 L42 58 L0 50 L42 42 Z" fill="#000000" />
+          </svg>
         </div>
       </div>
 
-      {/* Main Title & Subtitle */}
-      <div style={{ textAlign: 'center', maxWidth: '680px', marginBottom: '32px', position: 'relative', zIndex: 10 }}>
-        <h1 style={{ fontSize: '38px', fontWeight: '800', fontFamily: 'var(--font-display)', color: '#0f172a', letterSpacing: '-0.8px' }}>
+      {/* Título & Subtítulo */}
+      <div style={{ textAlign: 'center', maxWidth: '640px', marginBottom: '32px', position: 'relative', zIndex: 10 }}>
+        <h1 style={{ fontSize: '34px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: '#0f172a', letterSpacing: '-0.8px', margin: 0 }}>
           Site pra negócio fora da busca
         </h1>
-        <p style={{ fontSize: '15px', color: '#64748b', marginTop: '8px', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '14.5px', color: '#64748b', marginTop: '10px', lineHeight: 1.5 }}>
           Descreva o negócio, cole um link do Google ou escolha um lead existente — sem precisar buscar primeiro
         </p>
       </div>
 
-      {/* Central Interactive Wizard Window (Matching input_file_0.png & input_file_1.png) */}
+      {/* Card Principal Neumorphism / Glass Window */}
       <div style={{
         width: '100%',
-        maxWidth: '720px',
-        background: 'rgba(255, 255, 255, 0.92)',
-        backdropFilter: 'blur(20px)',
+        maxWidth: '680px',
+        background: '#ffffff',
         borderRadius: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.95)',
-        boxShadow: '0 30px 70px -15px rgba(0, 70, 150, 0.12), 0 10px 30px rgba(0,0,0,0.03)',
-        padding: '16px',
+        border: '1px solid rgba(226, 232, 240, 0.8)',
+        boxShadow: '0 20px 60px -10px rgba(0, 0, 0, 0.08), 0 8px 25px rgba(0,0,0,0.03)',
+        padding: '20px',
         position: 'relative',
         zIndex: 10
       }}>
         
-        {/* Top Segmented Tabs Bar */}
+        {/* Abas Superiores das Opções */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: '6px',
-          background: '#e2e8f0',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '4px',
+          background: '#f1f5f9',
           padding: '4px',
-          borderRadius: '16px',
+          borderRadius: '14px',
           marginBottom: '20px'
         }}>
           
+          {/* Aba Descrever */}
           <button 
             onClick={() => setActiveTab('descrever')}
             style={{
               padding: '10px 14px',
-              borderRadius: '12px',
+              borderRadius: '10px',
               border: 'none',
               background: activeTab === 'descrever' ? '#0070f3' : 'transparent',
               color: activeTab === 'descrever' ? '#fff' : '#64748b',
               fontSize: '13px',
-              fontWeight: '700',
+              fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -134,19 +137,20 @@ export default function CreateSiteWizardView({ leads, onProceedToEditor }) {
               transition: 'all 0.2s ease'
             }}
           >
-            <Sparkles size={14} /> Descrever
+            <Sparkles size={14} /> Descrever <Lock size={12} opacity={0.6} />
           </button>
 
+          {/* Aba Link do Google */}
           <button 
             onClick={() => setActiveTab('google')}
             style={{
               padding: '10px 14px',
-              borderRadius: '12px',
+              borderRadius: '10px',
               border: 'none',
               background: activeTab === 'google' ? '#0070f3' : 'transparent',
               color: activeTab === 'google' ? '#fff' : '#64748b',
               fontSize: '13px',
-              fontWeight: '700',
+              fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -155,19 +159,20 @@ export default function CreateSiteWizardView({ leads, onProceedToEditor }) {
               transition: 'all 0.2s ease'
             }}
           >
-            <LinkIcon size={14} /> Link do Google
+            <LinkIcon size={14} /> Link do Google <Lock size={12} opacity={0.6} />
           </button>
 
+          {/* Aba Lead Existente (Ativa) */}
           <button 
             onClick={() => setActiveTab('lead')}
             style={{
               padding: '10px 14px',
-              borderRadius: '12px',
+              borderRadius: '10px',
               border: 'none',
-              background: activeTab === 'lead' ? '#0070f3' : '#transparent',
+              background: activeTab === 'lead' ? '#0070f3' : 'transparent',
               color: activeTab === 'lead' ? '#fff' : '#64748b',
               fontSize: '13px',
-              fontWeight: '700',
+              fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -178,172 +183,201 @@ export default function CreateSiteWizardView({ leads, onProceedToEditor }) {
           >
             <Users size={14} /> Lead existente
           </button>
-
         </div>
 
-        {/* Tab Content Box */}
-        <div style={{ padding: '0 8px 16px 8px', minHeight: '140px' }}>
+        {/* Conteúdo Interno: Busca & Seleção de Leads */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
           
-          {activeTab === 'lead' && (
-            <div>
-              <label style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '8px' }}>
-                Selecione o Lead para Gerar o Site:
-              </label>
-              <select 
-                value={selectedLeadId}
-                onChange={(e) => setSelectedLeadId(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  background: '#fff',
-                  color: '#0f172a',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
-                }}
-              >
-                {leads.map(lead => (
-                  <option key={lead.id} value={lead.id}>
-                    {lead.nome} — {lead.categoria} ({lead.cidade}, {lead.estado})
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          {/* Campo de Busca */}
+          <div style={{ position: 'relative' }}>
+            <input 
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar lead por nome ou cidade..."
+              style={{
+                width: '100%',
+                padding: '12px 16px 12px 40px',
+                borderRadius: '14px',
+                background: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                fontSize: '13px',
+                color: '#0f172a',
+                outline: 'none'
+              }}
+            />
+            <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+          </div>
 
-          {activeTab === 'descrever' && (
-            <div>
-              <textarea 
-                value={descriptionText}
-                onChange={(e) => setDescriptionText(e.target.value)}
-                placeholder="Descreva o negócio em poucas palavras. Ex: Barbearia Vip com agendamento de cabelo e barba em São Paulo..."
-                style={{
-                  width: '100%',
-                  height: '110px',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '13px',
-                  fontFamily: 'inherit',
-                  resize: 'none'
-                }}
-              />
-            </div>
-          )}
+          {/* Lista de Leads */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '220px', overflowY: 'auto' }}>
+            {filteredLeads.map(lead => {
+              const isSelected = selectedLeadId === lead.id;
+              const initial = (lead.nome || 'L').charAt(0).toUpperCase();
 
-          {activeTab === 'google' && (
-            <div>
-              <input 
-                type="text"
-                value={googleLink}
-                onChange={(e) => setGoogleLink(e.target.value)}
-                placeholder="Cole a URL do perfil do Google Maps (ex: https://maps.google.com/?cid=...)"
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '13px'
-                }}
-              />
-            </div>
-          )}
+              return (
+                <div
+                  key={lead.id}
+                  onClick={() => setSelectedLeadId(lead.id)}
+                  style={{
+                    padding: '12px 16px',
+                    borderRadius: '14px',
+                    background: isSelected ? '#f1f5f9' : '#ffffff',
+                    border: isSelected ? '1px solid #cbd5e1' : '1px solid #f1f5f9',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    background: '#e2e8f0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#475569'
+                  }}>
+                    {initial}
+                  </div>
 
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
+                      {lead.nome}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '1px' }}>
+                      {lead.categoria} · {lead.cidade}
+                    </div>
+                  </div>
+
+                  {isSelected && <Check size={16} color="#0070f3" />}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Model Selector Popup Dropdown (Matching exact design input_file_1.png) */}
-        {isModelDropdownOpen && (
-          <div style={{
-            position: 'absolute',
-            bottom: '70px',
-            left: '20px',
-            width: '320px',
-            background: '#ffffff',
-            borderRadius: '20px',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 20px 40px -10px rgba(0, 50, 120, 0.15)',
-            padding: '14px',
-            zIndex: 50,
-            animation: 'fadeIn 0.2s ease'
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {modelOptions.map(m => {
-                const Icon = m.icon;
-                const isSelected = selectedModel === m.id;
-                return (
-                  <div 
-                    key={m.id}
-                    onClick={() => {
-                      setSelectedModel(m.id);
-                      setIsModelDropdownOpen(false);
-                    }}
-                    style={{
-                      background: isSelected ? '#f8fafc' : '#transparent',
-                      padding: '12px',
-                      borderRadius: '12px',
-                      cursor: 'pointer',
-                      border: isSelected ? '1px solid #0070f3' : '1px solid transparent',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Icon size={16} color={isSelected ? '#0070f3' : '#475569'} />
-                      <h4 style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a' }}>{m.title}</h4>
-                      {m.locked && <Lock size={12} color="#94a3b8" />}
-                    </div>
-                    <p style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', lineHeight: 1.4 }}>
-                      {m.desc}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Bottom Action Bar inside Card */}
+        {/* Rodapé do Card: Seletor de Modelo Pop-up & Botão Gerar */}
         <div style={{
           display: 'flex',
-          justify: 'space-between',
           alignItems: 'center',
-          paddingTop: '12px',
-          borderTop: '1px solid #f1f5f9'
+          justifyContent: 'space-between',
+          paddingTop: '16px',
+          borderTop: '1px solid #f1f5f9',
+          position: 'relative'
         }}>
           
-          <button 
-            onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-            style={{
-              background: '#f1f5f9',
-              border: '1px solid #cbd5e1',
-              borderRadius: '12px',
-              padding: '8px 14px',
-              fontSize: '12.5px',
-              fontWeight: '700',
-              color: '#0f172a',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Sparkles size={14} color="#0070f3" />
-            Selecionar modelo <ChevronUp size={14} />
-          </button>
+          {/* Seletor de Modelo Dropdown Pop-up */}
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+              style={{
+                padding: '10px 16px',
+                borderRadius: '12px',
+                background: '#f1f5f9',
+                border: '1px solid #e2e8f0',
+                color: '#0f172a',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              <Sparkles size={14} color="#0070f3" />
+              <span>Selecionar modelo</span>
+              <ChevronUp size={14} color="#64748b" style={{ transform: isModelDropdownOpen ? 'rotate(180deg)' : 'none' }} />
+            </button>
+
+            {/* Menu Pop-up de Modelos */}
+            {isModelDropdownOpen && (
+              <div style={{
+                position: 'absolute',
+                bottom: '100%',
+                left: 0,
+                marginBottom: '8px',
+                width: '320px',
+                background: '#ffffff',
+                borderRadius: '16px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+                padding: '8px',
+                zIndex: 50,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px'
+              }}>
+                {modelOptions.map(opt => {
+                  const IconComp = opt.icon;
+                  const isOptSelected = selectedModel === opt.id;
+
+                  return (
+                    <div
+                      key={opt.id}
+                      onClick={() => {
+                        if (!opt.locked) {
+                          setSelectedModel(opt.id);
+                          setIsModelDropdownOpen(false);
+                        }
+                      }}
+                      style={{
+                        padding: '12px',
+                        borderRadius: '12px',
+                        background: isOptSelected ? '#f8fafc' : 'transparent',
+                        opacity: opt.locked ? 0.5 : 1,
+                        cursor: opt.locked ? 'not-allowed' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '10px',
+                        transition: 'background 0.15s ease'
+                      }}
+                    >
+                      <IconComp size={16} color={isOptSelected ? '#0070f3' : '#64748b'} style={{ marginTop: '2px' }} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          {opt.title} {opt.locked && <Lock size={12} color="#94a3b8" />}
+                        </div>
+                        <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', lineHeight: 1.4 }}>
+                          {opt.desc}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
           <span style={{ fontSize: '12px', color: '#94a3b8' }}>
             Escolha um modelo pra começar
           </span>
 
-          <button 
-            onClick={handleGenerate}
-            className="btn-primary" 
-            style={{ padding: '9px 22px', fontSize: '13.5px' }}
+          {/* Botão Gerar */}
+          <button
+            onClick={handleExecuteGenerate}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '12px',
+              background: '#0070f3',
+              border: 'none',
+              color: '#ffffff',
+              fontSize: '13px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 4px 14px rgba(0, 112, 243, 0.35)'
+            }}
           >
-            <ArrowUp size={16} /> Gerar
+            <ArrowUp size={15} /> Gerar
           </button>
-
         </div>
 
       </div>
