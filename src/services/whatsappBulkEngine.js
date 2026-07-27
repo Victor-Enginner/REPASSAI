@@ -105,6 +105,8 @@ export function generatePersonalizedScript(lead) {
   ].join(' ');
 }
 
+export const generateSingleScript = generatePersonalizedScript;
+
 /**
  * Monta os scripts de um lote, separando o que pode e o que não pode ser
  * abordado — para a UI nunca disparar às cegas.
