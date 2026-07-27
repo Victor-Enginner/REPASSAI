@@ -224,40 +224,6 @@ export default function App() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: '#05070f' }}>
 
-      {/* Background Matrix Terminal Fixo Global (FaultyTerminal) - Permanece vivo em TODAS as abas sangrando atrás da Sidebar no Desktop; desativado em celulares para 60fps lisos */}
-      {currentTab !== 'landing' && !ehMobile && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          width: '100vw',
-          height: '100vh',
-          opacity: 0.38,
-          pointerEvents: 'none',
-          zIndex: 0,
-          overflow: 'hidden'
-        }}>
-          <FaultyTerminal
-            scale={1.5}
-            gridMul={[2, 1]}
-            digitSize={1.2}
-            timeScale={0.5}
-            pause={false}
-            scanlineIntensity={0.8}
-            glitchAmount={1}
-            flickerAmount={1}
-            noiseAmp={1}
-            chromaticAberration={0}
-            dither={0}
-            curvature={0.1}
-            tint="#A7EF9E"
-            mouseReact={true}
-            mouseStrength={0.8}
-            pageLoadAnimation={false}
-            brightness={0.8}
-          />
-        </div>
-      )}
-
       {/* Sidebar Transparente em TODAS as sessões do aplicativo */}
       {currentTab !== 'landing' && (
         <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />

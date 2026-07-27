@@ -79,12 +79,12 @@ export default function LoginView({ onAutenticado }) {
   return (
     <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 5vw, 40px)', background: '#05070f' }}>
 
-      {/* Mesmo fundo do resto do sistema, para a entrada não parecer outro app. */}
-      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, opacity: 0.3, pointerEvents: 'none', zIndex: 0 }}>
+      {/* TRAVA VISUAL DE IDENTIDADE: Fundo Matrix FaultyTerminal de Alta Visibilidade (NUNCA ALTERAR) */}
+      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, opacity: 0.85, pointerEvents: 'none', zIndex: 0 }}>
         <FaultyTerminal
           scale={1.5} gridMul={[2, 1]} digitSize={1.2} timeScale={0.5}
           scanlineIntensity={0.8} glitchAmount={1} flickerAmount={1} noiseAmp={1}
-          curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={0.8}
+          curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={1.0}
           pageLoadAnimation={false}
         />
       </div>

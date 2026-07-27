@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import logoOrb from '../assets/repass_logo_orb.jpg';
 import { useEhMobile } from '../hooks/useMediaQuery';
+import FaultyTerminal from './ui/FaultyTerminal';
 
 export default function Sidebar({ currentTab, setCurrentTab }) {
   const [hoveredTab, setHoveredTab] = useState(null);
@@ -186,10 +187,22 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         borderRight: '0.5px solid rgba(255, 255, 255, 0.1)',
         userSelect: 'none',
         overflowY: 'auto',
+        overflowX: 'hidden',
+        position: 'relative',
         ...estiloAside,
       }}
     >
-      <div>
+      {/* Fundo Matrix FaultyTerminal exclusivo da Barra de Navegação / Sidebar */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, opacity: 0.35, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        <FaultyTerminal
+          scale={1.2} gridMul={[1, 1]} digitSize={1.0} timeScale={0.4}
+          scanlineIntensity={0.8} glitchAmount={0.8} flickerAmount={0.8} noiseAmp={0.8}
+          curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={0.8}
+          pageLoadAnimation={false}
+        />
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* Fechar — só aparece com a gaveta aberta. */}
         {ehMobile && (
           <button
