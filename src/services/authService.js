@@ -175,6 +175,17 @@ export async function cadastrar(email, senha) {
   return { precisaConfirmar: true };
 }
 
+/**
+ * Solicita redefinição de senha por e-mail no Supabase.
+ * @param {string} email
+ * @returns {Promise<void>}
+ */
+export async function recuperarSenha(email) {
+  await chamarSupabaseAuth('recover', {
+    email: email.trim(),
+  });
+}
+
 /** Encerra a sessão local. */
 export function sair() {
   try {

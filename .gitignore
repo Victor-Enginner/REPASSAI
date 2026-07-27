@@ -27,3 +27,14 @@ dist-ssr
 __pycache__/
 *.pyc
 backend/.env
+
+# Variantes de .env (backup, local, cópia) — o padrão exato acima não
+# cobria .env.bak / .env.local, e um backup com segredos seria commitado.
+.env
+.env.*
+!.env.example
+backend/.env.*
+!backend/.env.example
+
+.vercel
+.env*
