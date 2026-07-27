@@ -51,17 +51,5 @@ const SELETOR_ALVO = [
 ].join(', ');
 
 export default function CursorPersonalizado() {
-  const temMouse = useMediaQuery('(pointer: fine)');
-  const ehMobile = useEhMobile();
-  const preferMenosMovimento = useMediaQuery('(prefers-reduced-motion: reduce)');
-
-  const ativo = temMouse && !ehMobile && !preferMenosMovimento;
-
-  if (!ativo) return null;
-
-  return (
-    <Suspense fallback={null}>
-      <FluidGlitchCursor />
-    </Suspense>
-  );
+  return null;
 }

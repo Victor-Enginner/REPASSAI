@@ -530,27 +530,7 @@ button,
   }
 }
 
-/*
-  Cursor personalizado.
-
-  A classe é posta no <html> pelo próprio componente, e só enquanto ele
-  está montado. Assim, se qualquer guarda falhar (toque, tela estreita,
-  reduced-motion), o cursor nativo continua intacto — nunca ficamos com
-  uma tela sem cursor nenhum.
-*/
-.cursor-personalizado-ativo,
-.cursor-personalizado-ativo * {
-  cursor: none !important;
-}
-
-/* Campos de texto mantêm o cursor nativo: sem ele, não dá para ver onde
-   o texto vai ser inserido. */
-.cursor-personalizado-ativo input,
-.cursor-personalizado-ativo textarea,
-.cursor-personalizado-ativo select,
-.cursor-personalizado-ativo [contenteditable] {
-  cursor: auto !important;
-}
+/* Cursor do Sistema Operacional Nativo Restaurado 100% */
 
 /* Os alvos em que o cursor gruda. Classe explícita em vez de seletor
    amplo: grudar em tudo faz o efeito perder sentido e virar ruído. */
