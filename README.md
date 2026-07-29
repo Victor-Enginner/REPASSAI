@@ -196,6 +196,7 @@ scripts/
 | [docs/GUIA_SUPABASE.md](docs/GUIA_SUPABASE.md) | tabelas, RLS e chaves |
 | [docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md) | Docker, checkpoints, recuperação |
 | [docs/linear/](docs/linear/) | backlog em CSV, importável no Linear |
+| [docs/HANDOFF.md](docs/HANDOFF.md) | transferência do projeto para outro agente de IA |
 
 O backlog operacional fica no Linear. `scripts/linear-sync.mjs` sincroniza os
 CSVs com a API — é idempotente, então pode rodar mais de uma vez.
