@@ -21,8 +21,28 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
+/**
+ * Le LINEAR_API_KEY do ambiente ou de backend/.env.
+ *
+ * O .env esta no .gitignore, entao a chave nunca vai para o repositorio. Ler
+ * dele evita que o operador tenha que lembrar de exportar a variavel toda vez
+ * — esquecer isso so aparece como "LINEAR_API_KEY nao esta definida", que
+ * parece erro do script.
+ */
+function lerChave() {
+  if (process.env.LINEAR_API_KEY) return process.env.LINEAR_API_KEY.trim();
+  try {
+    const env = readFileSync(join(RAIZ, "backend", ".env"), "utf8");
+    const linha = env.split(/\r?\n/).find((l) => l.trim().startsWith("LINEAR_API_KEY="));
+    if (linha) return linha.split("=").slice(1).join("=").trim().replace(/^["']|["']$/g, "");
+  } catch {
+    // sem .env: segue com o ambiente, e o aviso abaixo explica o que fazer
+  }
+  return "";
+}
+
 const API = "https://api.linear.app/graphql";
-const CHAVE = process.env.LINEAR_API_KEY;
+const CHAVE = lerChave();
 const SECO = process.argv.includes("--dry");
 
 // Projeto que recebe a documentação geral. O `documentCreate` do Linear EXIGE
