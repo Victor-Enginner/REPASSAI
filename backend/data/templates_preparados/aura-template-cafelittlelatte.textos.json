@@ -1,0 +1,604 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "Little Latte Cafe",
+    "inicio": 3143,
+    "fim": 3160
+  },
+  {
+    "id": 1,
+    "tag": "a",
+    "texto": "Home",
+    "inicio": 3753,
+    "fim": 3757
+  },
+  {
+    "id": 2,
+    "tag": "a",
+    "texto": "About me",
+    "inicio": 3812,
+    "fim": 3820
+  },
+  {
+    "id": 3,
+    "tag": "a",
+    "texto": "Best seller",
+    "inicio": 3874,
+    "fim": 3885
+  },
+  {
+    "id": 4,
+    "tag": "a",
+    "texto": "Menu",
+    "inicio": 3939,
+    "fim": 3943
+  },
+  {
+    "id": 5,
+    "tag": "a",
+    "texto": "Contact us",
+    "inicio": 4000,
+    "fim": 4010
+  },
+  {
+    "id": 6,
+    "tag": "a",
+    "texto": "Little Latte Cafe",
+    "inicio": 4102,
+    "fim": 4119
+  },
+  {
+    "id": 7,
+    "tag": "p",
+    "texto": "A cozy, small-batch coffee spot in the heart of downtown Victoria—built for slow mornings, fresh bites, and very good coffee.",
+    "inicio": 5167,
+    "fim": 5292
+  },
+  {
+    "id": 8,
+    "tag": "p",
+    "texto": "Warm cups.",
+    "inicio": 5465,
+    "fim": 5475
+  },
+  {
+    "id": 9,
+    "tag": "br",
+    "texto": "Open hearts.",
+    "inicio": 5492,
+    "fim": 5504
+  },
+  {
+    "id": 10,
+    "tag": "?",
+    "texto": "Order Now",
+    "inicio": 5882,
+    "fim": 5891
+  },
+  {
+    "id": 11,
+    "tag": "p",
+    "texto": "Little Latte",
+    "inicio": 6522,
+    "fim": 6534
+  },
+  {
+    "id": 12,
+    "tag": "h1",
+    "texto": "More than a coffee",
+    "inicio": 7194,
+    "fim": 7212
+  },
+  {
+    "id": 13,
+    "tag": "br",
+    "texto": "— it’s a pause",
+    "inicio": 7227,
+    "fim": 7241
+  },
+  {
+    "id": 14,
+    "tag": "p",
+    "texto": "Inside The SoMA building on Broughton Street, Little Latte Cafe is a warm downtown hideaway for espresso, reading, studying, and low-key catch-ups across from the Central Library.",
+    "inicio": 7343,
+    "fim": 7522
+  },
+  {
+    "id": 15,
+    "tag": "p",
+    "texto": "5.0 Stars",
+    "inicio": 7739,
+    "fim": 7748
+  },
+  {
+    "id": 16,
+    "tag": "p",
+    "texto": "Cozy service, fresh food, quiet atmosphere",
+    "inicio": 7812,
+    "fim": 7854
+  },
+  {
+    "id": 17,
+    "tag": "a",
+    "texto": "Visit downtown",
+    "inicio": 8067,
+    "fim": 8081
+  },
+  {
+    "id": 18,
+    "tag": "h2",
+    "texto": "Small-batch espresso, served with soul",
+    "inicio": 8756,
+    "fim": 8794
+  },
+  {
+    "id": 19,
+    "tag": "a",
+    "texto": "Read more",
+    "inicio": 8953,
+    "fim": 8962
+  },
+  {
+    "id": 20,
+    "tag": "p",
+    "texto": "Brewing stories since",
+    "inicio": 9681,
+    "fim": 9702
+  },
+  {
+    "id": 21,
+    "tag": "br",
+    "texto": "2024 – now",
+    "inicio": 9717,
+    "fim": 9727
+  },
+  {
+    "id": 22,
+    "tag": "p",
+    "texto": "Built with love and a simple idea—to create a warm space where Victoria locals can slow down, sip something handcrafted, and enjoy fresh food made in-house.",
+    "inicio": 9829,
+    "fim": 9985
+  },
+  {
+    "id": 23,
+    "tag": "?",
+    "texto": "Read More",
+    "inicio": 10388,
+    "fim": 10397
+  },
+  {
+    "id": 24,
+    "tag": "span",
+    "texto": "Cocoa Hazelnut Latte",
+    "inicio": 11310,
+    "fim": 11330
+  },
+  {
+    "id": 25,
+    "tag": "span",
+    "texto": "Strawberry Dirty Soda",
+    "inicio": 11511,
+    "fim": 11532
+  },
+  {
+    "id": 26,
+    "tag": "span",
+    "texto": "Bacon, Egg & Cheese Croissant",
+    "inicio": 11713,
+    "fim": 11746
+  },
+  {
+    "id": 27,
+    "tag": "h2",
+    "texto": "Rooted in",
+    "inicio": 12060,
+    "fim": 12069
+  },
+  {
+    "id": 28,
+    "tag": "br",
+    "texto": "flavor, fueled",
+    "inicio": 12082,
+    "fim": 12096
+  },
+  {
+    "id": 29,
+    "tag": "br",
+    "texto": "by community",
+    "inicio": 12109,
+    "fim": 12121
+  },
+  {
+    "id": 30,
+    "tag": "h2",
+    "texto": "Coffee. Pastries. And",
+    "inicio": 12376,
+    "fim": 12397
+  },
+  {
+    "id": 31,
+    "tag": "br",
+    "texto": "everything you crave.",
+    "inicio": 12412,
+    "fim": 12433
+  },
+  {
+    "id": 32,
+    "tag": "p",
+    "texto": "Customer favorites rotate with daily bakes, but the signature sweet lattes, dirty sodas, breakfast croissants, and lemon bars keep regulars coming back.",
+    "inicio": 12558,
+    "fim": 12710
+  },
+  {
+    "id": 33,
+    "tag": "span",
+    "texto": "$6",
+    "inicio": 13171,
+    "fim": 13173
+  },
+  {
+    "id": 34,
+    "tag": "span",
+    "texto": "Cocoa Hazelnut Latte",
+    "inicio": 13199,
+    "fim": 13219
+  },
+  {
+    "id": 35,
+    "tag": "span",
+    "texto": "$7",
+    "inicio": 13597,
+    "fim": 13599
+  },
+  {
+    "id": 36,
+    "tag": "p",
+    "texto": "Strawberry Dirty Soda",
+    "inicio": 13683,
+    "fim": 13704
+  },
+  {
+    "id": 37,
+    "tag": "p",
+    "texto": "Bright, refreshing, playful, and made for the afternoon wind-down.",
+    "inicio": 13781,
+    "fim": 13847
+  },
+  {
+    "id": 38,
+    "tag": "span",
+    "texto": "$5",
+    "inicio": 14251,
+    "fim": 14253
+  },
+  {
+    "id": 39,
+    "tag": "span",
+    "texto": "Hot Chocolate",
+    "inicio": 14279,
+    "fim": 14292
+  },
+  {
+    "id": 40,
+    "tag": "h2",
+    "texto": "Fresh made,",
+    "inicio": 15034,
+    "fim": 15045
+  },
+  {
+    "id": 41,
+    "tag": "br",
+    "texto": "every day.",
+    "inicio": 15060,
+    "fim": 15070
+  },
+  {
+    "id": 42,
+    "tag": "?",
+    "texto": "Read More",
+    "inicio": 15691,
+    "fim": 15700
+  },
+  {
+    "id": 43,
+    "tag": "span",
+    "texto": "$4–6",
+    "inicio": 15924,
+    "fim": 15928
+  },
+  {
+    "id": 44,
+    "tag": "span",
+    "texto": "Smooth espresso & BC-roasted lattes",
+    "inicio": 15973,
+    "fim": 16012
+  },
+  {
+    "id": 45,
+    "tag": "span",
+    "texto": "$6",
+    "inicio": 16196,
+    "fim": 16198
+  },
+  {
+    "id": 46,
+    "tag": "span",
+    "texto": "Cocoa Hazelnut Latte",
+    "inicio": 16243,
+    "fim": 16263
+  },
+  {
+    "id": 47,
+    "tag": "span",
+    "texto": "$7",
+    "inicio": 16447,
+    "fim": 16449
+  },
+  {
+    "id": 48,
+    "tag": "span",
+    "texto": "Strawberry Dirty Soda",
+    "inicio": 16494,
+    "fim": 16515
+  },
+  {
+    "id": 49,
+    "tag": "span",
+    "texto": "$8",
+    "inicio": 16699,
+    "fim": 16701
+  },
+  {
+    "id": 50,
+    "tag": "span",
+    "texto": "Bacon, Egg & Cheese Croissant",
+    "inicio": 16746,
+    "fim": 16779
+  },
+  {
+    "id": 51,
+    "tag": "span",
+    "texto": "$4",
+    "inicio": 16963,
+    "fim": 16965
+  },
+  {
+    "id": 52,
+    "tag": "span",
+    "texto": "Daily Lemon Bars",
+    "inicio": 17010,
+    "fim": 17026
+  },
+  {
+    "id": 53,
+    "tag": "p",
+    "texto": "Original in-house recipes, economical prices, and payment by debit, credit, or mobile wallet. Wheelchair-accessible entrance, seating, and nearby parking are available.",
+    "inicio": 17244,
+    "fim": 17412
+  },
+  {
+    "id": 54,
+    "tag": "a",
+    "texto": "Read more",
+    "inicio": 17579,
+    "fim": 17588
+  },
+  {
+    "id": 55,
+    "tag": "p",
+    "texto": "Hours",
+    "inicio": 18143,
+    "fim": 18148
+  },
+  {
+    "id": 56,
+    "tag": "p",
+    "texto": "Tuesday – Monday",
+    "inicio": 18221,
+    "fim": 18237
+  },
+  {
+    "id": 57,
+    "tag": "br",
+    "texto": "6:00 AM – 6:00 PM",
+    "inicio": 18241,
+    "fim": 18258
+  },
+  {
+    "id": 58,
+    "tag": "p",
+    "texto": "Location",
+    "inicio": 18458,
+    "fim": 18466
+  },
+  {
+    "id": 59,
+    "tag": "p",
+    "texto": "732 Broughton St",
+    "inicio": 18539,
+    "fim": 18555
+  },
+  {
+    "id": 60,
+    "tag": "br",
+    "texto": "Victoria, BC V8W 1E1",
+    "inicio": 18559,
+    "fim": 18579
+  },
+  {
+    "id": 61,
+    "tag": "p",
+    "texto": "Payment",
+    "inicio": 18783,
+    "fim": 18790
+  },
+  {
+    "id": 62,
+    "tag": "p",
+    "texto": "Debit, credit, Apple Pay",
+    "inicio": 18863,
+    "fim": 18887
+  },
+  {
+    "id": 63,
+    "tag": "br",
+    "texto": "and Google Pay accepted",
+    "inicio": 18891,
+    "fim": 18914
+  },
+  {
+    "id": 64,
+    "tag": "p",
+    "texto": "Access",
+    "inicio": 19120,
+    "fim": 19126
+  },
+  {
+    "id": 65,
+    "tag": "p",
+    "texto": "Accessible entrance, seating",
+    "inicio": 19199,
+    "fim": 19227
+  },
+  {
+    "id": 66,
+    "tag": "br",
+    "texto": "and nearby parking",
+    "inicio": 19231,
+    "fim": 19249
+  },
+  {
+    "id": 67,
+    "tag": "p",
+    "texto": "Contact us",
+    "inicio": 19484,
+    "fim": 19494
+  },
+  {
+    "id": 68,
+    "tag": "?",
+    "texto": "Instagram",
+    "inicio": 19790,
+    "fim": 19799
+  },
+  {
+    "id": 69,
+    "tag": "p",
+    "texto": "Little Latte Cafe",
+    "inicio": 20015,
+    "fim": 20032
+  },
+  {
+    "id": 70,
+    "tag": "p",
+    "texto": "732 Broughton St",
+    "inicio": 20158,
+    "fim": 20174
+  },
+  {
+    "id": 71,
+    "tag": "p",
+    "texto": "Menu",
+    "inicio": 20932,
+    "fim": 20936
+  },
+  {
+    "id": 72,
+    "tag": "a",
+    "texto": "About us",
+    "inicio": 21095,
+    "fim": 21103
+  },
+  {
+    "id": 73,
+    "tag": "a",
+    "texto": "Best sellers",
+    "inicio": 21171,
+    "fim": 21183
+  },
+  {
+    "id": 74,
+    "tag": "a",
+    "texto": "Fresh menu",
+    "inicio": 21251,
+    "fim": 21261
+  },
+  {
+    "id": 75,
+    "tag": "a",
+    "texto": "Visit",
+    "inicio": 21332,
+    "fim": 21337
+  },
+  {
+    "id": 76,
+    "tag": "p",
+    "texto": "Visit",
+    "inicio": 21443,
+    "fim": 21448
+  },
+  {
+    "id": 77,
+    "tag": "p",
+    "texto": "Downtown Victoria",
+    "inicio": 21558,
+    "fim": 21575
+  },
+  {
+    "id": 78,
+    "tag": "p",
+    "texto": "The SoMA Building",
+    "inicio": 21595,
+    "fim": 21612
+  },
+  {
+    "id": 79,
+    "tag": "p",
+    "texto": "Across from Library",
+    "inicio": 21632,
+    "fim": 21651
+  },
+  {
+    "id": 80,
+    "tag": "p",
+    "texto": "Paid street parking",
+    "inicio": 21671,
+    "fim": 21690
+  },
+  {
+    "id": 81,
+    "tag": "p",
+    "texto": "Contact",
+    "inicio": 21796,
+    "fim": 21803
+  },
+  {
+    "id": 82,
+    "tag": "p",
+    "texto": "732 Broughton St, Victoria, BC",
+    "inicio": 21913,
+    "fim": 21943
+  },
+  {
+    "id": 83,
+    "tag": "p",
+    "texto": "Phone not publicly listed",
+    "inicio": 21963,
+    "fim": 21988
+  },
+  {
+    "id": 84,
+    "tag": "p",
+    "texto": "Open major regional holidays",
+    "inicio": 22008,
+    "fim": 22036
+  },
+  {
+    "id": 85,
+    "tag": "p",
+    "texto": "Little Latte Cafe",
+    "inicio": 22056,
+    "fim": 22073
+  }
+]

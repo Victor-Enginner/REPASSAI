@@ -15,6 +15,8 @@ import urllib.error
 import urllib.parse
 import sys
 import os
+import threading
+import time
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -215,6 +217,133 @@ class TestProtecaoSSRF(unittest.TestCase):
             self.assertFalse(app_api.host_permitido(url), f"deveria bloquear: {url}")
 
 
+class TestLimitadorDeTaxa(unittest.TestCase):
+    """
+    O limitador roda sob ThreadingHTTPServer: sem trava, duas requisições
+    simultâneas leem a mesma lista e o teto vaza. Teste de unidade, não
+    depende do servidor estar no ar.
+    """
+
+    def test_bloqueia_apos_o_teto(self):
+        from app_api import LimitadorDeTaxa
+        limitador = LimitadorDeTaxa(3, 60)
+        self.assertTrue(all(limitador.permitir("a")[0] for _ in range(3)))
+        permitido, espera = limitador.permitir("a")
+        self.assertFalse(permitido)
+        self.assertGreater(espera, 0)
+
+    def test_identidades_nao_compartilham_cota(self):
+        """Um IP estourando o limite não pode bloquear os demais."""
+        from app_api import LimitadorDeTaxa
+        limitador = LimitadorDeTaxa(2, 60)
+        limitador.permitir("a")
+        limitador.permitir("a")
+        self.assertFalse(limitador.permitir("a")[0])
+        self.assertTrue(limitador.permitir("b")[0])
+
+    def test_janela_expira(self):
+        from app_api import LimitadorDeTaxa
+        limitador = LimitadorDeTaxa(1, 1)
+        self.assertTrue(limitador.permitir("a")[0])
+        self.assertFalse(limitador.permitir("a")[0])
+        time.sleep(1.1)
+        self.assertTrue(limitador.permitir("a")[0], "janela deveria ter expirado")
+
+    def test_concorrencia_respeita_o_teto(self):
+        """20 threads disputando um teto de 5 não podem passar 5."""
+        from app_api import LimitadorDeTaxa
+        limitador = LimitadorDeTaxa(5, 60)
+        aprovados = []
+        trava = threading.Lock()
+
+        def tentar():
+            if limitador.permitir("concorrente")[0]:
+                with trava:
+                    aprovados.append(1)
+
+        fios = [threading.Thread(target=tentar) for _ in range(20)]
+        for f in fios:
+            f.start()
+        for f in fios:
+            f.join()
+        self.assertEqual(len(aprovados), 5, "trava falhou: o teto vazou sob concorrência")
+
+
+class TestRotasProtegidas(unittest.TestCase):
+    """
+    Rotas que gastam dinheiro (Places, LLM) não podem executar sem token.
+
+    Regressão cara: antes, `if usuario:` fazia a requisição SEM token pular a
+    checagem de cota e rodar a varredura assim mesmo — qualquer um na internet
+    queimava a cota do Google Places do dono do sistema.
+    """
+
+    BASE = "http://localhost:8000"
+    ROTAS = (
+        "/api/ai/generate", "/api/leads/scan", "/api/site/generate",
+        "/api/site/clone", "/api/sites",
+    )
+
+    def _postar(self, rota, token=None):
+        req = urllib.request.Request(
+            f"{self.BASE}{rota}",
+            data=b"{}",
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        if token:
+            req.add_header("Authorization", f"Bearer {token}")
+        try:
+            with urllib.request.urlopen(req, timeout=10) as res:
+                return res.status
+        except urllib.error.HTTPError as e:
+            return e.code
+        except (urllib.error.URLError, OSError):
+            self.skipTest("Servidor API offline, pulando teste de integração.")
+
+    def test_sem_token_nao_executa(self):
+        import supabase_client
+        if not supabase_client.auth_configurado():
+            self.skipTest("Multiusuário desligado; rotas são single-user por desenho.")
+        for rota in self.ROTAS:
+            self.assertIn(
+                self._postar(rota), (401, 429),
+                f"{rota} executou sem autenticação",
+            )
+
+    def test_token_invalido_nao_executa(self):
+        import supabase_client
+        if not supabase_client.auth_configurado():
+            self.skipTest("Multiusuário desligado.")
+        self.assertIn(self._postar("/api/leads/scan", token="token_falso_123"), (401, 429))
+
+    def test_sites_nao_vazam_sem_token(self):
+        """
+        Sites são dado privado do operador: listar sem token não pode devolver
+        registro de ninguém. Vale para GET, não só para POST.
+        """
+        import supabase_client
+        if not supabase_client.auth_configurado():
+            self.skipTest("Multiusuário desligado.")
+        for url in (f"{self.BASE}/api/sites", f"{self.BASE}/api/sites/detail?id=qualquer"):
+            try:
+                with urllib.request.urlopen(url, timeout=10) as res:
+                    self.fail(f"{url} respondeu {res.status} sem autenticacao")
+            except urllib.error.HTTPError as e:
+                self.assertIn(e.code, (401, 429), f"{url} deveria exigir login")
+            except (urllib.error.URLError, OSError):
+                self.skipTest("Servidor API offline.")
+
+    def test_rotas_publicas_seguem_abertas(self):
+        """A proteção não pode ter fechado o que precisa ficar aberto."""
+        for rota in ("/api/health", "/api/system/status", "/api/templates"):
+            try:
+                with urllib.request.urlopen(f"{self.BASE}{rota}", timeout=10) as res:
+                    self.assertEqual(res.status, 200, f"{rota} quebrou")
+            except (urllib.error.URLError, OSError):
+                self.skipTest("Servidor API offline.")
+
+
 class TestPreviewHtml(unittest.TestCase):
     """
     O endpoint que serve o HTML do editor não pode virar leitor de arquivos.
@@ -306,6 +435,15 @@ class TestApiHttp(unittest.TestCase):
             with urllib.request.urlopen(req, timeout=30) as response:
                 self.assertEqual(response.status, 200)
                 data = json.loads(response.read().decode('utf-8'))
+        except urllib.error.HTTPError as e:
+            # HTTPError herda de URLError: sem este ramo, um 401 seria relatado
+            # como "servidor offline" e o teste passaria a mentir o motivo.
+            if e.code in (401, 429):
+                self.skipTest(
+                    f"/api/leads/scan exige autenticacao (HTTP {e.code}). "
+                    "Rode com token valido para cobrir este caso."
+                )
+            raise
         except (urllib.error.URLError, OSError):
             self.skipTest("Servidor API offline, pulando teste de integração.")
 

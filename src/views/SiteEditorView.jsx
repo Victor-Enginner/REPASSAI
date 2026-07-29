@@ -3,7 +3,8 @@ import { Sparkles, Send, Copy, ExternalLink, Check, History, Layout, Palette, Ph
 import { executeAgenticLoop } from '../services/agenticPlanner';
 import { gerarLandingPage } from '../services/agenticGenerator';
 import SchemaRenderer from '../components/SchemaRenderer';
-import { DocumentDatabase } from '../mock/documentDB';
+import { DocumentDatabase } from '../services/documentDB';
+import { fetchAutenticado } from '../services/authService';
 import { downloadStandaloneHTML } from '../services/siteDeployer';
 import AgenticChatbotBuilder from '../components/AgenticChatbotBuilder';
 import ReactBitsCanvas from '../components/ui/ReactBitsCanvas';
@@ -32,19 +33,61 @@ export default function SiteEditorView({ lead, onBack }) {
 
   const projectId = `site_${targetLead.id || 'default'}`;
 
+  const [erroPersistencia, setErroPersistencia] = useState('');
+
+  // A leitura virou assíncrona ao sair do localStorage. Um documento que não
+  // existe agora devolve null explicitamente (antes: undefined silencioso,
+  // que abria o editor vazio — a "tela cinza").
   useEffect(() => {
-    const existingDoc = DocumentDatabase.getDocument(projectId);
-    if (existingDoc) {
-      setDocSchema(existingDoc);
-    } else {
+    let ativo = true;
+    (async () => {
+      try {
+        const existingDoc = await DocumentDatabase.getDocument(projectId);
+        if (!ativo) return;
+        if (existingDoc && (existingDoc.htmlContent || existingDoc.outputFileName)) {
+          setDocSchema(existingDoc);
+          return;
+        }
+      } catch (e) {
+        if (!ativo) return;
+        setErroPersistencia(e.message || 'Nao foi possivel abrir este site.');
+        return;
+      }
       initAgenticPipeline();
-    }
+    })();
+    return () => { ativo = false; };
   }, [projectId]);
 
   const initAgenticPipeline = async () => {
     const schema = await executeAgenticLoop(targetLead);
-    const saved = DocumentDatabase.saveDocument(projectId, schema);
-    setDocSchema(saved);
+
+    // Garante que o arquivo HTML5 físico do site seja compilado pelo backend.
+    // Usa fetchAutenticado: /api/site/generate passou a exigir token.
+    try {
+      const res = await fetchAutenticado('/api/site/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead: targetLead })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.schema) {
+          Object.assign(schema, data.schema);
+        }
+      }
+    } catch (err) {
+      console.warn("Compilador /api/site/generate offline no init.", err);
+    }
+
+    try {
+      const saved = await DocumentDatabase.saveDocument(projectId, schema);
+      setDocSchema(saved);
+    } catch (e) {
+      // O site existe na tela mesmo sem ter gravado: mostrar o trabalho e
+      // avisar é melhor que descartar o que a IA acabou de gerar.
+      setDocSchema(schema);
+      setErroPersistencia(e.message || 'Site gerado, mas nao foi salvo.');
+    }
   };
 
   /**
@@ -96,11 +139,11 @@ export default function SiteEditorView({ lead, onBack }) {
   const systemista = docSchema?.systemista;
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#000000', color: '#ffffff' }}>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--fg-black)', color: 'var(--fg-white)' }}>
       
       {/* Editor Top Bar */}
       <header style={{
-        background: '#0a0e1a',
+        background: 'var(--bg-surface)',
         borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)',
         // Também quebra linha: em tela estreita, título e ações não cabem
         // lado a lado.
@@ -117,10 +160,10 @@ export default function SiteEditorView({ lead, onBack }) {
             <ArrowLeft size={14} /> Voltar
           </button>
           <div>
-            <h2 className="font-headline" style={{ fontSize: '15px', color: '#ffffff' }}>
+            <h2 className="font-headline" style={{ fontSize: '15px', color: 'var(--fg-white)' }}>
               CHATBOT AGÊNTICO BUILDER · {targetLead.nome}
             </h2>
-            <span className="mono-label" style={{ fontSize: '9px', color: '#6366f1' }}>⚡ LOVABLE-STYLE AGENTIC LOOP</span>
+            <span className="mono-label" style={{ fontSize: '9px', color: 'var(--accent-indigo)' }}>⚡ LOVABLE-STYLE AGENTIC LOOP</span>
           </div>
         </div>
 
@@ -129,7 +172,7 @@ export default function SiteEditorView({ lead, onBack }) {
           <button
             onClick={() => alert(`📱 ROTEIRO DE ABORDAGEM P/ WHATSAPP:\n\n"Oi, tudo bem? Encontrei o ${targetLead.nome} pesquisando ${targetLead.categoria} em ${targetLead.cidade}.\n\nMontei uma versão moderna e com fotos reais do estabelecimento de vocês para acelerar o atendimento pelo WhatsApp: ${window.location.href}\n\nO que achou do visual?"`)} 
             className="btn-secondary" 
-            style={{ padding: '8px 14px', fontSize: '11px', color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
+            style={{ padding: '8px 14px', fontSize: '11px', color: 'var(--accent-cyan)', borderColor: 'rgba(56, 189, 248, 0.3)' }}
           >
             <MessageSquare size={14} /> Ver Roteiro de Abordagem
           </button>
@@ -137,7 +180,7 @@ export default function SiteEditorView({ lead, onBack }) {
           <button 
             onClick={() => alert(`💰 LINK DE COBRANÇA MENSALIDADE:\n\nFormato de Assinatura R$ 97,00/mês gerado para ${targetLead.nome}.`)} 
             className="btn-secondary" 
-            style={{ padding: '8px 14px', fontSize: '11px', color: '#22c55e', borderColor: 'rgba(34, 197, 94, 0.3)' }}
+            style={{ padding: '8px 14px', fontSize: '11px', color: 'var(--estado-sucesso)', borderColor: 'rgba(34, 197, 94, 0.3)' }}
           >
             <DollarSign size={14} /> Cobrar Mensalidade
           </button>
@@ -178,15 +221,15 @@ export default function SiteEditorView({ lead, onBack }) {
         />
 
         {/* Right Side: Full Live Interactive Iframe Preview (Estilo Emergent / Lovable) */}
-        <div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#050711', padding: '20px', boxSizing: 'border-box' }}>
+        <div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'var(--bg-black)', padding: '20px', boxSizing: 'border-box' }}>
           
           {/* Viewport Header Controls */}
           <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="mono-label" style={{ color: '#22c55e', background: 'rgba(34,197,94,0.1)', padding: '4px 8px', borderRadius: '4px' }}>
+              <span className="mono-label" style={{ color: 'var(--estado-sucesso)', background: 'rgba(34,197,94,0.1)', padding: '4px 8px', borderRadius: '4px' }}>
                 ● PREVIEW AO VIVO // 77LIB ENGINE
               </span>
-              <span style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ fontSize: '11px', color: 'var(--fg-muted)', fontFamily: 'var(--font-mono)' }}>
                 {targetLead.nome} ({targetLead.cidade} - {targetLead.estado})
               </span>
             </div>
@@ -212,12 +255,12 @@ export default function SiteEditorView({ lead, onBack }) {
               color={['#38bdf8', '#22c55e', '#6366f1']}
               borderRadius={12}
               borderWidth={2}
-              style={{ width: '100%', height: '100%', background: '#050711' }}
+              style={{ width: '100%', height: '100%', background: 'var(--bg-black)' }}
             >
               <div style={{
                 width: '100%',
                 height: '100%',
-                background: '#ffffff',
+                background: 'var(--fg-white)',
                 borderRadius: '10px',
                 overflow: 'hidden',
                 position: 'relative'
@@ -231,7 +274,7 @@ export default function SiteEditorView({ lead, onBack }) {
                     width: '100%',
                     height: '100%',
                     border: 'none',
-                    background: '#ffffff'
+                    background: 'var(--fg-white)'
                   }}
                 />
               </div>

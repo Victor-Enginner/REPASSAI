@@ -76,16 +76,16 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
               <span className="mono-label">MODULE // ABORDAGEM_INDIVIDUAL_04</span>
             </div>
 
-            <h1 className="font-headline" style={{ fontSize: 'clamp(22px, 4vw, 32px)', color: '#ffffff', letterSpacing: '-0.04em' }}>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(22px, 4vw, 32px)', color: 'var(--fg-white)', letterSpacing: '-0.04em' }}>
               CENTRAL DE ABORDAGEM 1-A-1
             </h1>
-            <p style={{ fontSize: '14px', color: '#cbd5e1', marginTop: '6px', maxWidth: '620px' }}>
+            <p style={{ fontSize: '14px', color: 'var(--fg-soft)', marginTop: '6px', maxWidth: '620px' }}>
               Aborde os leads captados 1 por 1 com scripts gerados por IA, links diretos e atualização imediata do funil comercial.
             </p>
           </div>
 
-          <div style={{ background: '#0a0e1a', border: '0.5px solid rgba(255, 255, 255, 0.15)', padding: '12px 20px', borderRadius: '8px', textAlign: 'right' }}>
-            <span className="mono-label" style={{ fontSize: '11px', color: '#38bdf8' }}>
+          <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.15)', padding: '12px 20px', borderRadius: '8px', textAlign: 'right' }}>
+            <span className="mono-label" style={{ fontSize: '11px', color: 'var(--accent-cyan)' }}>
               {leads.length} LEADS NO FUNIL DE ABORDAGEM
             </span>
           </div>
@@ -125,10 +125,10 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
 
         {/* Grid dos Cards de Abordagem 1-a-1 */}
         {leadsFiltrados.length === 0 ? (
-          <div className="glass-panel" style={{ padding: '48px', textAlign: 'center', background: '#0a0e1a', borderRadius: '12px', border: '0.5px dashed rgba(255,255,255,0.2)' }}>
+          <div className="glass-panel" style={{ padding: '48px', textAlign: 'center', background: 'var(--bg-surface)', borderRadius: '12px', border: '0.5px dashed rgba(255,255,255,0.2)' }}>
             <MessageSquare size={32} color="#64748b" style={{ margin: '0 auto 12px' }} />
-            <h3 style={{ fontSize: '16px', color: '#ffffff', fontWeight: 700 }}>Nenhum lead encontrado neste filtro</h3>
-            <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>
+            <h3 style={{ fontSize: '16px', color: 'var(--fg-white)', fontWeight: 700 }}>Nenhum lead encontrado neste filtro</h3>
+            <p style={{ fontSize: '13px', color: 'var(--fg-muted)', marginTop: '6px' }}>
               Rode o Scanner OSINT para capturar novos estabelecimentos na cidade desejada.
             </p>
           </div>
@@ -168,13 +168,13 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                   {/* Topo: Nome, Categoria e Badges */}
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
-                      <h2 className="font-headline" style={{ fontSize: '18px', color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                      <h2 className="font-headline" style={{ fontSize: '18px', color: 'var(--fg-white)', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
                         {lead.nome}
                       </h2>
                       {ehQuente && (
                         <span style={{
                           background: 'rgba(239, 68, 68, 0.15)',
-                          color: '#f87171',
+                          color: 'var(--estado-erro)',
                           border: '1px solid rgba(239, 68, 68, 0.4)',
                           padding: '3px 8px',
                           borderRadius: '4px',
@@ -187,7 +187,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                       )}
                     </div>
 
-                    <div style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--fg-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span>{lead.categoria || 'Comércio Local'}</span>
                       <span>•</span>
                       <span>{lead.cidade || 'Franca'}</span>
@@ -196,9 +196,9 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
 
                   {/* Telefone & Status do Site */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '10px 14px', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#ffffff', fontWeight: 600 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--fg-white)', fontWeight: 600 }}>
                       <Phone size={14} color="#38bdf8" />
-                      {lead.telefone || <span style={{ color: '#64748b', fontSize: '11px' }}>SEM TELEFONE</span>}
+                      {lead.telefone || <span style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>SEM TELEFONE</span>}
                     </div>
 
                     <span style={{
@@ -222,7 +222,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-primary"
-                        style={{ padding: '10px', fontSize: '11px', textDecoration: 'none', justifyContent: 'center', background: '#22c55e', color: '#04140a' }}
+                        style={{ padding: '10px', fontSize: '11px', textDecoration: 'none', justifyContent: 'center', background: 'var(--estado-sucesso)', color: 'var(--fg-sobre-verde)' }}
                       >
                         <MessageSquare size={13} /> Abrir WhatsApp
                       </a>
@@ -239,7 +239,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                     <button
                       onClick={() => handleAbrirScriptIA(lead)}
                       className="btn-secondary"
-                      style={{ padding: '10px', fontSize: '11px', justifyContent: 'center', color: '#818cf8', borderColor: 'rgba(129, 140, 248, 0.4)' }}
+                      style={{ padding: '10px', fontSize: '11px', justifyContent: 'center', color: 'var(--accent-indigo-claro)', borderColor: 'rgba(129, 140, 248, 0.4)' }}
                     >
                       <Sparkles size={13} /> Script IA
                     </button>
@@ -247,7 +247,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
 
                   {/* Estágios de Transição no CRM Comercial */}
                   <div style={{ paddingTop: '12px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+                    <div style={{ fontSize: '10px', color: 'var(--fg-subtle)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
                       Mover Estágio no Funil:
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
@@ -321,7 +321,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
             <div className="glass-panel" style={{
               maxWidth: '560px',
               width: '100%',
-              background: '#0a0e1a',
+              background: 'var(--bg-surface)',
               borderRadius: '16px',
               padding: '28px',
               border: '1px solid rgba(129, 140, 248, 0.4)',
@@ -330,7 +330,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Sparkles size={18} color="#818cf8" />
-                  <h3 style={{ fontSize: '16px', color: '#ffffff', fontWeight: 800 }}>
+                  <h3 style={{ fontSize: '16px', color: 'var(--fg-white)', fontWeight: 800 }}>
                     Script IA // {scriptModalLead.nome}
                   </h3>
                 </div>
@@ -344,12 +344,12 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
               </div>
 
               <div style={{
-                background: '#050711',
+                background: 'var(--bg-black)',
                 padding: '16px',
                 borderRadius: '8px',
                 border: '0.5px solid rgba(255,255,255,0.12)',
                 fontSize: '13px',
-                color: '#e2e8f0',
+                color: 'var(--fg-bright)',
                 lineHeight: 1.6,
                 fontFamily: 'var(--font-mono)',
                 marginBottom: '20px',
@@ -375,7 +375,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary"
-                    style={{ padding: '10px 18px', fontSize: '12px', textDecoration: 'none', background: '#22c55e', color: '#04140a' }}
+                    style={{ padding: '10px 18px', fontSize: '12px', textDecoration: 'none', background: 'var(--estado-sucesso)', color: 'var(--fg-sobre-verde)' }}
                   >
                     <MessageSquare size={14} /> Abrir no WhatsApp
                   </a>

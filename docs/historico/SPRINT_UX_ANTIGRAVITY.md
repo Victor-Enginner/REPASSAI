@@ -1,3 +1,8 @@
+> **HISTÓRICO — não é referência.**
+> Plano de UX ja executado.
+> A referência atual está em [../ARQUITETURA.md](../ARQUITETURA.md) e
+> [../ROADMAP.md](../ROADMAP.md). Índice em [../README.md](../README.md).
+
 # REPASS AI — Plano de Execução UX/Navegação
 
 **Para:** agente Antigravity

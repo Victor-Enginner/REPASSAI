@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="de" class="scroll-smooth">
+  <head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vidalli Andrea | Joias Artesanais</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;display=swap"
+rel="stylesheet"
+/>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+gold: {
+DEFAULT: '#C5A059',
+light: '#DCC287',
+dark: '#A68545'
+}
+},
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+serif: ['Playfair Display', 'serif'],
+},
+animation: {
+marquee: 'marquee 25s linear infinite',
+},
+keyframes: {
+marquee: {
+'0%': { transform: 'translateX(0%)' },
+'100%': { transform: 'translateX(-100%)' },
+}
+}
+}
+}
+}
+</script>
+<style>
+body {
+font-family: 'Inter', sans-serif;
+background-color: #ffffff;
+}
+h1, h2, h3, h4, .serif {
+font-family: 'Playfair Display', serif;
+}
+.hide-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.hide-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+.image-hover-zoom {
+transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.group:hover .image-hover-zoom {
+transform: scale(1.03);
+}
+</style><!-- aura-ga4-start -->
+
+
+<!-- aura-ga4-end -->
+</head>
+  <body class="antialiased selection:bg-gold selection:text-white text-black">
+    <!-- Navigation -->
+    <nav
+      class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 transition-all duration-300"
+    >
+      <div
+        class="md:px-8 flex h-24 max-w-screen-2xl mr-auto ml-auto pr-4 pl-4 items-center justify-between"
+      >
+        <!-- Mobile Menu Trigger -->
+        <button
+          class="md:hidden p-2 text-black hover:text-gold transition-colors"
+        >
+          <iconify-icon
+            icon="lucide:menu"
+            width="24"
+            stroke-width="1.5"
+          ></iconify-icon>
+        </button>
+
+        <!-- Links Left -->
+        <div
+          class="hidden md:flex gap-10 text-xs uppercase tracking-widest font-normal text-gray-500"
+        >
+          <a
+            href="#kollektion"
+            class="hover:text-black transition-colors duration-300"
+          >
+            Coleção
+          </a>
+          <a
+            href="#atelier"
+            class="hover:text-black transition-colors duration-300"
+          >
+            Sobre Mim
+          </a>
+        </div>
+
+        <!-- Logo -->
+        <a href="#" class="flex items-center justify-center group">
+          <svg
+            width="60"
+            height="60"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="group-hover:text-gold transition-colors duration-500 w-[60px] h-[60px]"
+            stroke-width="2"
+            style="color: rgb(197, 160, 89);"
+          >
+            <path
+              d="M50 5 L93.3 30 V75 L50 95 L6.7 75 V30 L50 5Z"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              class=""
+            ></path>
+            <text
+              x="50"
+              y="65"
+              font-family="Playfair Display"
+              font-size="40"
+              text-anchor="middle"
+              fill="currentColor"
+              class=""
+            >
+              VA
+            </text>
+            <path
+              d="M40 70 Q 45 50 60 35"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              opacity="0.8"
+            ></path>
+            <path
+              d="M42 65 L45 62 M45 60 L48 57 M48 55 L51 52"
+              stroke="currentColor"
+              stroke-width="1.5"
+            ></path>
+          </svg>
+        </a>
+
+        <!-- Links Right -->
+        <div class="flex items-center gap-8">
+          <button
+            class="relative p-1 text-black hover:text-gold transition-colors group"
+          >
+            <iconify-icon
+              icon="lucide:shopping-bag"
+              width="20"
+              stroke-width="1.5"
+            ></iconify-icon>
+            <span
+              class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            >
+              0
+            </span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header
+      class="relative w-full min-h-screen flex items-center justify-center pt-24 pb-12 px-4"
+    >
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 w-full h-full max-w-screen-2xl gap-x-8 gap-y-8 items-center"
+      >
+        <!-- Text Content -->
+        <div
+          class="order-2 md:order-1 flex flex-col justify-center items-start md:pl-8 lg:pl-16 space-y-8"
+        >
+          <div class="w-16 h-[2px] bg-gold"></div>
+          <h1
+            class="md:text-7xl lg:text-8xl leading-[0.95] serif text-5xl font-normal text-black tracking-tight"
+          >
+            Joalheria Vidalli
+            <br />
+            <span class="text-gold italic">{{NOME}}</span>
+          </h1>
+          <p
+            class="md:text-lg leading-relaxed text-base text-gray-600 max-w-md"
+          >
+            Sua joalheria para compra e venda de joias de luxo.
+            <br />
+            <br />
+            Há mais de 40 anos estamos ao lado de nossos clientes com total confiança.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto">
+            <a
+              href="#kollektion"
+              class="group relative px-8 py-4 bg-black text-white text-xs uppercase tracking-widest font-normal text-center overflow-hidden"
+            >
+              <span
+                class="relative z-10 group-hover:text-black transition-colors duration-300"
+              >
+                Ver coleção
+              </span>
+              <div
+                class="absolute inset-0 h-full w-full bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+              ></div>
+            </a>
+            <a
+              href="#atelier"
+              class="group uppercase hover:bg-black hover:text-white transition-colors duration-300 text-xs font-normal text-black tracking-widest text-center border-black border pt-4 pr-8 pb-4 pl-8"
+            >
+              Sobre Mim
+            </a>
+          </div>
+        </div>
+
+        <!-- Image Content -->
+        <div
+          class="order-1 md:order-2 relative h-[60vh] md:h-[80vh] bg-gray-100 overflow-hidden"
+        >
+          <img
+            src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/97b13484-9088-41a1-be0e-aac832f13705_1600w.jpg"
+            alt="Gold Schmuck Detail"
+            class="object-center hover:grayscale-0 transition-all duration-1000 bg-yellow-300 w-full h-full object-cover grayscale"
+          />
+          <div
+            class="absolute bottom-6 left-6 right-6 flex justify-between items-end text-white mix-blend-difference"
+          >
+            <span class="uppercase text-xs tracking-widest">{{ANO}}</span>
+            <span class="uppercase text-xs tracking-widest">
+              {{CIDADE}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Marquee (Updated with infinite scroll) -->
+    <section
+      class="py-12 border-t border-b border-gray-100 bg-white overflow-hidden flex select-none"
+    >
+      <!-- First Loop -->
+      <div
+        class="animate-marquee flex whitespace-nowrap min-w-full shrink-0 items-center"
+      >
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-black/5 mx-8"
+        >
+          Artesanal
+        </span>
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-gold/20 serif italic mx-8"
+        >
+          {{NOME}}
+        </span>
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-black/5 mx-8"
+        >
+          Atemporal
+        </span>
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-gold/20 serif italic mx-8"
+        >
+          Único
+        </span>
+      </div>
+      <!-- Second Loop for seamless transition -->
+      <div
+        class="animate-marquee flex whitespace-nowrap min-w-full shrink-0 items-center"
+        aria-hidden="true"
+      >
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-black/5 mx-8"
+        >
+          Artesanal
+        </span>
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-gold/20 serif italic mx-8"
+        >
+          {{NOME}}
+        </span>
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-black/5 mx-8"
+        >
+          Atemporal
+        </span>
+        <span
+          class="text-6xl md:text-8xl font-normal tracking-tighter uppercase text-gold/20 serif italic mx-8"
+        >
+          Único
+        </span>
+      </div>
+    </section>
+
+    <!-- Collection -->
+    <section
+      class="md:px-8 max-w-screen-2xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4"
+      id="kollektion"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black/10 pb-8"
+      >
+        <div class="max-w-lg">
+          <span
+            class="text-gold font-normal text-xs tracking-widest uppercase mb-3 block"
+          >
+            Coleção Atual
+          </span>
+          <h2 class="text-4xl tracking-tight text-black serif font-normal">
+            Peças de Assinatura
+          </h2>
+        </div>
+        <a
+          href="#"
+          class="mt-4 md:mt-0 group flex items-center gap-3 text-xs uppercase tracking-widest font-normal hover:text-gold transition-colors"
+        >
+          Todos os Produtos
+          <iconify-icon
+            icon="lucide:arrow-right"
+            width="16"
+            class="group-hover:translate-x-1 transition-transform"
+          ></iconify-icon>
+        </a>
+      </div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16"
+      >
+        <!-- Product 1 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden bg-gray-50 aspect-[4/5] mb-6">
+            <div
+              class="group-hover:bg-black/5 transition-colors z-10 duration-300 bg-black/0 absolute top-0 right-0 bottom-0 left-0"
+            ></div>
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1270766f-db0e-4d5b-85db-1cfedef9ac56_1600w.jpg"
+              alt="Gold Ring"
+              class="image-hover-zoom w-full h-full object-cover"
+            />
+            <span
+              class="text-[10px] uppercase z-20 font-normal text-black tracking-wider bg-white pt-1 pr-3 pb-1 pl-3 absolute top-4 left-4"
+            >
+              Novo
+            </span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <div class="">
+              <h3 class="text-xl text-black serif font-normal">Anel Elegância</h3>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wide mt-1 group-hover:text-gold transition-colors"
+              >
+                Ouro 18k
+              </p>
+            </div>
+            <span class="text-sm font-normal">Sob consulta</span>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden bg-gray-50 aspect-[4/5] mb-6">
+            <div
+              class="group-hover:bg-black/5 transition-colors z-10 duration-300 bg-black/0 absolute top-0 right-0 bottom-0 left-0"
+            ></div>
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fabedb0d-467e-45ed-930f-2a561895a076_1600w.jpg"
+              alt="Pearl Necklace"
+              class="image-hover-zoom w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex justify-between items-baseline">
+            <div class="">
+              <h3 class="text-xl text-black serif font-normal">
+                Colar de Pérola
+              </h3>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wide mt-1 group-hover:text-gold transition-colors"
+              >
+                Pérola Cultivada
+              </p>
+            </div>
+            <span class="text-sm font-normal">Sob consulta</span>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden bg-gray-50 aspect-[4/5] mb-6">
+            <div
+              class="group-hover:bg-black/5 transition-colors z-10 duration-300 bg-black/0 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/de3055f3-7ce2-4f8e-810a-1d061b7f3537_1600w.jpg)] bg-cover bg-center absolute top-0 right-0 bottom-0 left-0"
+            ></div>
+            <img
+              src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&amp;w=1000&amp;auto=format&amp;fit=crop"
+              alt="Earrings"
+              class="w-full h-full object-cover image-hover-zoom"
+            />
+          </div>
+          <div class="flex justify-between items-baseline">
+            <div>
+              <h3 class="text-xl text-black serif font-normal">
+                Brinco Novo
+              </h3>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wide mt-1 group-hover:text-gold transition-colors"
+              >
+                Prata 925
+              </p>
+            </div>
+            <span class="text-sm font-normal">Sob consulta</span>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden bg-gray-50 aspect-[4/5] mb-6">
+            <div
+              class="group-hover:bg-black/5 transition-colors z-10 duration-300 bg-black/0 absolute top-0 right-0 bottom-0 left-0"
+            ></div>
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f7ff11b2-928c-4005-bf7d-47d33d2b58d0_1600w.jpg"
+              alt="Bracelet"
+              class="image-hover-zoom w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex justify-between items-baseline">
+            <div>
+              <h3 class="text-xl text-black serif font-normal">
+                Pulseira Helix
+              </h3>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wide mt-1 group-hover:text-gold transition-colors"
+              >
+                Dourado
+              </p>
+            </div>
+            <span class="text-sm font-normal">Sob consulta</span>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden bg-gray-50 aspect-[4/5] mb-6">
+            <div
+              class="group-hover:bg-black/5 transition-colors z-10 duration-300 bg-black/0 absolute top-0 right-0 bottom-0 left-0"
+            ></div>
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a50b35f0-09bf-4a77-8d53-270981b17e22_1600w.jpg"
+              alt="Signet Ring"
+              class="image-hover-zoom w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex justify-between items-baseline">
+            <div class="">
+              <h3 class="text-xl text-black serif font-normal">Anel Signum</h3>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wide mt-1 group-hover:text-gold transition-colors"
+              >
+                Ouro Maciço
+              </p>
+            </div>
+            <span class="text-sm font-normal">Sob consulta</span>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden bg-gray-50 aspect-[4/5] mb-6">
+            <div
+              class="group-hover:bg-black/5 transition-colors z-10 duration-300 bg-black/0 absolute top-0 right-0 bottom-0 left-0"
+            ></div>
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7998a59f-416e-4cb4-8999-bdf11936bc71_1600w.jpg"
+              alt="Set Collection"
+              class="image-hover-zoom w-full h-full object-cover z-10"
+            />
+            <span
+              class="absolute top-4 left-4 bg-black text-white px-3 py-1 text-[10px] uppercase tracking-wider font-normal z-20"
+            >
+              Conjunto
+            </span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <div>
+              <h3 class="text-xl text-black serif font-normal">Conjunto Noturno</h3>
+              <p
+                class="text-xs text-gray-500 uppercase tracking-wide mt-1 group-hover:text-gold transition-colors"
+              >
+                Coleção Completa
+              </p>
+            </div>
+            <span class="text-sm font-normal">Sob consulta</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Atelier / Black Section -->
+    <section
+      class="overflow-hidden text-white bg-black pt-32 pb-32 relative"
+      id="atelier"
+    >
+      <div class="max-w-screen-xl mx-auto px-4 md:px-8 relative z-10">
+        <div class="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <div class="relative">
+            <div
+              class="absolute -top-4 -left-4 w-24 h-24 border-t border-l border-gold/50 hidden md:block"
+            ></div>
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/da81b8a5-ec37-4de5-86fb-e9896c5bb37b_1600w.jpg"
+              alt="Werkstatt"
+              class="aspect-square hover:opacity-100 transition-opacity duration-700 opacity-80 w-full object-cover grayscale"
+            />
+            <div
+              class="absolute -bottom-4 -right-4 w-24 h-24 border-b border-r border-gold/50 hidden md:block"
+            ></div>
+          </div>
+
+          <div class="space-y-8">
+            <h2
+              class="md:text-5xl lg:text-6xl serif leading-tight text-4xl font-normal tracking-tight"
+            >
+              {{NOME}}
+              <br />
+              <span class="text-gold italic">Artesanato e Alma</span>
+            </h2>
+            <p class="leading-relaxed text-lg font-light text-gray-400">
+              Longe da produção em massa, aqui é criada joia com personalidade. Cada peça passa por minhas mãos – desde o design até o polimento. Eu uso apenas metais nobres reciclados e pedras sem conflitos, porque o verdadeiro luxo significa responsabilidade.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+              <div class="border-l border-gold pl-4">
+                <h4 class="text-gold serif text-xl mb-1 font-normal">100%</h4>
+                <p class="text-sm text-gray-400">Metais Nobres Reciclados</p>
+              </div>
+              <div class="border-l border-gold pl-4">
+                <h4 class="text-gold serif text-xl mb-1 font-normal">
+                  {{CIDADE}}
+                </h4>
+                <p class="text-sm text-gray-400">Produção Local</p>
+              </div>
+            </div>
+
+            <div class="pt-8">
+              <a
+                href="#"
+                class="inline-flex items-center gap-3 text-white border-b border-gold pb-1 hover:text-gold transition-colors text-sm uppercase tracking-widest font-normal"
+              >
+                Saiba mais sobre o processo
+                <iconify-icon
+                  icon="lucide:arrow-right"
+                  width="16"
+                ></iconify-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services / Icons -->
+    <section class="bg-white border-gray-100 border-b pt-20 pb-20">
+      <div class="max-w-screen-xl mx-auto px-4 md:px-8">
+        <div
+          class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100"
+        >
+          <div class="p-8 text-center group">
+            <div
+              class="mb-4 text-gray-400 group-hover:text-gold transition-colors duration-300 flex justify-center"
+            >
+              <iconify-icon
+                icon="lucide:gem"
+                width="32"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3 class="text-lg font-normal text-black mb-2">
+              Garantia Vitalícia
+            </h3>
+            <p class="text-sm text-gray-500 max-w-xs mx-auto">
+              Garantia contra defeitos de material e fabricação.
+            </p>
+          </div>
+          <div class="p-8 text-center group">
+            <div
+              class="mb-4 text-gray-400 group-hover:text-gold transition-colors duration-300 flex justify-center"
+            >
+              <iconify-icon
+                icon="lucide:refresh-cw"
+                width="32"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3 class="text-lg font-normal text-black mb-2">
+              Reconstrução gratuita
+            </h3>
+            <p class="text-sm text-gray-500 max-w-xs mx-auto">
+              Polimos sua joia uma vez por ano.
+            </p>
+          </div>
+          <div class="p-8 text-center group">
+            <div
+              class="mb-4 text-gray-400 group-hover:text-gold transition-colors duration-300 flex justify-center"
+            >
+              <iconify-icon
+                icon="lucide:gift"
+                width="32"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3 class="text-lg font-normal text-black mb-2">
+              Embalagem premium
+            </h3>
+            <p class="text-sm text-gray-500 max-w-xs mx-auto">
+              Presenteado de forma sustentável e elegante.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white pt-20 pb-10">
+      <div class="md:px-8 max-w-screen-2xl mr-auto ml-auto pr-4 pl-4">
+        <div class="flex flex-col md:flex-row justify-between gap-12 mb-20">
+          <!-- Brand -->
+          <div class="md:w-1/3">
+            <div class="flex items-center gap-2 mb-6">
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 100 100"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="text-white"
+                stroke-width="2"
+                style="color: rgb(255, 255, 255);"
+              >
+                <path
+                  d="M50 5 L93.3 30 V75 L50 95 L6.7 75 V30 L50 5Z"
+                  stroke="currentColor"
+                  stroke-width="5"
+                  fill="none"
+                ></path>
+                <text
+                  x="50"
+                  y="70"
+                  font-family="Playfair Display"
+                  font-size="50"
+                  text-anchor="middle"
+                  fill="currentColor"
+                  font-weight="bold"
+                >
+                  VA
+                </text>
+              </svg>
+              <span class="serif text-2xl font-normal tracking-tight">
+                {{NOME}}
+              </span>
+            </div>
+            <p class="leading-relaxed text-sm text-gray-400 max-w-xs mb-8">
+              Criamos joias para personalidades únicas. Design atemporal encontra artesanato brasileiro.
+            </p>
+            <div class="flex gap-6">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white hover:scale-110 transition-all"
+              >
+                <iconify-icon icon="lucide:instagram" width="20"></iconify-icon>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white hover:scale-110 transition-all"
+              >
+                <iconify-icon icon="lucide:facebook" width="20"></iconify-icon>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white hover:scale-110 transition-all"
+              >
+                <iconify-icon icon="lucide:mail" width="20"></iconify-icon>
+              </a>
+            </div>
+          </div>
+
+          <!-- Links Grid -->
+          <div class="md:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div class="">
+              <h5
+                class="text-xs font-semibold uppercase tracking-widest text-gold mb-6"
+              >
+                Loja
+              </h5>
+              <ul class="space-y-4 text-sm text-gray-400">
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Novidades
+                  </a>
+                </li>
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Mais vendidos
+                  </a>
+                </li>
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Presentes
+                  </a>
+                </li>
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Vales-presente
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="">
+              <h5
+                class="text-xs font-semibold uppercase tracking-widest text-gold mb-6"
+              >
+                Atendimento
+              </h5>
+              <ul class="space-y-4 text-sm text-gray-400">
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Contato
+                  </a>
+                </li>
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Envio e devoluções
+                  </a>
+                </li>
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">
+                    Encontrar tamanho de anel
+                  </a>
+                </li>
+                <li class="">
+                  <a href="#" class="hover:text-white transition-colors">Perguntas frequentes</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-span-2 md:col-span-1">
+              <h5
+                class="text-xs font-semibold uppercase tracking-widest text-gold mb-6"
+              >
+                Newsletter
+              </h5>
+              <p class="text-xs text-gray-500 mb-4">
+                Ganhe 10% de desconto na sua primeira compra.
+              </p>
+              <form class="flex border-b border-gray-700 pb-2">
+                <input
+                  type="email"
+                  placeholder="E-Mail Adresse"
+                  class="bg-transparent w-full text-sm text-white placeholder-gray-600 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  class="text-xs uppercase tracking-widest hover:text-gold transition-colors"
+                >
+                  Enviar
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600"
+        >
+          <p class="">{{ANO}} {{NOME}}. {{CIDADE}}</p>
+          <div class="flex gap-6 mt-4 md:mt-0">
+            <a href="#" class="hover:text-gray-400 transition-colors">
+              Sobre nós
+            </a>
+            <a href="#" class="hover:text-gray-400 transition-colors">
+              Privacidade
+            </a>
+            <a href="#" class="hover:text-gray-400 transition-colors">Termos e condições</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

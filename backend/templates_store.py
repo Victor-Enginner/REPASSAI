@@ -32,7 +32,10 @@ os.makedirs(CATALOG_DIR, exist_ok=True)
 URL_REGISTRY = "https://77lib.dev/r"
 
 # Preço padrão de venda, em centavos, para não trabalhar com float.
-PRECO_PADRAO_CENTAVOS = 1990
+# Zero = sem preço definido. A loja esconde o selo quando é 0, em vez de
+# anunciar um valor que ninguém decidiu. O preço de cada template é escolhido
+# depois, um a um, editando `preco_centavos` na ficha.
+PRECO_PADRAO_CENTAVOS = 0
 
 
 def token():

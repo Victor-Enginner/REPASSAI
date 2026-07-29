@@ -54,23 +54,23 @@ export default class ViewErrorBoundary extends React.Component {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
             <AlertTriangle size={20} color="#f87171" />
-            <h2 className="font-headline" style={{ fontSize: '20px', color: '#fca5a5', margin: 0 }}>
+            <h2 className="font-headline" style={{ fontSize: '20px', color: 'var(--estado-erro-suave)', margin: 0 }}>
               ESTA ABA FALHOU
             </h2>
           </div>
 
-          <p style={{ fontSize: '13.5px', color: '#cbd5e1', lineHeight: 1.65, marginBottom: '16px' }}>
-            O módulo <strong style={{ color: '#fff' }}>{this.props.nome || 'desconhecido'}</strong> encontrou
+          <p style={{ fontSize: '13.5px', color: 'var(--fg-soft)', lineHeight: 1.65, marginBottom: '16px' }}>
+            O módulo <strong style={{ color: 'var(--fg-white)' }}>{this.props.nome || 'desconhecido'}</strong> encontrou
             um erro e foi isolado. O restante do sistema continua funcionando —
             use a barra lateral para navegar normalmente.
           </p>
 
           <pre style={{
-            background: '#05070f',
+            background: 'var(--bg-deep)',
             border: '0.5px solid rgba(255,255,255,0.12)',
             padding: '12px',
             fontSize: '11.5px',
-            color: '#f87171',
+            color: 'var(--estado-erro)',
             fontFamily: 'var(--font-mono, monospace)',
             whiteSpace: 'pre-wrap',
             overflowX: 'auto',

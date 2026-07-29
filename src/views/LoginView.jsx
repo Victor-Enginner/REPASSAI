@@ -12,7 +12,7 @@ import { LogIn, UserPlus, RefreshCw, AlertCircle, MailCheck, ShieldCheck, KeyRou
 import { entrar, cadastrar, recuperarSenha } from '../services/authService';
 import FaultyTerminal from '../components/ui/FaultyTerminal';
 
-export default function LoginView({ onAutenticado }) {
+export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) {
   const [modo, setModo] = useState('entrar'); // entrar | cadastrar | recuperar
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -80,16 +80,16 @@ export default function LoginView({ onAutenticado }) {
   const campo = {
     width: '100%',
     padding: '12px 14px',
-    background: '#0a0e1a',
+    background: 'var(--bg-surface)',
     border: '0.5px solid rgba(255,255,255,0.16)',
     borderRadius: '4px',
-    color: '#fff',
+    color: 'var(--fg-white)',
     fontSize: '13px',
     fontFamily: 'inherit',
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 5vw, 40px)', background: '#05070f' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 5vw, 40px)', background: 'var(--bg-deep)' }}>
 
       {/* TRAVA VISUAL DE IDENTIDADE MEMOIZADA: Fundo Matrix de Alta Visibilidade (ZERO PISCADA AO DIGITAR) */}
       {backgroundFaulty}
@@ -97,11 +97,11 @@ export default function LoginView({ onAutenticado }) {
       <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '410px' }}>
 
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <span className="mono-label" style={{ color: '#6366f1' }}>MODULE // AUTH_00</span>
-          <h1 className="font-headline" style={{ fontSize: 'clamp(26px, 6vw, 34px)', color: '#fff', marginTop: '10px', letterSpacing: '-0.03em' }}>
+          <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>MODULE // AUTH_00</span>
+          <h1 className="font-headline" style={{ fontSize: 'clamp(26px, 6vw, 34px)', color: 'var(--fg-white)', marginTop: '10px', letterSpacing: '-0.03em' }}>
             REPASS AI
           </h1>
-          <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '8px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--fg-muted)', marginTop: '8px' }}>
             {modo === 'entrar'
               ? 'Entre para acessar seus leads.'
               : modo === 'cadastrar'
@@ -114,7 +114,7 @@ export default function LoginView({ onAutenticado }) {
           onSubmit={enviar}
           style={{ background: 'rgba(10,14,26,0.92)', border: '0.5px solid rgba(255,255,255,0.14)', borderRadius: '6px', padding: 'clamp(20px, 5vw, 28px)', backdropFilter: 'blur(8px)' }}
         >
-          <div style={{ display: 'flex', gap: '4px', background: '#05070f', padding: '3px', borderRadius: '4px', marginBottom: '22px' }}>
+          <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-deep)', padding: '3px', borderRadius: '4px', marginBottom: '22px' }}>
             {[['entrar', 'ENTRAR'], ['cadastrar', 'CRIAR CONTA'], ['recuperar', 'RECUPERAR']].map(([id, rotulo]) => (
               <button
                 key={id}
@@ -134,7 +134,7 @@ export default function LoginView({ onAutenticado }) {
           </div>
 
           <label style={{ display: 'block', marginBottom: '14px' }}>
-            <span className="mono-label" style={{ fontSize: '10px', color: '#64748b', display: 'block', marginBottom: '7px' }}>E-MAIL</span>
+            <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-subtle)', display: 'block', marginBottom: '7px' }}>E-MAIL</span>
             <input
               type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               autoComplete="email" placeholder="voce@exemplo.com" style={campo}
@@ -144,12 +144,12 @@ export default function LoginView({ onAutenticado }) {
           {modo !== 'recuperar' && (
             <label style={{ display: 'block', marginBottom: '14px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '7px' }}>
-                <span className="mono-label" style={{ fontSize: '10px', color: '#64748b' }}>SENHA</span>
+                <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-subtle)' }}>SENHA</span>
                 {modo === 'entrar' && (
                   <button
                     type="button"
                     onClick={() => { setModo('recuperar'); setErro(null); setAviso(null); }}
-                    style={{ background: 'none', border: 'none', color: '#6366f1', fontSize: '11px', cursor: 'pointer', padding: 0 }}
+                    style={{ background: 'none', border: 'none', color: 'var(--accent-indigo)', fontSize: '11px', cursor: 'pointer', padding: 0 }}
                   >
                     Esqueci minha senha
                   </button>
@@ -158,7 +158,7 @@ export default function LoginView({ onAutenticado }) {
               <input
                 type="password" value={senha} onChange={(e) => setSenha(e.target.value)}
                 autoComplete={modo === 'entrar' ? 'current-password' : 'new-password'}
-                placeholder="••••••••" style={campo}
+                placeholder="••••••••" style={campo} aria-label="Senha"
               />
             </label>
           )}
@@ -166,14 +166,14 @@ export default function LoginView({ onAutenticado }) {
           {erro && (
             <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', background: 'rgba(239,68,68,0.08)', border: '0.5px solid rgba(239,68,68,0.35)', borderRadius: '4px', padding: '11px 13px', marginBottom: '16px' }}>
               <AlertCircle size={15} color="#f87171" style={{ flexShrink: 0, marginTop: '1px' }} />
-              <span style={{ fontSize: '12px', color: '#fca5a5', lineHeight: 1.55 }}>{erro}</span>
+              <span style={{ fontSize: '12px', color: 'var(--estado-erro-suave)', lineHeight: 1.55 }}>{erro}</span>
             </div>
           )}
 
           {aviso && (
             <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', background: 'rgba(34,197,94,0.08)', border: '0.5px solid rgba(34,197,94,0.35)', borderRadius: '4px', padding: '11px 13px', marginBottom: '16px' }}>
               <MailCheck size={15} color="#22c55e" style={{ flexShrink: 0, marginTop: '1px' }} />
-              <span style={{ fontSize: '12px', color: '#86efac', lineHeight: 1.55 }}>{aviso}</span>
+              <span style={{ fontSize: '12px', color: 'var(--estado-sucesso-claro)', lineHeight: 1.55 }}>{aviso}</span>
             </div>
           )}
 
@@ -190,10 +190,31 @@ export default function LoginView({ onAutenticado }) {
 
         <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', marginTop: '18px', padding: '13px', background: 'rgba(10,14,26,0.8)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}>
           <ShieldCheck size={14} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-          <span style={{ fontSize: '11px', color: '#64748b', lineHeight: 1.6 }}>
+          <span style={{ fontSize: '11px', color: 'var(--fg-subtle)', lineHeight: 1.6 }}>
             Cada operador enxerga apenas os próprios leads. O isolamento é feito
             no servidor, por usuário.
           </span>
+        </div>
+
+        <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px' }}>
+          {onVoltarLanding && (
+            <button
+              type="button"
+              onClick={onVoltarLanding}
+              style={{ background: 'none', border: 'none', color: 'var(--fg-muted)', fontSize: '12px', cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              ← Voltar ao site
+            </button>
+          )}
+          {onBypass && (
+            <button
+              type="button"
+              onClick={onBypass}
+              style={{ background: 'none', border: 'none', color: 'var(--accent-indigo)', fontSize: '12px', cursor: 'pointer', fontWeight: 600 }}
+            >
+              Entrar Modo Demo →
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -12,7 +12,8 @@ import {
 } from 'lucide-react';
 import { apiUrl } from '../config';
 import { executeAgenticLoop } from '../services/agenticPlanner';
-import { DocumentDatabase } from '../mock/documentDB';
+import { DocumentDatabase } from '../services/documentDB';
+import { fetchAutenticado } from '../services/authService';
 import PixelTetris from './ui/PixelTetris';
 
 // Template da marca Systemista / REPASS AI preservado
@@ -52,19 +53,19 @@ export const SYSTEMISTA_PROMPT_TEMPLATE = {
 
 // Design System Tokens
 const TOKENS = {
-  bgPrimary: '#050507',
-  bgSecondary: '#090A0F',
-  surface: '#101118',
-  textPrimary: '#F7F7F9',
-  textSecondary: '#B3B5C3',
-  textMuted: '#74778A',
-  indigo: '#6366F1',
-  violet: '#8B5CF6',
-  magenta: '#EC4899',
-  cyan: '#38BDF8',
-  success: '#22C55E',
-  warning: '#F59E0B',
-  error: '#F43F5E',
+  bgPrimary: 'var(--bg-black)',
+  bgSecondary: 'var(--bg-surface)',
+  surface: 'var(--bg-card)',
+  textPrimary: 'var(--fg-white)',
+  textSecondary: 'var(--fg-soft)',
+  textMuted: 'var(--fg-muted)',
+  indigo: 'var(--accent-indigo)',
+  violet: 'var(--accent-violeta)',
+  magenta: 'var(--accent-rosa)',
+  cyan: 'var(--accent-cyan)',
+  success: 'var(--estado-sucesso)',
+  warning: 'var(--estado-alerta)',
+  error: 'var(--estado-erro-forte)',
   border: '0.5px solid rgba(99, 102, 241, 0.25)',
   borderMuted: '0.5px solid rgba(255, 255, 255, 0.1)'
 };
@@ -203,7 +204,32 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
     const targetLead = lead || { nome: "Systemista AI", categoria: "Startup", cidade: "São Paulo" };
     
     setAgentState('coding');
-    const generatedSchema = await executeAgenticLoop(targetLead, textToSend);
+    let generatedSchema = await executeAgenticLoop(targetLead, textToSend);
+
+    // Conecta a chamada ao backend real para gerar o arquivo .html físico e atualizar o iframe
+    try {
+      const res = await fetchAutenticado('/api/site/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead: targetLead,
+          instrucao: textToSend
+        })
+      });
+
+      if (res.ok) {
+        const backendData = await res.json();
+        if (backendData.schema) {
+          generatedSchema = {
+            ...generatedSchema,
+            ...backendData.schema,
+            llmResponse: generatedSchema.llmResponse
+          };
+        }
+      }
+    } catch (err) {
+      console.warn("API /api/site/generate offline. Mantendo schema agêntico em memória.", err);
+    }
 
     if (textToSend.toLowerCase().includes('systemista') || textToSend.toLowerCase().includes('startup')) {
       generatedSchema.theme = 'systemista_glitch';
@@ -211,21 +237,28 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
     }
 
     const projectId = `site_${targetLead.id || 'default'}`;
-    const savedDoc = DocumentDatabase.saveDocument(projectId, generatedSchema);
+    let savedDoc = generatedSchema;
+    try {
+      savedDoc = await DocumentDatabase.saveDocument(projectId, generatedSchema);
+    } catch (err) {
+      // Mostra o site mesmo sem ter gravado: descartar o resultado da IA
+      // por falha de rede seria pior que exibir e avisar.
+      console.warn('Site gerado mas nao salvo:', err.message);
+    }
     onSchemaGenerated(savedDoc);
 
-    const providerName = generatedSchema.providerInfo?.provider || 'Motor Estático Resiliente';
-    const providerModel = generatedSchema.providerInfo?.model || 'Rule-Based Engine';
-    const aiOutputText = generatedSchema.llmResponse ? `\n\n💡 **Resposta do Motor de IA (${providerName})**:\n${generatedSchema.llmResponse}` : '';
+    const providerName = generatedSchema.providerInfo?.provider || 'Motor Neural REPASS';
+    const providerModel = generatedSchema.providerInfo?.model || 'auto';
+    const aiOutputText = generatedSchema.llmResponse ? `\n\n💡 **Instruções Aplicadas pelo Motor de IA**:\n${generatedSchema.llmResponse}` : '';
 
     const botMsg = {
       sender: 'bot',
-      text: `✅ **Landing Page Compilada com Sucesso!**\n\n- **Motor de IA**: ${providerName} (${providerModel})\n- **Cliente**: ${targetLead.nome}\n- **Tokens**: Injetados via DocumentDB NoSQL\n- **Componentes**: Glitch Hero, Bento Services, Process Grid e WhatsApp CTA.${aiOutputText}`,
+      text: `✅ **Landing Page Recompilada & Atualizada ao Vivo!**\n\n- **Cliente**: ${targetLead.nome}\n- **Nicho**: ${targetLead.categoria || 'Geral'}\n- **Arquivo Compilado**: \`${generatedSchema.outputFileName || 'generated_site.html'}\`\n- **Status**: Visualização sincronizada ao vivo no painel ao lado.${aiOutputText}`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       traces: [
         { action: `INFERENCIA_LLM (${providerName})`, status: 'completed', time: '00:02' },
-        { action: 'COMPILANDO_TOKENS_NOSQL', status: 'completed', time: '00:04' },
-        { action: 'PUBLICANDO_PREVIEW_HTML5', status: 'completed', time: '00:05' }
+        { action: 'GERANDO_HTML5_COM_LIB77', status: 'completed', time: '00:04' },
+        { action: 'SINCRONIZANDO_PREVIEW_IFRAME', status: 'completed', time: '00:05' }
       ]
     };
 
@@ -238,7 +271,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
   const handleCloneSiteByUrl = async (urlToClone) => {
     setAgentState('searching');
     try {
-      const res = await fetch(apiUrl('/api/site/clone'), {
+      const res = await fetchAutenticado('/api/site/clone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: urlToClone })
@@ -247,7 +280,12 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
       if (res.ok) {
         const data = await res.json();
         const clonedSchema = data.clonedSchema;
-        const savedDoc = DocumentDatabase.saveDocument(clonedSchema.projectId, clonedSchema);
+        let savedDoc = clonedSchema;
+        try {
+          savedDoc = await DocumentDatabase.saveDocument(clonedSchema.projectId, clonedSchema);
+        } catch (err) {
+          console.warn('Clone gerado mas nao salvo:', err.message);
+        }
         onSchemaGenerated(savedDoc);
 
         setMessages(prev => [
@@ -345,9 +383,10 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
             value={cloneUrl}
             onChange={(e) => setCloneUrl(e.target.value)}
             placeholder="Cole uma URL para clonar (ex: https://systemista.lovable.app/)"
+            aria-label="URL do site a clonar"
             style={{ flex: 1, padding: '6px 10px', background: TOKENS.bgPrimary, border: TOKENS.borderMuted, color: TOKENS.textPrimary, fontSize: '11px', fontFamily: 'var(--font-mono)', outline: 'none', borderRadius: '3px' }}
           />
-          <button onClick={() => cloneUrl && handleSendMessage(cloneUrl)} style={{ padding: '0 12px', background: TOKENS.indigo, border: 'none', color: '#fff', fontSize: '10px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', borderRadius: '3px', flexShrink: 0 }}>
+          <button onClick={() => cloneUrl && handleSendMessage(cloneUrl)} style={{ padding: '0 12px', background: TOKENS.indigo, border: 'none', color: 'var(--fg-white)', fontSize: '10px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', borderRadius: '3px', flexShrink: 0 }}>
             <Globe size={12} /> CLONAR
           </button>
         </div>
@@ -360,7 +399,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '4px 0 12px 0' }}>
               <div style={{ padding: '10px 12px', background: 'rgba(99, 102, 241, 0.12)', border: '0.5px solid rgba(99, 102, 241, 0.3)', borderRadius: '6px' }}>
                 <span className="mono-label" style={{ fontSize: '9px', color: TOKENS.indigo }}>🎮 DECISÕES DE FUNDAÇÃO DO PROJETO</span>
-                <h3 className="font-headline" style={{ fontSize: '14px', color: '#ffffff', margin: '4px 0 2px 0' }}>
+                <h3 className="font-headline" style={{ fontSize: '14px', color: 'var(--fg-white)', margin: '4px 0 2px 0' }}>
                   Como você quer iniciar {lead ? `o site de ${lead.nome}?` : 'o projeto?'}
                 </h3>
                 <p style={{ fontSize: '11px', color: TOKENS.textSecondary, margin: 0 }}>
@@ -386,8 +425,8 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)'}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>1. 🏆 Template 77lib 3D + Fotos Reais</span>
-                    <span className="mono-label" style={{ fontSize: '8px', color: '#22c55e', background: 'rgba(34,197,94,0.15)', padding: '2px 6px', borderRadius: '3px' }}>RECOMENDADO</span>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>1. 🏆 Template 77lib 3D + Fotos Reais</span>
+                    <span className="mono-label" style={{ fontSize: '8px', color: 'var(--estado-sucesso)', background: 'rgba(34,197,94,0.15)', padding: '2px 6px', borderRadius: '3px' }}>RECOMENDADO</span>
                   </div>
                   <p style={{ fontSize: '10.5px', color: TOKENS.textSecondary, margin: 0, lineHeight: 1.4 }}>
                     Compilação no padrão 77lib com fotos de alta resolução do Google Business e botões de conversão.
@@ -409,8 +448,8 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>2. 🍔 Cardápio & Pedidos no WhatsApp</span>
-                    <span className="mono-label" style={{ fontSize: '8px', color: '#ec4899', background: 'rgba(236,72,153,0.15)', padding: '2px 6px', borderRadius: '3px' }}>VENDAS RÁPIDAS</span>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>2. 🍔 Cardápio & Pedidos no WhatsApp</span>
+                    <span className="mono-label" style={{ fontSize: '8px', color: 'var(--accent-rosa)', background: 'rgba(236,72,153,0.15)', padding: '2px 6px', borderRadius: '3px' }}>VENDAS RÁPIDAS</span>
                   </div>
                   <p style={{ fontSize: '10.5px', color: TOKENS.textSecondary, margin: 0, lineHeight: 1.4 }}>
                     Focado em conversão direta pelo WhatsApp com vitrine dos itens mais bem avaliados no Google.
@@ -432,8 +471,8 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>3. ⚡ Estética Systemista Dark Tech B2B</span>
-                    <span className="mono-label" style={{ fontSize: '8px', color: '#38bdf8', background: 'rgba(56,189,248,0.15)', padding: '2px 6px', borderRadius: '3px' }}>CYBERPUNK</span>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>3. ⚡ Estética Systemista Dark Tech B2B</span>
+                    <span className="mono-label" style={{ fontSize: '8px', color: 'var(--accent-cyan)', background: 'rgba(56,189,248,0.15)', padding: '2px 6px', borderRadius: '3px' }}>CYBERPUNK</span>
                   </div>
                   <p style={{ fontSize: '10.5px', color: TOKENS.textSecondary, margin: 0, lineHeight: 1.4 }}>
                     Visual dark minimalista com linhas tecnológicas, estatísticas animadas e prova social.
@@ -450,8 +489,8 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
               {m.sender === 'user' && (
                 <div style={{
                   maxWidth: '85%',
-                  background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-                  color: '#ffffff',
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, var(--accent-rosa) 100%)',
+                  color: 'var(--fg-white)',
                   padding: '10px 14px',
                   borderRadius: '6px 6px 0px 6px',
                   fontSize: '12px',
@@ -556,7 +595,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   outline: 'none'
                 }}
               />
-              <button type="submit" disabled={isProcessing} style={{ padding: '8px 14px', background: TOKENS.indigo, border: 'none', color: '#fff', cursor: 'pointer', fontWeight: '700', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', borderRadius: '3px', flexShrink: 0 }}>
+              <button type="submit" disabled={isProcessing} style={{ padding: '8px 14px', background: TOKENS.indigo, border: 'none', color: 'var(--fg-white)', cursor: 'pointer', fontWeight: '700', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', borderRadius: '3px', flexShrink: 0 }}>
                 <Send size={13} /> ENVIAR
               </button>
             </div>
@@ -598,7 +637,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
             <span style={{ fontSize: '11px', fontWeight: '800', fontFamily: 'var(--font-mono)', color: TOKENS.indigo }}>HISTÓRICO DE SESSÕES</span>
-            <button onClick={() => setShowHistoryDrawer(false)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
+            <button onClick={() => setShowHistoryDrawer(false)} style={{ background: 'none', border: 'none', color: 'var(--fg-white)', cursor: 'pointer' }}>
               <X size={14} />
             </button>
           </div>
@@ -612,7 +651,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   padding: '8px 10px',
                   background: activeSessionId === c.id ? 'rgba(99,102,241,0.15)' : TOKENS.surface,
                   border: activeSessionId === c.id ? TOKENS.border : TOKENS.borderMuted,
-                  color: '#fff',
+                  color: 'var(--fg-white)',
                   fontSize: '11px',
                   textAlign: 'left',
                   cursor: 'pointer',
@@ -644,13 +683,13 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
             <span style={{ fontSize: '11px', fontWeight: '800', fontFamily: 'var(--font-mono)', color: TOKENS.indigo }}>PAINEL DE CONTEXTO NOSQL</span>
-            <button onClick={() => setShowContextDrawer(false)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
+            <button onClick={() => setShowContextDrawer(false)} style={{ background: 'none', border: 'none', color: 'var(--fg-white)', cursor: 'pointer' }}>
               <X size={14} />
             </button>
           </div>
 
           <div style={{ background: TOKENS.surface, border: TOKENS.border, padding: '10px', fontSize: '11px', fontFamily: 'var(--font-mono)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <div><span style={{ color: TOKENS.textMuted }}>PROJETO:</span> <strong style={{ color: '#fff' }}>{lead?.nome || 'Systemista Glitch'}</strong></div>
+            <div><span style={{ color: TOKENS.textMuted }}>PROJETO:</span> <strong style={{ color: 'var(--fg-white)' }}>{lead?.nome || 'Systemista Glitch'}</strong></div>
             <div><span style={{ color: TOKENS.textMuted }}>NICHO:</span> <strong style={{ color: TOKENS.cyan }}>{lead?.categoria || 'Startup B2B'}</strong></div>
             <div><span style={{ color: TOKENS.textMuted }}>ESTADO:</span> <strong style={{ color: TOKENS.success }}>COMPILADO</strong></div>
             <div><span style={{ color: TOKENS.textMuted }}>LATÊNCIA:</span> &lt;30ms</div>

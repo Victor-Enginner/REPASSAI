@@ -1,0 +1,898 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "Cabaña La Martina | Lujo y Naturaleza en Sabanagrande",
+    "inicio": 3165,
+    "fim": 3218
+  },
+  {
+    "id": 1,
+    "tag": "div",
+    "texto": "La Martina",
+    "inicio": 6574,
+    "fim": 6584
+  },
+  {
+    "id": 2,
+    "tag": "a",
+    "texto": "Amenidades",
+    "inicio": 6819,
+    "fim": 6829
+  },
+  {
+    "id": 3,
+    "tag": "a",
+    "texto": "Habitaciones",
+    "inicio": 6945,
+    "fim": 6957
+  },
+  {
+    "id": 4,
+    "tag": "a",
+    "texto": "Tarifas",
+    "inicio": 7075,
+    "fim": 7082
+  },
+  {
+    "id": 5,
+    "tag": "a",
+    "texto": "Convivencia",
+    "inicio": 7198,
+    "fim": 7209
+  },
+  {
+    "id": 6,
+    "tag": "a",
+    "texto": "Reservar",
+    "inicio": 7509,
+    "fim": 7517
+  },
+  {
+    "id": 7,
+    "tag": "p",
+    "texto": "Sabanagrande, Atlántico",
+    "inicio": 8662,
+    "fim": 8685
+  },
+  {
+    "id": 8,
+    "tag": "h1",
+    "texto": "Refugio de",
+    "inicio": 8824,
+    "fim": 8834
+  },
+  {
+    "id": 9,
+    "tag": "br",
+    "texto": "Exclusividad",
+    "inicio": 8860,
+    "fim": 8872
+  },
+  {
+    "id": 10,
+    "tag": "p",
+    "texto": "Alquiler completo y privado. Una experiencia campestre de lujo con\n          diseño orgánico, rodeado de fauna exótica e instalaciones premium para\n          su total descanso.",
+    "inicio": 8985,
+    "fim": 9161
+  },
+  {
+    "id": 11,
+    "tag": "a",
+    "texto": "Inicia tu Reserva",
+    "inicio": 9471,
+    "fim": 9488
+  },
+  {
+    "id": 12,
+    "tag": "a",
+    "texto": "Ver Tour 360",
+    "inicio": 9759,
+    "fim": 9771
+  },
+  {
+    "id": 13,
+    "tag": "h2",
+    "texto": "Catálogo de Amenidades",
+    "inicio": 10819,
+    "fim": 10841
+  },
+  {
+    "id": 14,
+    "tag": "p",
+    "texto": "Diseñado bajo un ecosistema de privacidad absoluta. Nuestras\n            instalaciones combinan recreación al aire libre con confort\n            doméstico contemporáneo.",
+    "inicio": 10930,
+    "fim": 11099
+  },
+  {
+    "id": 15,
+    "tag": "h3",
+    "texto": "Recreación y Exterior",
+    "inicio": 11707,
+    "fim": 11728
+  },
+  {
+    "id": 16,
+    "tag": "?",
+    "texto": "Piscina Privada (12m x 4m)",
+    "inicio": 11986,
+    "fim": 12012
+  },
+  {
+    "id": 17,
+    "tag": "?",
+    "texto": "Jacuzzi integrado",
+    "inicio": 12208,
+    "fim": 12225
+  },
+  {
+    "id": 18,
+    "tag": "?",
+    "texto": "Cancha de Fútbol privada",
+    "inicio": 12425,
+    "fim": 12449
+  },
+  {
+    "id": 19,
+    "tag": "?",
+    "texto": "Kiosco Tradicional cubierto",
+    "inicio": 12651,
+    "fim": 12678
+  },
+  {
+    "id": 20,
+    "tag": "?",
+    "texto": "Amplias Zonas Verdes y Caballeriza",
+    "inicio": 12874,
+    "fim": 12908
+  },
+  {
+    "id": 21,
+    "tag": "h3",
+    "texto": "Confort Interior",
+    "inicio": 13498,
+    "fim": 13514
+  },
+  {
+    "id": 22,
+    "tag": "?",
+    "texto": "Aire Acondicionado integral",
+    "inicio": 13768,
+    "fim": 13795
+  },
+  {
+    "id": 23,
+    "tag": "?",
+    "texto": "Cocina Integral equipada",
+    "inicio": 13995,
+    "fim": 14019
+  },
+  {
+    "id": 24,
+    "tag": "?",
+    "texto": "Televisores distribuidos",
+    "inicio": 14213,
+    "fim": 14237
+  },
+  {
+    "id": 25,
+    "tag": "?",
+    "texto": "Conectividad Wifi de alta velocidad",
+    "inicio": 14440,
+    "fim": 14475
+  },
+  {
+    "id": 26,
+    "tag": "h3",
+    "texto": "Servicios Ecosistémicos",
+    "inicio": 15070,
+    "fim": 15093
+  },
+  {
+    "id": 27,
+    "tag": "?",
+    "texto": "Sistema de Sonido propio (Controlado)",
+    "inicio": 15353,
+    "fim": 15390
+  },
+  {
+    "id": 28,
+    "tag": "?",
+    "texto": "Mascotas Permitidas (Pet-Friendly)",
+    "inicio": 15585,
+    "fim": 15619
+  },
+  {
+    "id": 29,
+    "tag": "?",
+    "texto": "Parqueadero Privado (Máx 9 vehículos)",
+    "inicio": 15814,
+    "fim": 15851
+  },
+  {
+    "id": 30,
+    "tag": "h2",
+    "texto": "Distribución de Habitaciones",
+    "inicio": 20663,
+    "fim": 20691
+  },
+  {
+    "id": 31,
+    "tag": "p",
+    "texto": "La cabaña cuenta con 3 habitaciones independientes, configuradas\n            para garantizar el máximo confort. Cada espacio asegura\n            climatización y servicios privados.",
+    "inicio": 20783,
+    "fim": 20963
+  },
+  {
+    "id": 32,
+    "tag": "h4",
+    "texto": "Habitación 1",
+    "inicio": 21181,
+    "fim": 21193
+  },
+  {
+    "id": 33,
+    "tag": "p",
+    "texto": "2 Literas",
+    "inicio": 21290,
+    "fim": 21299
+  },
+  {
+    "id": 34,
+    "tag": "h4",
+    "texto": "Habitación 2",
+    "inicio": 21928,
+    "fim": 21940
+  },
+  {
+    "id": 35,
+    "tag": "p",
+    "texto": "2 Literas",
+    "inicio": 22037,
+    "fim": 22046
+  },
+  {
+    "id": 36,
+    "tag": "h4",
+    "texto": "Habitación 3",
+    "inicio": 22675,
+    "fim": 22687
+  },
+  {
+    "id": 37,
+    "tag": "p",
+    "texto": "1 Cama Doble",
+    "inicio": 22784,
+    "fim": 22796
+  },
+  {
+    "id": 38,
+    "tag": "h2",
+    "texto": "Nuestra Fauna",
+    "inicio": 24069,
+    "fim": 24082
+  },
+  {
+    "id": 39,
+    "tag": "p",
+    "texto": "Convive con especies exóticas y de granja en un entorno controlado y\n          seguro. Un contacto directo y responsable con la naturaleza.",
+    "inicio": 24182,
+    "fim": 24321
+  },
+  {
+    "id": 40,
+    "tag": "h3",
+    "texto": "Avestruces",
+    "inicio": 25338,
+    "fim": 25348
+  },
+  {
+    "id": 41,
+    "tag": "p",
+    "texto": "Interacción Permitida",
+    "inicio": 25476,
+    "fim": 25497
+  },
+  {
+    "id": 42,
+    "tag": "h3",
+    "texto": "Llamas y Alpacas",
+    "inicio": 26221,
+    "fim": 26237
+  },
+  {
+    "id": 43,
+    "tag": "p",
+    "texto": "Interacción Permitida",
+    "inicio": 26365,
+    "fim": 26386
+  },
+  {
+    "id": 44,
+    "tag": "h3",
+    "texto": "Venados Sika",
+    "inicio": 27106,
+    "fim": 27118
+  },
+  {
+    "id": 45,
+    "tag": "p",
+    "texto": "Avistamiento en manada",
+    "inicio": 27246,
+    "fim": 27268
+  },
+  {
+    "id": 46,
+    "tag": "h3",
+    "texto": "Caballos Percherones",
+    "inicio": 27993,
+    "fim": 28013
+  },
+  {
+    "id": 47,
+    "tag": "p",
+    "texto": "Zona Ecuestre",
+    "inicio": 28141,
+    "fim": 28154
+  },
+  {
+    "id": 48,
+    "tag": "h3",
+    "texto": "Pavos Reales",
+    "inicio": 28874,
+    "fim": 28886
+  },
+  {
+    "id": 49,
+    "tag": "p",
+    "texto": "Aves Exóticas",
+    "inicio": 29014,
+    "fim": 29027
+  },
+  {
+    "id": 50,
+    "tag": "h3",
+    "texto": "Granja Interactiva",
+    "inicio": 29753,
+    "fim": 29771
+  },
+  {
+    "id": 51,
+    "tag": "p",
+    "texto": "Ovejas, Cabras y más",
+    "inicio": 29899,
+    "fim": 29919
+  },
+  {
+    "id": 52,
+    "tag": "h2",
+    "texto": "Tarifas Planas",
+    "inicio": 30855,
+    "fim": 30869
+  },
+  {
+    "id": 53,
+    "tag": "p",
+    "texto": "Sin variaciones de temporada. Precios fijos y cerrados por bloque de\n          servicio, garantizando transparencia total en su reserva.",
+    "inicio": 30983,
+    "fim": 31119
+  },
+  {
+    "id": 54,
+    "tag": "h3",
+    "texto": "Pasadía Diurno",
+    "inicio": 31560,
+    "fim": 31574
+  },
+  {
+    "id": 55,
+    "tag": "p",
+    "texto": "Máx 20 Personas",
+    "inicio": 31686,
+    "fim": 31701
+  },
+  {
+    "id": 56,
+    "tag": "div",
+    "texto": "$1.2M",
+    "inicio": 31822,
+    "fim": 31827
+  },
+  {
+    "id": 57,
+    "tag": "span",
+    "texto": "COP",
+    "inicio": 31940,
+    "fim": 31943
+  },
+  {
+    "id": 58,
+    "tag": "?",
+    "texto": "Tarifa plana asistan 1 o 20 personas.",
+    "inicio": 32251,
+    "fim": 32288
+  },
+  {
+    "id": 59,
+    "tag": "?",
+    "texto": "Acceso a todas las zonas húmedas y recreativas.",
+    "inicio": 32476,
+    "fim": 32523
+  },
+  {
+    "id": 60,
+    "tag": "?",
+    "texto": "Anticipo de reserva: 30% ($360.000 COP).",
+    "inicio": 32711,
+    "fim": 32751
+  },
+  {
+    "id": 61,
+    "tag": "h3",
+    "texto": "Alojamiento Completo",
+    "inicio": 33190,
+    "fim": 33210
+  },
+  {
+    "id": 62,
+    "tag": "p",
+    "texto": "Máx 14 Personas",
+    "inicio": 33335,
+    "fim": 33350
+  },
+  {
+    "id": 63,
+    "tag": "div",
+    "texto": "$3.0M",
+    "inicio": 33470,
+    "fim": 33475
+  },
+  {
+    "id": 64,
+    "tag": "span",
+    "texto": "COP / Noche",
+    "inicio": 33585,
+    "fim": 33596
+  },
+  {
+    "id": 65,
+    "tag": "?",
+    "texto": "Tarifa plana idéntica fines de semana y festivos.",
+    "inicio": 33900,
+    "fim": 33949
+  },
+  {
+    "id": 66,
+    "tag": "?",
+    "texto": "Exclusividad total de habitaciones y predio.",
+    "inicio": 34139,
+    "fim": 34183
+  },
+  {
+    "id": 67,
+    "tag": "?",
+    "texto": "Anticipo de reserva: $1.000.000 COP.",
+    "inicio": 34373,
+    "fim": 34409
+  },
+  {
+    "id": 68,
+    "tag": "h2",
+    "texto": "Reglas de Convivencia",
+    "inicio": 35259,
+    "fim": 35280
+  },
+  {
+    "id": 69,
+    "tag": "p",
+    "texto": "Para mantener la integridad acústica y la armonía del ecosistema,\n        establecemos regulaciones estrictas.",
+    "inicio": 35346,
+    "fim": 35456
+  },
+  {
+    "id": 70,
+    "tag": "strong",
+    "texto": "Sonido Externo Prohibido",
+    "inicio": 35792,
+    "fim": 35816
+  },
+  {
+    "id": 71,
+    "tag": "span",
+    "texto": "Estrictamente prohibido el uso de bafles o amplificadores\n                  externos. Debe usarse el sonido integrado.",
+    "inicio": 35902,
+    "fim": 36020
+  },
+  {
+    "id": 72,
+    "tag": "strong",
+    "texto": "Horario y Seguridad en Piscina",
+    "inicio": 36364,
+    "fim": 36394
+  },
+  {
+    "id": 73,
+    "tag": "span",
+    "texto": "Uso permitido hasta las 10:00 PM. Prohibido ingresar envases o\n                  vasos de vidrio en la zona perimetral.",
+    "inicio": 36480,
+    "fim": 36599
+  },
+  {
+    "id": 74,
+    "tag": "strong",
+    "texto": "Zonas de No Fumar",
+    "inicio": 36946,
+    "fim": 36963
+  },
+  {
+    "id": 75,
+    "tag": "span",
+    "texto": "Prohibido fumar tabaco o cigarrillos electrónicos en el\n                  interior de la casa y todo el Kiosco.",
+    "inicio": 37049,
+    "fim": 37160
+  },
+  {
+    "id": 76,
+    "tag": "h2",
+    "texto": "Interacción con la Fauna",
+    "inicio": 37412,
+    "fim": 37436
+  },
+  {
+    "id": 77,
+    "tag": "p",
+    "texto": "Nuestro predio es hogar de avestruces, llamas, venados, caballos,\n        pavos reales y más. Protegemos su dieta activamente.",
+    "inicio": 37502,
+    "fim": 37628
+  },
+  {
+    "id": 78,
+    "tag": "strong",
+    "texto": "Alimentación Controlada",
+    "inicio": 38007,
+    "fim": 38030
+  },
+  {
+    "id": 79,
+    "tag": "span",
+    "texto": "Prohibido suministrar comida externa a los animales. Las\n                  interacciones se realizan exclusivamente mediante la compra de\n                  kits de comida controlados internamente.",
+    "inicio": 38124,
+    "fim": 38320
+  },
+  {
+    "id": 80,
+    "tag": "div",
+    "texto": "Permitido alimentar con kit únicamente: Llamas, Avestruces y\n          Guacamayas.",
+    "inicio": 38492,
+    "fim": 38574
+  },
+  {
+    "id": 81,
+    "tag": "h2",
+    "texto": "Tour 360°",
+    "inicio": 38946,
+    "fim": 38955
+  },
+  {
+    "id": 82,
+    "tag": "p",
+    "texto": "Explora cada rincón de Cabaña La Martina de manera interactiva. Un\n          recorrido inmersivo por nuestras instalaciones antes de tu visita.",
+    "inicio": 39059,
+    "fim": 39202
+  },
+  {
+    "id": 83,
+    "tag": "?",
+    "texto": "Iniciar Recorrido",
+    "inicio": 40636,
+    "fim": 40653
+  },
+  {
+    "id": 84,
+    "tag": "button",
+    "texto": "Explorar Tour Interactivo",
+    "inicio": 41010,
+    "fim": 41035
+  },
+  {
+    "id": 85,
+    "tag": "h2",
+    "texto": "Solicitud de Reserva",
+    "inicio": 41843,
+    "fim": 41863
+  },
+  {
+    "id": 86,
+    "tag": "p",
+    "texto": "Proceso en 3 pasos",
+    "inicio": 41987,
+    "fim": 42005
+  },
+  {
+    "id": 87,
+    "tag": "h3",
+    "texto": "Paso 1: Seleccione su Plan",
+    "inicio": 42200,
+    "fim": 42226
+  },
+  {
+    "id": 88,
+    "tag": "h4",
+    "texto": "Pasadía Diurno",
+    "inicio": 42642,
+    "fim": 42656
+  },
+  {
+    "id": 89,
+    "tag": "p",
+    "texto": "Tarifa plana para hasta 20 personas.",
+    "inicio": 42744,
+    "fim": 42780
+  },
+  {
+    "id": 90,
+    "tag": "h4",
+    "texto": "Alojamiento",
+    "inicio": 43163,
+    "fim": 43174
+  },
+  {
+    "id": 91,
+    "tag": "p",
+    "texto": "Privacidad total hasta 14 personas.",
+    "inicio": 43262,
+    "fim": 43297
+  },
+  {
+    "id": 92,
+    "tag": "h3",
+    "texto": "Paso 2: Datos del Grupo",
+    "inicio": 43590,
+    "fim": 43613
+  },
+  {
+    "id": 93,
+    "tag": "button",
+    "texto": "← Cambiar Plan",
+    "inicio": 43747,
+    "fim": 43761
+  },
+  {
+    "id": 94,
+    "tag": "p",
+    "texto": "Disponibilidad garantizada en tiempo real al contactar.",
+    "inicio": 43945,
+    "fim": 44000
+  },
+  {
+    "id": 95,
+    "tag": "label",
+    "texto": "Nombre Completo",
+    "inicio": 44191,
+    "fim": 44206
+  },
+  {
+    "id": 96,
+    "tag": "label",
+    "texto": "Fecha Solicitada",
+    "inicio": 44590,
+    "fim": 44606
+  },
+  {
+    "id": 97,
+    "tag": "label",
+    "texto": "Cantidad de Personas",
+    "inicio": 44900,
+    "fim": 44920
+  },
+  {
+    "id": 98,
+    "tag": "span",
+    "texto": "(Máx)",
+    "inicio": 44986,
+    "fim": 44991
+  },
+  {
+    "id": 99,
+    "tag": "button",
+    "texto": "Continuar a Verificación",
+    "inicio": 45416,
+    "fim": 45440
+  },
+  {
+    "id": 100,
+    "tag": "h3",
+    "texto": "Paso 3: Verificación y Resumen",
+    "inicio": 45660,
+    "fim": 45690
+  },
+  {
+    "id": 101,
+    "tag": "p",
+    "texto": "Plan Seleccionado",
+    "inicio": 45988,
+    "fim": 46005
+  },
+  {
+    "id": 102,
+    "tag": "button",
+    "texto": "Modificar",
+    "inicio": 46225,
+    "fim": 46234
+  },
+  {
+    "id": 103,
+    "tag": "p",
+    "texto": "Contacto y Fecha",
+    "inicio": 46490,
+    "fim": 46506
+  },
+  {
+    "id": 104,
+    "tag": "button",
+    "texto": "Modificar",
+    "inicio": 46724,
+    "fim": 46733
+  },
+  {
+    "id": 105,
+    "tag": "p",
+    "texto": "Tarifa Plana Total",
+    "inicio": 46961,
+    "fim": 46979
+  },
+  {
+    "id": 106,
+    "tag": "strong",
+    "texto": "Nota Importante",
+    "inicio": 47379,
+    "fim": 47394
+  },
+  {
+    "id": 107,
+    "tag": "?",
+    "texto": "Se requiere un depósito de garantía de $300.000 COP antes del\n            ingreso, reembolsable tras inventario. El cierre se realiza vía\n            WhatsApp.",
+    "inicio": 47429,
+    "fim": 47588
+  },
+  {
+    "id": 108,
+    "tag": "?",
+    "texto": "Confirmar y Enviar a WhatsApp",
+    "inicio": 47961,
+    "fim": 47990
+  },
+  {
+    "id": 109,
+    "tag": "h2",
+    "texto": "Ubicación Estratégica",
+    "inicio": 48811,
+    "fim": 48832
+  },
+  {
+    "id": 110,
+    "tag": "p",
+    "texto": "Sabanagrande, Atlántico. Un escape orgánico y privado, a minutos del\n            entorno urbano. Rutas de acceso pavimentadas y seguras para todo\n            tipo de vehículos.",
+    "inicio": 48923,
+    "fim": 49099
+  },
+  {
+    "id": 111,
+    "tag": "?",
+    "texto": "Vía Oriental, Sabanagrande, Atlántico",
+    "inicio": 49359,
+    "fim": 49396
+  },
+  {
+    "id": 112,
+    "tag": "?",
+    "texto": "A 30 minutos de Barranquilla",
+    "inicio": 49598,
+    "fim": 49626
+  },
+  {
+    "id": 113,
+    "tag": "?",
+    "texto": "Parqueadero privado interno (9 cupos)",
+    "inicio": 49822,
+    "fim": 49859
+  },
+  {
+    "id": 114,
+    "tag": "a",
+    "texto": "Abrir en Google Maps",
+    "inicio": 50154,
+    "fim": 50174
+  },
+  {
+    "id": 115,
+    "tag": "h3",
+    "texto": "La Martina",
+    "inicio": 51296,
+    "fim": 51306
+  },
+  {
+    "id": 116,
+    "tag": "p",
+    "texto": "Lujo exclusivo y contacto orgánico con la naturaleza en\n            Sabanagrande, Atlántico. Tu refugio privado.",
+    "inicio": 51393,
+    "fim": 51505
+  },
+  {
+    "id": 117,
+    "tag": "h4",
+    "texto": "Contacto",
+    "inicio": 52016,
+    "fim": 52024
+  },
+  {
+    "id": 118,
+    "tag": "a",
+    "texto": "+57 301 578 0509",
+    "inicio": 52225,
+    "fim": 52241
+  },
+  {
+    "id": 119,
+    "tag": "a",
+    "texto": "info.lamartina.co@gmail.com",
+    "inicio": 52425,
+    "fim": 52452
+  },
+  {
+    "id": 120,
+    "tag": "li",
+    "texto": "Sabanagrande, Atlántico",
+    "inicio": 52568,
+    "fim": 52591
+  },
+  {
+    "id": 121,
+    "tag": "br",
+    "texto": "Colombia",
+    "inicio": 52625,
+    "fim": 52633
+  },
+  {
+    "id": 122,
+    "tag": "h4",
+    "texto": "Legal",
+    "inicio": 52808,
+    "fim": 52813
+  },
+  {
+    "id": 123,
+    "tag": "li",
+    "texto": "Políticas de Cancelación",
+    "inicio": 52910,
+    "fim": 52934
+  },
+  {
+    "id": 124,
+    "tag": "li",
+    "texto": "Reglamento de Penalizaciones",
+    "inicio": 52956,
+    "fim": 52984
+  },
+  {
+    "id": 125,
+    "tag": "li",
+    "texto": "Términos de Privacidad",
+    "inicio": 53006,
+    "fim": 53028
+  },
+  {
+    "id": 126,
+    "tag": "?",
+    "texto": "Cabaña La Martina. Todos los derechos reservados.",
+    "inicio": 53341,
+    "fim": 53390
+  },
+  {
+    "id": 127,
+    "tag": "p",
+    "texto": "Diseñado bajo ecosistema natural",
+    "inicio": 53436,
+    "fim": 53468
+  }
+]

@@ -22,10 +22,10 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
   const [copied, setCopied] = useState(false);
 
   const columns = [
-    { id: 'Leads em Aberto', title: 'Leads em Aberto', color: '#38bdf8' },
-    { id: 'Em Negociação', title: 'Em Negociação', color: '#6366f1' },
-    { id: 'Agendados', title: 'Agendados', color: '#f59e0b' },
-    { id: 'Convertidos', title: 'Convertidos / Fechado', color: '#22c55e' }
+    { id: 'Leads em Aberto', title: 'Leads em Aberto', color: 'var(--accent-cyan)' },
+    { id: 'Em Negociação', title: 'Em Negociação', color: 'var(--accent-indigo)' },
+    { id: 'Agendados', title: 'Agendados', color: 'var(--estado-alerta)' },
+    { id: 'Convertidos', title: 'Convertidos / Fechado', color: 'var(--estado-sucesso)' }
   ];
 
   const handleMoveStage = (leadId, newStage) => {
@@ -56,16 +56,16 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
           <span className="mono-label">PIPELINE // SALES_CRM_03</span>
-          <h1 className="font-headline" style={{ fontSize: '32px', color: '#ffffff', marginTop: '4px' }}>
+          <h1 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '4px' }}>
             CRM DE FECHAMENTO
           </h1>
-          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '4px' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--fg-muted)', marginTop: '4px' }}>
             Acompanhe suas prospecções e feche novos clientes com roteiros de abordagem em 1 clique
           </p>
         </div>
 
         <div style={{ display: 'flex', gap: '12px' }}>
-          <span className="mono-label" style={{ border: '0.5px solid rgba(255,255,255,0.2)', padding: '8px 16px', color: '#ffffff' }}>
+          <span className="mono-label" style={{ border: '0.5px solid rgba(255,255,255,0.2)', padding: '8px 16px', color: 'var(--fg-white)' }}>
             TOTAL LEADS // {leads.length}
           </span>
         </div>
@@ -86,7 +86,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                 height: 'calc(100vh - 200px)',
                 display: 'flex',
                 flexDirection: 'column',
-                background: '#0a0e1a',
+                background: 'var(--bg-surface)',
                 border: '0.5px solid rgba(255, 255, 255, 0.12)',
                 position: 'relative',
                 overflow: 'hidden'
@@ -96,11 +96,11 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)', flexShrink: 0, zIndex: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: col.color }} />
-                  <h2 className="font-mono" style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>
+                  <h2 className="font-mono" style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>
                     {col.title}
                   </h2>
                 </div>
-                <span className="mono-label" style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 8px', color: '#ffffff', borderRadius: '4px' }}>
+                <span className="mono-label" style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 8px', color: 'var(--fg-white)', borderRadius: '4px' }}>
                   {colLeads.length}
                 </span>
               </div>
@@ -118,7 +118,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                 zIndex: 1
               }}>
                 {colLeads.length === 0 ? (
-                  <div style={{ padding: '30px 10px', textAlign: 'center', color: '#64748b', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                  <div style={{ padding: '30px 10px', textAlign: 'center', color: 'var(--fg-subtle)', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
                     NENHUM LEAD NESTA ETAPA
                   </div>
                 ) : (
@@ -134,7 +134,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                         key={lead.id}
                         className="cursor-target"
                         style={{
-                          background: '#111726',
+                          background: 'var(--bg-card)',
                           border: '0.5px solid rgba(255, 255, 255, 0.12)',
                           borderRadius: '8px',
                           padding: '16px',
@@ -148,10 +148,10 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                         {/* Top Row: Title & Temperature */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
                           <div>
-                            <h3 className="font-headline" style={{ fontSize: '15px', color: '#ffffff', lineHeight: 1.2 }}>
+                            <h3 className="font-headline" style={{ fontSize: '15px', color: 'var(--fg-white)', lineHeight: 1.2 }}>
                               {lead.nome}
                             </h3>
-                            <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
+                            <div style={{ fontSize: '11px', color: 'var(--fg-muted)', marginTop: '4px' }}>
                               {lead.categoria} · {lead.cidade}
                             </div>
                           </div>
@@ -162,7 +162,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                         </div>
 
                         {/* Phone & Status */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94a3b8' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'var(--fg-muted)' }}>
                           <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <Phone size={12} /> {lead.telefone}
                           </span>
@@ -207,7 +207,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                           {col.id !== 'Em Negociação' && (
                             <button 
                               onClick={() => handleMoveStage(lead.id, 'Em Negociação')}
-                              style={{ flex: 1, padding: '4px', background: 'rgba(99, 102, 241, 0.15)', border: '0.5px solid rgba(99, 102, 241, 0.3)', color: '#a5b4fc', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                              style={{ flex: 1, padding: '4px', background: 'rgba(99, 102, 241, 0.15)', border: '0.5px solid rgba(99, 102, 241, 0.3)', color: 'var(--accent-indigo-suave)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
                             >
                               → Negociação
                             </button>
@@ -215,7 +215,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                           {col.id !== 'Agendados' && (
                             <button 
                               onClick={() => handleMoveStage(lead.id, 'Agendados')}
-                              style={{ flex: 1, padding: '4px', background: 'rgba(245, 158, 11, 0.15)', border: '0.5px solid rgba(245, 158, 11, 0.3)', color: '#fde047', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                              style={{ flex: 1, padding: '4px', background: 'rgba(245, 158, 11, 0.15)', border: '0.5px solid rgba(245, 158, 11, 0.3)', color: 'var(--estado-alerta-suave)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
                             >
                               → Agendar
                             </button>
@@ -223,7 +223,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                           {col.id !== 'Convertidos' && (
                             <button 
                               onClick={() => handleMoveStage(lead.id, 'Convertidos')}
-                              style={{ flex: 1, padding: '4px', background: 'rgba(34, 197, 94, 0.15)', border: '0.5px solid rgba(34, 197, 94, 0.3)', color: '#4ade80', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                              style={{ flex: 1, padding: '4px', background: 'rgba(34, 197, 94, 0.15)', border: '0.5px solid rgba(34, 197, 94, 0.3)', color: 'var(--estado-sucesso-suave)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
                             >
                               ✓ Fechar
                             </button>
@@ -265,7 +265,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
           padding: '20px'
         }}>
           <div style={{
-            background: '#0a0e1a',
+            background: 'var(--bg-surface)',
             border: '0.5px solid rgba(255,255,255,0.2)',
             maxWidth: '540px',
             width: '100%',
@@ -273,14 +273,14 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <span className="mono-label">SCRIPT_GENERATOR // {selectedLeadForScript.nome}</span>
-              <button onClick={() => setSelectedLeadForScript(null)} style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '18px' }}>✕</button>
+              <button onClick={() => setSelectedLeadForScript(null)} style={{ background: 'none', border: 'none', color: 'var(--fg-white)', cursor: 'pointer', fontSize: '18px' }}>✕</button>
             </div>
 
-            <h3 className="font-headline" style={{ fontSize: '20px', color: '#ffffff', marginBottom: '12px' }}>
+            <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)', marginBottom: '12px' }}>
               Roteiro de Abordagem IA
             </h3>
 
-            <div style={{ background: '#111726', padding: '16px', border: '0.5px solid rgba(255,255,255,0.12)', fontSize: '13px', color: '#cbd5e1', lineHeight: 1.6, fontFamily: 'monospace', marginBottom: '20px', whiteSpace: 'pre-line' }}>
+            <div style={{ background: 'var(--bg-card)', padding: '16px', border: '0.5px solid rgba(255,255,255,0.12)', fontSize: '13px', color: 'var(--fg-soft)', lineHeight: 1.6, fontFamily: 'monospace', marginBottom: '20px', whiteSpace: 'pre-line' }}>
               {generatePersonalizedScript(selectedLeadForScript)}
             </div>
 

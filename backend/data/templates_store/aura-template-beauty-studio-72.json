@@ -1,0 +1,107 @@
+{
+  "slug": "aura-template-beauty-studio-72",
+  "titulo": "Ina Beauty Studio Plovdiv",
+  "descricao": "A reusable landing page template for beauty studios, salons, and solo estheticians to showcase services, pricing, gallery highlights, and booking details. Fonte: https://www.aura.build/templates/beauty-studio-72",
+  "arquivo": "77lib/aura-template-beauty-studio-72.html",
+  "tamanho_html": 85326,
+  "paleta": [
+    {
+      "cor": "#a8832a",
+      "usos": 66
+    },
+    {
+      "cor": "#2c2416",
+      "usos": 36
+    },
+    {
+      "cor": "#f5f0e8",
+      "usos": 32
+    },
+    {
+      "cor": "#c9a84c",
+      "usos": 27
+    },
+    {
+      "cor": "#7a6a4f",
+      "usos": 17
+    },
+    {
+      "cor": "#6f624a",
+      "usos": 10
+    },
+    {
+      "cor": "#e6ddcf",
+      "usos": 9
+    },
+    {
+      "cor": "rgba(44,36,22,0.10)",
+      "usos": 9
+    },
+    {
+      "cor": "#e4d8c8",
+      "usos": 8
+    },
+    {
+      "cor": "#f8f4ec",
+      "usos": 7
+    },
+    {
+      "cor": "#c4527a",
+      "usos": 7
+    },
+    {
+      "cor": "#ede8dc",
+      "usos": 7
+    },
+    {
+      "cor": "#8a7a5f",
+      "usos": 7
+    },
+    {
+      "cor": "#8b6b23",
+      "usos": 6
+    },
+    {
+      "cor": "#f7f1e8",
+      "usos": 6
+    },
+    {
+      "cor": "rgba(44,36,22,0.05)",
+      "usos": 6
+    }
+  ],
+  "fontes": [
+    "Cormorant Garamond",
+    "DM Sans",
+    "Dancing Script"
+  ],
+  "secoes": [
+    "Красота с грижа",
+    "Миглопластика",
+    "Ина и нейното студио",
+    "Галерия",
+    "Контакти"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations",
+    "IntersectionObserver",
+    "Backdrop Filter"
+  ],
+  "imagens": 11,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-beauty-studio-72?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Ina Beauty Studio Plovdiv\n\nOrigem: registry privado 77lib\nSlug: `aura-template-beauty-studio-72`\n\n## Objetivo\nA reusable landing page template for beauty studios, salons, and solo estheticians to showcase services, pricing, gallery highlights, and booking details. Fonte: https://www.aura.build/templates/beauty-studio-72\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #a8832a  (66x)\n- #2c2416  (36x)\n- #f5f0e8  (32x)\n- #c9a84c  (27x)\n- #7a6a4f  (17x)\n- #6f624a  (10x)\n- #e6ddcf  (9x)\n- rgba(44,36,22,0.10)  (9x)\n- #e4d8c8  (8x)\n- #f8f4ec  (7x)\n- #c4527a  (7x)\n- #ede8dc  (7x)\n- #8a7a5f  (7x)\n- #8b6b23  (6x)\n- #f7f1e8  (6x)\n- rgba(44,36,22,0.05)  (6x)\n\n## Tipografia detectada\n- Cormorant Garamond\n- DM Sans\n- Dancing Script\n\n## Estrutura de seções\n- Красота с грижа\n- Миглопластика\n- Ина и нейното студио\n- Галерия\n- Контакти\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Ina Beauty Studio Plovdiv\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Ina Beauty Studio Plovdiv\n\nOrigem: registry privado 77lib\nSlug: `aura-template-beauty-studio-72`\n\n## Objetivo\nA reusable landing page template for beauty studios, salons, and solo estheticians to showcase services, pricing, gallery highlights, and booking details. Fonte: https://www.aura.build/templates/beauty-studio-72\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #a8832a  (66x)\n- #2c2416  (36x)\n- #f5f0e8  (32x)\n- #c9a84c  (27x)\n- #7a6a4f  (17x)\n- #6f624a  (10x)\n- #e6ddcf  (9x)\n- rgba(44,36,22,0.10)  (9x)\n- #e4d8c8  (8x)\n- #f8f4ec  (7x)\n- #c4527a  (7x)\n- #ede8dc  (7x)\n- #8a7a5f  (7x)\n- #8b6b23  (6x)\n- #f7f1e8  (6x)\n- rgba(44,36,22,0.05)  (6x)\n\n## Tipografia detectada\n- Cormorant Garamond\n- DM Sans\n- Dancing Script\n\n## Estrutura de seções\n- Красота с грижа\n- Миглопластика\n- Ина и нейното студио\n- Галерия\n- Контакти\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:51"
+}

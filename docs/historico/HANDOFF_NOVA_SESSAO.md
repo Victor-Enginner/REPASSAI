@@ -1,3 +1,8 @@
+> **HISTÓRICO — não é referência.**
+> Passagem de contexto entre sessoes.
+> A referência atual está em [../ARQUITETURA.md](../ARQUITETURA.md) e
+> [../ROADMAP.md](../ROADMAP.md). Índice em [../README.md](../README.md).
+
 # REPASS AI — Handoff para nova sessão
 
 Documento autossuficiente. Um agente sem histórico consegue continuar só

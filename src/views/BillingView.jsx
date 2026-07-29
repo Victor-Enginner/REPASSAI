@@ -7,7 +7,7 @@ export default function BillingView() {
       name: 'PRO STARTER',
       price: 'R$ 147',
       period: '/mês',
-      color: '#6366f1',
+      color: 'var(--accent-indigo)',
       features: [
         'Até 200 Leads OSINT / mês',
         'Motor de IA Declarativo NoSQL',
@@ -20,7 +20,7 @@ export default function BillingView() {
       name: 'AGENCY SCALER',
       price: 'R$ 297',
       period: '/mês',
-      color: '#38bdf8',
+      color: 'var(--accent-cyan)',
       popular: true,
       features: [
         'Leads OSINT Ilimitados',
@@ -34,7 +34,7 @@ export default function BillingView() {
       name: 'ENTERPRISE AI',
       price: 'R$ 597',
       period: '/mês',
-      color: '#22c55e',
+      color: 'var(--estado-sucesso)',
       features: [
         'Tudo do plano Agency Scaler',
         'Conexão WhatsApp Cloud API Oficial',
@@ -52,16 +52,16 @@ export default function BillingView() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
         <div>
           <span className="mono-label">MODULE // BILLING_PRICING_08</span>
-          <h1 className="font-headline" style={{ fontSize: '32px', color: '#ffffff', marginTop: '4px' }}>
+          <h1 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '4px' }}>
             PLANOS DE ASSINATURA & FATURAMENTO
           </h1>
-          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '4px' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--fg-muted)', marginTop: '4px' }}>
             Escolha o plano ideal para escalar a sua operação de vendas de sites B2B
           </p>
         </div>
 
-        <div style={{ background: '#0a0e1a', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
-          <span className="mono-label" style={{ color: '#22c55e' }}>ASSINATURA ATIVA // AGENCY PRO</span>
+        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
+          <span className="mono-label" style={{ color: 'var(--estado-sucesso)' }}>ASSINATURA ATIVA // AGENCY PRO</span>
         </div>
       </div>
 
@@ -76,13 +76,13 @@ export default function BillingView() {
               display: 'flex',
               flexDirection: 'column',
               justify: 'space-between',
-              background: '#0a0e1a',
+              background: 'var(--bg-surface)',
               border: p.popular ? `1px solid ${p.color}` : '0.5px solid rgba(255, 255, 255, 0.12)',
               position: 'relative'
             }}
           >
             {p.popular && (
-              <span className="mono-label" style={{ position: 'absolute', top: '-12px', right: '20px', background: p.color, color: '#fff', padding: '2px 10px' }}>
+              <span className="mono-label" style={{ position: 'absolute', top: '-12px', right: '20px', background: p.color, color: 'var(--fg-white)', padding: '2px 10px' }}>
                 MAIS POPULAR
               </span>
             )}
@@ -91,13 +91,13 @@ export default function BillingView() {
               <span className="mono-label" style={{ color: p.color }}>{p.name}</span>
               
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', margin: '16px 0 24px 0' }}>
-                <span className="font-headline" style={{ fontSize: '42px', color: '#ffffff' }}>{p.price}</span>
-                <span style={{ fontSize: '13px', color: '#94a3b8' }}>{p.period}</span>
+                <span className="font-headline" style={{ fontSize: '42px', color: 'var(--fg-white)' }}>{p.price}</span>
+                <span style={{ fontSize: '13px', color: 'var(--fg-muted)' }}>{p.period}</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
                 {p.features.map(f => (
-                  <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#cbd5e1' }}>
+                  <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--fg-soft)' }}>
                     <Check size={14} color={p.color} /> {f}
                   </div>
                 ))}

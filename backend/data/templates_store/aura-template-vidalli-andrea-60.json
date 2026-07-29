@@ -1,0 +1,62 @@
+{
+  "slug": "aura-template-vidalli-andrea-60",
+  "titulo": "Luxury Jewelry E-commerce Template",
+  "descricao": "A refined, artisanal jewelry e-commerce template featuring a minimalist aesthetic and high-end product showcases for sustainable luxury brands. Fonte: https://www.aura.build/templates/vidalli-andrea-60",
+  "arquivo": "77lib/aura-template-vidalli-andrea-60.html",
+  "tamanho_html": 31915,
+  "paleta": [
+    {
+      "cor": "#c5a059",
+      "usos": 1
+    },
+    {
+      "cor": "#dcc287",
+      "usos": 1
+    },
+    {
+      "cor": "#a68545",
+      "usos": 1
+    },
+    {
+      "cor": "#ffffff",
+      "usos": 1
+    },
+    {
+      "cor": "rgb(197, 160, 89)",
+      "usos": 1
+    },
+    {
+      "cor": "rgb(255, 255, 255)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Playfair Display"
+  ],
+  "secoes": [
+    "Westend Juwelier Haider",
+    "Signature Pieces",
+    "Vidalli Andrea Handwerk &amp; Seele"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations"
+  ],
+  "imagens": 8,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-vidalli-andrea-60?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Luxury Jewelry E-commerce Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-vidalli-andrea-60`\n\n## Objetivo\nA refined, artisanal jewelry e-commerce template featuring a minimalist aesthetic and high-end product showcases for sustainable luxury brands. Fonte: https://www.aura.build/templates/vidalli-andrea-60\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #c5a059  (1x)\n- #dcc287  (1x)\n- #a68545  (1x)\n- #ffffff  (1x)\n- rgb(197, 160, 89)  (1x)\n- rgb(255, 255, 255)  (1x)\n\n## Tipografia detectada\n- Inter\n- Playfair Display\n\n## Estrutura de seções\n- Westend Juwelier Haider\n- Signature Pieces\n- Vidalli Andrea Handwerk &amp; Seele\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Luxury Jewelry E-commerce Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Luxury Jewelry E-commerce Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-vidalli-andrea-60`\n\n## Objetivo\nA refined, artisanal jewelry e-commerce template featuring a minimalist aesthetic and high-end product showcases for sustainable luxury brands. Fonte: https://www.aura.build/templates/vidalli-andrea-60\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #c5a059  (1x)\n- #dcc287  (1x)\n- #a68545  (1x)\n- #ffffff  (1x)\n- rgb(197, 160, 89)  (1x)\n- rgb(255, 255, 255)  (1x)\n\n## Tipografia detectada\n- Inter\n- Playfair Display\n\n## Estrutura de seções\n- Westend Juwelier Haider\n- Signature Pieces\n- Vidalli Andrea Handwerk &amp; Seele\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:54"
+}

@@ -1,0 +1,1479 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "micsas.ff — La pizza de barri, ara amb motor",
+      "destino": "adaptar",
+      "texto": "micsas.ff — A pizza da vizinha, agora com entrega"
+    },
+    {
+      "id": 1,
+      "tag": "span",
+      "original": "micsas.ff",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "Nosaltres",
+      "destino": "traduzir",
+      "texto": "Sobre nós"
+    },
+    {
+      "id": 3,
+      "tag": "a",
+      "original": "Carta",
+      "destino": "traduzir",
+      "texto": "Cardápio"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Serveis",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Testimonis",
+      "destino": "traduzir",
+      "texto": "Depoimentos"
+    },
+    {
+      "id": 6,
+      "tag": "a",
+      "original": "Contacte",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 7,
+      "tag": "a",
+      "original": "Escriu-nos",
+      "destino": "traduzir",
+      "texto": "Fale conosco"
+    },
+    {
+      "id": 8,
+      "tag": "a",
+      "original": "Nosaltres",
+      "destino": "traduzir",
+      "texto": "Sobre nós"
+    },
+    {
+      "id": 9,
+      "tag": "a",
+      "original": "Carta",
+      "destino": "traduzir",
+      "texto": "Cardápio"
+    },
+    {
+      "id": 10,
+      "tag": "a",
+      "original": "Serveis",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 11,
+      "tag": "a",
+      "original": "Testimonis",
+      "destino": "traduzir",
+      "texto": "Depoimentos"
+    },
+    {
+      "id": 12,
+      "tag": "a",
+      "original": "Contacte",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 13,
+      "tag": "a",
+      "original": "Escriu-nos",
+      "destino": "traduzir",
+      "texto": "Fale conosco"
+    },
+    {
+      "id": 14,
+      "tag": "h1",
+      "original": "micsas.ff",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 15,
+      "tag": "p",
+      "original": "MICSAS FRIENDS & FAMILY",
+      "destino": "adaptar",
+      "texto": "MICSAS AMIGOS & FAMÍLIA"
+    },
+    {
+      "id": 16,
+      "tag": "a",
+      "original": "Demana aqui!",
+      "destino": "traduzir",
+      "texto": "Peça aqui!"
+    },
+    {
+      "id": 17,
+      "tag": "a",
+      "original": "Segueix-nos",
+      "destino": "traduzir",
+      "texto": "Siga-nos"
+    },
+    {
+      "id": 18,
+      "tag": "span",
+      "original": "Descobreix",
+      "destino": "traduzir",
+      "texto": "Descubra"
+    },
+    {
+      "id": 19,
+      "tag": "span",
+      "original": "sobre nosaltres",
+      "destino": "traduzir",
+      "texto": "sobre nós"
+    },
+    {
+      "id": 20,
+      "tag": "h2",
+      "original": "Nascuts a Matadepera,",
+      "destino": "adaptar",
+      "texto": "Nasceu em uma cidade do interior,"
+    },
+    {
+      "id": 21,
+      "tag": "span",
+      "original": "fets",
+      "destino": "adaptar",
+      "texto": "Feito"
+    },
+    {
+      "id": 22,
+      "tag": "br",
+      "original": "per compartir.",
+      "destino": "adaptar",
+      "texto": "para compartilhar."
+    },
+    {
+      "id": 23,
+      "tag": "p",
+      "original": "Micsas neix a Matadepera, d'un grup d'amics obsessionats amb la pizza napolitana de veritat: massa fermentada x hores i amb ingredients escollits un per un. Sense app, sense intermediaris.",
+      "destino": "adaptar",
+      "texto": "micsas.ff nasceu em uma cidade do interior, de um grupo de amigos obcecados com a pizza napolitana autêntica: massa fermentada por horas e ingredientes selecionados um a um. Sem app, sem intermediários."
+    },
+    {
+      "id": 24,
+      "tag": "br",
+      "original": "Cuinem i entreguem nosaltres mateixos perquè la caixa arribi al teu portal encara calenta. També tenim el servei de esdevemients, per tot aquell públic que vol la pizza tradicional napolitana en la seva festa.",
+      "destino": "adaptar",
+      "texto": "Preparamos e entregamos nós mesmos para que a caixa chegue à sua porta ainda quente. Também temos o serviço de eventos, para todo aquele público que quer a pizza tradicional napolitana na sua festa."
+    },
+    {
+      "id": 25,
+      "tag": "p",
+      "original": "Pizza napolitana tradicional",
+      "destino": "adaptar",
+      "texto": "Pizza brasileira tradicional"
+    },
+    {
+      "id": 26,
+      "tag": "p",
+      "original": "Sense pressa, només amor i temps. L'olor de la massa al matí, el so de\n          les motos al vespre, la calor del forn de pedra. Així és Micsas. Així\n          és el nostre barri.",
+      "destino": "adaptar",
+      "texto": "Sem pressa, apenas amor e tempo. O cheiro da massa pela manhã, o som das motos à noite, o calor do forno de pedra. É assim que é. É assim que é o nosso bairro."
+    },
+    {
+      "id": 27,
+      "tag": "span",
+      "original": "Testimonis",
+      "destino": "traduzir",
+      "texto": "Depoimentos"
+    },
+    {
+      "id": 28,
+      "tag": "h2",
+      "original": "Què diuen els nostres veïns",
+      "destino": "traduzir",
+      "texto": "O que dizem os nossos vizinhos"
+    },
+    {
+      "id": 29,
+      "tag": "p",
+      "original": "\"La millor pizza de Matadepera, sens dubte. La massa és\n                increïble i arriba súper calenta gràcies a la moto.\"",
+      "destino": "adaptar",
+      "texto": "\"A melhor pizza da cidade, sem dúvida. A massa é incrível e chega super quente graças à entrega rápida.\""
+    },
+    {
+      "id": 30,
+      "tag": "div",
+      "original": "Marta P.",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 31,
+      "tag": "p",
+      "original": "\"Es nota que fan la fermentació de 72h. No es fa gens pesada, i\n                els ingredients són de primera qualitat.\"",
+      "destino": "adaptar",
+      "texto": "\"É notável que fazem a fermentação de 72h. Não é pesada e os ingredientes são de primeira qualidade.\""
+    },
+    {
+      "id": 32,
+      "tag": "div",
+      "original": "Jordi C.",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 33,
+      "tag": "p",
+      "original": "\"Un tracte excepcional pel telèfon i la pizza impressionant. Ens\n                va encantar 'La Bèstia de Matadepera'.\"",
+      "destino": "adaptar",
+      "texto": "\"Um atendimento excepcional pelo telefone e a pizza impressionante. Gostamos muito da 'Especial da Casa'.\""
+    },
+    {
+      "id": 34,
+      "tag": "div",
+      "original": "Aina R.",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 35,
+      "tag": "p",
+      "original": "\"Molt bona relació qualitat-preu. Finalment una pizzeria\n                autèntica napolitana al barri sense complicacions.\"",
+      "destino": "adaptar",
+      "texto": "\"Muito boa relação qualidade-preço. Finalmente uma pizzaria autêntica na cidade sem complicação.\""
+    },
+    {
+      "id": 36,
+      "tag": "div",
+      "original": "Marc V.",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 37,
+      "tag": "p",
+      "original": "\"Ràpids, amables i amb un forn de pedra que es nota a cada\n                mossegada. Totalment recomanable per divendres a la nit.\"",
+      "destino": "adaptar",
+      "texto": "\"Rápido, amigável e com um forno de pedra que se nota em cada mordida. Totalmente recomendável para sextas à noite.\""
+    },
+    {
+      "id": 38,
+      "tag": "div",
+      "original": "Laia S.",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 39,
+      "tag": "span",
+      "original": "Carta · Primavera 2025",
+      "destino": "adaptar",
+      "texto": "Cardápio · Verão {{ANO}}"
+    },
+    {
+      "id": 40,
+      "tag": "h2",
+      "original": "Les nostres pizzes",
+      "destino": "traduzir",
+      "texto": "Nossas pizzas"
+    },
+    {
+      "id": 41,
+      "tag": "h3",
+      "original": "Pizzes clàssiques",
+      "destino": "traduzir",
+      "texto": "Pizzas clássicas"
+    },
+    {
+      "id": 42,
+      "tag": "p",
+      "original": "tradició napolitana",
+      "destino": "adaptar",
+      "texto": "Tradição brasileira"
+    },
+    {
+      "id": 43,
+      "tag": "span",
+      "original": "La Moto",
+      "destino": "adaptar",
+      "texto": "A Especial"
+    },
+    {
+      "id": 44,
+      "tag": "span",
+      "original": "Mortadel·la, burrata, pesto de rúcula, orenga",
+      "destino": "adaptar",
+      "texto": "Calabresa, catupiry, azeitona, cebola"
+    },
+    {
+      "id": 45,
+      "tag": "span",
+      "original": "€16.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 46,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 47,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "✎ Adicionar nota"
+    },
+    {
+      "id": 48,
+      "tag": "span",
+      "original": "El Telèfon Vermell",
+      "destino": "adaptar",
+      "texto": "A Favorita"
+    },
+    {
+      "id": 49,
+      "tag": "span",
+      "original": "Salami picant, mel de romaní, gorgonzola, nous",
+      "destino": "adaptar",
+      "texto": "Linguiça, bacon, queijo, ovos"
+    },
+    {
+      "id": 50,
+      "tag": "span",
+      "original": "€15.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 51,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 52,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 53,
+      "tag": "span",
+      "original": "La Bèstia de Matadepera",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 54,
+      "tag": "span",
+      "original": "Botifarra, ceba caramel·litzada, salsa romesco, mozzarella",
+      "destino": "adaptar",
+      "texto": "Linguiça, cebola caramelizada, molho de tomate, queijo mozzarella"
+    },
+    {
+      "id": 55,
+      "tag": "span",
+      "original": "€17.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 56,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 57,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 58,
+      "tag": "span",
+      "original": "L'Avi Fresc",
+      "destino": "adaptar",
+      "texto": "Picanha, rúcula, parmesão, azeitonas, limão"
+    },
+    {
+      "id": 59,
+      "tag": "span",
+      "original": "Pernil ibèric, rúcula, parmesà, tàperes, filet de llimona",
+      "destino": "adaptar",
+      "texto": "Pernil, rúcula, parmesão, azeitonas, limão"
+    },
+    {
+      "id": 60,
+      "tag": "span",
+      "original": "€16.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 61,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 62,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 63,
+      "tag": "span",
+      "original": "La Cremosa",
+      "destino": "adaptar",
+      "texto": "Catupiry, cogumelos, trufa preta"
+    },
+    {
+      "id": 64,
+      "tag": "span",
+      "original": "Mascarpone, bolets de temporada, tòfona negra",
+      "destino": "adaptar",
+      "texto": "Catupiry, cogumelos, trufa preta"
+    },
+    {
+      "id": 65,
+      "tag": "span",
+      "original": "€15.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 66,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 67,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 68,
+      "tag": "h3",
+      "original": "Les clàssiques",
+      "destino": "traduzir",
+      "texto": "Clássicos"
+    },
+    {
+      "id": 69,
+      "tag": "p",
+      "original": "Tradició napolitana",
+      "destino": "traduzir",
+      "texto": "Tradição napolitana"
+    },
+    {
+      "id": 70,
+      "tag": "span",
+      "original": "Margherita",
+      "destino": "adaptar",
+      "texto": "Margherita"
+    },
+    {
+      "id": 71,
+      "tag": "span",
+      "original": "Tomàquet San Marzano, mozzarella fior di latte, alfàbrega fresca",
+      "destino": "adaptar",
+      "texto": "Tomate fresco, queijo mozzarella, manjericão fresco"
+    },
+    {
+      "id": 72,
+      "tag": "span",
+      "original": "€11.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 73,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 74,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 75,
+      "tag": "span",
+      "original": "Marinara",
+      "destino": "adaptar",
+      "texto": "Molho de Tomate"
+    },
+    {
+      "id": 76,
+      "tag": "span",
+      "original": "Tomàquet, all, orenga, oli d'oliva verge extra",
+      "destino": "adaptar",
+      "texto": "Tomate, alho, orégano, azeite extra virgem"
+    },
+    {
+      "id": 77,
+      "tag": "span",
+      "original": "€9.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 78,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 79,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 80,
+      "tag": "span",
+      "original": "Napolitana",
+      "destino": "adaptar",
+      "texto": "Napolitana"
+    },
+    {
+      "id": 81,
+      "tag": "span",
+      "original": "Tomàquet, mozzarella, anxoves, tàperes, olives negres",
+      "destino": "adaptar",
+      "texto": "Tomate, mussarela, anchovas, azeitonas pretas"
+    },
+    {
+      "id": 82,
+      "tag": "span",
+      "original": "€13.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 83,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 84,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 85,
+      "tag": "span",
+      "original": "Quatre formatges",
+      "destino": "adaptar",
+      "texto": "Quatro Queijos"
+    },
+    {
+      "id": 86,
+      "tag": "span",
+      "original": "Mozzarella, gorgonzola, parmesà, provolone, mel",
+      "destino": "adaptar",
+      "texto": "Mussarela, gorgonzola, parmesão, provolone, mel"
+    },
+    {
+      "id": 87,
+      "tag": "span",
+      "original": "€14.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 88,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 89,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 90,
+      "tag": "span",
+      "original": "Calzone",
+      "destino": "adaptar",
+      "texto": "Calzone"
+    },
+    {
+      "id": 91,
+      "tag": "span",
+      "original": "Ricotta, mozzarella, pernil dolç, alfàbrega",
+      "destino": "adaptar",
+      "texto": "Ricota, mussarela, presunto, alfafa"
+    },
+    {
+      "id": 92,
+      "tag": "span",
+      "original": "€13.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 93,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 94,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 95,
+      "tag": "span",
+      "original": "Aigua mineral",
+      "destino": "adaptar",
+      "texto": "Água Mineral"
+    },
+    {
+      "id": 96,
+      "tag": "span",
+      "original": "50 cl",
+      "destino": "adaptar",
+      "texto": "500ml"
+    },
+    {
+      "id": 97,
+      "tag": "span",
+      "original": "€2.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 98,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 99,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 100,
+      "tag": "span",
+      "original": "Refresc",
+      "destino": "adaptar",
+      "texto": "Refresco"
+    },
+    {
+      "id": 101,
+      "tag": "span",
+      "original": "Coca-Cola, Fanta, Sprite · 33 cl",
+      "destino": "adaptar",
+      "texto": "Coca-Cola, Fanta, Guaraná · 330ml"
+    },
+    {
+      "id": 102,
+      "tag": "span",
+      "original": "€2.50",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 103,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 104,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 105,
+      "tag": "span",
+      "original": "Cervesa artesana",
+      "destino": "adaptar",
+      "texto": "Cerveja artesanal"
+    },
+    {
+      "id": 106,
+      "tag": "span",
+      "original": "Producció local · 33 cl",
+      "destino": "adaptar",
+      "texto": "Produção local · 330ml"
+    },
+    {
+      "id": 107,
+      "tag": "span",
+      "original": "€4.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 108,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 109,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 110,
+      "tag": "span",
+      "original": "Tiramisú casolà",
+      "destino": "adaptar",
+      "texto": "Torta de chocolate"
+    },
+    {
+      "id": 111,
+      "tag": "span",
+      "original": "Fet a la cuina cada dia",
+      "destino": "traduzir",
+      "texto": "Feita na cozinha todos os dias"
+    },
+    {
+      "id": 112,
+      "tag": "span",
+      "original": "€5.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 113,
+      "tag": "button",
+      "original": "Afegir",
+      "destino": "traduzir",
+      "texto": "Adicionar"
+    },
+    {
+      "id": 114,
+      "tag": "button",
+      "original": "✎ Afegir nota",
+      "destino": "traduzir",
+      "texto": "Adicionar nota"
+    },
+    {
+      "id": 115,
+      "tag": "span",
+      "original": "0 pizzes · €0,00",
+      "destino": "adaptar",
+      "texto": "0 pizzas · sob consulta"
+    },
+    {
+      "id": 116,
+      "tag": "span",
+      "original": "Veure cistella",
+      "destino": "traduzir",
+      "texto": "Ver carrinho"
+    },
+    {
+      "id": 117,
+      "tag": "span",
+      "original": "Veure cistella →",
+      "destino": "traduzir",
+      "texto": "Ver carrinho →"
+    },
+    {
+      "id": 118,
+      "tag": "span",
+      "original": "Com t'ajudem",
+      "destino": "traduzir",
+      "texto": "Como podemos ajudar"
+    },
+    {
+      "id": 119,
+      "tag": "h3",
+      "original": "A les teves mans",
+      "destino": "traduzir",
+      "texto": "Em suas mãos"
+    },
+    {
+      "id": 120,
+      "tag": "h4",
+      "original": "Recollida",
+      "destino": "traduzir",
+      "texto": "Retirada"
+    },
+    {
+      "id": 121,
+      "tag": "p",
+      "original": "Passa pel local a buscar la teva pizza calenta. Sense espera,\n              sense sorpreses.",
+      "destino": "traduzir",
+      "texto": "Passe pelo local para buscar sua pizza quente. Sem espera, sem surpresas."
+    },
+    {
+      "id": 122,
+      "tag": "h4",
+      "original": "A domicili",
+      "destino": "traduzir",
+      "texto": "Entrega"
+    },
+    {
+      "id": 123,
+      "tag": "p",
+      "original": "Matadepera, Terrassa nord i Castellar. La moto del Riki arriba\n              calenteta.",
+      "destino": "adaptar",
+      "texto": "Em São Paulo, Zona Norte e Zona Sul. A moto do delivery chega quente."
+    },
+    {
+      "id": 124,
+      "tag": "h4",
+      "original": "Telèfon",
+      "destino": "traduzir",
+      "texto": "Telefone"
+    },
+    {
+      "id": 125,
+      "tag": "p",
+      "original": "Truca'ns, digues el que vols i ja ho fem nosaltres. Com sempre\n              s'ha fet.",
+      "destino": "traduzir",
+      "texto": "Diga o que você quer e já faremos para você. Como sempre fizemos."
+    },
+    {
+      "id": 126,
+      "tag": "a",
+      "original": "93 XXX XX XX →",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 127,
+      "tag": "h2",
+      "original": "De Matadepera,",
+      "destino": "adaptar",
+      "texto": "De São Paulo"
+    },
+    {
+      "id": 128,
+      "tag": "br",
+      "original": "a la teva taula.",
+      "destino": "traduzir",
+      "texto": "à sua mesa."
+    },
+    {
+      "id": 129,
+      "tag": "span",
+      "original": "On som",
+      "destino": "traduzir",
+      "texto": "Somos"
+    },
+    {
+      "id": 130,
+      "tag": "p",
+      "original": "Carrer de la Pau, 1",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 131,
+      "tag": "br",
+      "original": "Matadepera, 08230",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}, {{ESTADO}}"
+    },
+    {
+      "id": 132,
+      "tag": "span",
+      "original": "Contacte per esdeveniments",
+      "destino": "traduzir",
+      "texto": "Contato para eventos"
+    },
+    {
+      "id": 133,
+      "tag": "a",
+      "original": "@micsas.ff",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 134,
+      "tag": "span",
+      "original": "Horaris",
+      "destino": "traduzir",
+      "texto": "Horários"
+    },
+    {
+      "id": 135,
+      "tag": "span",
+      "original": "Dl – Dj",
+      "destino": "traduzir",
+      "texto": "Segunda a Sexta"
+    },
+    {
+      "id": 136,
+      "tag": "span",
+      "original": "Tancat",
+      "destino": "traduzir",
+      "texto": "Fechado"
+    },
+    {
+      "id": 137,
+      "tag": "span",
+      "original": "Dv – Dg",
+      "destino": "traduzir",
+      "texto": "Sábado e Domingo"
+    },
+    {
+      "id": 138,
+      "tag": "h3",
+      "original": "On arriben les nostres pizzes",
+      "destino": "adaptar",
+      "texto": "Onde chegam nossas pizzas"
+    },
+    {
+      "id": 139,
+      "tag": "p",
+      "original": "Matadepera, Vallès Occidental",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}, {{ESTADO}}"
+    },
+    {
+      "id": 140,
+      "tag": "span",
+      "original": "Obre Google Maps →",
+      "destino": "traduzir",
+      "texto": "Abra o Google Maps →"
+    },
+    {
+      "id": 141,
+      "tag": "p",
+      "original": "micsas.ff",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 142,
+      "tag": "p",
+      "original": "Pasta, foc i moto. Res més.",
+      "destino": "adaptar",
+      "texto": "Massa, queijo e moto. Nada mais."
+    },
+    {
+      "id": 143,
+      "tag": "p",
+      "original": "© 2025 micsas.ff · Tots els drets reservats",
+      "destino": "traduzir",
+      "texto": "© {{ANO}} {{NOME}} · Todos os direitos reservados"
+    },
+    {
+      "id": 144,
+      "tag": "span",
+      "original": "Efectiu",
+      "destino": "traduzir",
+      "texto": "Dinheiro"
+    },
+    {
+      "id": 145,
+      "tag": "span",
+      "original": "Targeta",
+      "destino": "traduzir",
+      "texto": "Cartão"
+    },
+    {
+      "id": 146,
+      "tag": "span",
+      "original": "Pagament online",
+      "destino": "traduzir",
+      "texto": "Pagamento online"
+    },
+    {
+      "id": 147,
+      "tag": "span",
+      "original": "La teva cistella",
+      "destino": "traduzir",
+      "texto": "Sua cesta"
+    },
+    {
+      "id": 148,
+      "tag": "p",
+      "original": "La cistella és buida",
+      "destino": "traduzir",
+      "texto": "A cesta está vazia"
+    },
+    {
+      "id": 149,
+      "tag": "p",
+      "original": "Afegeix pizzes des de la carta per començar.",
+      "destino": "traduzir",
+      "texto": "Adicione pizzas do cardápio para começar."
+    },
+    {
+      "id": 150,
+      "tag": "button",
+      "original": "Veure carta",
+      "destino": "traduzir",
+      "texto": "Ver carta"
+    },
+    {
+      "id": 151,
+      "tag": "span",
+      "original": "Subtotal",
+      "destino": "traduzir",
+      "texto": "Subtotal"
+    },
+    {
+      "id": 152,
+      "tag": "span",
+      "original": "€0.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 153,
+      "tag": "span",
+      "original": "Lliurament",
+      "destino": "traduzir",
+      "texto": "Entrega"
+    },
+    {
+      "id": 154,
+      "tag": "span",
+      "original": "€2.50",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 155,
+      "tag": "span",
+      "original": "Total",
+      "destino": "traduzir",
+      "texto": "Total"
+    },
+    {
+      "id": 156,
+      "tag": "span",
+      "original": "€0.00",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 157,
+      "tag": "label",
+      "original": "⚠️ Al·lèrgies o intoleràncies",
+      "destino": "traduzir",
+      "texto": "⚠️ Alergias ou intolerâncias"
+    },
+    {
+      "id": 158,
+      "tag": "button",
+      "original": "Continuar → Checkout",
+      "destino": "traduzir",
+      "texto": "Continuar → Checkout"
+    },
+    {
+      "id": 159,
+      "tag": "h2",
+      "original": "Dades de lliurament",
+      "destino": "traduzir",
+      "texto": "Dados de entrega"
+    },
+    {
+      "id": 160,
+      "tag": "p",
+      "original": "On t'enviem la pizza?",
+      "destino": "traduzir",
+      "texto": "Onde enviaremos a pizza?"
+    },
+    {
+      "id": 161,
+      "tag": "label",
+      "original": "Nom *",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 162,
+      "tag": "label",
+      "original": "Telèfon *",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 163,
+      "tag": "label",
+      "original": "Adreça *",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 164,
+      "tag": "label",
+      "original": "Pis / Porta",
+      "destino": "traduzir",
+      "texto": "Andar / Porta"
+    },
+    {
+      "id": 165,
+      "tag": "label",
+      "original": "Codi postal",
+      "destino": "traduzir",
+      "texto": "CEP"
+    },
+    {
+      "id": 166,
+      "tag": "label",
+      "original": "Nota per al repartidor",
+      "destino": "traduzir",
+      "texto": "Observação para o entregador"
+    },
+    {
+      "id": 167,
+      "tag": "p",
+      "original": "Si us plau, omple els camps obligatoris (nom, telèfon i adreça).",
+      "destino": "traduzir",
+      "texto": "Por favor, preencha os campos obrigatórios (nome, telefone e endereço)."
+    },
+    {
+      "id": 168,
+      "tag": "button",
+      "original": "Cancel·lar",
+      "destino": "traduzir",
+      "texto": "Cancelar"
+    },
+    {
+      "id": 169,
+      "tag": "button",
+      "original": "Continuar →",
+      "destino": "traduzir",
+      "texto": "Continuar →"
+    },
+    {
+      "id": 170,
+      "tag": "h2",
+      "original": "Forma de pagament",
+      "destino": "traduzir",
+      "texto": "Forma de pagamento"
+    },
+    {
+      "id": 171,
+      "tag": "p",
+      "original": "Com vols pagar?",
+      "destino": "traduzir",
+      "texto": "Como você gostaria de pagar?"
+    },
+    {
+      "id": 172,
+      "tag": "span",
+      "original": "Pagar ara amb targeta",
+      "destino": "traduzir",
+      "texto": "Pagar agora com cartão"
+    },
+    {
+      "id": 173,
+      "tag": "label",
+      "original": "Número de targeta",
+      "destino": "traduzir",
+      "texto": "Número do cartão"
+    },
+    {
+      "id": 174,
+      "tag": "label",
+      "original": "Caducitat",
+      "destino": "traduzir",
+      "texto": "Validade"
+    },
+    {
+      "id": 175,
+      "tag": "label",
+      "original": "CVV",
+      "destino": "traduzir",
+      "texto": "CVV"
+    },
+    {
+      "id": 176,
+      "tag": "span",
+      "original": "Pagar al repartidor",
+      "destino": "traduzir",
+      "texto": "Pagar ao entregador"
+    },
+    {
+      "id": 177,
+      "tag": "?",
+      "original": "Targeta (datàfon)",
+      "destino": "adaptar",
+      "texto": "Cartão de Crédito"
+    },
+    {
+      "id": 178,
+      "tag": "?",
+      "original": "Efectiu",
+      "destino": "adaptar",
+      "texto": "Dinheiro"
+    },
+    {
+      "id": 179,
+      "tag": "p",
+      "original": "Si us plau, tria una forma de pagament i el mètode exacte.",
+      "destino": "traduzir",
+      "texto": "Por favor, escolha uma forma de pagamento e o método exato."
+    },
+    {
+      "id": 180,
+      "tag": "button",
+      "original": "← Enrere",
+      "destino": "traduzir",
+      "texto": "← Voltar"
+    },
+    {
+      "id": 181,
+      "tag": "button",
+      "original": "Continuar →",
+      "destino": "traduzir",
+      "texto": "Continuar →"
+    },
+    {
+      "id": 182,
+      "tag": "h2",
+      "original": "Confirmació",
+      "destino": "traduzir",
+      "texto": "Confirmação"
+    },
+    {
+      "id": 183,
+      "tag": "p",
+      "original": "Revisa la teva comanda abans d'enviar-la.",
+      "destino": "traduzir",
+      "texto": "Verifique seu pedido antes de enviá-lo."
+    },
+    {
+      "id": 184,
+      "tag": "p",
+      "original": "Articles",
+      "destino": "traduzir",
+      "texto": "Itens"
+    },
+    {
+      "id": 185,
+      "tag": "p",
+      "original": "Lliurament",
+      "destino": "traduzir",
+      "texto": "Entrega"
+    },
+    {
+      "id": 186,
+      "tag": "p",
+      "original": "Pagament",
+      "destino": "traduzir",
+      "texto": "Pagamento"
+    },
+    {
+      "id": 187,
+      "tag": "span",
+      "original": "Total",
+      "destino": "traduzir",
+      "texto": "Total"
+    },
+    {
+      "id": 188,
+      "tag": "p",
+      "original": "Hi ha hagut un error. Torna-ho a intentar.",
+      "destino": "traduzir",
+      "texto": "Houve um erro. Tente novamente."
+    },
+    {
+      "id": 189,
+      "tag": "button",
+      "original": "← Enrere",
+      "destino": "traduzir",
+      "texto": "← Voltar"
+    },
+    {
+      "id": 190,
+      "tag": "button",
+      "original": "Confirma ✓",
+      "destino": "traduzir",
+      "texto": "Confirmar ✓"
+    },
+    {
+      "id": 191,
+      "tag": "h2",
+      "original": "Gràcies!",
+      "destino": "traduzir",
+      "texto": "Obrigado!"
+    },
+    {
+      "id": 192,
+      "tag": "p",
+      "original": "La teva comanda és en camí.",
+      "destino": "traduzir",
+      "texto": "Seu pedido está a caminho."
+    },
+    {
+      "id": 193,
+      "tag": "p",
+      "original": "Temps estimat d'entrega:",
+      "destino": "traduzir",
+      "texto": "Tempo estimado de entrega:"
+    },
+    {
+      "id": 194,
+      "tag": "strong",
+      "original": "30–45 minuts",
+      "destino": "adaptar",
+      "texto": "30-45 minutos"
+    },
+    {
+      "id": 195,
+      "tag": "p",
+      "original": "El Riki et trucarà per confirmar quan surti.",
+      "destino": "traduzir",
+      "texto": "Nossa equipe entrará em contato para confirmar quando sair."
+    },
+    {
+      "id": 196,
+      "tag": "button",
+      "original": "Tornar a l'inici",
+      "destino": "traduzir",
+      "texto": "Voltar ao início"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 197,
+  "corrigidos_por_consistencia": [],
+  "precos_neutralizados": [
+    {
+      "id": 45,
+      "era": "€16.00",
+      "modo": "total"
+    },
+    {
+      "id": 50,
+      "era": "€15.00",
+      "modo": "total"
+    },
+    {
+      "id": 55,
+      "era": "€17.00",
+      "modo": "total"
+    },
+    {
+      "id": 60,
+      "era": "€16.00",
+      "modo": "total"
+    },
+    {
+      "id": 65,
+      "era": "€15.00",
+      "modo": "total"
+    },
+    {
+      "id": 72,
+      "era": "€11.00",
+      "modo": "total"
+    },
+    {
+      "id": 77,
+      "era": "€9.00",
+      "modo": "total"
+    },
+    {
+      "id": 82,
+      "era": "€13.00",
+      "modo": "total"
+    },
+    {
+      "id": 87,
+      "era": "€14.00",
+      "modo": "total"
+    },
+    {
+      "id": 92,
+      "era": "€13.00",
+      "modo": "total"
+    },
+    {
+      "id": 97,
+      "era": "€2.00",
+      "modo": "total"
+    },
+    {
+      "id": 102,
+      "era": "€2.50",
+      "modo": "total"
+    },
+    {
+      "id": 107,
+      "era": "€4.00",
+      "modo": "total"
+    },
+    {
+      "id": 112,
+      "era": "€5.00",
+      "modo": "total"
+    },
+    {
+      "id": 115,
+      "era": "0 pizzas · R$0,00",
+      "modo": "embutido"
+    },
+    {
+      "id": 152,
+      "era": "€0.00",
+      "modo": "total"
+    },
+    {
+      "id": 154,
+      "era": "€2.50",
+      "modo": "total"
+    },
+    {
+      "id": 156,
+      "era": "€0.00",
+      "modo": "total"
+    }
+  ],
+  "marcas_removidas": []
+}

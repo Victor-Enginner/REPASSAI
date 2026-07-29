@@ -1,0 +1,111 @@
+{
+  "slug": "aura-template-industrial-constructi-38",
+  "titulo": "Construction  Steel Reinforcement Landing Page Template",
+  "descricao": "A high-performance construction template designed for reinforcement specialists, structural engineering firms, and general contractors in the building industry. Fonte: https://www.aura.build/templates/industrial-constructi-38",
+  "arquivo": "77lib/aura-template-industrial-constructi-38.html",
+  "tamanho_html": 75632,
+  "paleta": [
+    {
+      "cor": "#f59e0b",
+      "usos": 6
+    },
+    {
+      "cor": "rgba(245,158,11,0.15)",
+      "usos": 6
+    },
+    {
+      "cor": "rgba(9,9,11,0.9)",
+      "usos": 6
+    },
+    {
+      "cor": "rgba(245,158,11,0.05)",
+      "usos": 3
+    },
+    {
+      "cor": "rgba(245,158,11,0.07)",
+      "usos": 3
+    },
+    {
+      "cor": "#fcd34d",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,255,255,0.4)",
+      "usos": 2
+    },
+    {
+      "cor": "#fbbf24",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(245,158,11,0.13)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(245,158,11,0.09)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(120,113,108,0.14)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(245,158,11,0.35)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(9,9,11,0.85)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(255,255,255,0.5)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(9,9,11,0.97)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(9,9,11,0.75)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Archivo"
+  ],
+  "secoes": [
+    "Betonstahlverlegung, auf die Sie bauen können.",
+    "Bewehrungsarbeiten aus einer Hand",
+    "Weil Ihre Betonage nicht warten kann.",
+    "Ihr Partner im Rohbau",
+    "Von der Anfrage zur Abnahme",
+    "Einblicke in unsere Arbeit",
+    "Von Herford aus in ganz NRW &amp; Niedersachsen",
+    "Häufige Fragen",
+    "Ihr nächstes Projekt braucht eine starke Bewehrung?",
+    "Projekt anfragen"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "Canvas",
+    "CSS Animations",
+    "Backdrop Filter"
+  ],
+  "imagens": 9,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-industrial-constructi-38?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Construction  Steel Reinforcement Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-industrial-constructi-38`\n\n## Objetivo\nA high-performance construction template designed for reinforcement specialists, structural engineering firms, and general contractors in the building industry. Fonte: https://www.aura.build/templates/industrial-constructi-38\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f59e0b  (6x)\n- rgba(245,158,11,0.15)  (6x)\n- rgba(9,9,11,0.9)  (6x)\n- rgba(245,158,11,0.05)  (3x)\n- rgba(245,158,11,0.07)  (3x)\n- #fcd34d  (2x)\n- rgba(255,255,255,0.4)  (2x)\n- #fbbf24  (1x)\n- rgba(245,158,11,0.13)  (1x)\n- rgba(245,158,11,0.09)  (1x)\n- rgba(120,113,108,0.14)  (1x)\n- rgba(245,158,11,0.35)  (1x)\n- rgba(9,9,11,0.85)  (1x)\n- rgba(255,255,255,0.5)  (1x)\n- rgba(9,9,11,0.97)  (1x)\n- rgba(9,9,11,0.75)  (1x)\n\n## Tipografia detectada\n- Inter\n- Archivo\n\n## Estrutura de seções\n- Betonstahlverlegung, auf die Sie bauen können.\n- Bewehrungsarbeiten aus einer Hand\n- Weil Ihre Betonage nicht warten kann.\n- Ihr Partner im Rohbau\n- Von der Anfrage zur Abnahme\n- Einblicke in unsere Arbeit\n- Von Herford aus in ganz NRW &amp; Niedersachsen\n- Häufige Fragen\n- Ihr nächstes Projekt braucht eine starke Bewehrung?\n- Projekt anfragen\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Construction  Steel Reinforcement Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Construction  Steel Reinforcement Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-industrial-constructi-38`\n\n## Objetivo\nA high-performance construction template designed for reinforcement specialists, structural engineering firms, and general contractors in the building industry. Fonte: https://www.aura.build/templates/industrial-constructi-38\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f59e0b  (6x)\n- rgba(245,158,11,0.15)  (6x)\n- rgba(9,9,11,0.9)  (6x)\n- rgba(245,158,11,0.05)  (3x)\n- rgba(245,158,11,0.07)  (3x)\n- #fcd34d  (2x)\n- rgba(255,255,255,0.4)  (2x)\n- #fbbf24  (1x)\n- rgba(245,158,11,0.13)  (1x)\n- rgba(245,158,11,0.09)  (1x)\n- rgba(120,113,108,0.14)  (1x)\n- rgba(245,158,11,0.35)  (1x)\n- rgba(9,9,11,0.85)  (1x)\n- rgba(255,255,255,0.5)  (1x)\n- rgba(9,9,11,0.97)  (1x)\n- rgba(9,9,11,0.75)  (1x)\n\n## Tipografia detectada\n- Inter\n- Archivo\n\n## Estrutura de seções\n- Betonstahlverlegung, auf die Sie bauen können.\n- Bewehrungsarbeiten aus einer Hand\n- Weil Ihre Betonage nicht warten kann.\n- Ihr Partner im Rohbau\n- Von der Anfrage zur Abnahme\n- Einblicke in unsere Arbeit\n- Von Herford aus in ganz NRW &amp; Niedersachsen\n- Häufige Fragen\n- Ihr nächstes Projekt braucht eine starke Bewehrung?\n- Projekt anfragen\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:55"
+}

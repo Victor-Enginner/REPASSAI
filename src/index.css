@@ -11,7 +11,42 @@
   --accent-indigo: #6366f1;
   --accent-blue: #0070f3;
   --accent-cyan: #38bdf8;
-  
+
+  /* Tons acrescentados na migração do design system (27/07/2026).
+     Saíram das cores mais repetidas no JSX — cada uma aparecia entre 10 e 57
+     vezes escrita à mão. Nome semântico (o que significa), não descritivo
+     (que cor é), para que trocar a paleta não exija renomear nada. */
+  --bg-deep: #05070f;
+  --bg-slate: #0f172a;
+  --fg-soft: #cbd5e1;
+  --fg-bright: #e2e8f0;
+  --fg-lightest: #f1f5f9;
+  --fg-black: #000000;
+
+  --estado-sucesso: #22c55e;
+  --estado-alerta: #f59e0b;
+  --estado-erro: #f87171;
+
+  --accent-indigo-suave: #a5b4fc;
+  --accent-indigo-claro: #818cf8;
+  --accent-rosa: #ec4899;
+  --accent-violeta: #5227ff;
+  --accent-esmeralda: #10b981;
+
+  /* Variações de estado usadas em texto sobre fundo escuro/claro. */
+  --estado-erro-forte: #ef4444;
+  --estado-erro-suave: #fca5a5;
+  --estado-sucesso-suave: #4ade80;
+  --estado-alerta-suave: #fde047;
+
+  --bg-sidebar: #070a14;
+  --fg-fraco: #475569;
+  --fg-quase-branco: #f8fafc;
+  --fg-sobre-verde: #04140a;
+  --bg-poco: #05070c;
+  --accent-indigo-forte: #4f46e5;
+  --estado-sucesso-claro: #86efac;
+
   --hairline-color: rgba(255, 255, 255, 0.12);
   --hairline-hover: rgba(99, 102, 241, 0.4);
   

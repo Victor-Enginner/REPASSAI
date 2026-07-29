@@ -1,0 +1,44 @@
+{
+  "slug": "aura-template-cafelittlelatte",
+  "titulo": "Little Latte Cafe Landing Page Template",
+  "descricao": "A clean, editorial-style coffee shop landing page template designed for cafes, roasteries, and small-batch food service businesses. Fonte: https://www.aura.build/templates/cafelittlelatte",
+  "arquivo": "77lib/aura-template-cafelittlelatte.html",
+  "tamanho_html": 22517,
+  "paleta": [
+    {
+      "cor": "#252525",
+      "usos": 66
+    },
+    {
+      "cor": "#efeee6",
+      "usos": 7
+    }
+  ],
+  "fontes": [],
+  "secoes": [
+    "More than a coffee — it’s a pause",
+    "Small-batch espresso, served with soul",
+    "Rooted in flavor, fueled by community",
+    "Coffee. Pastries. And everything you crave.",
+    "Fresh made, every day."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 9,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-cafelittlelatte?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Little Latte Cafe Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-cafelittlelatte`\n\n## Objetivo\nA clean, editorial-style coffee shop landing page template designed for cafes, roasteries, and small-batch food service businesses. Fonte: https://www.aura.build/templates/cafelittlelatte\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #252525  (66x)\n- #efeee6  (7x)\n\n## Tipografia detectada\n- (nenhuma externa)\n\n## Estrutura de seções\n- More than a coffee — it’s a pause\n- Small-batch espresso, served with soul\n- Rooted in flavor, fueled by community\n- Coffee. Pastries. And everything you crave.\n- Fresh made, every day.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Little Latte Cafe Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Little Latte Cafe Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-cafelittlelatte`\n\n## Objetivo\nA clean, editorial-style coffee shop landing page template designed for cafes, roasteries, and small-batch food service businesses. Fonte: https://www.aura.build/templates/cafelittlelatte\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #252525  (66x)\n- #efeee6  (7x)\n\n## Tipografia detectada\n- (nenhuma externa)\n\n## Estrutura de seções\n- More than a coffee — it’s a pause\n- Small-batch espresso, served with soul\n- Rooted in flavor, fueled by community\n- Coffee. Pastries. And everything you crave.\n- Fresh made, every day.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:54"
+}

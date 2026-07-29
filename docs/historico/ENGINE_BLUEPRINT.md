@@ -1,3 +1,8 @@
+> **HISTÓRICO — não é referência.**
+> Descrevia o motor antes do pipeline de 5 camadas.
+> A referência atual está em [../ARQUITETURA.md](../ARQUITETURA.md) e
+> [../ROADMAP.md](../ROADMAP.md). Índice em [../README.md](../README.md).
+
 # REPASS AI — Blueprint do Motor de Geração
 
 Extração acionável dos três documentos de referência, traduzida em decisões

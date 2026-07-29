@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="es" class="scroll-smooth"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cabaña La Martina | Lujo y Naturaleza en Sabanagrande</title>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Public+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- Icons -->
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- Tailwind CSS (via CDN for direct application) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#555b00',
+secondary: '#be7f00',
+canvas: '#f6efe5',
+darkbase: '#282828',
+surface: '#1e1e1e',
+muted: '#ada89a'
+},
+fontFamily: {
+serif: ['"Playfair Display"', 'serif'],
+sans: ['"Public Sans"', 'Arial', 'sans-serif']
+},
+animation: {
+'float': 'float 6s ease-in-out infinite',
+'float-delayed': 'float 6s ease-in-out 3s infinite',
+'spin-slow': 'spin 24s linear infinite',
+'pulse-soft': 'pulseSoft 8s ease-in-out infinite',
+'slow-zoom': 'slowZoom 20s ease-in-out infinite alternate',
+'drift-x': 'driftX 18s ease-in-out infinite',
+'drift-x-rev': 'driftXRev 22s ease-in-out infinite'
+},
+keyframes: {
+float: {
+'0%, 100%': { transform: 'translateY(0)' },
+'50%': { transform: 'translateY(-15px)' }
+},
+pulseSoft: {
+'0%, 100%': { opacity: '0.10', transform: 'scale(1)' },
+'50%': { opacity: '0.28', transform: 'scale(1.05)' }
+},
+slowZoom: {
+'0%': { transform: 'scale(1)' },
+'100%': { transform: 'scale(1.1)' }
+},
+driftX: {
+'0%, 100%': { transform: 'translateX(0)' },
+'50%': { transform: 'translateX(18px)' }
+},
+driftXRev: {
+'0%, 100%': { transform: 'translateX(0)' },
+'50%': { transform: 'translateX(-18px)' }
+}
+}
+}
+}
+}
+</script>
+<style>
+body {
+background-color: #f6efe5;
+color: #282828;
+-webkit-font-smoothing: antialiased;
+}
+/* Micro-interactions & animations */
+.reveal {
+opacity: 0;
+transform: translateY(40px) scale(0.985);
+transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+will-change: transform, opacity;
+}
+.reveal.active {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+/* Soft parallax for small accents */
+.parallax-y {
+transform: translate3d(0, calc(var(--parallax-y, 0px) * 1), 0);
+will-change: transform;
+}
+/* Infinite micro-movement dots */
+.micro-dot {
+width: 6px;
+height: 6px;
+border-radius: 9999px;
+background: rgba(85, 91, 0, 0.18);
+filter: blur(0.2px);
+}
+@media (prefers-reduced-motion: reduce) {
+.reveal {
+transition: none;
+opacity: 1;
+transform: none;
+}
+.parallax-y {
+transform: none;
+}
+}
+/* Form styling overrides */
+input[type="date"],
+input[type="number"],
+input[type="text"] {
+background-color: transparent;
+border-bottom: 1px solid #ada89a;
+border-radius: 0;
+color: #282828;
+}
+input:focus {
+outline: none;
+border-bottom-color: #555b00;
+}
+.dark-overlay {
+background-color: rgba(0, 0, 0, 0.36);
+}
+</style><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body class="font-sans antialiased text-base selection:bg-primary selection:text-white">
+    <!-- Header Navigation -->
+    <header class="fixed z-50 flex transition-all duration-300 w-full h-[80px] top-0 backdrop-blur-md items-center">
+      <div class="max-w-[1440px] mx-auto w-full px-6 flex justify-between items-center">
+        <div class="text-white font-serif italic text-xl md:text-2xl tracking-tight">
+          La Martina
+        </div>
+        <nav class="hidden md:flex gap-8 items-center text-white text-xs font-semibold tracking-widest uppercase">
+          <a href="#amenities" class="hover:text-secondary transition-colors duration-300">
+            Amenidades
+          </a>
+          <a href="#rooms" class="hover:text-secondary transition-colors duration-300">
+            Habitaciones
+          </a>
+          <a href="#pricing" class="hover:text-secondary transition-colors duration-300">
+            Tarifas
+          </a>
+          <a href="#rules" class="hover:text-secondary transition-colors duration-300">
+            Convivencia
+          </a>
+        </nav>
+        <a href="#booking" class="bg-primary text-white text-xs font-semibold uppercase tracking-widest py-3 px-6 rounded-[100px] hover:bg-secondary transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500">
+          Reservar
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative w-full h-screen min-h-[600px] flex items-center justify-center pt-[80px] overflow-hidden">
+      <div class="absolute inset-0 w-full h-full">
+        <img src="https://cdn.prod.website-files.com/6710d1b2bc82a2f6d06f926d/67287418d258ac034b0468b9_Lodge.webp" alt="Vista exterior de Cabaña La Martina" class="w-full h-full object-cover animate-slow-zoom">
+        <div class="absolute inset-0 dark-overlay"></div>
+      </div>
+      <div class="relative z-10 text-center px-4 max-w-4xl mx-auto reveal active">
+        <iconify-icon icon="solar:stars-minimalistic-bold-duotone" class="absolute text-white/30 text-6xl -top-12 md:-top-20 -left-10 animate-float pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></iconify-icon>
+        <iconify-icon icon="solar:leaf-bold-duotone" class="absolute text-white/20 text-5xl bottom-0 -right-12 animate-float-delayed pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></iconify-icon>
+        <p class="text-white text-xs md:text-sm uppercase tracking-[0.2em] font-semibold mb-6">
+          Sabanagrande, Atlántico
+        </p>
+        <h1 class="text-white font-serif italic font-light text-6xl md:text-8xl tracking-tight leading-none mb-8">
+          Refugio de
+          <br>
+          Exclusividad
+        </h1>
+        <p class="text-white/90 text-sm md:text-lg font-light max-w-2xl mx-auto mb-10">
+          Alquiler completo y privado. Una experiencia campestre de lujo con
+          diseño orgánico, rodeado de fauna exótica e instalaciones premium para
+          su total descanso.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="#booking" class="bg-primary text-white text-xs font-semibold uppercase tracking-widest py-4 px-10 rounded-[100px] hover:bg-secondary transition-colors duration-300 w-full sm:w-auto">
+            Inicia tu Reserva
+          </a>
+          <a href="#tour-360" class="bg-transparent border border-white text-white text-xs font-semibold uppercase tracking-widest py-4 px-10 rounded-[100px] hover:bg-white hover:text-darkbase transition-colors duration-300 w-full sm:w-auto">
+            Ver Tour 360
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Amenities Section -->
+    <section class="md:py-32 overflow-hidden z-10 pt-24 pb-24 relative" id="amenities">
+      <div class="absolute top-20 left-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] animate-pulse-soft pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></div>
+      <div class="absolute bottom-10 right-0 w-80 h-80 bg-secondary/10 rounded-full blur-[100px] animate-pulse-soft pointer-events-none parallax-y" style="animation-delay: -4s; --parallax-y: 0.0px;"></div>
+      <div class="absolute top-44 left-10 micro-dot animate-drift-x pointer-events-none"></div>
+      <div class="absolute bottom-28 right-16 micro-dot animate-drift-x-rev pointer-events-none" style="animation-delay: -6s"></div>
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <div class="mb-16 md:mb-24 reveal text-center max-w-3xl mx-auto active">
+          <h2 class="font-serif italic font-light text-4xl md:text-5xl tracking-tight text-darkbase mb-6">
+            Catálogo de Amenidades
+          </h2>
+          <p class="text-sm md:text-base text-darkbase/80">
+            Diseñado bajo un ecosistema de privacidad absoluta. Nuestras
+            instalaciones combinan recreación al aire libre con confort
+            doméstico contemporáneo.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+          <!-- Recreación -->
+          <div class="reveal active">
+            <img src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800&auto=format&fit=crop" alt="Piscina La Martina" class="w-full aspect-video object-cover rounded-[12px] mb-6 shadow-sm transition-transform duration-500 hover:scale-[1.02]">
+            <div class="h-[1px] w-full bg-darkbase/10 mb-8"></div>
+            <h3 class="text-xs uppercase tracking-widest font-semibold mb-6 text-primary">
+              Recreación y Exterior
+            </h3>
+            <ul class="space-y-4 text-sm text-darkbase/80">
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:swimming-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Piscina Privada (12m x 4m)
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:bath-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Jacuzzi integrado
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:football-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Cancha de Fútbol privada
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:home-smile-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Kiosco Tradicional cubierto
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:leaf-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Amplias Zonas Verdes y Caballeriza
+              </li>
+            </ul>
+          </div>
+
+          <!-- Confort -->
+          <div class="reveal active" style="transition-delay: 100ms;">
+            <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=800&auto=format&fit=crop" alt="Cabaña Interior" class="w-full aspect-video object-cover rounded-[12px] mb-6 shadow-sm transition-transform duration-500 hover:scale-[1.02]">
+            <div class="h-[1px] w-full bg-darkbase/10 mb-8"></div>
+            <h3 class="text-xs uppercase tracking-widest font-semibold mb-6 text-primary">
+              Confort Interior
+            </h3>
+            <ul class="space-y-4 text-sm text-darkbase/80">
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:wind-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Aire Acondicionado integral
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:chef-hat-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Cocina Integral equipada
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:tv-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Televisores distribuidos
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:wifi-router-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Conectividad Wifi de alta velocidad
+              </li>
+            </ul>
+          </div>
+
+          <!-- Servicios -->
+          <div class="reveal active" style="transition-delay: 200ms;">
+            <img src="https://images.unsplash.com/photo-1563396983906-f3715f1f2e11?q=80&w=800&auto=format&fit=crop" alt="Avestruces y Fauna" class="w-full aspect-video object-cover rounded-[12px] mb-6 shadow-sm transition-transform duration-500 hover:scale-[1.02]">
+            <div class="h-[1px] w-full bg-darkbase/10 mb-8"></div>
+            <h3 class="text-xs uppercase tracking-widest font-semibold mb-6 text-primary">
+              Servicios Ecosistémicos
+            </h3>
+            <ul class="space-y-4 text-sm text-darkbase/80">
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:music-note-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Sistema de Sonido propio (Controlado)
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:cat-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Mascotas Permitidas (Pet-Friendly)
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:car-linear" class="text-xl mt-0.5 text-secondary"></iconify-icon>
+                Parqueadero Privado (Máx 9 vehículos)
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rooms Distribution Split Layout -->
+    <section id="rooms" class="bg-surface text-white py-24 md:py-32 relative overflow-hidden">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-soft pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></div>
+      <div class="absolute top-24 left-10 micro-dot animate-drift-x pointer-events-none"></div>
+      <div class="absolute bottom-24 right-12 micro-dot animate-drift-x-rev pointer-events-none" style="animation-delay: -8s"></div>
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div id="room-carousel" class="relative h-[400px] lg:h-[600px] rounded-[16px] overflow-hidden reveal active group">
+          <div class="carousel-inner relative w-full h-full">
+            <img src="https://cdn.prod.website-files.com/6710d1b2bc82a2f6d06f926d/672874bd3b68ae7b587f264d_Lodge%202.webp" class="carousel-item absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-10 opacity-100" alt="Habitación 1">
+            <img src="https://images.unsplash.com/photo-1598928506311-c55d430bfc23?q=80&w=800&auto=format&fit=crop" class="carousel-item absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-0 opacity-0" alt="Habitación 2">
+            <img src="https://images.unsplash.com/photo-1560067174-c5a3a8f37060?q=80&w=800&auto=format&fit=crop" class="carousel-item absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-0 opacity-0" alt="Habitación 3">
+          </div>
+          <div class="absolute inset-0 bg-darkbase/20 z-20 pointer-events-none"></div>
+
+          <button onclick="window.nextSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-primary transition opacity-0 group-hover:opacity-100 backdrop-blur-sm focus-visible:outline-none">
+            <iconify-icon icon="solar:alt-arrow-left-linear" class="text-xl"></iconify-icon>
+          </button>
+          <button onclick="window.nextSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-primary transition opacity-0 group-hover:opacity-100 backdrop-blur-sm focus-visible:outline-none">
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="text-xl"></iconify-icon>
+          </button>
+
+          <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+            <button onclick="window.setSlide(0)" class="carousel-dot w-6 h-2 rounded-full bg-white transition-all"></button>
+            <button onclick="window.setSlide(1)" class="carousel-dot w-2 h-2 rounded-full bg-white/50 transition-all"></button>
+            <button onclick="window.setSlide(2)" class="carousel-dot w-2 h-2 rounded-full bg-white/50 transition-all"></button>
+          </div>
+        </div>
+        <script>
+          window.currentRoomSlide = 0;
+          window.updateRoomCarousel = function() {
+              const roomSlides = document.querySelectorAll('.carousel-item');
+              const roomDots = document.querySelectorAll('.carousel-dot');
+              roomSlides.forEach((slide, index) => {
+                  if(index === window.currentRoomSlide) {
+                      slide.classList.remove('opacity-0', 'z-0');
+                      slide.classList.add('opacity-100', 'z-10');
+                      roomDots[index].classList.remove('bg-white/50', 'w-2');
+                      roomDots[index].classList.add('bg-white', 'w-6');
+                  } else {
+                      slide.classList.remove('opacity-100', 'z-10');
+                      slide.classList.add('opacity-0', 'z-0');
+                      roomDots[index].classList.remove('bg-white', 'w-6');
+                      roomDots[index].classList.add('bg-white/50', 'w-2');
+                  }
+              });
+          };
+          window.nextSlide = function(dir) {
+              const roomSlides = document.querySelectorAll('.carousel-item');
+              window.currentRoomSlide = (window.currentRoomSlide + dir + roomSlides.length) % roomSlides.length;
+              window.updateRoomCarousel();
+          };
+          window.setSlide = function(index) {
+              window.currentRoomSlide = index;
+              window.updateRoomCarousel();
+          };
+          setInterval(() => window.nextSlide(1), 5000);
+        </script>
+        <div class="reveal">
+          <h2 class="font-serif italic font-light text-4xl md:text-5xl tracking-tight mb-8">
+            Distribución de Habitaciones
+          </h2>
+          <p class="text-white/70 text-sm md:text-base mb-12">
+            La cabaña cuenta con 3 habitaciones independientes, configuradas
+            para garantizar el máximo confort. Cada espacio asegura
+            climatización y servicios privados.
+          </p>
+
+          <div class="space-y-8">
+            <div class="pb-6 border-b border-white/10 flex justify-between items-end">
+              <div>
+                <h4 class="font-serif italic text-2xl mb-2">Habitación 1</h4>
+                <p class="text-xs uppercase tracking-widest text-muted">
+                  2 Literas
+                </p>
+              </div>
+              <div class="flex gap-2 text-primary">
+                <iconify-icon icon="solar:bath-linear" class="text-xl" title="Baño Privado"></iconify-icon>
+                <iconify-icon icon="solar:wind-linear" class="text-xl" title="Aire Acondicionado"></iconify-icon>
+                <iconify-icon icon="solar:tv-linear" class="text-xl" title="TV"></iconify-icon>
+              </div>
+            </div>
+            <div class="pb-6 border-b border-white/10 flex justify-between items-end">
+              <div class="">
+                <h4 class="font-serif italic text-2xl mb-2">Habitación 2</h4>
+                <p class="text-xs uppercase tracking-widest text-muted">
+                  2 Literas
+                </p>
+              </div>
+              <div class="flex gap-2 text-primary">
+                <iconify-icon icon="solar:bath-linear" class="text-xl" title="Baño Privado"></iconify-icon>
+                <iconify-icon icon="solar:wind-linear" class="text-xl" title="Aire Acondicionado"></iconify-icon>
+                <iconify-icon icon="solar:tv-linear" class="text-xl" title="TV"></iconify-icon>
+              </div>
+            </div>
+            <div class="pb-6 border-b border-white/10 flex justify-between items-end">
+              <div class="">
+                <h4 class="font-serif italic text-2xl mb-2">Habitación 3</h4>
+                <p class="text-xs uppercase tracking-widest text-muted">
+                  1 Cama Doble
+                </p>
+              </div>
+              <div class="flex gap-2 text-primary">
+                <iconify-icon icon="solar:bath-linear" class="text-xl" title="Baño Privado"></iconify-icon>
+                <iconify-icon icon="solar:wind-linear" class="text-xl" title="Aire Acondicionado"></iconify-icon>
+                <iconify-icon icon="solar:tv-linear" class="text-xl" title="TV"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="md:py-32 overflow-hidden pt-24 pb-24 relative" id="fauna">
+      <div class="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[80px] animate-pulse-soft pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></div>
+      <div class="absolute top-1/3 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] animate-pulse-soft pointer-events-none parallax-y" style="animation-delay: -3s; --parallax-y: 0.0px;"></div>
+      <div class="absolute top-20 right-16 micro-dot animate-drift-x pointer-events-none"></div>
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 mb-12">
+        <h2 class="font-serif italic font-light text-4xl md:text-5xl tracking-tight text-darkbase mb-4 reveal">
+          Nuestra Fauna
+        </h2>
+        <p class="text-sm md:text-base text-darkbase/80 max-w-2xl reveal">
+          Convive con especies exóticas y de granja en un entorno controlado y
+          seguro. Un contacto directo y responsable con la naturaleza.
+        </p>
+      </div>
+      <div class="flex overflow-x-auto gap-4 md:gap-8 lg:px-[15vw] snap-x snap-mandatory reveal scroll-smooth pr-4 pb-12 pl-4 gap-x-4 gap-y-4" style="scrollbar-width: none">
+        <style>
+          div[data-element-id="aura-emqlwl4f1aa3lfg1"]::-webkit-scrollbar {
+            display: none;
+          }
+        </style>
+
+        <div class="shrink-0 w-[90vw] md:w-[70vw] snap-center relative rounded-[24px] overflow-hidden group h-[400px] md:h-[600px] shadow-xl">
+          <img src="https://images.unsplash.com/photo-1563396983906-f3715f1f2e11?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Avestruces">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12">
+            <h3 class="text-white font-serif italic font-light text-3xl md:text-5xl mb-2 tracking-tight">
+              Avestruces
+            </h3>
+            <p class="text-white/80 text-xs md:text-sm uppercase tracking-widest font-medium">
+              Interacción Permitida
+            </p>
+          </div>
+        </div>
+
+        <div class="shrink-0 w-[90vw] md:w-[70vw] snap-center relative rounded-[24px] overflow-hidden group h-[400px] md:h-[600px] shadow-xl">
+          <img src="https://images.unsplash.com/photo-1568160455018-09cd34bb4859?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Llamas y Alpacas">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12">
+            <h3 class="text-white font-serif italic font-light text-3xl md:text-5xl mb-2 tracking-tight">
+              Llamas y Alpacas
+            </h3>
+            <p class="text-white/80 text-xs md:text-sm uppercase tracking-widest font-medium">
+              Interacción Permitida
+            </p>
+          </div>
+        </div>
+
+        <div class="shrink-0 w-[90vw] md:w-[70vw] snap-center relative rounded-[24px] overflow-hidden group h-[400px] md:h-[600px] shadow-xl">
+          <img src="https://images.unsplash.com/photo-1502422791888-29bf42907409?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Venados Sika">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12">
+            <h3 class="text-white font-serif italic font-light text-3xl md:text-5xl mb-2 tracking-tight">
+              Venados Sika
+            </h3>
+            <p class="text-white/80 text-xs md:text-sm uppercase tracking-widest font-medium">
+              Avistamiento en manada
+            </p>
+          </div>
+        </div>
+
+        <div class="shrink-0 w-[90vw] md:w-[70vw] snap-center relative rounded-[24px] overflow-hidden group h-[400px] md:h-[600px] shadow-xl">
+          <img src="https://images.unsplash.com/photo-1555529733-0e670560f7e1?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Caballos Percherones">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12">
+            <h3 class="text-white font-serif italic font-light text-3xl md:text-5xl mb-2 tracking-tight">
+              Caballos Percherones
+            </h3>
+            <p class="text-white/80 text-xs md:text-sm uppercase tracking-widest font-medium">
+              Zona Ecuestre
+            </p>
+          </div>
+        </div>
+
+        <div class="shrink-0 w-[90vw] md:w-[70vw] snap-center relative rounded-[24px] overflow-hidden group h-[400px] md:h-[600px] shadow-xl">
+          <img src="https://images.unsplash.com/photo-1515594854536-cb7db353b3f4?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Pavos Reales">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12">
+            <h3 class="text-white font-serif italic font-light text-3xl md:text-5xl mb-2 tracking-tight">
+              Pavos Reales
+            </h3>
+            <p class="text-white/80 text-xs md:text-sm uppercase tracking-widest font-medium">
+              Aves Exóticas
+            </p>
+          </div>
+        </div>
+
+        <div class="shrink-0 w-[90vw] md:w-[70vw] snap-center relative rounded-[24px] overflow-hidden group h-[400px] md:h-[600px] shadow-xl">
+          <img src="https://images.unsplash.com/photo-1484557985045-edf25e08da73?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Granja Interactiva">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12">
+            <h3 class="text-white font-serif italic font-light text-3xl md:text-5xl mb-2 tracking-tight">
+              Granja Interactiva
+            </h3>
+            <p class="text-white/80 text-xs md:text-sm uppercase tracking-widest font-medium">
+              Ovejas, Cabras y más
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing (Estructura Tarifaria Plana) -->
+    <section id="pricing" class="py-24 md:py-32 bg-canvas relative overflow-hidden">
+      <div class="absolute top-32 left-1/4 w-72 h-72 bg-secondary/10 rounded-full blur-[80px] animate-pulse-soft pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></div>
+      <iconify-icon icon="solar:wallet-money-bold-duotone" class="absolute text-primary/5 text-9xl bottom-10 right-20 animate-float-delayed pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></iconify-icon>
+      <div class="absolute bottom-24 left-12 micro-dot animate-drift-x-rev pointer-events-none" style="animation-delay: -10s"></div>
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 text-center">
+        <h2 class="font-serif italic font-light text-4xl md:text-5xl tracking-tight text-darkbase mb-4 reveal">
+          Tarifas Planas
+        </h2>
+        <p class="text-sm md:text-base text-darkbase/80 mb-16 max-w-2xl mx-auto reveal">
+          Sin variaciones de temporada. Precios fijos y cerrados por bloque de
+          servicio, garantizando transparencia total en su reserva.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <!-- Pasadía -->
+          <div class="bg-white p-10 rounded-[16px] text-left reveal shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-canvas rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-500"></div>
+
+            <h3 class="font-serif italic text-3xl mb-2">Pasadía Diurno</h3>
+            <p class="text-xs uppercase tracking-widest text-secondary font-semibold mb-6">
+              Máx 20 Personas
+            </p>
+            <div class="text-5xl font-sans font-light tracking-tight text-primary mb-6">
+              $1.2M
+              <span class="text-base text-darkbase/60 uppercase tracking-widest font-semibold">
+                COP
+              </span>
+            </div>
+            <ul class="space-y-3 text-sm text-darkbase/80 mb-10 border-t border-darkbase/10 pt-6">
+              <li class="flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-linear" class="text-primary"></iconify-icon>
+                Tarifa plana asistan 1 o 20 personas.
+              </li>
+              <li class="flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-linear" class="text-primary"></iconify-icon>
+                Acceso a todas las zonas húmedas y recreativas.
+              </li>
+              <li class="flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-linear" class="text-primary"></iconify-icon>
+                Anticipo de reserva: 30% ($360.000 COP).
+              </li>
+            </ul>
+          </div>
+
+          <!-- Alojamiento -->
+          <div class="bg-darkbase text-white p-10 rounded-[16px] text-left reveal shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-surface rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-500"></div>
+
+            <h3 class="font-serif italic text-3xl mb-2">
+              Alojamiento Completo
+            </h3>
+            <p class="text-xs uppercase tracking-widest text-secondary font-semibold mb-6">
+              Máx 14 Personas
+            </p>
+            <div class="text-5xl font-sans font-light tracking-tight text-canvas mb-6">
+              $3.0M
+              <span class="text-base text-white/60 uppercase tracking-widest font-semibold">
+                COP / Noche
+              </span>
+            </div>
+            <ul class="space-y-3 text-sm text-white/80 mb-10 border-t border-white/10 pt-6">
+              <li class="flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-linear" class="text-secondary"></iconify-icon>
+                Tarifa plana idéntica fines de semana y festivos.
+              </li>
+              <li class="flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-linear" class="text-secondary"></iconify-icon>
+                Exclusividad total de habitaciones y predio.
+              </li>
+              <li class="flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-linear" class="text-secondary"></iconify-icon>
+                Anticipo de reserva: $1.000.000 COP.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rules & Fauna Image-Text Grid -->
+    <section class="md:py-32 overflow-hidden text-white pt-24 pb-24 relative" id="rules">
+  <!-- Optional Background Accent Image behind text -->
+  <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('https://cdn.prod.website-files.com/6710d1b2bc82a2f6d06f926d/6731d7c63fc5a7e0fdf13552_Starry%20Background.webp'); background-size: cover; background-position: center;">
+  </div>
+
+  <div class="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
+    <div class="reveal will-change-transform">
+      <div class="h-[1px] w-16 bg-secondary mb-8"></div>
+      <h2 class="font-serif italic font-light text-4xl mb-6">
+        Reglas de Convivencia
+      </h2>
+      <p class="text-sm text-white/70 mb-8">
+        Para mantener la integridad acústica y la armonía del ecosistema,
+        establecemos regulaciones estrictas.
+      </p>
+      <ul class="space-y-6 text-sm">
+        <li class="flex items-start gap-4">
+          <iconify-icon icon="solar:volume-cross-linear" class="text-2xl text-secondary shrink-0"></iconify-icon>
+          <div class="">
+            <strong class="block font-semibold tracking-wide uppercase text-xs mb-1">
+                  Sonido Externo Prohibido
+                </strong>
+            <span class="text-white/70">
+                  Estrictamente prohibido el uso de bafles o amplificadores
+                  externos. Debe usarse el sonido integrado.
+                </span>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <iconify-icon icon="solar:danger-circle-linear" class="text-2xl text-secondary shrink-0"></iconify-icon>
+          <div class="">
+            <strong class="block font-semibold tracking-wide uppercase text-xs mb-1">
+                  Horario y Seguridad en Piscina
+                </strong>
+            <span class="text-white/70">
+                  Uso permitido hasta las 10:00 PM. Prohibido ingresar envases o
+                  vasos de vidrio en la zona perimetral.
+                </span>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <iconify-icon icon="solar:forbidden-circle-linear" class="text-2xl text-secondary shrink-0"></iconify-icon>
+          <div class="">
+            <strong class="block font-semibold tracking-wide uppercase text-xs mb-1">
+                  Zonas de No Fumar
+                </strong>
+            <span class="text-white/70">
+                  Prohibido fumar tabaco o cigarrillos electrónicos en el
+                  interior de la casa y todo el Kiosco.
+                </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="reveal will-change-transform">
+      <div class="h-[1px] w-16 bg-primary mb-8"></div>
+      <h2 class="font-serif italic font-light text-4xl mb-6">
+        Interacción con la Fauna
+      </h2>
+      <p class="text-sm text-white/70 mb-8">
+        Nuestro predio es hogar de avestruces, llamas, venados, caballos,
+        pavos reales y más. Protegemos su dieta activamente.
+      </p>
+
+      <div class="bg-darkbase/50 border border-white/10 p-6 rounded-[16px]">
+        <div class="flex items-start gap-4 mb-4">
+          <iconify-icon icon="solar:hand-stars-linear" class="text-2xl text-primary shrink-0"></iconify-icon>
+          <div class="">
+            <strong class="block font-semibold tracking-wide uppercase text-xs mb-1">
+                  Alimentación Controlada
+                </strong>
+            <span class="text-white/70 text-sm">
+                  Prohibido suministrar comida externa a los animales. Las
+                  interacciones se realizan exclusivamente mediante la compra de
+                  kits de comida controlados internamente.
+                </span>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/10 text-xs text-white/50 tracking-widest uppercase">
+          Permitido alimentar con kit únicamente: Llamas, Avestruces y
+          Guacamayas.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Booking UX Architecture (3-Step Form) -->
+    <section id="tour-360" class="py-24 md:py-32 bg-darkbase text-white relative">
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 text-center reveal">
+        <h2 class="font-serif italic font-light text-4xl md:text-5xl tracking-tight mb-4">
+          Tour 360°
+        </h2>
+        <p class="text-sm md:text-base text-white/70 max-w-2xl mx-auto mb-12">
+          Explora cada rincón de Cabaña La Martina de manera interactiva. Un
+          recorrido inmersivo por nuestras instalaciones antes de tu visita.
+        </p>
+        <div class="relative w-full aspect-video max-w-4xl mx-auto rounded-[16px] overflow-hidden shadow-2xl border border-white/10 group cursor-pointer">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop" alt="Vista 360" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700 animate-slow-zoom">
+          <div class="absolute inset-0 bg-black/40 flex items-center justify-center transition-colors duration-300 group-hover:bg-black/20">
+            <div class="absolute w-32 h-32 border border-white/20 rounded-full animate-[spin_10s_linear_infinite] border-dashed pointer-events-none"></div>
+            <button class="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">
+              <iconify-icon icon="solar:play-circle-bold-duotone" class="text-5xl"></iconify-icon>
+            </button>
+          </div>
+          <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-xs tracking-widest uppercase bg-black/60 px-4 py-2 rounded-[100px] backdrop-blur-md">
+            <span class="flex items-center gap-2">
+              <iconify-icon icon="solar:panorama-linear" class="text-lg"></iconify-icon>
+              Iniciar Recorrido
+            </span>
+          </div>
+        </div>
+        <div class="mt-10">
+          <button class="inline-block bg-primary text-white text-xs font-semibold uppercase tracking-widest py-4 px-10 rounded-[100px] hover:bg-secondary transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500">
+            Explorar Tour Interactivo
+          </button>
+        </div>
+      </div>
+    </section>
+    <section id="booking" class="py-24 md:py-32 bg-canvas relative overflow-hidden">
+      <div class="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] animate-pulse-soft pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></div>
+      <div class="absolute bottom-0 left-0 w-80 h-80 bg-secondary/5 rounded-full blur-[80px] animate-pulse-soft pointer-events-none parallax-y" style="animation-delay: -2s; --parallax-y: 0.0px;"></div>
+      <div class="absolute top-20 left-14 micro-dot animate-drift-x pointer-events-none"></div>
+      <div class="max-w-3xl mx-auto px-6 reveal bg-white p-8 md:p-12 rounded-[16px] shadow-sm">
+        <h2 class="font-serif italic font-light text-4xl text-center mb-2">
+          Solicitud de Reserva
+        </h2>
+        <p class="text-xs uppercase tracking-widest text-center text-primary font-semibold mb-12">
+          Proceso en 3 pasos
+        </p>
+
+        <!-- Step 1: Tipo de Plan -->
+        <div id="step-1" class="transition-all duration-500 block">
+          <h3 class="text-lg font-semibold mb-6 text-center">
+            Paso 1: Seleccione su Plan
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button onclick="setPlan('pasadia')" class="text-left border border-darkbase/20 rounded-[16px] p-6 hover:border-primary hover:bg-canvas/50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500">
+              <h4 class="font-serif italic text-2xl mb-2 text-darkbase">
+                Pasadía Diurno
+              </h4>
+              <p class="text-sm text-darkbase/60">
+                Tarifa plana para hasta 20 personas.
+              </p>
+            </button>
+            <button onclick="setPlan('alojamiento')" class="text-left border border-darkbase/20 rounded-[16px] p-6 hover:border-primary hover:bg-canvas/50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500">
+              <h4 class="font-serif italic text-2xl mb-2 text-darkbase">
+                Alojamiento
+              </h4>
+              <p class="text-sm text-darkbase/60">
+                Privacidad total hasta 14 personas.
+              </p>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Fechas y Datos -->
+        <div id="step-2" class="transition-all duration-500 hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-semibold">Paso 2: Datos del Grupo</h3>
+            <button onclick="goBack(1)" class="text-xs uppercase tracking-widest text-muted hover:text-darkbase">
+              ← Cambiar Plan
+            </button>
+          </div>
+          <p class="text-xs text-primary font-semibold tracking-widest uppercase mb-8 p-4 bg-primary/5 rounded-[8px] inline-block">
+            Disponibilidad garantizada en tiempo real al contactar.
+          </p>
+
+          <div class="space-y-6">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-widest text-darkbase/80 mb-2">
+                Nombre Completo
+              </label>
+              <input type="text" id="contact-name" class="w-full py-3 text-sm focus:outline-none" placeholder="Ingresa tu nombre">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-darkbase/80 mb-2">
+                  Fecha Solicitada
+                </label>
+                <input type="date" id="contact-date" class="w-full py-3 text-sm focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-darkbase/80 mb-2">
+                  Cantidad de Personas
+                  <span id="max-people-label" class="text-muted">(Máx)</span>
+                </label>
+                <input type="number" id="contact-people" min="1" class="w-full py-3 text-sm focus:outline-none" placeholder="0">
+              </div>
+            </div>
+            <button onclick="verifyData()" class="w-full bg-darkbase text-white text-xs font-semibold uppercase tracking-widest py-4 px-8 rounded-[100px] hover:bg-primary transition-colors duration-300 mt-6">
+              Continuar a Verificación
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Resumen -->
+        <div id="step-3" class="transition-all duration-500 hidden">
+          <h3 class="text-lg font-semibold mb-6">
+            Paso 3: Verificación y Resumen
+          </h3>
+
+          <div class="bg-canvas p-6 rounded-[16px] space-y-4 mb-8">
+            <div class="flex justify-between items-end border-b border-darkbase/10 pb-4">
+              <div>
+                <p class="text-xs text-darkbase/60 uppercase tracking-widest mb-1">
+                  Plan Seleccionado
+                </p>
+                <p id="summary-plan" class="font-serif italic text-2xl">--</p>
+              </div>
+              <button onclick="goBack(1)" class="text-xs text-primary underline">
+                Modificar
+              </button>
+            </div>
+            <div class="flex justify-between items-end border-b border-darkbase/10 pb-4">
+              <div>
+                <p class="text-xs text-darkbase/60 uppercase tracking-widest mb-1">
+                  Contacto y Fecha
+                </p>
+                <p id="summary-details" class="text-sm font-semibold">--</p>
+              </div>
+              <button onclick="goBack(2)" class="text-xs text-primary underline">
+                Modificar
+              </button>
+            </div>
+            <div class="flex justify-between items-end pt-2">
+              <div>
+                <p class="text-xs text-darkbase/60 uppercase tracking-widest mb-1">
+                  Tarifa Plana Total
+                </p>
+                <p id="summary-price" class="text-2xl font-light tracking-tight text-primary">
+                  --
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-secondary/10 p-4 rounded-[8px] mb-8 text-xs text-darkbase/80">
+            <strong class="block uppercase tracking-widest text-secondary mb-1">
+              Nota Importante
+            </strong>
+            Se requiere un depósito de garantía de $300.000 COP antes del
+            ingreso, reembolsable tras inventario. El cierre se realiza vía
+            WhatsApp.
+          </div>
+
+          <button onclick="submitToWhatsApp()" class="w-full bg-[#25D366] text-white flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-widest py-4 px-8 rounded-[100px] hover:bg-[#128C7E] transition-colors duration-300">
+            <iconify-icon icon="solar:phone-calling-linear" class="text-lg"></iconify-icon>
+            Confirmar y Enviar a WhatsApp
+          </button>
+        </div>
+      </div>
+    </section>
+    <section id="location" class="py-24 md:py-32 bg-surface text-white relative overflow-hidden">
+      <iconify-icon icon="solar:map-arrow-square-bold-duotone" class="absolute text-primary/5 text-[15rem] top-10 left-10 animate-float pointer-events-none parallax-y" style="--parallax-y: 0.0px;"></iconify-icon>
+      <div class="absolute bottom-24 right-24 micro-dot animate-drift-x-rev pointer-events-none" style="animation-delay: -7s"></div>
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center reveal">
+        <div class="">
+          <div class="h-[1px] w-16 bg-primary mb-8"></div>
+          <h2 class="font-serif italic font-light text-4xl md:text-5xl tracking-tight mb-6">
+            Ubicación Estratégica
+          </h2>
+          <p class="text-sm md:text-base text-white/70 mb-8">
+            Sabanagrande, Atlántico. Un escape orgánico y privado, a minutos del
+            entorno urbano. Rutas de acceso pavimentadas y seguras para todo
+            tipo de vehículos.
+          </p>
+          <ul class="space-y-4 text-sm text-white/70 mb-10">
+            <li class="flex items-start gap-3">
+              <iconify-icon icon="solar:map-point-linear" class="text-xl mt-0.5 text-secondary shrink-0"></iconify-icon>
+              Vía Oriental, Sabanagrande, Atlántico
+            </li>
+            <li class="flex items-start gap-3">
+              <iconify-icon icon="solar:routing-2-linear" class="text-xl mt-0.5 text-secondary shrink-0"></iconify-icon>
+              A 30 minutos de Barranquilla
+            </li>
+            <li class="flex items-start gap-3">
+              <iconify-icon icon="solar:car-linear" class="text-xl mt-0.5 text-secondary shrink-0"></iconify-icon>
+              Parqueadero privado interno (9 cupos)
+            </li>
+          </ul>
+          <a href="#" class="inline-flex items-center justify-center gap-3 border border-white/20 text-white text-xs font-semibold uppercase tracking-widest py-4 px-8 rounded-[100px] hover:bg-white hover:text-darkbase transition-all duration-300">
+            Abrir en Google Maps
+            <iconify-icon icon="solar:map-arrow-up-linear" class="text-lg"></iconify-icon>
+          </a>
+        </div>
+        <div class="h-[350px] md:h-[450px] w-full rounded-[16px] overflow-hidden shadow-2xl relative">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15674.316499899327!2d-74.7570415!3d10.7963365!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42c5545a90987%3A0xc069deef4f1db1f3!2sSabanagrande%2C%20Atl%C3%A1ntico!5e0!3m2!1sen!2sco!4v1700000000000!5m2!1sen!2sco" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="filter grayscale opacity-80 contrast-125 hover:filter-none hover:opacity-100 transition-all duration-700 absolute inset-0"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-darkbase text-white pt-20 pb-10">
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div class="md:col-span-2">
+          <h3 class="font-serif italic text-4xl mb-4 text-canvas">
+            La Martina
+          </h3>
+          <p class="text-sm text-white/60 max-w-sm mb-6">
+            Lujo exclusivo y contacto orgánico con la naturaleza en
+            Sabanagrande, Atlántico. Tu refugio privado.
+          </p>
+          <a href="https://www.instagram.com/cabana_la_martina/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/20 hover:border-primary hover:bg-primary transition-all">
+            <iconify-icon icon="solar:camera-linear" class="text-lg"></iconify-icon>
+          </a>
+        </div>
+
+        <div class="">
+          <h4 class="text-xs uppercase tracking-widest font-semibold text-primary mb-6">
+            Contacto
+          </h4>
+          <ul class="space-y-4 text-sm text-white/70">
+            <li class="">
+              <a href="tel:+573015780509" class="hover:text-canvas transition-colors">
+                +57 301 578 0509
+              </a>
+            </li>
+            <li class="">
+              <a href="mailto:info.lamartina.co@gmail.com" class="hover:text-canvas transition-colors">
+                info.lamartina.co@gmail.com
+              </a>
+            </li>
+            <li class="uppercase text-xs tracking-widest mt-6">
+              Sabanagrande, Atlántico
+              <br>
+              Colombia
+            </li>
+          </ul>
+        </div>
+
+        <div class="">
+          <h4 class="text-xs uppercase tracking-widest font-semibold text-primary mb-6">
+            Legal
+          </h4>
+          <ul class="space-y-4 text-sm text-white/70">
+            <li class="">Políticas de Cancelación</li>
+            <li>Reglamento de Penalizaciones</li>
+            <li>Términos de Privacidad</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="max-w-[1440px] mx-auto px-6 lg:px-12 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/40 uppercase tracking-widest">
+        <p>
+          ©
+          <span id="year">2026</span>
+          Cabaña La Martina. Todos los derechos reservados.
+        </p>
+        <p class="mt-4 md:mt-0">Diseñado bajo ecosistema natural</p>
+      </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+      (function(){
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) return;
+
+        const els = Array.from(document.querySelectorAll('.parallax-y'));
+        if (!els.length) return;
+
+        let ticking = false;
+        const update = () => {
+          const y = window.scrollY || 0;
+          els.forEach((el, i) => {
+            const speed = 0.06 + (i % 4) * 0.01;
+            const offset = (y * speed) * -1;
+            el.style.setProperty('--parallax-y', offset.toFixed(1) + 'px');
+          });
+          ticking = false;
+        };
+
+        const onScroll = () => {
+          if (!ticking) {
+            window.requestAnimationFrame(update);
+            ticking = true;
+          }
+        };
+
+        update();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script>
+    <script>
+              // Set dynamic year
+              document.getElementById('year').textContent = new Date().getFullYear();
+
+              // Reveal animations setup
+              const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              if (!reduceMotion) {
+                  const observerOptions = {
+                      root: null,
+                      rootMargin: '0px',
+                      threshold: 0.15
+                  };
+
+                  const observer = new IntersectionObserver((entries) => {
+                      entries.forEach(entry => {
+                          if (entry.isIntersecting) {
+                              entry.target.classList.add('active');
+                              observer.unobserve(entry.target);
+                          }
+                      });
+                  }, observerOptions);
+
+                  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+              }
+
+              // Booking Form State and Logic
+              let bookingState = {
+                  plan: '',
+                  name: '',
+                  date: '',
+                  people: 0,
+                  price: 0
+              };
+
+              const config = {
+                  pasadia: { name: 'Pasadía Diurno', max: 20, price: '$1.200.000 COP' },
+                  alojamiento: { name: 'Alojamiento Completo', max: 14, price: '$3.000.000 COP' }
+              };
+
+              function setPlan(selectedPlan) {
+                  bookingState.plan = selectedPlan;
+                  const planConfig = config[selectedPlan];
+
+                  // Update UI for step 2
+                  document.getElementById('max-people-label').textContent = `(Máx ${planConfig.max})`;
+                  document.getElementById('contact-people').max = planConfig.max;
+
+                  // Transition steps
+                  document.getElementById('step-1').classList.add('hidden');
+                  document.getElementById('step-2').classList.remove('hidden');
+              }
+
+              function goBack(step) {
+                  document.getElementById('step-1').classList.add('hidden');
+                  document.getElementById('step-2').classList.add('hidden');
+                  document.getElementById('step-3').classList.add('hidden');
+
+                  document.getElementById(`step-${step}`).classList.remove('hidden');
+              }
+
+              function verifyData() {
+                  const name = document.getElementById('contact-name').value.trim();
+                  const date = document.getElementById('contact-date').value;
+                  const people = parseInt(document.getElementById('contact-people').value, 10);
+                  const planConfig = config[bookingState.plan];
+
+                  if (!name || !date || !people) {
+                      alert('Por favor completa todos los campos.');
+                      return;
+                  }
+
+                  if (people > planConfig.max) {
+                      alert(`El plan seleccionado tiene un límite máximo de ${planConfig.max} personas.`);
+                      return;
+                  }
+
+                  if (people < 1) {
+                      alert('La cantidad de personas debe ser al menos 1.');
+                      return;
+                  }
+
+                  // Save state
+                  bookingState.name = name;
+                  bookingState.date = date;
+                  bookingState.people = people;
+                  bookingState.price = planConfig.price;
+
+                  // Populate summary
+                  document.getElementById('summary-plan').textContent = planConfig.name;
+                  document.getElementById('summary-details').innerHTML = `${name} <br><span class="text-xs text-darkbase/60">${people} Personas | Fecha: ${date}</span>`;
+                  document.getElementById('summary-price').textContent = planConfig.price;
+
+                  // Move to step 3
+                  document.getElementById('step-2').classList.add('hidden');
+                  document.getElementById('step-3').classList.remove('hidden');
+              }
+
+              function submitToWhatsApp() {
+                  const planConfig = config[bookingState.plan];
+
+                  const message = `Hola Cabaña La Martina, quiero confirmar disponibilidad para una reserva:
+
+      *Plan:* ${planConfig.name}
+      *Nombre de Contacto:* ${bookingState.name}
+      *Fecha Solicitada:* ${bookingState.date}
+      *Cantidad de Personas:* ${bookingState.people}
+      *Tarifa Esperada:* ${bookingState.price}
+
+      Quedo atento(a) para proceder con el anticipo.`;
+
+                  const encodedMessage = encodeURIComponent(message);
+                  const whatsappNumber = "573015780509";
+
+                  window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+              }
+    </script>
+  
+</body></html>

@@ -38,3 +38,8 @@ backend/.env.*
 
 .vercel
 .env*
+
+# Cache local da biblioteca de assets (canonico fica no Cloudflare R2).
+# Somente o indice leve e versionado.
+backend/data/asset_library/*
+!backend/data/asset_library/index.json

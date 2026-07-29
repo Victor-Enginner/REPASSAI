@@ -43,22 +43,22 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
         <input
           type="checkbox"
+          aria-label={`Selecionar ${lead.nome}`}
           checked={selecionado}
           onChange={() => onAlternarSelecao(lead.id)}
-          aria-label={`Selecionar ${lead.nome}`}
-          style={{ marginTop: '3px', width: '17px', height: '17px', accentColor: '#6366f1', flexShrink: 0, cursor: 'pointer' }}
+          style={{ marginTop: '3px', width: '17px', height: '17px', accentColor: 'var(--accent-indigo)', flexShrink: 0, cursor: 'pointer' }}
         />
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <h3 className="font-headline" style={{
-            fontSize: '16px', color: '#ffffff', lineHeight: 1.25, margin: 0,
+            fontSize: '16px', color: 'var(--fg-white)', lineHeight: 1.25, margin: 0,
             letterSpacing: '-0.02em', fontWeight: 800
           }}>
             {lead.nome}
           </h3>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '12px', color: '#cbd5e1', fontWeight: 500 }}>
+            <span style={{ fontSize: '12px', color: 'var(--fg-soft)', fontWeight: 500 }}>
               {lead.categoria}{lead.cidade ? ` · ${lead.cidade}` : ''}
             </span>
 
@@ -66,7 +66,7 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
               <span style={{
                 fontSize: '9.5px', fontWeight: 800, fontFamily: 'var(--font-mono)',
                 padding: '2px 8px', borderRadius: '4px',
-                background: 'rgba(245, 158, 11, 0.16)', color: '#fbbf24',
+                background: 'rgba(245, 158, 11, 0.16)', color: 'var(--estado-alerta-suave)',
                 border: '0.5px solid rgba(245, 158, 11, 0.4)',
                 display: 'inline-flex', alignItems: 'center', gap: '4px',
               }}>
@@ -83,9 +83,9 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
           {nota !== null && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '7px' }}>
               <Star size={13} color="#f59e0b" fill="#f59e0b" />
-              <span style={{ fontSize: '12px', color: '#ffffff', fontWeight: 700 }}>{nota}</span>
+              <span style={{ fontSize: '12px', color: 'var(--fg-white)', fontWeight: 700 }}>{nota}</span>
               {avaliacoes !== null && (
-                <span style={{ fontSize: '11.5px', color: '#94a3b8' }}>
+                <span style={{ fontSize: '11.5px', color: 'var(--fg-muted)' }}>
                   · {avaliacoes.toLocaleString('pt-BR')} avaliações
                 </span>
               )}
@@ -126,7 +126,7 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', fontSize: '12px', color: 'var(--fg-soft)' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
             <MapPin size={13} color="#64748b" style={{ flexShrink: 0, marginTop: '2px' }} />
             <span style={{ lineHeight: 1.4 }}>{lead.endereco || `${lead.cidade || ''}${lead.estado ? `, ${lead.estado}` : ''}`}</span>
@@ -143,7 +143,7 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
         {lead.orientacao && (
           <div style={{
             display: 'flex', gap: '8px', alignItems: 'flex-start',
-            fontSize: '11.5px', color: '#a5b4fc', fontStyle: 'italic',
+            fontSize: '11.5px', color: 'var(--accent-indigo-suave)', fontStyle: 'italic',
             lineHeight: 1.5, marginTop: '4px',
             background: 'rgba(99, 102, 241, 0.08)',
             padding: '8px 12px',

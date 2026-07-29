@@ -88,7 +88,7 @@
     "Canvas"
   ],
   "imagens": 6,
-  "preco_centavos": 1990,
+  "preco_centavos": 0,
   "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-artisanal-specialty-91?token=SEU_TOKEN",
   "requisitos": [
     "Navegador moderno",

@@ -1,0 +1,417 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "Exo Ape - Studio de Design Numérique",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 1,
+      "tag": "a",
+      "original": "Exo Ape",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "Réalisations",
+      "destino": "traduzir",
+      "texto": "Realizações"
+    },
+    {
+      "id": 3,
+      "tag": "a",
+      "original": "Studio",
+      "destino": "traduzir",
+      "texto": "Estúdio"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Actualités",
+      "destino": "traduzir",
+      "texto": "Notícias"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Contact",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 6,
+      "tag": "button",
+      "original": "Menu",
+      "destino": "traduzir",
+      "texto": "Menu"
+    },
+    {
+      "id": 7,
+      "tag": "p",
+      "original": "Studio de design numérique en partenariat avec des marques et des\n            entreprises qui créent des expériences exceptionnelles où les gens\n            vivent, travaillent et se détendent.",
+      "destino": "adaptar",
+      "texto": "Estúdio de design digital que trabalha com comércios locais e empresas que criam experiências marcantes para clientes que vivem, trabalham e se divertem."
+    },
+    {
+      "id": 8,
+      "tag": "span",
+      "original": "Digital",
+      "destino": "traduzir",
+      "texto": "Digital"
+    },
+    {
+      "id": 9,
+      "tag": "span",
+      "original": "Design",
+      "destino": "traduzir",
+      "texto": "Design"
+    },
+    {
+      "id": 10,
+      "tag": "span",
+      "original": "Expérience",
+      "destino": "traduzir",
+      "texto": "Experiência"
+    },
+    {
+      "id": 11,
+      "tag": "p",
+      "original": "Nous aidons les entreprises axées sur l'expérience à prospérer en\n            faisant ressentir à leur public les subtilités raffinées de leur\n            marque et de leurs produits dans l'espace numérique. Les voyages\n            inoubliables commencent par un clic.",
+      "destino": "adaptar",
+      "texto": "Ajudamos empresas focadas em experiência a crescerem, fazendo seus clientes sentirem os detalhes únicos da marca e dos produtos no ambiente digital. Uma experiência memorável começa com um clique."
+    },
+    {
+      "id": 12,
+      "tag": "span",
+      "original": "Le Studio",
+      "destino": "traduzir",
+      "texto": "O Estúdio"
+    },
+    {
+      "id": 13,
+      "tag": "a",
+      "original": "Réalisations",
+      "destino": "traduzir",
+      "texto": "Realizações"
+    },
+    {
+      "id": 14,
+      "tag": "a",
+      "original": "Studio",
+      "destino": "traduzir",
+      "texto": "Estúdio"
+    },
+    {
+      "id": 15,
+      "tag": "a",
+      "original": "Actualités",
+      "destino": "traduzir",
+      "texto": "Notícias"
+    },
+    {
+      "id": 16,
+      "tag": "a",
+      "original": "Contact",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 17,
+      "tag": "a",
+      "original": "hello@exoape.com",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 18,
+      "tag": "a",
+      "original": "+31 772 086 200",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 19,
+      "tag": "?",
+      "original": "Projets en vedette",
+      "destino": "traduzir",
+      "texto": "Projetos em destaque"
+    },
+    {
+      "id": 20,
+      "tag": "h2",
+      "original": "Réalisations",
+      "destino": "traduzir",
+      "texto": "Realizações"
+    },
+    {
+      "id": 21,
+      "tag": "p",
+      "original": "Aperçu des projets que nous avons passionnément construits avec des\n            clients et amis avant-gardistes au fil des ans.",
+      "destino": "adaptar",
+      "texto": "Visão geral dos projetos que desenvolvemos com entusiasmo junto a clientes e parceiros inovadores ao longo dos anos."
+    },
+    {
+      "id": 22,
+      "tag": "span",
+      "original": "Ottografie",
+      "destino": "adaptar",
+      "texto": "Foto Criativa"
+    },
+    {
+      "id": 23,
+      "tag": "span",
+      "original": "Parcours Photographique Fluide",
+      "destino": "adaptar",
+      "texto": "Trilha Fotográfica Suave"
+    },
+    {
+      "id": 24,
+      "tag": "span",
+      "original": "Amaterasu",
+      "destino": "adaptar",
+      "texto": "Projeto Aurora"
+    },
+    {
+      "id": 25,
+      "tag": "span",
+      "original": "Innovation en Santé de Pointe",
+      "destino": "traduzir",
+      "texto": "Inovação em Saúde de Ponta"
+    },
+    {
+      "id": 26,
+      "tag": "span",
+      "original": "Columbia Pictures",
+      "destino": "adaptar",
+      "texto": "Globo Pictures"
+    },
+    {
+      "id": 27,
+      "tag": "span",
+      "original": "Célébration d'un Siècle de Cinéma",
+      "destino": "traduzir",
+      "texto": "Comemoração de um Século de Cinema"
+    },
+    {
+      "id": 28,
+      "tag": "span",
+      "original": "Cambium",
+      "destino": "adaptar",
+      "texto": "Cerrado"
+    },
+    {
+      "id": 29,
+      "tag": "span",
+      "original": "Pionnier des Solutions Durables",
+      "destino": "traduzir",
+      "texto": "Pioneiro das Soluções Sustentáveis"
+    },
+    {
+      "id": 30,
+      "tag": "span",
+      "original": "Parcourir tous les projets",
+      "destino": "traduzir",
+      "texto": "Navegar por todos os projetos"
+    },
+    {
+      "id": 31,
+      "tag": "?",
+      "original": "Travail en mouvement",
+      "destino": "traduzir",
+      "texto": "Trabalho em movimento"
+    },
+    {
+      "id": 32,
+      "tag": "span",
+      "original": "Voir",
+      "destino": "traduzir",
+      "texto": "Ver"
+    },
+    {
+      "id": 33,
+      "tag": "span",
+      "original": "la Vidéo",
+      "destino": "traduzir",
+      "texto": "o Vídeo"
+    },
+    {
+      "id": 34,
+      "tag": "p",
+      "original": "Notre travail s'apprécie mieux en mouvement. N'oubliez pas de mettre\n          vos écouteurs.",
+      "destino": "traduzir",
+      "texto": "Nosso trabalho é melhor apreciado em melhor apreciado em movimento. Não esqueça de colocar seus fones de ouvido."
+    },
+    {
+      "id": 35,
+      "tag": "?",
+      "original": "Dans les médias",
+      "destino": "traduzir",
+      "texto": "Na mídia. Não esqueça de colocar seus fones de ouvido."
+    },
+    {
+      "id": 35,
+      "tag": "?",
+      "original": "Dans les médias",
+      "destino": "traduzir",
+      "texto": "Na mídia"
+    },
+    {
+      "id": 36,
+      "tag": "span",
+      "original": "Faire Passer",
+      "destino": "traduzir",
+      "texto": "Divulgar"
+    },
+    {
+      "id": 37,
+      "tag": "span",
+      "original": "le Mot",
+      "destino": "traduzir",
+      "texto": "a Palavra"
+    },
+    {
+      "id": 38,
+      "tag": "p",
+      "original": "Découvrez-en plus sur notre travail sur ces plateformes de référence\n          en design et technologie.",
+      "destino": "traduzir",
+      "texto": "Saiba mais sobre nosso trabalho nessas plataformas de referência em design e tecnologia."
+    },
+    {
+      "id": 39,
+      "tag": "span",
+      "original": "Toutes les actualités",
+      "destino": "traduzir",
+      "texto": "Todas as notícias"
+    },
+    {
+      "id": 40,
+      "tag": "span",
+      "original": "Notre",
+      "destino": "traduzir",
+      "texto": "Nosso"
+    },
+    {
+      "id": 41,
+      "tag": "span",
+      "original": "Histoire",
+      "destino": "traduzir",
+      "texto": "História"
+    },
+    {
+      "id": 42,
+      "tag": "p",
+      "original": "L'histoire derrière Exo Ape en est une d'exploration, de\n              créativité et de curiosité.",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 43,
+      "tag": "p",
+      "original": "Willem II Singel 8",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 44,
+      "tag": "p",
+      "original": "6041 HS, Roermond",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}"
+    },
+    {
+      "id": 45,
+      "tag": "p",
+      "original": "Pays-Bas",
+      "destino": "variavel",
+      "texto": "{{ESTADO}}"
+    },
+    {
+      "id": 46,
+      "tag": "a",
+      "original": "hello@exoape.com",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 47,
+      "tag": "a",
+      "original": "Réalisations",
+      "destino": "traduzir",
+      "texto": "Realizações"
+    },
+    {
+      "id": 48,
+      "tag": "a",
+      "original": "Studio",
+      "destino": "traduzir",
+      "texto": "Estúdio"
+    },
+    {
+      "id": 49,
+      "tag": "a",
+      "original": "Actualités",
+      "destino": "traduzir",
+      "texto": "Atualidades"
+    },
+    {
+      "id": 50,
+      "tag": "a",
+      "original": "Contact",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 51,
+      "tag": "a",
+      "original": "Behance",
+      "destino": "traduzir",
+      "texto": "Behance"
+    },
+    {
+      "id": 52,
+      "tag": "a",
+      "original": "Dribbble",
+      "destino": "traduzir",
+      "texto": "Dribbble"
+    },
+    {
+      "id": 53,
+      "tag": "a",
+      "original": "Linkedin",
+      "destino": "traduzir",
+      "texto": "Linkedin"
+    },
+    {
+      "id": 54,
+      "tag": "a",
+      "original": "Instagram",
+      "destino": "traduzir",
+      "texto": "Instagram"
+    },
+    {
+      "id": 55,
+      "tag": "span",
+      "original": "Notre Histoire",
+      "destino": "traduzir",
+      "texto": "Nossa História"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 56,
+  "marcas_removidas": [
+    {
+      "id": 0,
+      "era": "Exo Ape - Estúdio de Design Digital"
+    },
+    {
+      "id": 42,
+      "era": "A história por trás da Exo Ape é uma de exploração, criatividade e curiosidade."
+    }
+  ],
+  "corrigidos_por_consistencia": [],
+  "precos_neutralizados": []
+}

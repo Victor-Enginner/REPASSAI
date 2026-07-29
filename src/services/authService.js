@@ -126,6 +126,8 @@ function traduzirErro(msg) {
   if (m.includes('user already registered')) return 'Este e-mail já tem cadastro.';
   if (m.includes('password should be at least')) return 'A senha precisa ter ao menos 6 caracteres.';
   if (m.includes('unable to validate email')) return 'E-mail inválido.';
+  if (m.includes('email rate limit exceeded')) return 'Muitas solicitações de e‑mail – aguarde alguns minutos antes de tentar novamente.';
+  if (m.includes('too many requests')) return 'Muitas solicitações - tente novamente em alguns minutos.';
   return msg;
 }
 

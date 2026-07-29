@@ -1,0 +1,1164 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "KRANNIK BAU GmbH – Betonstahlverlegung & Bewehrungsarbeiten in Herford, NRW & Niedersachsen",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 1,
+      "tag": "span",
+      "original": "KB",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 2,
+      "tag": "span",
+      "original": "KRANNIK BAU",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 3,
+      "tag": "span",
+      "original": "Betonstahlverlegung",
+      "destino": "adaptar",
+      "texto": "Armadura de concreto"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Leistungen",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Warum wir",
+      "destino": "traduzir",
+      "texto": "Por que nós"
+    },
+    {
+      "id": 6,
+      "tag": "a",
+      "original": "Ablauf",
+      "destino": "traduzir",
+      "texto": "Processo"
+    },
+    {
+      "id": 7,
+      "tag": "a",
+      "original": "Projekte",
+      "destino": "traduzir",
+      "texto": "Projetos"
+    },
+    {
+      "id": 8,
+      "tag": "a",
+      "original": "FAQ",
+      "destino": "traduzir",
+      "texto": "FAQ"
+    },
+    {
+      "id": 9,
+      "tag": "?",
+      "original": "05221 / 00 00 00",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 10,
+      "tag": "a",
+      "original": "Projekt anfragen",
+      "destino": "traduzir",
+      "texto": "Solicitar projeto"
+    },
+    {
+      "id": 11,
+      "tag": "a",
+      "original": "Leistungen",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 12,
+      "tag": "a",
+      "original": "Warum wir",
+      "destino": "traduzir",
+      "texto": "Por que nós"
+    },
+    {
+      "id": 13,
+      "tag": "a",
+      "original": "Ablauf",
+      "destino": "traduzir",
+      "texto": "Processo"
+    },
+    {
+      "id": 14,
+      "tag": "a",
+      "original": "Projekte",
+      "destino": "traduzir",
+      "texto": "Projetos"
+    },
+    {
+      "id": 15,
+      "tag": "a",
+      "original": "FAQ",
+      "destino": "traduzir",
+      "texto": "FAQ"
+    },
+    {
+      "id": 16,
+      "tag": "a",
+      "original": "Projekt anfragen",
+      "destino": "traduzir",
+      "texto": "Solicitar projeto"
+    },
+    {
+      "id": 17,
+      "tag": "span",
+      "original": "Kolonne im Einsatz · Bielefeld",
+      "destino": "adaptar",
+      "texto": "Equipe em ação · São Paulo"
+    },
+    {
+      "id": 18,
+      "tag": "span",
+      "original": "Abnahme bestanden · 0 Mängel",
+      "destino": "adaptar",
+      "texto": "Aprovação obtida · 0 não conformidades"
+    },
+    {
+      "id": 19,
+      "tag": "?",
+      "original": "Kurzfristig einsatzbereit in NRW & Niedersachsen",
+      "destino": "adaptar",
+      "texto": "Disponível imediatamente em São Paulo & Rio de Janeiro"
+    },
+    {
+      "id": 20,
+      "tag": "span",
+      "original": "Betonstahlverlegung,",
+      "destino": "adaptar",
+      "texto": "Armadura de concreto,"
+    },
+    {
+      "id": 21,
+      "tag": "span",
+      "original": "auf",
+      "destino": "traduzir",
+      "texto": "em"
+    },
+    {
+      "id": 22,
+      "tag": "span",
+      "original": "die",
+      "destino": "traduzir",
+      "texto": "a"
+    },
+    {
+      "id": 23,
+      "tag": "span",
+      "original": "Sie",
+      "destino": "traduzir",
+      "texto": "você"
+    },
+    {
+      "id": 24,
+      "tag": "span",
+      "original": "bauen",
+      "destino": "traduzir",
+      "texto": "construir"
+    },
+    {
+      "id": 25,
+      "tag": "span",
+      "original": "können.",
+      "destino": "traduzir",
+      "texto": "podem."
+    },
+    {
+      "id": 26,
+      "tag": "p",
+      "original": "Die KRANNIK BAU GmbH aus Herford ist Ihr Spezialist für Bewehrungsarbeiten im Roh-, Ingenieur- und Industriebau. Erfahrene Kolonnen – sauber nach Plan und Statik, abnahmebereit und termintreu.",
+      "destino": "adaptar",
+      "texto": "Concreto Forte Ltda. de São Paulo é especialista em armaduras para obras residenciais, industriais e comerciais. Equipes experientes – limpeza conforme projeto e normas, prontas para vistoria e dentro do prazo."
+    },
+    {
+      "id": 27,
+      "tag": "span",
+      "original": "Projekt anfragen",
+      "destino": "traduzir",
+      "texto": "Solicitar projeto"
+    },
+    {
+      "id": 28,
+      "tag": "a",
+      "original": "Leistungen ansehen",
+      "destino": "traduzir",
+      "texto": "Ver serviços"
+    },
+    {
+      "id": 29,
+      "tag": "?",
+      "original": "Kurzfristig verfügbar",
+      "destino": "traduzir",
+      "texto": "Disponível imediatamente"
+    },
+    {
+      "id": 30,
+      "tag": "?",
+      "original": "Erfahrene Kolonnen",
+      "destino": "traduzir",
+      "texto": "Equipes experientes"
+    },
+    {
+      "id": 31,
+      "tag": "?",
+      "original": "Nach Plan & Statik",
+      "destino": "traduzir",
+      "texto": "Conforme projeto e normas"
+    },
+    {
+      "id": 32,
+      "tag": "?",
+      "original": "Abnahmebereit",
+      "destino": "traduzir",
+      "texto": "Pronto para vistoria"
+    },
+    {
+      "id": 33,
+      "tag": "span",
+      "original": "Scrollen",
+      "destino": "traduzir",
+      "texto": "Deslocar"
+    },
+    {
+      "id": 34,
+      "tag": "?",
+      "original": "Bodenplatten",
+      "destino": "adaptar",
+      "texto": "Lajes de piso"
+    },
+    {
+      "id": 35,
+      "tag": "?",
+      "original": "Deckenbewehrung",
+      "destino": "adaptar",
+      "texto": "Armadura de laje"
+    },
+    {
+      "id": 36,
+      "tag": "?",
+      "original": "Ortbetonwände",
+      "destino": "adaptar",
+      "texto": "Paredes de concreto"
+    },
+    {
+      "id": 37,
+      "tag": "?",
+      "original": "Ingenieurbau",
+      "destino": "adaptar",
+      "texto": "Engenharia civil"
+    },
+    {
+      "id": 38,
+      "tag": "?",
+      "original": "Industrie- & Gewerbebau",
+      "destino": "adaptar",
+      "texto": "Construção industrial e comercial"
+    },
+    {
+      "id": 39,
+      "tag": "?",
+      "original": "Nachunternehmerleistungen",
+      "destino": "adaptar",
+      "texto": "Serviços de subcontratados"
+    },
+    {
+      "id": 40,
+      "tag": "?",
+      "original": "Bodenplatten",
+      "destino": "adaptar",
+      "texto": "Lajes de piso"
+    },
+    {
+      "id": 41,
+      "tag": "?",
+      "original": "Deckenbewehrung",
+      "destino": "adaptar",
+      "texto": "Armadura de laje"
+    },
+    {
+      "id": 42,
+      "tag": "?",
+      "original": "Ortbetonwände",
+      "destino": "adaptar",
+      "texto": "Paredes de concreto"
+    },
+    {
+      "id": 43,
+      "tag": "?",
+      "original": "Ingenieurbau",
+      "destino": "adaptar",
+      "texto": "Engenharia civil"
+    },
+    {
+      "id": 44,
+      "tag": "?",
+      "original": "Industrie- & Gewerbebau",
+      "destino": "adaptar",
+      "texto": "Construção industrial e comercial"
+    },
+    {
+      "id": 45,
+      "tag": "?",
+      "original": "Nachunternehmerleistungen",
+      "destino": "adaptar",
+      "texto": "Serviços de subcontratados"
+    },
+    {
+      "id": 46,
+      "tag": "p",
+      "original": "Jahre Erfahrung im Bewehrungsbau",
+      "destino": "traduzir",
+      "texto": "Anos de experiência em armaduras"
+    },
+    {
+      "id": 47,
+      "tag": "p",
+      "original": "Abgeschlossene Projekte",
+      "destino": "traduzir",
+      "texto": "Projetos concluídos"
+    },
+    {
+      "id": 48,
+      "tag": "p",
+      "original": "Bundesländer im Einsatzgebiet",
+      "destino": "traduzir",
+      "texto": "Estados onde atuamos"
+    },
+    {
+      "id": 49,
+      "tag": "p",
+      "original": "Rückmeldung auf Anfragen",
+      "destino": "traduzir",
+      "texto": "Resposta às solicitações"
+    },
+    {
+      "id": 50,
+      "tag": "?",
+      "original": "Unsere Leistungen",
+      "destino": "traduzir",
+      "texto": "Nossos Serviços"
+    },
+    {
+      "id": 51,
+      "tag": "h2",
+      "original": "Bewehrungsarbeiten aus einer Hand",
+      "destino": "traduzir",
+      "texto": "Armadura de concreto completa"
+    },
+    {
+      "id": 52,
+      "tag": "p",
+      "original": "Vom Fundament bis zur Decke: Wir verlegen Betonstahl exakt nach Bewehrungsplan – für Bauunternehmen, Generalunternehmer und Projektleiter, die sich auf ihren Nachunternehmer verlassen müssen.",
+      "destino": "adaptar",
+      "texto": "Da fundação até o laço: posicionamos a armadura de concreto exatamente conforme o projeto – para construtoras, empreiteiras e engenheiros que precisam confiar no seu subcontratado."
+    },
+    {
+      "id": 53,
+      "tag": "h3",
+      "original": "Bodenplatten",
+      "destino": "traduzir",
+      "texto": "Lajes de concreto"
+    },
+    {
+      "id": 54,
+      "tag": "p",
+      "original": "Untere und obere Lage, Randeinfassungen, Zulagen – maßhaltig verlegt und sauber dokumentiert. Die Basis für jedes Bauwerk.",
+      "destino": "adaptar",
+      "texto": "Camada inferior e superior, bordas e sobreposições – posicionadas com precisão e bem documentadas. A base de toda obra."
+    },
+    {
+      "id": 55,
+      "tag": "h3",
+      "original": "Deckenbewehrung",
+      "destino": "traduzir",
+      "texto": "Armadura de laje"
+    },
+    {
+      "id": 56,
+      "tag": "p",
+      "original": "Komplette Deckenbewehrung inklusive Durchstanzbewehrung, Abstandhaltern und Anschlüssen – termingerecht zur Betonage.",
+      "destino": "adaptar",
+      "texto": "Armadura completa de laje, incluindo armadura contra punção, espaçadores e conexões – entregue no prazo para o concreto."
+    },
+    {
+      "id": 57,
+      "tag": "h3",
+      "original": "Ortbetonwände",
+      "destino": "traduzir",
+      "texto": "Muros de concreto armado"
+    },
+    {
+      "id": 58,
+      "tag": "p",
+      "original": "Wandbewehrung mit exakten Übergreifungen, Eckausbildungen und Aussparungen – passgenau für die Schalung.",
+      "destino": "adaptar",
+      "texto": "Armadura de muro com sobreposições exatas, detalhes de cantos e aberturas – ajustada perfeitamente para a forma."
+    },
+    {
+      "id": 59,
+      "tag": "h3",
+      "original": "Ingenieurbau",
+      "destino": "traduzir",
+      "texto": "Obras de engenharia"
+    },
+    {
+      "id": 60,
+      "tag": "p",
+      "original": "Anspruchsvolle Bewehrung für Sonderbauwerke: hohe Bewehrungsgrade, komplexe Geometrien, präzise Ausführung.",
+      "destino": "adaptar",
+      "texto": "Armadura exigente para obras especiais: alta taxa de armadura, geometrias complexas, execução precisa."
+    },
+    {
+      "id": 61,
+      "tag": "h3",
+      "original": "Industrie- & Gewerbebau",
+      "destino": "traduzir",
+      "texto": "Construção industrial e comercial"
+    },
+    {
+      "id": 62,
+      "tag": "p",
+      "original": "Großflächige Bewehrung für Hallen, Logistikzentren und Gewerbeobjekte – mit der Kapazität für enge Taktpläne.",
+      "destino": "adaptar",
+      "texto": "Armadura em larga escala para galpões, centros logísticos e prédios comerciais – com capacidade para cronogramas apertados."
+    },
+    {
+      "id": 63,
+      "tag": "h3",
+      "original": "Nachunternehmerleistungen",
+      "destino": "traduzir",
+      "texto": "Serviços de subcontratado"
+    },
+    {
+      "id": 64,
+      "tag": "p",
+      "original": "Verlässlicher Partner für Bauunternehmen und GU: klare Kommunikation, saubere Schnittstellen, vertragstreue Abwicklung.",
+      "destino": "adaptar",
+      "texto": "Parceiro confiável para construtoras e empreiteiras: comunicação clara, interfaces bem definidas e execução conforme contrato."
+    },
+    {
+      "id": 65,
+      "tag": "h3",
+      "original": "Logistik-Management & Baustellen-Support",
+      "destino": "traduzir",
+      "texto": "Gestão de logística e suporte de obra"
+    },
+    {
+      "id": 66,
+      "tag": "p",
+      "original": "Materialkoordination, Stahlannahme, Lagerorganisation und Unterstützung im Bauablauf – damit Ihre Baustelle im Takt bleibt.",
+      "destino": "adaptar",
+      "texto": "Coordenação de materiais, recebimento de aço, organização do estoque e apoio no processo construtivo – para que sua obra continue no ritmo."
+    },
+    {
+      "id": 67,
+      "tag": "a",
+      "original": "Anfrage stellen",
+      "destino": "traduzir",
+      "texto": "Solicitar orçamento"
+    },
+    {
+      "id": 68,
+      "tag": "p",
+      "original": "Ausführung nach Bewehrungsplan",
+      "destino": "traduzir",
+      "texto": "Execução conforme o plano de armadura"
+    },
+    {
+      "id": 69,
+      "tag": "?",
+      "original": "Warum KRANNIK BAU?",
+      "destino": "traduzir",
+      "texto": "Por que KRANNIK BAU?"
+    },
+    {
+      "id": 70,
+      "tag": "h2",
+      "original": "Weil Ihre Betonage nicht warten kann.",
+      "destino": "traduzir",
+      "texto": "Porque sua concretagem não pode esperar."
+    },
+    {
+      "id": 71,
+      "tag": "p",
+      "original": "Verzögerungen in der Bewehrung kosten Geld, Takt und Nerven. Wir sorgen dafür, dass Ihre Abnahme planmäßig läuft – mit eingespielten Teams und klarer Kommunikation.",
+      "destino": "adaptar",
+      "texto": "Atrasos na armadura custam dinheiro, prazo e tranquilidade. Garantimos que sua aprovação ocorra no cronograma – com equipes experientes e comunicação clara."
+    },
+    {
+      "id": 72,
+      "tag": "p",
+      "original": "Meistergeführte Kolonnen",
+      "destino": "traduzir",
+      "texto": "Equipes lideradas por mestres"
+    },
+    {
+      "id": 73,
+      "tag": "p",
+      "original": "Erfahrene Vorarbeiter mit Verantwortung – auch bei komplexen Bewehrungsgraden.",
+      "destino": "traduzir",
+      "texto": "Capatazes experientes com responsabilidade – mesmo em armaduras complexas."
+    },
+    {
+      "id": 74,
+      "tag": "p",
+      "original": "Termintreue",
+      "destino": "traduzir",
+      "texto": "Pontualidade"
+    },
+    {
+      "id": 75,
+      "tag": "p",
+      "original": "Wir halten Taktpläne ein – und melden uns frühzeitig, wenn etwas zu klären ist.",
+      "destino": "traduzir",
+      "texto": "Cumprimos os cronogramas – e avisamos antecipadamente se algo precisar ser esclarecido."
+    },
+    {
+      "id": 76,
+      "tag": "p",
+      "original": "Saubere Ausführung nach Bewehrungsplan",
+      "destino": "traduzir",
+      "texto": "Execução limpa conforme o plano de armadura."
+    },
+    {
+      "id": 77,
+      "tag": "p",
+      "original": "Lagen, Übergreifungen, Abstände – exakt nach Statik. Abnahmebereit, ohne Nacharbeit.",
+      "destino": "traduzir",
+      "texto": "Sobreposições, emendas e espaçamentos – exatamente conforme a estática. Pronto para vistoria, sem retrabalho."
+    },
+    {
+      "id": 78,
+      "tag": "p",
+      "original": "Einsatz in NRW & Niedersachsen",
+      "destino": "adaptar",
+      "texto": "Atuação em SP & MG"
+    },
+    {
+      "id": 79,
+      "tag": "p",
+      "original": "Von Herford aus schnell auf Ihrer Baustelle – auch kurzfristig.",
+      "destino": "adaptar",
+      "texto": "De Campinas rápido para sua obra – também em regime de urgência."
+    },
+    {
+      "id": 80,
+      "tag": "p",
+      "original": "Für wen arbeiten wir?",
+      "destino": "traduzir",
+      "texto": "Para quem trabalhamos?"
+    },
+    {
+      "id": 81,
+      "tag": "h2",
+      "original": "Ihr Partner im Rohbau",
+      "destino": "traduzir",
+      "texto": "Seu parceiro na obra bruta."
+    },
+    {
+      "id": 82,
+      "tag": "h3",
+      "original": "Bauunternehmen",
+      "destino": "traduzir",
+      "texto": "Empresa de construção."
+    },
+    {
+      "id": 83,
+      "tag": "p",
+      "original": "Verstärkung für Ihre Rohbauprojekte – flexibel und eingespielt.",
+      "destino": "traduzir",
+      "texto": "Reforço para seus projetos de obra bruta – flexível e bem entrosado."
+    },
+    {
+      "id": 84,
+      "tag": "h3",
+      "original": "Generalunternehmer",
+      "destino": "traduzir",
+      "texto": "Construtora geral."
+    },
+    {
+      "id": 85,
+      "tag": "p",
+      "original": "Verlässlicher Nachunternehmer mit sauberer Vertragsabwicklung.",
+      "destino": "traduzir",
+      "texto": "Subcontratante confiável com execução contratual limpa."
+    },
+    {
+      "id": 86,
+      "tag": "h3",
+      "original": "Projektleiter",
+      "destino": "traduzir",
+      "texto": "Líder de projeto."
+    },
+    {
+      "id": 87,
+      "tag": "p",
+      "original": "Ein Ansprechpartner, schnelle Rückmeldung, klare Absprachen.",
+      "destino": "traduzir",
+      "texto": "Um ponto de contato, retorno rápido e acordos claros."
+    },
+    {
+      "id": 88,
+      "tag": "?",
+      "original": "So einfach geht's",
+      "destino": "traduzir",
+      "texto": "É simples assim."
+    },
+    {
+      "id": 89,
+      "tag": "h2",
+      "original": "Von der Anfrage zur Abnahme",
+      "destino": "traduzir",
+      "texto": "Da solicitação à vistoria."
+    },
+    {
+      "id": 90,
+      "tag": "h3",
+      "original": "Anfrage senden",
+      "destino": "traduzir",
+      "texto": "Enviar solicitação."
+    },
+    {
+      "id": 91,
+      "tag": "p",
+      "original": "Pläne, Mengen oder Eckdaten an uns – per Formular, E-Mail oder Telefon.",
+      "destino": "traduzir",
+      "texto": "Planos, quantidades ou dados principais para nós – por formulário, e-mail ou telefone."
+    },
+    {
+      "id": 92,
+      "tag": "h3",
+      "original": "Rückmeldung in 24h",
+      "destino": "traduzir",
+      "texto": "Retorno em 24h."
+    },
+    {
+      "id": 93,
+      "tag": "p",
+      "original": "Wir prüfen Ihr Projekt und melden uns schnell mit Verfügbarkeit und Angebot.",
+      "destino": "traduzir",
+      "texto": "Analisamos seu projeto e retornamos rapidamente com disponibilidade e proposta."
+    },
+    {
+      "id": 94,
+      "tag": "h3",
+      "original": "Ausführung nach Plan",
+      "destino": "traduzir",
+      "texto": "Execução conforme o plano."
+    },
+    {
+      "id": 95,
+      "tag": "p",
+      "original": "Unsere Kolonne verlegt exakt nach Bewehrungsplan und Statik – im Takt Ihrer Baustelle.",
+      "destino": "traduzir",
+      "texto": "Nossa equipe instala exatamente conforme o plano de armadura e a estática – no ritmo da sua obra."
+    },
+    {
+      "id": 96,
+      "tag": "h3",
+      "original": "Abnahmebereit",
+      "destino": "traduzir",
+      "texto": "Pronto para vistoria."
+    },
+    {
+      "id": 97,
+      "tag": "p",
+      "original": "Saubere Übergabe zur Bewehrungsabnahme – bereit für die Betonage.",
+      "destino": "traduzir",
+      "texto": "Entrega limpa para a vistoria da armadura – pronto para concretagem."
+    },
+    {
+      "id": 98,
+      "tag": "?",
+      "original": "Projektgalerie",
+      "destino": "traduzir",
+      "texto": "Galeria de projetos."
+    },
+    {
+      "id": 99,
+      "tag": "h2",
+      "original": "Einblicke in unsere Arbeit",
+      "destino": "traduzir",
+      "texto": "Visão geral do nosso trabalho."
+    },
+    {
+      "id": 100,
+      "tag": "button",
+      "original": "Alle",
+      "destino": "traduzir",
+      "texto": "Todos"
+    },
+    {
+      "id": 101,
+      "tag": "button",
+      "original": "Bodenplatten",
+      "destino": "adaptar",
+      "texto": "Lajes de piso"
+    },
+    {
+      "id": 102,
+      "tag": "button",
+      "original": "Decken",
+      "destino": "adaptar",
+      "texto": "Forro"
+    },
+    {
+      "id": 103,
+      "tag": "button",
+      "original": "Wände",
+      "destino": "adaptar",
+      "texto": "Paredes"
+    },
+    {
+      "id": 104,
+      "tag": "button",
+      "original": "Ingenieurbau",
+      "destino": "adaptar",
+      "texto": "Engenharia de estruturas"
+    },
+    {
+      "id": 105,
+      "tag": "span",
+      "original": "Bodenplatten",
+      "destino": "adaptar",
+      "texto": "Lajes de piso"
+    },
+    {
+      "id": 106,
+      "tag": "p",
+      "original": "Bodenplatte Gewerbehalle",
+      "destino": "adaptar",
+      "texto": "Laje de piso para galpão"
+    },
+    {
+      "id": 107,
+      "tag": "span",
+      "original": "Decken",
+      "destino": "adaptar",
+      "texto": "Forro"
+    },
+    {
+      "id": 108,
+      "tag": "p",
+      "original": "Deckenbewehrung Wohnbau",
+      "destino": "adaptar",
+      "texto": "Armadura de laje residencial"
+    },
+    {
+      "id": 109,
+      "tag": "span",
+      "original": "Wände",
+      "destino": "adaptar",
+      "texto": "Paredes"
+    },
+    {
+      "id": 110,
+      "tag": "p",
+      "original": "Ortbetonwand Kellergeschoss",
+      "destino": "adaptar",
+      "texto": "Muro de concreto armado semissubterrâneo"
+    },
+    {
+      "id": 111,
+      "tag": "span",
+      "original": "Ingenieurbau",
+      "destino": "adaptar",
+      "texto": "Engenharia de estruturas"
+    },
+    {
+      "id": 112,
+      "tag": "p",
+      "original": "Ingenieurbauwerk",
+      "destino": "adaptar",
+      "texto": "Obra de engenharia civil"
+    },
+    {
+      "id": 113,
+      "tag": "span",
+      "original": "Bodenplatten",
+      "destino": "adaptar",
+      "texto": "Lajes de piso"
+    },
+    {
+      "id": 114,
+      "tag": "p",
+      "original": "Fundamentplatte Logistikzentrum",
+      "destino": "adaptar",
+      "texto": "Laje de fundação para centro logístico"
+    },
+    {
+      "id": 115,
+      "tag": "span",
+      "original": "Decken",
+      "destino": "adaptar",
+      "texto": "Forro"
+    },
+    {
+      "id": 116,
+      "tag": "p",
+      "original": "Geschossdecke Bürogebäude",
+      "destino": "adaptar",
+      "texto": "Laje de piso para prédio comercial"
+    },
+    {
+      "id": 117,
+      "tag": "?",
+      "original": "Einsatzgebiete",
+      "destino": "traduzir",
+      "texto": "Áreas de atuação"
+    },
+    {
+      "id": 118,
+      "tag": "h2",
+      "original": "Von Herford aus in ganz NRW & Niedersachsen",
+      "destino": "adaptar",
+      "texto": "De Campinas para todo o Estado de SP & região"
+    },
+    {
+      "id": 119,
+      "tag": "p",
+      "original": "Unser Standort in Herford liegt zentral in Ostwestfalen – ideal für schnelle Einsätze in Bielefeld, Osnabrück, Hannover, Münster, dem Ruhrgebiet und darüber hinaus. Auch überregionale Projekte nach Absprache.",
+      "destino": "adaptar",
+      "texto": "Nossa sede em Campinas fica central na região Metropolitana – ideal para atendimentos rápidos em Belo Horizonte, Uberlândia, Goiânia, Vitória, região do Vale do Aço e além. Também atendemos projetos interestaduais conforme combinação."
+    },
+    {
+      "id": 120,
+      "tag": "span",
+      "original": "Herford",
+      "destino": "adaptar",
+      "texto": "Campinas"
+    },
+    {
+      "id": 121,
+      "tag": "span",
+      "original": "Bielefeld",
+      "destino": "adaptar",
+      "texto": "Uberlândia"
+    },
+    {
+      "id": 122,
+      "tag": "span",
+      "original": "Osnabrück",
+      "destino": "adaptar",
+      "texto": "Ribeirão"
+    },
+    {
+      "id": 123,
+      "tag": "span",
+      "original": "Hannover",
+      "destino": "adaptar",
+      "texto": "Goiânia"
+    },
+    {
+      "id": 124,
+      "tag": "span",
+      "original": "Münster",
+      "destino": "adaptar",
+      "texto": "Caxias"
+    },
+    {
+      "id": 125,
+      "tag": "span",
+      "original": "Paderborn",
+      "destino": "adaptar",
+      "texto": "São Paulo"
+    },
+    {
+      "id": 126,
+      "tag": "span",
+      "original": "Ruhrgebiet",
+      "destino": "adaptar",
+      "texto": "Grande SP"
+    },
+    {
+      "id": 127,
+      "tag": "span",
+      "original": "+ auf Anfrage",
+      "destino": "traduzir",
+      "texto": "sob consulta"
+    },
+    {
+      "id": 128,
+      "tag": "p",
+      "original": "FAQ",
+      "destino": "traduzir",
+      "texto": "FAQ"
+    },
+    {
+      "id": 129,
+      "tag": "h2",
+      "original": "Häufige Fragen",
+      "destino": "traduzir",
+      "texto": "Perguntas comuns"
+    },
+    {
+      "id": 130,
+      "tag": "summary",
+      "original": "Wie schnell können Sie auf der Baustelle sein?",
+      "destino": "traduzir",
+      "texto": "Quão rápido chegar ao canteiro?"
+    },
+    {
+      "id": 131,
+      "tag": "p",
+      "original": "Je nach Auslastung sind wir oft kurzfristig einsatzbereit. Senden Sie uns Ihre Anfrage – wir melden uns in der Regel innerhalb von 24 Stunden mit einer konkreten Verfügbarkeit zurück.",
+      "destino": "traduzir",
+      "texto": "Dependendo da carga de trabalho, estamos frequentemente prontos para atender em curto prazo. Envie sua solicitação – normalmente respondemos em até 24 horas com uma disponibilidade concreta."
+    },
+    {
+      "id": 132,
+      "tag": "summary",
+      "original": "Arbeiten Sie als Nachunternehmer für Generalunternehmer?",
+      "destino": "traduzir",
+      "texto": "Vocês trabalham como subcontratados para construtoras?"
+    },
+    {
+      "id": 133,
+      "tag": "p",
+      "original": "Ja, Nachunternehmerleistungen sind unser Kerngeschäft. Wir arbeiten für Bauunternehmen und Generalunternehmer – mit klaren Schnittstellen, sauberer Dokumentation und vertragstreuer Abwicklung.",
+      "destino": "traduzir",
+      "texto": "Sim, serviços de subcontratação são nosso core business. Trabalhamos para construtoras e empreiteiras – com interfaces claras, documentação organizada e execução confiável."
+    },
+    {
+      "id": 134,
+      "tag": "summary",
+      "original": "Welche Unterlagen benötigen Sie für ein Angebot?",
+      "destino": "traduzir",
+      "texto": "Quais documentos vocês precisam para um orçamento?"
+    },
+    {
+      "id": 135,
+      "tag": "p",
+      "original": "Ideal sind Bewehrungspläne und Stahllisten. Für eine erste Einschätzung reichen auch Eckdaten wie Bauteilart, Stahltonnage und Ausführungszeitraum.",
+      "destino": "traduzir",
+      "texto": "Ideais são os planos de armadura e as listas de aço. Para uma primeira avaliação, bastam também dados básicos como tipo de elemento, tonelagem de aço e prazo de execução."
+    },
+    {
+      "id": 136,
+      "tag": "summary",
+      "original": "Übernehmen Sie auch große Tonnagen und Taktbaustellen?",
+      "destino": "traduzir",
+      "texto": "Vocês também atendem grandes tonelagens e canteiros de obra com ritmo acelerado?"
+    },
+    {
+      "id": 137,
+      "tag": "p",
+      "original": "Ja. Unsere Kolonnen sind auf Industrie- und Gewerbeprojekte mit engen Taktplänen eingestellt und skalieren je nach Projektgröße.",
+      "destino": "traduzir",
+      "texto": "Sim. Nossas equipes estão preparadas para projetos industriais e comerciais com cronogramas apertados e escalam conforme o tamanho do projeto."
+    },
+    {
+      "id": 138,
+      "tag": "summary",
+      "original": "In welchen Regionen sind Sie tätig?",
+      "destino": "traduzir",
+      "texto": "Em quais regiões vocês atuam?"
+    },
+    {
+      "id": 139,
+      "tag": "p",
+      "original": "Unser Schwerpunkt liegt in Nordrhein-Westfalen und Niedersachsen – insbesondere Ostwestfalen-Lippe, Hannover, Osnabrück und Münster. Überregionale Einsätze sind nach Absprache möglich.",
+      "destino": "adaptar",
+      "texto": "Nosso foco está em São Paulo e Minas Gerais – especialmente Grande São Paulo, Belo Horizonte, Campinas e Ribeirão Preto. Atendimentos em outras regiões são possíveis mediante acordo."
+    },
+    {
+      "id": 140,
+      "tag": "h2",
+      "original": "Ihr nächstes Projekt braucht",
+      "destino": "traduzir",
+      "texto": "Seu próximo projeto precisa"
+    },
+    {
+      "id": 141,
+      "tag": "br",
+      "original": "eine",
+      "destino": "traduzir",
+      "texto": "uma"
+    },
+    {
+      "id": 142,
+      "tag": "span",
+      "original": "starke Bewehrung",
+      "destino": "traduzir",
+      "texto": "armadura forte"
+    },
+    {
+      "id": 143,
+      "tag": "p",
+      "original": "Senden Sie uns Ihre Pläne oder Eckdaten – wir melden uns schnell mit Verfügbarkeit und Angebot.",
+      "destino": "traduzir",
+      "texto": "Envie-nos seus planos ou dados básicos – retornamos rapidamente com disponibilidade e orçamento."
+    },
+    {
+      "id": 144,
+      "tag": "span",
+      "original": "Jetzt Kontakt aufnehmen",
+      "destino": "traduzir",
+      "texto": "Solicitar contato agora"
+    },
+    {
+      "id": 145,
+      "tag": "?",
+      "original": "Direkt anrufen",
+      "destino": "traduzir",
+      "texto": "Ligar agora"
+    },
+    {
+      "id": 146,
+      "tag": "?",
+      "original": "Kontakt",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 147,
+      "tag": "h2",
+      "original": "Projekt anfragen",
+      "destino": "traduzir",
+      "texto": "Solicitar orçamento"
+    },
+    {
+      "id": 148,
+      "tag": "p",
+      "original": "Schnelle Rückmeldung garantiert: Wir antworten in der Regel innerhalb von 24 Stunden – auch bei kurzfristigen Anfragen.",
+      "destino": "traduzir",
+      "texto": "Resposta rápida garantida: Respondemos geralmente em até 24 horas – mesmo para solicitações de última hora."
+    },
+    {
+      "id": 149,
+      "tag": "span",
+      "original": "Telefon",
+      "destino": "traduzir",
+      "texto": "Telefone"
+    },
+    {
+      "id": 150,
+      "tag": "span",
+      "original": "05221 / 00 00 00",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 151,
+      "tag": "span",
+      "original": "E-Mail",
+      "destino": "traduzir",
+      "texto": "E-mail"
+    },
+    {
+      "id": 152,
+      "tag": "span",
+      "original": "info@krannikbau.de",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 153,
+      "tag": "span",
+      "original": "Standort",
+      "destino": "traduzir",
+      "texto": "Localização"
+    },
+    {
+      "id": 154,
+      "tag": "span",
+      "original": "32049 Herford, Nordrhein-Westfalen",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 155,
+      "tag": "label",
+      "original": "Name / Firma *",
+      "destino": "traduzir",
+      "texto": "Nome / Empresa *"
+    },
+    {
+      "id": 156,
+      "tag": "label",
+      "original": "E-Mail *",
+      "destino": "traduzir",
+      "texto": "E-mail *"
+    },
+    {
+      "id": 157,
+      "tag": "label",
+      "original": "Telefon",
+      "destino": "traduzir",
+      "texto": "Telefone"
+    },
+    {
+      "id": 158,
+      "tag": "label",
+      "original": "Projektstandort",
+      "destino": "traduzir",
+      "texto": "Local do Projeto"
+    },
+    {
+      "id": 159,
+      "tag": "label",
+      "original": "Ihr Projekt *",
+      "destino": "traduzir",
+      "texto": "Seu Projeto *"
+    },
+    {
+      "id": 160,
+      "tag": "button",
+      "original": "Anfrage senden",
+      "destino": "traduzir",
+      "texto": "Enviar Solicitação"
+    },
+    {
+      "id": 161,
+      "tag": "p",
+      "original": "Mit dem Absenden stimmen Sie unserer Datenschutzerklärung zu.",
+      "destino": "traduzir",
+      "texto": "Ao enviar, você concorda com nossa Política de Privacidade"
+    },
+    {
+      "id": 162,
+      "tag": "span",
+      "original": "KB",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 163,
+      "tag": "span",
+      "original": "KRANNIK BAU GmbH",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 164,
+  "marcas_removidas": [],
+  "corrigidos_por_consistencia": [
+    {
+      "id": 162,
+      "original": "KB",
+      "era": "KB Construção",
+      "virou": "{{NOME}}"
+    }
+  ],
+  "precos_neutralizados": []
+}

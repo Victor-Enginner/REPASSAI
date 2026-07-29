@@ -1,0 +1,652 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "Little Latte Cafe",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 1,
+      "tag": "a",
+      "original": "Home",
+      "destino": "traduzir",
+      "texto": "Início"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "About me",
+      "destino": "traduzir",
+      "texto": "Sobre Nós"
+    },
+    {
+      "id": 3,
+      "tag": "a",
+      "original": "Best seller",
+      "destino": "traduzir",
+      "texto": "Mais Vendidos"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Menu",
+      "destino": "traduzir",
+      "texto": "Cardápio"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Contact us",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 6,
+      "tag": "a",
+      "original": "Little Latte Cafe",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 7,
+      "tag": "p",
+      "original": "A cozy, small-batch coffee spot in the heart of downtown Victoria—built for slow mornings, fresh bites, and very good coffee.",
+      "destino": "adaptar",
+      "texto": "Um café aconchegante e caseiro no coração do centro da cidade — feito para manhãs tranquilas, mordiscos frescos e café muito bom."
+    },
+    {
+      "id": 8,
+      "tag": "p",
+      "original": "Warm cups.",
+      "destino": "adaptar",
+      "texto": "Xícaras quentes."
+    },
+    {
+      "id": 9,
+      "tag": "br",
+      "original": "Open hearts.",
+      "destino": "adaptar",
+      "texto": "Corações abertos."
+    },
+    {
+      "id": 10,
+      "tag": "?",
+      "original": "Order Now",
+      "destino": "traduzir",
+      "texto": "Pedir Agora"
+    },
+    {
+      "id": 11,
+      "tag": "p",
+      "original": "Little Latte",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 12,
+      "tag": "h1",
+      "original": "More than a coffee",
+      "destino": "traduzir",
+      "texto": "Mais do que um café"
+    },
+    {
+      "id": 13,
+      "tag": "br",
+      "original": "— it’s a pause",
+      "destino": "adaptar",
+      "texto": "— é uma pausa"
+    },
+    {
+      "id": 14,
+      "tag": "p",
+      "original": "Inside The SoMA building on Broughton Street, Little Latte Cafe is a warm downtown hideaway for espresso, reading, studying, and low-key catch-ups across from the Central Library.",
+      "destino": "adaptar",
+      "texto": "Dentro do prédio, {{NOME}} é um esconderijo aconchegante no centro da cidade para espresso, leitura, estudo e encontros tranquilos."
+    },
+    {
+      "id": 15,
+      "tag": "p",
+      "original": "5.0 Stars",
+      "destino": "variavel",
+      "texto": "{{AVALIACAO}} Estrelas"
+    },
+    {
+      "id": 16,
+      "tag": "p",
+      "original": "Cozy service, fresh food, quiet atmosphere",
+      "destino": "adaptar",
+      "texto": "Serviço aconchegante, comida fresca, atmosfera tranquila"
+    },
+    {
+      "id": 17,
+      "tag": "a",
+      "original": "Visit downtown",
+      "destino": "traduzir",
+      "texto": "Visite o Centro"
+    },
+    {
+      "id": 18,
+      "tag": "h2",
+      "original": "Small-batch espresso, served with soul",
+      "destino": "adaptar",
+      "texto": "Espresso caseiro, servido com alma"
+    },
+    {
+      "id": 19,
+      "tag": "a",
+      "original": "Read more",
+      "destino": "traduzir",
+      "texto": "Leia Mais"
+    },
+    {
+      "id": 20,
+      "tag": "p",
+      "original": "Brewing stories since",
+      "destino": "adaptar",
+      "texto": "Contando histórias desde"
+    },
+    {
+      "id": 21,
+      "tag": "br",
+      "original": "2024 – now",
+      "destino": "variavel",
+      "texto": "{{ANO}} — agora"
+    },
+    {
+      "id": 22,
+      "tag": "p",
+      "original": "Built with love and a simple idea—to create a warm space where Victoria locals can slow down, sip something handcrafted, and enjoy fresh food made in-house.",
+      "destino": "adaptar",
+      "texto": "Construído com amor e uma ideia simples — criar um espaço aconchegante onde as pessoas possam desacelerar, saborear algo feito à mão e desfrutar de comida fresca feita na casa."
+    },
+    {
+      "id": 23,
+      "tag": "?",
+      "original": "Read More",
+      "destino": "traduzir",
+      "texto": "Leia Mais"
+    },
+    {
+      "id": 24,
+      "tag": "span",
+      "original": "Cocoa Hazelnut Latte",
+      "destino": "adaptar",
+      "texto": "Café com Leite"
+    },
+    {
+      "id": 25,
+      "tag": "span",
+      "original": "Strawberry Dirty Soda",
+      "destino": "adaptar",
+      "texto": "Pão de Queijo"
+    },
+    {
+      "id": 26,
+      "tag": "span",
+      "original": "Bacon, Egg & Cheese Croissant",
+      "destino": "adaptar",
+      "texto": "Misto Quente"
+    },
+    {
+      "id": 27,
+      "tag": "h2",
+      "original": "Rooted in",
+      "destino": "traduzir",
+      "texto": "Enraizado em"
+    },
+    {
+      "id": 28,
+      "tag": "br",
+      "original": "flavor, fueled",
+      "destino": "traduzir",
+      "texto": "sabor, impulsionado"
+    },
+    {
+      "id": 29,
+      "tag": "br",
+      "original": "by community",
+      "destino": "traduzir",
+      "texto": "pela comunidade"
+    },
+    {
+      "id": 30,
+      "tag": "h2",
+      "original": "Coffee. Pastries. And",
+      "destino": "traduzir",
+      "texto": "Café. Pastéis. E"
+    },
+    {
+      "id": 31,
+      "tag": "br",
+      "original": "everything you crave.",
+      "destino": "traduzir",
+      "texto": "tudo o que você deseja."
+    },
+    {
+      "id": 32,
+      "tag": "p",
+      "original": "Customer favorites rotate with daily bakes, but the signature sweet lattes, dirty sodas, breakfast croissants, and lemon bars keep regulars coming back.",
+      "destino": "adaptar",
+      "texto": "Os favoritos dos clientes mudam com as assadeiras diárias, mas os lattes doces assinados, os cafés especiais, os croissants de café da manhã e as barras de limão mantêm os regulares voltando."
+    },
+    {
+      "id": 33,
+      "tag": "span",
+      "original": "$6",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 34,
+      "tag": "span",
+      "original": "Cocoa Hazelnut Latte",
+      "destino": "adaptar",
+      "texto": "Café com Leite"
+    },
+    {
+      "id": 35,
+      "tag": "span",
+      "original": "$7",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 36,
+      "tag": "p",
+      "original": "Strawberry Dirty Soda",
+      "destino": "adaptar",
+      "texto": "Pão de Queijo"
+    },
+    {
+      "id": 37,
+      "tag": "p",
+      "original": "Bright, refreshing, playful, and made for the afternoon wind-down.",
+      "destino": "traduzir",
+      "texto": "Brilhante, refrescante, divertido e feito para o descanso da tarde."
+    },
+    {
+      "id": 38,
+      "tag": "span",
+      "original": "$5",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 39,
+      "tag": "span",
+      "original": "Hot Chocolate",
+      "destino": "adaptar",
+      "texto": "Chocolate Quente"
+    },
+    {
+      "id": 40,
+      "tag": "h2",
+      "original": "Fresh made,",
+      "destino": "traduzir",
+      "texto": "Feito fresco,"
+    },
+    {
+      "id": 41,
+      "tag": "br",
+      "original": "every day.",
+      "destino": "traduzir",
+      "texto": "todos os dias."
+    },
+    {
+      "id": 42,
+      "tag": "?",
+      "original": "Read More",
+      "destino": "traduzir",
+      "texto": "Leia Mais"
+    },
+    {
+      "id": 43,
+      "tag": "span",
+      "original": "$4–6",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 44,
+      "tag": "span",
+      "original": "Smooth espresso & BC-roasted lattes",
+      "destino": "adaptar",
+      "texto": "Espresso suave e lattes torrados"
+    },
+    {
+      "id": 45,
+      "tag": "span",
+      "original": "$6",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 46,
+      "tag": "span",
+      "original": "Cocoa Hazelnut Latte",
+      "destino": "adaptar",
+      "texto": "Café com Leite"
+    },
+    {
+      "id": 47,
+      "tag": "span",
+      "original": "$7",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 48,
+      "tag": "span",
+      "original": "Strawberry Dirty Soda",
+      "destino": "adaptar",
+      "texto": "Pão de Queijo"
+    },
+    {
+      "id": 49,
+      "tag": "span",
+      "original": "$8",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 50,
+      "tag": "span",
+      "original": "Bacon, Egg & Cheese Croissant",
+      "destino": "adaptar",
+      "texto": "Misto Quente"
+    },
+    {
+      "id": 51,
+      "tag": "span",
+      "original": "$4",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 52,
+      "tag": "span",
+      "original": "Daily Lemon Bars",
+      "destino": "adaptar",
+      "texto": "Torta de Limão"
+    },
+    {
+      "id": 53,
+      "tag": "p",
+      "original": "Original in-house recipes, economical prices, and payment by debit, credit, or mobile wallet. Wheelchair-accessible entrance, seating, and nearby parking are available.",
+      "destino": "traduzir",
+      "texto": "Receitas caseiras originais, preços econômicos, e pagamento por débito, crédito, ou carteira móvel. Entrada, assentos e estacionamento próximos acessíveis para cadeiras de rodas estão disponíveis."
+    },
+    {
+      "id": 54,
+      "tag": "a",
+      "original": "Read more",
+      "destino": "traduzir",
+      "texto": "Leia mais"
+    },
+    {
+      "id": 55,
+      "tag": "p",
+      "original": "Hours",
+      "destino": "traduzir",
+      "texto": "Horário de Funcionamento"
+    },
+    {
+      "id": 56,
+      "tag": "p",
+      "original": "Tuesday – Monday",
+      "destino": "traduzir",
+      "texto": "Terça a Segunda"
+    },
+    {
+      "id": 57,
+      "tag": "br",
+      "original": "6:00 AM – 6:00 PM",
+      "destino": "traduzir",
+      "texto": "6:00 AM – 6:00 PM"
+    },
+    {
+      "id": 58,
+      "tag": "p",
+      "original": "Location",
+      "destino": "traduzir",
+      "texto": "Localização"
+    },
+    {
+      "id": 59,
+      "tag": "p",
+      "original": "732 Broughton St",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 60,
+      "tag": "br",
+      "original": "Victoria, BC V8W 1E1",
+      "destino": "adaptar",
+      "texto": "São Paulo, SP"
+    },
+    {
+      "id": 61,
+      "tag": "p",
+      "original": "Payment",
+      "destino": "traduzir",
+      "texto": "Pagamento"
+    },
+    {
+      "id": 62,
+      "tag": "p",
+      "original": "Debit, credit, Apple Pay",
+      "destino": "adaptar",
+      "texto": "Débito, crédito, Pix"
+    },
+    {
+      "id": 63,
+      "tag": "br",
+      "original": "and Google Pay accepted",
+      "destino": "adaptar",
+      "texto": "e pagamento com cartão aceitos"
+    },
+    {
+      "id": 64,
+      "tag": "p",
+      "original": "Access",
+      "destino": "traduzir",
+      "texto": "Acesso"
+    },
+    {
+      "id": 65,
+      "tag": "p",
+      "original": "Accessible entrance, seating",
+      "destino": "adaptar",
+      "texto": "Entrada acessível, assentos"
+    },
+    {
+      "id": 66,
+      "tag": "br",
+      "original": "and nearby parking",
+      "destino": "adaptar",
+      "texto": "e estacionamento próximo"
+    },
+    {
+      "id": 67,
+      "tag": "p",
+      "original": "Contact us",
+      "destino": "traduzir",
+      "texto": "Contate-nos"
+    },
+    {
+      "id": 68,
+      "tag": "?",
+      "original": "Instagram",
+      "destino": "adaptar",
+      "texto": "Instagram"
+    },
+    {
+      "id": 69,
+      "tag": "p",
+      "original": "Little Latte Cafe",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 70,
+      "tag": "p",
+      "original": "732 Broughton St",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 71,
+      "tag": "p",
+      "original": "Menu",
+      "destino": "traduzir",
+      "texto": "Cardápio"
+    },
+    {
+      "id": 72,
+      "tag": "a",
+      "original": "About us",
+      "destino": "traduzir",
+      "texto": "Sobre nós"
+    },
+    {
+      "id": 73,
+      "tag": "a",
+      "original": "Best sellers",
+      "destino": "traduzir",
+      "texto": "Mais vendidos"
+    },
+    {
+      "id": 74,
+      "tag": "a",
+      "original": "Fresh menu",
+      "destino": "traduzir",
+      "texto": "Cardápio fresco"
+    },
+    {
+      "id": 75,
+      "tag": "a",
+      "original": "Visit",
+      "destino": "traduzir",
+      "texto": "Visite"
+    },
+    {
+      "id": 76,
+      "tag": "p",
+      "original": "Visit",
+      "destino": "traduzir",
+      "texto": "Visite"
+    },
+    {
+      "id": 77,
+      "tag": "p",
+      "original": "Downtown Victoria",
+      "destino": "adaptar",
+      "texto": "Centro da Cidade"
+    },
+    {
+      "id": 78,
+      "tag": "p",
+      "original": "The SoMA Building",
+      "destino": "adaptar",
+      "texto": "Prédio Comercial"
+    },
+    {
+      "id": 79,
+      "tag": "p",
+      "original": "Across from Library",
+      "destino": "adaptar",
+      "texto": "Em frente à Biblioteca"
+    },
+    {
+      "id": 80,
+      "tag": "p",
+      "original": "Paid street parking",
+      "destino": "adaptar",
+      "texto": "Estacionamento pago na rua"
+    },
+    {
+      "id": 81,
+      "tag": "p",
+      "original": "Contact",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 82,
+      "tag": "p",
+      "original": "732 Broughton St, Victoria, BC",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 83,
+      "tag": "p",
+      "original": "Phone not publicly listed",
+      "destino": "adaptar",
+      "texto": "Telefone não divulgado publicamente"
+    },
+    {
+      "id": 84,
+      "tag": "p",
+      "original": "Open major regional holidays",
+      "destino": "adaptar",
+      "texto": "Aberto em feriados regionais importantes"
+    },
+    {
+      "id": 85,
+      "tag": "p",
+      "original": "Little Latte Cafe",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 86,
+  "corrigidos_por_consistencia": [],
+  "precos_neutralizados": [
+    {
+      "id": 33,
+      "era": "$6",
+      "modo": "total"
+    },
+    {
+      "id": 35,
+      "era": "$7",
+      "modo": "total"
+    },
+    {
+      "id": 38,
+      "era": "$5",
+      "modo": "total"
+    },
+    {
+      "id": 43,
+      "era": "$4–6",
+      "modo": "total"
+    },
+    {
+      "id": 45,
+      "era": "$6",
+      "modo": "total"
+    },
+    {
+      "id": 47,
+      "era": "$7",
+      "modo": "total"
+    },
+    {
+      "id": 49,
+      "era": "$8",
+      "modo": "total"
+    },
+    {
+      "id": 51,
+      "era": "$4",
+      "modo": "total"
+    }
+  ],
+  "marcas_removidas": []
+}

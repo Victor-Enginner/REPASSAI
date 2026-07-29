@@ -1,0 +1,394 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "Exo Ape - Studio de Design Numérique",
+    "inicio": 3150,
+    "fim": 3186
+  },
+  {
+    "id": 1,
+    "tag": "a",
+    "texto": "Exo Ape",
+    "inicio": 4191,
+    "fim": 4198
+  },
+  {
+    "id": 2,
+    "tag": "a",
+    "texto": "Réalisations",
+    "inicio": 4344,
+    "fim": 4356
+  },
+  {
+    "id": 3,
+    "tag": "a",
+    "texto": "Studio",
+    "inicio": 4609,
+    "fim": 4615
+  },
+  {
+    "id": 4,
+    "tag": "a",
+    "texto": "Actualités",
+    "inicio": 4868,
+    "fim": 4878
+  },
+  {
+    "id": 5,
+    "tag": "a",
+    "texto": "Contact",
+    "inicio": 5131,
+    "fim": 5138
+  },
+  {
+    "id": 6,
+    "tag": "button",
+    "texto": "Menu",
+    "inicio": 5459,
+    "fim": 5463
+  },
+  {
+    "id": 7,
+    "tag": "p",
+    "texto": "Studio de design numérique en partenariat avec des marques et des\n            entreprises qui créent des expériences exceptionnelles où les gens\n            vivent, travaillent et se détendent.",
+    "inicio": 6423,
+    "fim": 6616
+  },
+  {
+    "id": 8,
+    "tag": "span",
+    "texto": "Digital",
+    "inicio": 6853,
+    "fim": 6860
+  },
+  {
+    "id": 9,
+    "tag": "span",
+    "texto": "Design",
+    "inicio": 6910,
+    "fim": 6916
+  },
+  {
+    "id": 10,
+    "tag": "span",
+    "texto": "Expérience",
+    "inicio": 6956,
+    "fim": 6966
+  },
+  {
+    "id": 11,
+    "tag": "p",
+    "texto": "Nous aidons les entreprises axées sur l'expérience à prospérer en\n            faisant ressentir à leur public les subtilités raffinées de leur\n            marque et de leurs produits dans l'espace numérique. Les voyages\n            inoubliables commencent par un clic.",
+    "inicio": 7156,
+    "fim": 7424
+  },
+  {
+    "id": 12,
+    "tag": "span",
+    "texto": "Le Studio",
+    "inicio": 8010,
+    "fim": 8019
+  },
+  {
+    "id": 13,
+    "tag": "a",
+    "texto": "Réalisations",
+    "inicio": 8537,
+    "fim": 8549
+  },
+  {
+    "id": 14,
+    "tag": "a",
+    "texto": "Studio",
+    "inicio": 8693,
+    "fim": 8699
+  },
+  {
+    "id": 15,
+    "tag": "a",
+    "texto": "Actualités",
+    "inicio": 8843,
+    "fim": 8853
+  },
+  {
+    "id": 16,
+    "tag": "a",
+    "texto": "Contact",
+    "inicio": 8997,
+    "fim": 9004
+  },
+  {
+    "id": 17,
+    "tag": "a",
+    "texto": "hello@exoape.com",
+    "inicio": 9277,
+    "fim": 9293
+  },
+  {
+    "id": 18,
+    "tag": "a",
+    "texto": "+31 772 086 200",
+    "inicio": 9496,
+    "fim": 9511
+  },
+  {
+    "id": 19,
+    "tag": "?",
+    "texto": "Projets en vedette",
+    "inicio": 10243,
+    "fim": 10261
+  },
+  {
+    "id": 20,
+    "tag": "h2",
+    "texto": "Réalisations",
+    "inicio": 10371,
+    "fim": 10383
+  },
+  {
+    "id": 21,
+    "tag": "p",
+    "texto": "Aperçu des projets que nous avons passionnément construits avec des\n            clients et amis avant-gardistes au fil des ans.",
+    "inicio": 10543,
+    "fim": 10670
+  },
+  {
+    "id": 22,
+    "tag": "span",
+    "texto": "Ottografie",
+    "inicio": 11504,
+    "fim": 11514
+  },
+  {
+    "id": 23,
+    "tag": "span",
+    "texto": "Parcours Photographique Fluide",
+    "inicio": 11592,
+    "fim": 11622
+  },
+  {
+    "id": 24,
+    "tag": "span",
+    "texto": "Amaterasu",
+    "inicio": 12378,
+    "fim": 12387
+  },
+  {
+    "id": 25,
+    "tag": "span",
+    "texto": "Innovation en Santé de Pointe",
+    "inicio": 12465,
+    "fim": 12494
+  },
+  {
+    "id": 26,
+    "tag": "span",
+    "texto": "Columbia Pictures",
+    "inicio": 13271,
+    "fim": 13288
+  },
+  {
+    "id": 27,
+    "tag": "span",
+    "texto": "Célébration d'un Siècle de Cinéma",
+    "inicio": 13366,
+    "fim": 13399
+  },
+  {
+    "id": 28,
+    "tag": "span",
+    "texto": "Cambium",
+    "inicio": 14142,
+    "fim": 14149
+  },
+  {
+    "id": 29,
+    "tag": "span",
+    "texto": "Pionnier des Solutions Durables",
+    "inicio": 14227,
+    "fim": 14258
+  },
+  {
+    "id": 30,
+    "tag": "span",
+    "texto": "Parcourir tous les projets",
+    "inicio": 14950,
+    "fim": 14976
+  },
+  {
+    "id": 31,
+    "tag": "?",
+    "texto": "Travail en mouvement",
+    "inicio": 16346,
+    "fim": 16366
+  },
+  {
+    "id": 32,
+    "tag": "span",
+    "texto": "Voir",
+    "inicio": 16510,
+    "fim": 16514
+  },
+  {
+    "id": 33,
+    "tag": "span",
+    "texto": "la Vidéo",
+    "inicio": 16538,
+    "fim": 16546
+  },
+  {
+    "id": 34,
+    "tag": "p",
+    "texto": "Notre travail s'apprécie mieux en mouvement. N'oubliez pas de mettre\n          vos écouteurs.",
+    "inicio": 16690,
+    "fim": 16783
+  },
+  {
+    "id": 35,
+    "tag": "?",
+    "texto": "Dans les médias",
+    "inicio": 17450,
+    "fim": 17465
+  },
+  {
+    "id": 36,
+    "tag": "span",
+    "texto": "Faire Passer",
+    "inicio": 17631,
+    "fim": 17643
+  },
+  {
+    "id": 37,
+    "tag": "span",
+    "texto": "le Mot",
+    "inicio": 17667,
+    "fim": 17673
+  },
+  {
+    "id": 38,
+    "tag": "p",
+    "texto": "Découvrez-en plus sur notre travail sur ces plateformes de référence\n          en design et technologie.",
+    "inicio": 17819,
+    "fim": 17923
+  },
+  {
+    "id": 39,
+    "tag": "span",
+    "texto": "Toutes les actualités",
+    "inicio": 18473,
+    "fim": 18494
+  },
+  {
+    "id": 40,
+    "tag": "span",
+    "texto": "Notre",
+    "inicio": 20804,
+    "fim": 20809
+  },
+  {
+    "id": 41,
+    "tag": "span",
+    "texto": "Histoire",
+    "inicio": 20837,
+    "fim": 20845
+  },
+  {
+    "id": 42,
+    "tag": "p",
+    "texto": "L'histoire derrière Exo Ape en est une d'exploration, de\n              créativité et de curiosité.",
+    "inicio": 20950,
+    "fim": 21048
+  },
+  {
+    "id": 43,
+    "tag": "p",
+    "texto": "Willem II Singel 8",
+    "inicio": 21295,
+    "fim": 21313
+  },
+  {
+    "id": 44,
+    "tag": "p",
+    "texto": "6041 HS, Roermond",
+    "inicio": 21331,
+    "fim": 21348
+  },
+  {
+    "id": 45,
+    "tag": "p",
+    "texto": "Pays-Bas",
+    "inicio": 21366,
+    "fim": 21374
+  },
+  {
+    "id": 46,
+    "tag": "a",
+    "texto": "hello@exoape.com",
+    "inicio": 21545,
+    "fim": 21561
+  },
+  {
+    "id": 47,
+    "tag": "a",
+    "texto": "Réalisations",
+    "inicio": 21929,
+    "fim": 21941
+  },
+  {
+    "id": 48,
+    "tag": "a",
+    "texto": "Studio",
+    "inicio": 22216,
+    "fim": 22222
+  },
+  {
+    "id": 49,
+    "tag": "a",
+    "texto": "Actualités",
+    "inicio": 22497,
+    "fim": 22507
+  },
+  {
+    "id": 50,
+    "tag": "a",
+    "texto": "Contact",
+    "inicio": 22782,
+    "fim": 22789
+  },
+  {
+    "id": 51,
+    "tag": "a",
+    "texto": "Behance",
+    "inicio": 23157,
+    "fim": 23164
+  },
+  {
+    "id": 52,
+    "tag": "a",
+    "texto": "Dribbble",
+    "inicio": 23439,
+    "fim": 23447
+  },
+  {
+    "id": 53,
+    "tag": "a",
+    "texto": "Linkedin",
+    "inicio": 23722,
+    "fim": 23730
+  },
+  {
+    "id": 54,
+    "tag": "a",
+    "texto": "Instagram",
+    "inicio": 24005,
+    "fim": 24014
+  },
+  {
+    "id": 55,
+    "tag": "span",
+    "texto": "Notre Histoire",
+    "inicio": 24920,
+    "fim": 24934
+  }
+]

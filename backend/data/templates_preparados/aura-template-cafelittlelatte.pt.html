@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{NOME}}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script><!-- aura-ga4-start -->
+
+
+<!-- aura-ga4-end -->
+</head>
+<body class="bg-[#efeee6] text-[#252525] antialiased selection:bg-[#252525] selection:text-[#efeee6]">
+  <main class="mx-auto min-h-screen w-full max-w-[112rem] overflow-hidden px-5 sm:px-8 lg:px-14">
+    <header class="flex items-center justify-between py-8 sm:py-10">
+      <nav class="hidden items-center gap-9 text-xs uppercase tracking-tight text-[#252525] md:flex">
+        <a href="#home" class="hover:opacity-60">Início</a>
+        <a href="#about" class="hover:opacity-60">Sobre Nós</a>
+        <a href="#best" class="hover:opacity-60">Mais Vendidos</a>
+        <a href="#menu" class="hover:opacity-60">Cardápio</a>
+        <a href="#contact" class="hover:opacity-60">Contato</a>
+      </nav>
+
+      <a href="#home" class="md:hidden text-sm uppercase tracking-tight">{{NOME}}</a>
+
+      <button aria-label="Open menu" class="grid size-11 place-items-center rounded-full border border-transparent hover:border-[#252525]/20">
+        <i data-lucide="menu" class="size-6"></i>
+      </button>
+    </header>
+
+    <section id="home" class="pt-12 sm:pt-20">
+      <div class="grid items-start gap-10 lg:grid-cols-[1fr_1.15fr_12rem]">
+        <div class="space-y-5">
+          <div class="grid w-20 grid-cols-4 gap-1">
+            <span class="aspect-square bg-[#252525] rotate-45"></span>
+            <span class="aspect-square bg-[#252525] rotate-45"></span>
+            <span class="aspect-square bg-[#252525] rotate-45"></span>
+            <span class="aspect-square bg-[#252525] rotate-45"></span>
+            <span class="aspect-square bg-[#252525] rotate-45 col-start-2"></span>
+            <span class="aspect-square bg-[#252525] rotate-45"></span>
+            <span class="aspect-square bg-[#252525] rotate-45"></span>
+          </div>
+          <p class="max-w-sm text-sm leading-relaxed text-[#252525]/70">
+            Um café aconchegante e caseiro no coração do centro da cidade — feito para manhãs tranquilas, mordiscos frescos e café muito bom.
+          </p>
+        </div>
+
+        <div class="">
+          <p class="text-4xl font-light uppercase leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">
+            Xícaras quentes.<br>
+            Corações abertos.
+          </p>
+        </div>
+
+        <a href="#menu" class="group hidden size-32 place-items-center rounded-full border border-[#252525] text-center text-sm lg:grid">
+          <span class="flex flex-col items-center gap-2">
+            <i data-lucide="arrow-up-right" class="size-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+            Pedir Agora
+          </span>
+        </a>
+      </div>
+
+      <div class="relative mt-14">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/084e9852-b8c5-4f7a-801e-1758ba192969_3840w.png" alt="Little Latte Cafe counter" class="h-[23rem] w-full object-cover brightness-[0.62] contrast-[1.08] saturate-[0.92] sm:h-[34rem] lg:h-[46rem]">
+        <div class="pointer-events-none absolute -top-4 left-0 right-0 overflow-hidden">
+          <p class="whitespace-nowrap text-[16vw] font-light uppercase leading-none tracking-tight text-transparent [-webkit-text-stroke:0.08rem_#efeee6]">
+            {{NOME}}
+          </p>
+        </div>
+        <div class="absolute -bottom-4 right-6 hidden grid-cols-3 gap-1 sm:grid">
+          <span class="size-7 bg-[#efeee6]"></span>
+          <span class="size-7 bg-[#252525]"></span>
+          <span class="size-7 bg-[#efeee6]"></span>
+          <span class="size-7 bg-[#252525] col-start-2"></span>
+          <span class="size-7 bg-[#efeee6]"></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
+      <div>
+        <h1 class="max-w-4xl text-4xl font-light uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          Mais do que um café<br>
+          — é uma pausa
+        </h1>
+        <p class="mt-9 max-w-2xl text-sm leading-relaxed text-[#252525]/70">
+          Dentro do prédio, {{NOME}} é um esconderijo aconchegante no centro da cidade para espresso, leitura, estudo e encontros tranquilos.
+        </p>
+      </div>
+
+      <div class="flex flex-col items-start gap-8 lg:items-end">
+        <div class="text-left lg:text-right">
+          <p class="text-4xl font-light uppercase tracking-tight sm:text-5xl">{{AVALIACAO}} Estrelas</p>
+          <p class="mt-3 text-xs uppercase tracking-tight">Serviço aconchegante, comida fresca, atmosfera tranquila</p>
+        </div>
+        <a href="#contact" class="inline-flex h-12 items-center justify-center border border-[#252525] px-8 text-xs uppercase tracking-tight hover:bg-[#252525] hover:text-[#efeee6]">
+          Visite o Centro
+        </a>
+      </div>
+
+      <div class="grid items-center gap-8 lg:col-span-2 lg:grid-cols-[10rem_18rem_1fr_12rem]">
+        <div class="text-center text-2xl font-light tracking-tight">
+          01<br>
+          <span class="text-sm">/</span><br>
+          <span class="text-sm">09</span>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=85" alt="Cafe exterior" class="h-44 w-full object-cover">
+
+        <div>
+          <p class="text-sm uppercase tracking-tight">01.</p>
+          <h2 class="mt-3 max-w-md text-2xl font-light uppercase leading-tight tracking-tight sm:text-3xl">
+            Espresso caseiro, servido com alma
+          </h2>
+          <a href="#best" class="mt-7 inline-flex items-center gap-5 border-b border-[#252525] text-xs uppercase tracking-tight">
+            Leia Mais <i data-lucide="arrow-right" class="size-4"></i>
+          </a>
+        </div>
+
+        <div class="hidden grid-cols-2 gap-1 justify-self-end lg:grid">
+          <span class="size-16 bg-[#252525]"></span>
+          <span class="size-16 bg-[#252525] translate-y-16"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[24rem_1fr_11rem]">
+      <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=900&q=85" alt="Cafe interior" class="h-[28rem] w-full object-cover lg:h-[32rem]">
+
+      <div>
+        <p class="text-4xl font-light uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          Contando histórias desde<br>
+          {{ANO}} — agora
+        </p>
+        <p class="mt-10 max-w-3xl text-sm leading-relaxed text-[#252525]/70">
+          Construído com amor e uma ideia simples — criar um espaço aconchegante onde as pessoas possam desacelerar, saborear algo feito à mão e desfrutar de comida fresca feita na casa.
+        </p>
+      </div>
+
+      <div class="space-y-28">
+        <a href="#menu" class="group mx-auto grid size-32 place-items-center rounded-full border border-[#252525] text-center text-sm">
+          <span class="flex flex-col items-center gap-2">
+            <i data-lucide="arrow-up-right" class="size-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+            Leia Mais
+          </span>
+        </a>
+
+        <div class="hidden grid-cols-4 gap-1 lg:grid">
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45 col-start-2"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-12 py-14 sm:py-20 lg:grid-cols-[1fr_1.25fr_0.85fr] lg:items-center">
+      <div class="space-y-4">
+        <div class="grid grid-cols-[4rem_1fr] border-b border-[#252525]/50 py-4 text-xs uppercase tracking-tight">
+          <span>01.</span>
+          <span>Café com Leite</span>
+        </div>
+        <div class="grid grid-cols-[4rem_1fr] border-b border-[#252525]/50 py-4 text-xs uppercase tracking-tight">
+          <span>02.</span>
+          <span>Pão de Queijo</span>
+        </div>
+        <div class="grid grid-cols-[4rem_1fr] border-b border-[#252525]/50 py-4 text-xs uppercase tracking-tight">
+          <span>03.</span>
+          <span>Misto Quente</span>
+        </div>
+      </div>
+
+      <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=85" alt="Coffee shop window" class="h-64 w-full object-cover sm:h-80">
+
+      <h2 class="text-4xl font-light uppercase leading-tight tracking-tight sm:text-5xl">
+        Enraizado em<br>
+        sabor, impulsionado<br>
+        pela comunidade
+      </h2>
+    </section>
+
+    <section id="best" class="py-16 sm:py-24">
+      <div class="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-24">
+        <h2 class="text-4xl font-light uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          Café. Pastéis. E<br>
+          tudo o que você deseja.
+        </h2>
+        <p class="max-w-xl self-end text-sm leading-relaxed text-[#252525]/70 lg:justify-self-end">
+          Os favoritos dos clientes mudam com as assadeiras diárias, mas os lattes doces assinados, os cafés especiais, os croissants de café da manhã e as barras de limão mantêm os regulares voltando.
+        </p>
+      </div>
+
+      <div class="mt-20 grid items-end gap-12 lg:grid-cols-[0.75fr_1.2fr_0.75fr_10rem]">
+        <div>
+          <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=700&q=85" alt="Iced latte" class="h-64 w-full object-cover sm:h-80">
+          <div class="mt-5 flex items-center justify-between text-sm uppercase tracking-tight">
+            <span class="text-2xl font-light tracking-tight">Sob consulta</span>
+            <span>Café com Leite</span>
+          </div>
+        </div>
+
+        <div>
+          <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=1000&q=85" alt="Creamy latte" class="h-[30rem] w-full object-cover">
+          <div class="mt-6 grid gap-6 sm:grid-cols-[8rem_1fr] sm:items-end">
+            <span class="text-5xl font-light tracking-tight sm:text-6xl">Sob consulta</span>
+            <div>
+              <p class="text-sm uppercase tracking-tight">Pão de Queijo</p>
+              <p class="mt-3 text-sm leading-relaxed text-[#252525]/65">Brilhante, refrescante, divertido e feito para o descanso da tarde.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=85" alt="Hot chocolate" class="h-64 w-full object-cover sm:h-80">
+          <div class="mt-5 flex items-center justify-between text-sm uppercase tracking-tight">
+            <span class="text-2xl font-light tracking-tight">Sob consulta</span>
+            <span>Chocolate Quente</span>
+          </div>
+        </div>
+
+        <div class="hidden place-items-end lg:grid">
+          <div class="text-center">
+            <p class="text-2xl font-light tracking-tight">01<span class="text-sm"> / 09</span></p>
+            <div class="mt-4 flex gap-2">
+              <span class="h-1 w-8 bg-[#252525]"></span>
+              <span class="h-1 w-6 bg-[#252525]"></span>
+              <span class="h-1 w-4 bg-[#252525]"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="grid gap-12 py-16 sm:py-24 lg:grid-cols-[24rem_1fr] lg:gap-20">
+      <div>
+        <h2 class="text-4xl font-light uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          Feito fresco,<br>
+          todos os dias.
+        </h2>
+        <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=900&q=85" alt="Cafe customers" class="mt-14 h-[32rem] w-full object-cover">
+      </div>
+
+      <div class="flex flex-col justify-between gap-16">
+        <a href="#contact" class="group ml-auto hidden size-32 place-items-center rounded-full border border-[#252525] text-center text-sm lg:grid">
+          <span class="flex flex-col items-center gap-2">
+            <i data-lucide="arrow-up-right" class="size-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+            Leia Mais
+          </span>
+        </a>
+
+        <div class="space-y-0">
+          <div class="grid grid-cols-[5rem_1fr] border-b border-[#252525]/50 py-5 text-xs uppercase tracking-tight sm:grid-cols-[7rem_1fr]">
+            <span>Sob consulta</span>
+            <span class="text-right">Espresso suave e lattes torrados</span>
+          </div>
+          <div class="grid grid-cols-[5rem_1fr] border-b border-[#252525]/50 py-5 text-xs uppercase tracking-tight sm:grid-cols-[7rem_1fr]">
+            <span>Sob consulta</span>
+            <span class="text-right">Café com Leite</span>
+          </div>
+          <div class="grid grid-cols-[5rem_1fr] border-b border-[#252525]/50 py-5 text-xs uppercase tracking-tight sm:grid-cols-[7rem_1fr]">
+            <span>Sob consulta</span>
+            <span class="text-right">Pão de Queijo</span>
+          </div>
+          <div class="grid grid-cols-[5rem_1fr] border-b border-[#252525]/50 py-5 text-xs uppercase tracking-tight sm:grid-cols-[7rem_1fr]">
+            <span>Sob consulta</span>
+            <span class="text-right">Misto Quente</span>
+          </div>
+          <div class="grid grid-cols-[5rem_1fr] border-b border-[#252525]/50 py-5 text-xs uppercase tracking-tight sm:grid-cols-[7rem_1fr]">
+            <span>Sob consulta</span>
+            <span class="text-right">Torta de Limão</span>
+          </div>
+        </div>
+
+        <div class="grid gap-10 lg:grid-cols-[1fr_18rem] lg:items-end">
+          <div>
+            <p class="max-w-xl text-sm leading-relaxed text-[#252525]/70">
+              Receitas caseiras originais, preços econômicos, e pagamento por débito, crédito, ou carteira móvel. Entrada, assentos e estacionamento próximos acessíveis para cadeiras de rodas estão disponíveis.
+            </p>
+            <a href="#contact" class="mt-8 inline-flex items-center gap-5 border-b border-[#252525] text-xs uppercase tracking-tight">
+              Leia mais <i data-lucide="arrow-right" class="size-4"></i>
+            </a>
+          </div>
+          <img src="https://images.unsplash.com/photo-1513267048331-5611cad62e41?auto=format&fit=crop&w=700&q=85" alt="Iced drink" class="h-48 w-full object-cover">
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-8 border-y border-[#252525]/20 py-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="flex gap-4">
+        <i data-lucide="clock" class="mt-1 size-5 shrink-0"></i>
+        <div>
+          <p class="text-xs uppercase tracking-tight">Horário de Funcionamento</p>
+          <p class="mt-2 text-sm leading-relaxed text-[#252525]/70">Terça a Segunda<br>6:00 AM – 6:00 PM</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <i data-lucide="map-pin" class="mt-1 size-5 shrink-0"></i>
+        <div>
+          <p class="text-xs uppercase tracking-tight">Localização</p>
+          <p class="mt-2 text-sm leading-relaxed text-[#252525]/70">{{ENDERECO}}<br>São Paulo, SP</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <i data-lucide="credit-card" class="mt-1 size-5 shrink-0"></i>
+        <div>
+          <p class="text-xs uppercase tracking-tight">Pagamento</p>
+          <p class="mt-2 text-sm leading-relaxed text-[#252525]/70">Débito, crédito, Pix<br>e pagamento com cartão aceitos</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <i data-lucide="accessibility" class="mt-1 size-5 shrink-0"></i>
+        <div>
+          <p class="text-xs uppercase tracking-tight">Acesso</p>
+          <p class="mt-2 text-sm leading-relaxed text-[#252525]/70">Entrada acessível, assentos<br>e estacionamento próximo</p>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact" class="py-16 sm:py-24">
+      <div class="grid gap-12 lg:grid-cols-[20rem_1fr]">
+        <div>
+          <p class="text-2xl font-light uppercase tracking-tight">Contate-nos</p>
+          <a href="https://www.instagram.com/" class="group mt-8 grid size-28 place-items-center rounded-full border border-[#252525] text-center text-xs">
+            <span class="flex flex-col items-center gap-2">
+              <i data-lucide="instagram" class="size-5"></i>
+              Instagram
+            </span>
+          </a>
+        </div>
+
+        <div class="text-left lg:text-center">
+          <p class="text-4xl font-light uppercase leading-tight tracking-tight sm:text-6xl lg:text-7xl">
+            {{NOME}}
+          </p>
+          <p class="mt-8 text-3xl font-light uppercase leading-tight tracking-tight sm:text-5xl">
+            {{ENDERECO}}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-20 grid gap-14 lg:grid-cols-[1fr_12rem_12rem_20rem]">
+        <div class="grid w-40 grid-cols-4 gap-2 self-end">
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45 col-start-2"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+          <span class="aspect-square bg-[#252525] rotate-45"></span>
+        </div>
+
+        <div>
+          <p class="text-sm uppercase tracking-tight">Cardápio</p>
+          <div class="mt-8 space-y-3 text-xs uppercase tracking-tight text-[#252525]/65">
+            <a href="#about" class="block hover:text-[#252525]">Sobre nós</a>
+            <a href="#best" class="block hover:text-[#252525]">Mais vendidos</a>
+            <a href="#menu" class="block hover:text-[#252525]">Cardápio fresco</a>
+            <a href="#contact" class="block hover:text-[#252525]">Visite</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-sm uppercase tracking-tight">Visite</p>
+          <div class="mt-8 space-y-3 text-xs uppercase tracking-tight text-[#252525]/65">
+            <p>Centro da Cidade</p>
+            <p>Prédio Comercial</p>
+            <p>Em frente à Biblioteca</p>
+            <p>Estacionamento pago na rua</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-sm uppercase tracking-tight">Contato</p>
+          <div class="mt-8 space-y-3 text-xs uppercase tracking-tight text-[#252525]/65">
+            <p>{{ENDERECO}}</p>
+            <p>Telefone não divulgado publicamente</p>
+            <p>Aberto em feriados regionais importantes</p>
+            <p>{{NOME}}</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    lucide.createIcons({
+      attrs: {
+        "stroke-width": 1.5
+      }
+    });
+  </script>
+
+</body></html>

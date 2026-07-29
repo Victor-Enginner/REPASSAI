@@ -1,0 +1,87 @@
+{
+  "slug": "aura-template-neapolitan-pizzeria-28",
+  "titulo": "Pizza Delivery and Restaurant Website Template",
+  "descricao": "A warm and artisanal website template designed for local pizzerias featuring a full digital menu and integrated cart functionality. Fonte: https://www.aura.build/templates/neapolitan-pizzeria-28",
+  "arquivo": "77lib/aura-template-neapolitan-pizzeria-28.html",
+  "tamanho_html": 135629,
+  "paleta": [
+    {
+      "cor": "#e23f2e",
+      "usos": 255
+    },
+    {
+      "cor": "#2a1a0f",
+      "usos": 178
+    },
+    {
+      "cor": "#c4b08a",
+      "usos": 141
+    },
+    {
+      "cor": "#f2e6ce",
+      "usos": 93
+    },
+    {
+      "cor": "#e6d5b0",
+      "usos": 65
+    },
+    {
+      "cor": "#5a3e28",
+      "usos": 40
+    },
+    {
+      "cor": "#9b8a72",
+      "usos": 33
+    },
+    {
+      "cor": "#b82a1f",
+      "usos": 10
+    },
+    {
+      "cor": "#1a1009",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(42, 26, 15, 0.1)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(226, 63, 46, 0.4)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Lilita One",
+    "DM Sans"
+  ],
+  "secoes": [
+    "micsas.ff",
+    "Nascuts a Matadepera, fets per compartir.",
+    "Què diuen els nostres veïns",
+    "Les nostres pizzes",
+    "De Matadepera, a la teva taula.",
+    "Dades de lliurament",
+    "Forma de pagament",
+    "Confirmació",
+    "Gràcies!"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 3,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-neapolitan-pizzeria-28?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Pizza Delivery and Restaurant Website Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-neapolitan-pizzeria-28`\n\n## Objetivo\nA warm and artisanal website template designed for local pizzerias featuring a full digital menu and integrated cart functionality. Fonte: https://www.aura.build/templates/neapolitan-pizzeria-28\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e23f2e  (255x)\n- #2a1a0f  (178x)\n- #c4b08a  (141x)\n- #f2e6ce  (93x)\n- #e6d5b0  (65x)\n- #5a3e28  (40x)\n- #9b8a72  (33x)\n- #b82a1f  (10x)\n- #1a1009  (2x)\n- rgba(42, 26, 15, 0.1)  (1x)\n- rgba(226, 63, 46, 0.4)  (1x)\n\n## Tipografia detectada\n- Lilita One\n- DM Sans\n\n## Estrutura de seções\n- micsas.ff\n- Nascuts a Matadepera, fets per compartir.\n- Què diuen els nostres veïns\n- Les nostres pizzes\n- De Matadepera, a la teva taula.\n- Dades de lliurament\n- Forma de pagament\n- Confirmació\n- Gràcies!\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Pizza Delivery and Restaurant Website Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Pizza Delivery and Restaurant Website Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-neapolitan-pizzeria-28`\n\n## Objetivo\nA warm and artisanal website template designed for local pizzerias featuring a full digital menu and integrated cart functionality. Fonte: https://www.aura.build/templates/neapolitan-pizzeria-28\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e23f2e  (255x)\n- #2a1a0f  (178x)\n- #c4b08a  (141x)\n- #f2e6ce  (93x)\n- #e6d5b0  (65x)\n- #5a3e28  (40x)\n- #9b8a72  (33x)\n- #b82a1f  (10x)\n- #1a1009  (2x)\n- rgba(42, 26, 15, 0.1)  (1x)\n- rgba(226, 63, 46, 0.4)  (1x)\n\n## Tipografia detectada\n- Lilita One\n- DM Sans\n\n## Estrutura de seções\n- micsas.ff\n- Nascuts a Matadepera, fets per compartir.\n- Què diuen els nostres veïns\n- Les nostres pizzes\n- De Matadepera, a la teva taula.\n- Dades de lliurament\n- Forma de pagament\n- Confirmació\n- Gràcies!\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:53"
+}

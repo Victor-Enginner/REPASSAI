@@ -15,7 +15,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   Search,
@@ -35,7 +35,6 @@ import {
 } from 'lucide-react';
 import logoOrb from '../assets/repass_logo_orb.jpg';
 import { useEhMobile } from '../hooks/useMediaQuery';
-import FaultyTerminal from './ui/FaultyTerminal';
 
 export default function Sidebar({ currentTab, setCurrentTab }) {
   const [hoveredTab, setHoveredTab] = useState(null);
@@ -43,13 +42,10 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
   const [gavetaAberta, setGavetaAberta] = useState(false);
   const botaoAbrirRef = useRef(null);
 
-  // Ao voltar para desktop, zera o estado da gaveta para não deixar
-  // resquício de overlay quando a Sidebar volta a ser coluna fixa.
   useEffect(() => {
     if (!ehMobile) setGavetaAberta(false);
   }, [ehMobile]);
 
-  // Esc fecha a gaveta e devolve o foco ao botão que a abriu.
   useEffect(() => {
     if (!gavetaAberta) return undefined;
     const aoTeclar = (e) => {
@@ -62,7 +58,6 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
     return () => document.removeEventListener('keydown', aoTeclar);
   }, [gavetaAberta]);
 
-  // Trava a rolagem do fundo enquanto a gaveta está aberta.
   useEffect(() => {
     if (!ehMobile) return undefined;
     const original = document.body.style.overflow;
@@ -70,23 +65,11 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
     return () => { document.body.style.overflow = original; };
   }, [gavetaAberta, ehMobile]);
 
-  /** Navega e, no celular, fecha a gaveta. */
   const navegar = (id) => {
     setCurrentTab(id);
     if (ehMobile) setGavetaAberta(false);
   };
 
-  /**
-   * Itens do menu.
-   *
-   * `nome` é o rótulo humano; `indice` é o número do módulo, renderizado
-   * pequeno e apagado ao lado.
-   *
-   * Antes o rótulo inteiro era `CRIAR_SITE_11` — nome de variável vazando
-   * na tela. A estética de terminal é boa e fica; o que muda é que
-   * terminal de verdade tem comando legível, e o número serve de índice,
-   * não de nome.
-   */
   const menuItems = [
     { id: 'dashboard',     nome: 'Painel',            indice: '01', icon: LayoutDashboard, badge: null },
     { id: 'leads',         nome: 'Scanner de Leads',  indice: '02', icon: Search,          badge: 'OSINT' },
@@ -98,11 +81,9 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
     { id: 'cobrar',        nome: 'Faturamento',       indice: '08', icon: CreditCard,      badge: null },
     { id: 'ranking',       nome: 'Indicações',        indice: '09', icon: Trophy,          badge: null },
     { id: 'templates',     nome: 'Loja de Templates', indice: '10', icon: LayoutTemplate,  badge: null },
-    { id: 'editor',        nome: 'Criar Site',        indice: '11', icon: PlusCircle,      badge: 'NEW' }
+    { id: 'wizard',        nome: 'Criar Site',        indice: '11', icon: PlusCircle,      badge: 'NEW' }
   ];
 
-  // No celular a gaveta fica fora da tela até ser aberta; no desktop é a
-  // coluna fixa e imutável de 260px travada na viewport.
   const estiloAside = ehMobile
     ? {
         width: '272px',
@@ -114,9 +95,8 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         transform: gavetaAberta ? 'translateX(0)' : 'translateX(-100%)',
         transition: 'transform 0.26s cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 60,
-        background: 'rgba(5, 7, 15, 0.97)',
-        backdropFilter: 'blur(16px)',
-        boxShadow: gavetaAberta ? '4px 0 32px rgba(0,0,0,0.6)' : 'none',
+        background: 'var(--bg-sidebar)',
+        boxShadow: gavetaAberta ? '4px 0 32px rgba(0,0,0,0.8)' : 'none',
       }
     : {
         width: '260px',
@@ -125,13 +105,13 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         top: 0,
         left: 0,
         flexShrink: 0,
-        background: '#05070f',
+        background: 'var(--bg-sidebar)',
         zIndex: 40,
       };
 
   return (
     <>
-      {/* Botão de abrir — só no celular, e só com a gaveta fechada. */}
+      {/* Botão de abrir — móvel */}
       {ehMobile && !gavetaAberta && (
         <button
           ref={botaoAbrirRef}
@@ -160,7 +140,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         </button>
       )}
 
-      {/* Fundo escuro: fecha ao tocar fora. */}
+      {/* Overlay móvel */}
       {ehMobile && gavetaAberta && (
         <div
           onClick={() => setGavetaAberta(false)}
@@ -168,8 +148,8 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.62)',
-            backdropFilter: 'blur(2px)',
+            background: 'rgba(0, 0, 0, 0.7)',
+            backdropFilter: 'blur(3px)',
             zIndex: 55,
           }}
         />
@@ -183,24 +163,13 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         display: 'flex',
         flexDirection: 'column',
         padding: 0,
-        borderRight: '0.5px solid rgba(255, 255, 255, 0.1)',
+        borderRight: '0.5px solid rgba(255, 255, 255, 0.08)',
         userSelect: 'none',
         overflow: 'hidden',
         ...estiloAside,
       }}
     >
-      {/* Fundo Matrix FaultyTerminal exclusivo da Barra de Navegação / Sidebar */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, opacity: 0.35, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <FaultyTerminal
-          scale={1.2} gridMul={[1, 1]} digitSize={1.0} timeScale={0.4}
-          scanlineIntensity={0.8} glitchAmount={0.8} flickerAmount={0.8} noiseAmp={0.8}
-          curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={0.8}
-          pageLoadAnimation={false}
-        />
-      </div>
-
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-        {/* Fechar — só aparece com a gaveta aberta. */}
         {ehMobile && (
           <button
             onClick={() => setGavetaAberta(false)}
@@ -224,15 +193,15 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           </button>
         )}
         
-        {/* Brand Header Fixo no Topo da Sidebar */}
+        {/* Brand Header */}
         <motion.div 
           onClick={() => navegar('landing')}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
           style={{
-            height: '72px',
-            padding: '0 20px',
-            borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)',
+            height: '68px',
+            padding: '0 18px',
+            borderBottom: '0.5px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -245,20 +214,20 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
               src={logoOrb} 
               alt="REPASS AI" 
               style={{
-                width: '28px',
-                height: '28px',
+                width: '26px',
+                height: '26px',
                 borderRadius: '50%',
                 objectFit: 'cover'
               }} 
             />
-            <span className="font-headline" style={{ fontSize: '18px', color: '#ffffff', letterSpacing: '-0.5px', fontWeight: '800' }}>
+            <span className="font-headline" style={{ fontSize: '17px', color: 'var(--fg-white)', letterSpacing: '-0.5px', fontWeight: '800' }}>
               REPASS
             </span>
           </div>
 
           <span className="mono-label" style={{ 
-            fontSize: '9px', 
-            color: '#6366f1', 
+            fontSize: '8.5px', 
+            color: 'var(--accent-indigo)', 
             background: 'rgba(99, 102, 241, 0.12)', 
             padding: '3px 8px', 
             borderRadius: '12px',
@@ -269,8 +238,8 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           </span>
         </motion.div>
 
-        {/* Navigation Menu com Rolagem Interna Isolada (Não move a Sidebar) */}
-        <nav style={{ display: 'flex', flexDirection: 'column', padding: '12px 8px', gap: '2px', position: 'relative', flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+        {/* Navigation Menu */}
+        <nav style={{ display: 'flex', flexDirection: 'column', padding: '10px 8px', gap: '2px', position: 'relative', flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -282,16 +251,14 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                 onClick={() => navegar(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
                 onMouseLeave={() => setHoveredTab(null)}
-                whileHover={{ x: 4 }}
+                whileHover={{ x: 3 }}
                 whileTap={{ scale: 0.98 }}
                 aria-current={isActive ? 'page' : undefined}
                 style={{
                   position: 'relative',
                   width: '100%',
-                  // 44px é o mínimo confortável para o dedo. No desktop,
-                  // onde o alvo é o cursor, 42px continua bom.
-                  height: ehMobile ? '48px' : '42px',
-                  padding: '0 12px',
+                  height: ehMobile ? '46px' : '40px',
+                  padding: '0 10px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -311,11 +278,11 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(90deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.05) 100%)',
+                      background: 'linear-gradient(90deg, rgba(99, 102, 241, 0.22) 0%, rgba(99, 102, 241, 0.04) 100%)',
                       borderLeft: '3px solid #6366f1',
                       borderRadius: '4px',
                       zIndex: -1,
-                      boxShadow: 'inset 0 0 12px rgba(99, 102, 241, 0.15)'
+                      boxShadow: 'inset 0 0 12px rgba(99, 102, 241, 0.12)'
                     }}
                   />
                 )}
@@ -336,87 +303,92 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                   />
                 )}
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {/* Left: Icon + Label */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
                   <Icon 
                     size={16} 
-                    color={isActive ? '#6366f1' : (item.highlight ? '#38bdf8' : '#94a3b8')} 
+                    color={isActive ? '#818cf8' : (item.highlight ? '#38bdf8' : '#64748b')} 
                     style={{
+                      flexShrink: 0,
                       transition: 'color 0.2s ease, transform 0.2s ease',
-                      transform: isActive ? 'scale(1.1)' : 'scale(1)'
+                      transform: isActive ? 'scale(1.08)' : 'scale(1)'
                     }}
                   />
                   <span style={{
                     fontSize: '13px',
-                    fontWeight: isActive ? '700' : '600',
+                    fontWeight: isActive ? '700' : '500',
                     color: isActive ? '#ffffff' : (isHovered ? '#f1f5f9' : '#cbd5e1'),
                     letterSpacing: '-0.01em',
                     transition: 'color 0.2s ease',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
                   }}>
                     {item.nome}
                   </span>
+                </div>
 
-                  {/* Índice do módulo: mantém o DNA de terminal sem virar rótulo. */}
+                {/* Right: Badge & Index */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0, marginLeft: '6px' }}>
+                  {item.badge && (
+                    <span style={{
+                      fontSize: '8px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-mono)',
+                      padding: '2px 5px',
+                      borderRadius: '4px',
+                      background: item.badge === 'PRO' ? 'rgba(236, 72, 153, 0.2)' : (item.badge === 'OSINT' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(99, 102, 241, 0.2)'),
+                      color: item.badge === 'PRO' ? '#ec4899' : (item.badge === 'OSINT' ? '#38bdf8' : '#a5b4fc'),
+                      border: `0.5px solid ${item.badge === 'PRO' ? 'rgba(236, 72, 153, 0.4)' : (item.badge === 'OSINT' ? 'rgba(56, 189, 248, 0.4)' : 'rgba(99, 102, 241, 0.4)')}`
+                    }}>
+                      {item.badge}
+                    </span>
+                  )}
+
                   <span style={{
                     fontSize: '9px',
                     fontFamily: 'var(--font-mono)',
-                    color: isActive ? '#6366f1' : '#ffffff',
-                    opacity: isActive ? 0.7 : 0.35,
+                    color: isActive ? '#818cf8' : '#475569',
+                    opacity: isActive ? 0.9 : 0.4,
                     letterSpacing: '0.05em',
-                    transition: 'opacity 0.2s ease'
+                    transition: 'color 0.2s ease'
                   }}>
                     {item.indice}
                   </span>
                 </div>
-
-                {/* Badge Indicator */}
-                {item.badge && (
-                  <span style={{
-                    fontSize: '8.5px',
-                    fontWeight: '800',
-                    fontFamily: 'var(--font-mono)',
-                    padding: '2px 6px',
-                    borderRadius: '4px',
-                    background: item.badge === 'PRO' ? 'rgba(236, 72, 153, 0.2)' : (item.badge === 'OSINT' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(99, 102, 241, 0.2)'),
-                    color: item.badge === 'PRO' ? '#ec4899' : (item.badge === 'OSINT' ? '#38bdf8' : '#a5b4fc'),
-                    border: `0.5px solid ${item.badge === 'PRO' ? 'rgba(236, 72, 153, 0.4)' : (item.badge === 'OSINT' ? 'rgba(56, 189, 248, 0.4)' : 'rgba(99, 102, 241, 0.4)')}`
-                  }}>
-                    {item.badge}
-                  </span>
-                )}
               </motion.button>
             );
           })}
         </nav>
       </div>
 
-      {/* Upgrade Footer Card Português BR */}
-      <div style={{ padding: '14px', borderTop: '0.5px solid rgba(255, 255, 255, 0.1)' }}>
+      {/* Upgrade Footer Card */}
+      <div style={{ padding: '12px', borderTop: '0.5px solid rgba(255, 255, 255, 0.08)', flexShrink: 0 }}>
         <motion.div 
           onClick={() => navegar('engine')}
-          whileHover={{ scale: 1.02, translateY: -2 }}
+          whileHover={{ scale: 1.01, translateY: -1 }}
           whileTap={{ scale: 0.98 }}
           style={{
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)',
-            border: '0.5px solid rgba(99, 102, 241, 0.3)',
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(236, 72, 153, 0.12) 100%)',
+            border: '0.5px solid rgba(99, 102, 241, 0.25)',
             borderRadius: '8px',
             padding: '12px',
             cursor: 'pointer',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <Sparkles size={14} color="#ec4899" />
-            <span style={{ fontSize: '11px', fontWeight: '800', color: '#ffffff', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+            <Sparkles size={13} color="#ec4899" />
+            <span style={{ fontSize: '10.5px', fontWeight: '800', color: 'var(--fg-white)', fontFamily: 'var(--font-mono)' }}>
               REPASS PRO // ACESSO ILIMITADO
             </span>
           </div>
 
-          <p style={{ fontSize: '10px', color: '#94a3b8', margin: 0, lineHeight: 1.4 }}>
+          <p style={{ fontSize: '10px', color: 'var(--fg-muted)', margin: 0, lineHeight: 1.4 }}>
             Varredura OSINT ilimitada & motor de IA 60fps sem bloqueios.
           </p>
 
-          <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '10px', color: '#6366f1', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '9.5px', color: 'var(--accent-indigo-claro)', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
             <span>ATIVAR AGORA</span>
             <ChevronRight size={12} />
           </div>

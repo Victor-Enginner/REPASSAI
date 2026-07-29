@@ -1,0 +1,107 @@
+{
+  "slug": "aura-template-luxury-barbershop-47",
+  "titulo": "Luxury Barbershop Landing Page Template",
+  "descricao": "A premium, dark-themed service template designed for high-end barbershops and male grooming businesses looking to project exclusivity and sophistication. Fonte: https://www.aura.build/templates/luxury-barbershop-47",
+  "arquivo": "77lib/aura-template-luxury-barbershop-47.html",
+  "tamanho_html": 49211,
+  "paleta": [
+    {
+      "cor": "#c8a65a",
+      "usos": 89
+    },
+    {
+      "cor": "#0b0b0b",
+      "usos": 25
+    },
+    {
+      "cor": "#1a1a1a",
+      "usos": 22
+    },
+    {
+      "cor": "#2f2f2f",
+      "usos": 21
+    },
+    {
+      "cor": "#111111",
+      "usos": 7
+    },
+    {
+      "cor": "rgba(200,166,90,0.1)",
+      "usos": 4
+    },
+    {
+      "cor": "rgba(11, 11, 11, 1)",
+      "usos": 2
+    },
+    {
+      "cor": "#151310",
+      "usos": 1
+    },
+    {
+      "cor": "#0a0a0a",
+      "usos": 1
+    },
+    {
+      "cor": "#25d366",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(11, 11, 11, 0.6)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(200,166,90,0.05)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(200,166,90,0.3)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(200,166,90,0.2)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(11, 11, 11, 0.8)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(37,211,102,0.3)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Montserrat",
+    "Playfair Display"
+  ],
+  "secoes": [
+    "Más que un corte.Una experiencia de distinción.",
+    "Tu imagen abre puertas.",
+    "Donde la barbería se convierte en un ritual.",
+    "Elige tu experiencia",
+    "La Experiencia ST. JOCP",
+    "La voz de nuestros clientes",
+    "Primera Visita Exclusiva",
+    "Preguntas Frecuentes",
+    "Tu imagen es una inversión."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 5,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-luxury-barbershop-47?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Luxury Barbershop Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-luxury-barbershop-47`\n\n## Objetivo\nA premium, dark-themed service template designed for high-end barbershops and male grooming businesses looking to project exclusivity and sophistication. Fonte: https://www.aura.build/templates/luxury-barbershop-47\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #c8a65a  (89x)\n- #0b0b0b  (25x)\n- #1a1a1a  (22x)\n- #2f2f2f  (21x)\n- #111111  (7x)\n- rgba(200,166,90,0.1)  (4x)\n- rgba(11, 11, 11, 1)  (2x)\n- #151310  (1x)\n- #0a0a0a  (1x)\n- #25d366  (1x)\n- rgba(11, 11, 11, 0.6)  (1x)\n- rgba(200,166,90,0.05)  (1x)\n- rgba(200,166,90,0.3)  (1x)\n- rgba(200,166,90,0.2)  (1x)\n- rgba(11, 11, 11, 0.8)  (1x)\n- rgba(37,211,102,0.3)  (1x)\n\n## Tipografia detectada\n- Montserrat\n- Playfair Display\n\n## Estrutura de seções\n- Más que un corte.Una experiencia de distinción.\n- Tu imagen abre puertas.\n- Donde la barbería se convierte en un ritual.\n- Elige tu experiencia\n- La Experiencia ST. JOCP\n- La voz de nuestros clientes\n- Primera Visita Exclusiva\n- Preguntas Frecuentes\n- Tu imagen es una inversión.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Luxury Barbershop Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Luxury Barbershop Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-luxury-barbershop-47`\n\n## Objetivo\nA premium, dark-themed service template designed for high-end barbershops and male grooming businesses looking to project exclusivity and sophistication. Fonte: https://www.aura.build/templates/luxury-barbershop-47\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #c8a65a  (89x)\n- #0b0b0b  (25x)\n- #1a1a1a  (22x)\n- #2f2f2f  (21x)\n- #111111  (7x)\n- rgba(200,166,90,0.1)  (4x)\n- rgba(11, 11, 11, 1)  (2x)\n- #151310  (1x)\n- #0a0a0a  (1x)\n- #25d366  (1x)\n- rgba(11, 11, 11, 0.6)  (1x)\n- rgba(200,166,90,0.05)  (1x)\n- rgba(200,166,90,0.3)  (1x)\n- rgba(200,166,90,0.2)  (1x)\n- rgba(11, 11, 11, 0.8)  (1x)\n- rgba(37,211,102,0.3)  (1x)\n\n## Tipografia detectada\n- Montserrat\n- Playfair Display\n\n## Estrutura de seções\n- Más que un corte.Una experiencia de distinción.\n- Tu imagen abre puertas.\n- Donde la barbería se convierte en un ritual.\n- Elige tu experiencia\n- La Experiencia ST. JOCP\n- La voz de nuestros clientes\n- Primera Visita Exclusiva\n- Preguntas Frecuentes\n- Tu imagen es una inversión.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:50"
+}

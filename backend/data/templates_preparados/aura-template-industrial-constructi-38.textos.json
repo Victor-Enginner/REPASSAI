@@ -1,0 +1,1150 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "KRANNIK BAU GmbH – Betonstahlverlegung & Bewehrungsarbeiten in Herford, NRW & Niedersachsen",
+    "inicio": 3144,
+    "fim": 3235
+  },
+  {
+    "id": 1,
+    "tag": "span",
+    "texto": "KB",
+    "inicio": 7919,
+    "fim": 7921
+  },
+  {
+    "id": 2,
+    "tag": "span",
+    "texto": "KRANNIK BAU",
+    "inicio": 8318,
+    "fim": 8329
+  },
+  {
+    "id": 3,
+    "tag": "span",
+    "texto": "Betonstahlverlegung",
+    "inicio": 8410,
+    "fim": 8429
+  },
+  {
+    "id": 4,
+    "tag": "a",
+    "texto": "Leistungen",
+    "inicio": 8648,
+    "fim": 8658
+  },
+  {
+    "id": 5,
+    "tag": "a",
+    "texto": "Warum wir",
+    "inicio": 8886,
+    "fim": 8895
+  },
+  {
+    "id": 6,
+    "tag": "a",
+    "texto": "Ablauf",
+    "inicio": 9124,
+    "fim": 9130
+  },
+  {
+    "id": 7,
+    "tag": "a",
+    "texto": "Projekte",
+    "inicio": 9361,
+    "fim": 9369
+  },
+  {
+    "id": 8,
+    "tag": "a",
+    "texto": "FAQ",
+    "inicio": 9595,
+    "fim": 9598
+  },
+  {
+    "id": 9,
+    "tag": "?",
+    "texto": "05221 / 00 00 00",
+    "inicio": 10047,
+    "fim": 10063
+  },
+  {
+    "id": 10,
+    "tag": "a",
+    "texto": "Projekt anfragen",
+    "inicio": 10334,
+    "fim": 10350
+  },
+  {
+    "id": 11,
+    "tag": "a",
+    "texto": "Leistungen",
+    "inicio": 11010,
+    "fim": 11020
+  },
+  {
+    "id": 12,
+    "tag": "a",
+    "texto": "Warum wir",
+    "inicio": 11140,
+    "fim": 11149
+  },
+  {
+    "id": 13,
+    "tag": "a",
+    "texto": "Ablauf",
+    "inicio": 11270,
+    "fim": 11276
+  },
+  {
+    "id": 14,
+    "tag": "a",
+    "texto": "Projekte",
+    "inicio": 11399,
+    "fim": 11407
+  },
+  {
+    "id": 15,
+    "tag": "a",
+    "texto": "FAQ",
+    "inicio": 11525,
+    "fim": 11528
+  },
+  {
+    "id": 16,
+    "tag": "a",
+    "texto": "Projekt anfragen",
+    "inicio": 11688,
+    "fim": 11704
+  },
+  {
+    "id": 17,
+    "tag": "span",
+    "texto": "Kolonne im Einsatz · Bielefeld",
+    "inicio": 14156,
+    "fim": 14186
+  },
+  {
+    "id": 18,
+    "tag": "span",
+    "texto": "Abnahme bestanden · 0 Mängel",
+    "inicio": 14603,
+    "fim": 14631
+  },
+  {
+    "id": 19,
+    "tag": "?",
+    "texto": "Kurzfristig einsatzbereit in NRW & Niedersachsen",
+    "inicio": 15271,
+    "fim": 15323
+  },
+  {
+    "id": 20,
+    "tag": "span",
+    "texto": "Betonstahlverlegung,",
+    "inicio": 15547,
+    "fim": 15567
+  },
+  {
+    "id": 21,
+    "tag": "span",
+    "texto": "auf",
+    "inicio": 15615,
+    "fim": 15618
+  },
+  {
+    "id": 22,
+    "tag": "span",
+    "texto": "die",
+    "inicio": 15650,
+    "fim": 15653
+  },
+  {
+    "id": 23,
+    "tag": "span",
+    "texto": "Sie",
+    "inicio": 15685,
+    "fim": 15688
+  },
+  {
+    "id": 24,
+    "tag": "span",
+    "texto": "bauen",
+    "inicio": 15935,
+    "fim": 15940
+  },
+  {
+    "id": 25,
+    "tag": "span",
+    "texto": "können.",
+    "inicio": 15984,
+    "fim": 15991
+  },
+  {
+    "id": 26,
+    "tag": "p",
+    "texto": "Die KRANNIK BAU GmbH aus Herford ist Ihr Spezialist für Bewehrungsarbeiten im Roh-, Ingenieur- und Industriebau. Erfahrene Kolonnen – sauber nach Plan und Statik, abnahmebereit und termintreu.",
+    "inicio": 16153,
+    "fim": 16345
+  },
+  {
+    "id": 27,
+    "tag": "span",
+    "texto": "Projekt anfragen",
+    "inicio": 17002,
+    "fim": 17018
+  },
+  {
+    "id": 28,
+    "tag": "a",
+    "texto": "Leistungen ansehen",
+    "inicio": 17411,
+    "fim": 17429
+  },
+  {
+    "id": 29,
+    "tag": "?",
+    "texto": "Kurzfristig verfügbar",
+    "inicio": 17864,
+    "fim": 17885
+  },
+  {
+    "id": 30,
+    "tag": "?",
+    "texto": "Erfahrene Kolonnen",
+    "inicio": 18179,
+    "fim": 18197
+  },
+  {
+    "id": 31,
+    "tag": "?",
+    "texto": "Nach Plan & Statik",
+    "inicio": 18481,
+    "fim": 18503
+  },
+  {
+    "id": 32,
+    "tag": "?",
+    "texto": "Abnahmebereit",
+    "inicio": 18788,
+    "fim": 18801
+  },
+  {
+    "id": 33,
+    "tag": "span",
+    "texto": "Scrollen",
+    "inicio": 19085,
+    "fim": 19093
+  },
+  {
+    "id": 34,
+    "tag": "?",
+    "texto": "Bodenplatten",
+    "inicio": 19926,
+    "fim": 19938
+  },
+  {
+    "id": 35,
+    "tag": "?",
+    "texto": "Deckenbewehrung",
+    "inicio": 20159,
+    "fim": 20174
+  },
+  {
+    "id": 36,
+    "tag": "?",
+    "texto": "Ortbetonwände",
+    "inicio": 20396,
+    "fim": 20409
+  },
+  {
+    "id": 37,
+    "tag": "?",
+    "texto": "Ingenieurbau",
+    "inicio": 20637,
+    "fim": 20649
+  },
+  {
+    "id": 38,
+    "tag": "?",
+    "texto": "Industrie- & Gewerbebau",
+    "inicio": 20873,
+    "fim": 20900
+  },
+  {
+    "id": 39,
+    "tag": "?",
+    "texto": "Nachunternehmerleistungen",
+    "inicio": 21123,
+    "fim": 21148
+  },
+  {
+    "id": 40,
+    "tag": "?",
+    "texto": "Bodenplatten",
+    "inicio": 21467,
+    "fim": 21479
+  },
+  {
+    "id": 41,
+    "tag": "?",
+    "texto": "Deckenbewehrung",
+    "inicio": 21700,
+    "fim": 21715
+  },
+  {
+    "id": 42,
+    "tag": "?",
+    "texto": "Ortbetonwände",
+    "inicio": 21937,
+    "fim": 21950
+  },
+  {
+    "id": 43,
+    "tag": "?",
+    "texto": "Ingenieurbau",
+    "inicio": 22178,
+    "fim": 22190
+  },
+  {
+    "id": 44,
+    "tag": "?",
+    "texto": "Industrie- & Gewerbebau",
+    "inicio": 22414,
+    "fim": 22441
+  },
+  {
+    "id": 45,
+    "tag": "?",
+    "texto": "Nachunternehmerleistungen",
+    "inicio": 22664,
+    "fim": 22689
+  },
+  {
+    "id": 46,
+    "tag": "p",
+    "texto": "Jahre Erfahrung im Bewehrungsbau",
+    "inicio": 23551,
+    "fim": 23583
+  },
+  {
+    "id": 47,
+    "tag": "p",
+    "texto": "Abgeschlossene Projekte",
+    "inicio": 24113,
+    "fim": 24136
+  },
+  {
+    "id": 48,
+    "tag": "p",
+    "texto": "Bundesländer im Einsatzgebiet",
+    "inicio": 24628,
+    "fim": 24657
+  },
+  {
+    "id": 49,
+    "tag": "p",
+    "texto": "Rückmeldung auf Anfragen",
+    "inicio": 25187,
+    "fim": 25211
+  },
+  {
+    "id": 50,
+    "tag": "?",
+    "texto": "Unsere Leistungen",
+    "inicio": 25682,
+    "fim": 25699
+  },
+  {
+    "id": 51,
+    "tag": "h2",
+    "texto": "Bewehrungsarbeiten aus einer Hand",
+    "inicio": 25842,
+    "fim": 25875
+  },
+  {
+    "id": 52,
+    "tag": "p",
+    "texto": "Vom Fundament bis zur Decke: Wir verlegen Betonstahl exakt nach Bewehrungsplan – für Bauunternehmen, Generalunternehmer und Projektleiter, die sich auf ihren Nachunternehmer verlassen müssen.",
+    "inicio": 25937,
+    "fim": 26128
+  },
+  {
+    "id": 53,
+    "tag": "h3",
+    "texto": "Bodenplatten",
+    "inicio": 27057,
+    "fim": 27069
+  },
+  {
+    "id": 54,
+    "tag": "p",
+    "texto": "Untere und obere Lage, Randeinfassungen, Zulagen – maßhaltig verlegt und sauber dokumentiert. Die Basis für jedes Bauwerk.",
+    "inicio": 27143,
+    "fim": 27265
+  },
+  {
+    "id": 55,
+    "tag": "h3",
+    "texto": "Deckenbewehrung",
+    "inicio": 28151,
+    "fim": 28166
+  },
+  {
+    "id": 56,
+    "tag": "p",
+    "texto": "Komplette Deckenbewehrung inklusive Durchstanzbewehrung, Abstandhaltern und Anschlüssen – termingerecht zur Betonage.",
+    "inicio": 28240,
+    "fim": 28357
+  },
+  {
+    "id": 57,
+    "tag": "h3",
+    "texto": "Ortbetonwände",
+    "inicio": 29245,
+    "fim": 29258
+  },
+  {
+    "id": 58,
+    "tag": "p",
+    "texto": "Wandbewehrung mit exakten Übergreifungen, Eckausbildungen und Aussparungen – passgenau für die Schalung.",
+    "inicio": 29332,
+    "fim": 29436
+  },
+  {
+    "id": 59,
+    "tag": "h3",
+    "texto": "Ingenieurbau",
+    "inicio": 30298,
+    "fim": 30310
+  },
+  {
+    "id": 60,
+    "tag": "p",
+    "texto": "Anspruchsvolle Bewehrung für Sonderbauwerke: hohe Bewehrungsgrade, komplexe Geometrien, präzise Ausführung.",
+    "inicio": 30384,
+    "fim": 30491
+  },
+  {
+    "id": 61,
+    "tag": "h3",
+    "texto": "Industrie- & Gewerbebau",
+    "inicio": 31380,
+    "fim": 31407
+  },
+  {
+    "id": 62,
+    "tag": "p",
+    "texto": "Großflächige Bewehrung für Hallen, Logistikzentren und Gewerbeobjekte – mit der Kapazität für enge Taktpläne.",
+    "inicio": 31481,
+    "fim": 31590
+  },
+  {
+    "id": 63,
+    "tag": "h3",
+    "texto": "Nachunternehmerleistungen",
+    "inicio": 32479,
+    "fim": 32504
+  },
+  {
+    "id": 64,
+    "tag": "p",
+    "texto": "Verlässlicher Partner für Bauunternehmen und GU: klare Kommunikation, saubere Schnittstellen, vertragstreue Abwicklung.",
+    "inicio": 32578,
+    "fim": 32697
+  },
+  {
+    "id": 65,
+    "tag": "h3",
+    "texto": "Logistik-Management & Baustellen-Support",
+    "inicio": 33678,
+    "fim": 33722
+  },
+  {
+    "id": 66,
+    "tag": "p",
+    "texto": "Materialkoordination, Stahlannahme, Lagerorganisation und Unterstützung im Bauablauf – damit Ihre Baustelle im Takt bleibt.",
+    "inicio": 33806,
+    "fim": 33929
+  },
+  {
+    "id": 67,
+    "tag": "a",
+    "texto": "Anfrage stellen",
+    "inicio": 34166,
+    "fim": 34181
+  },
+  {
+    "id": 68,
+    "tag": "p",
+    "texto": "Ausführung nach Bewehrungsplan",
+    "inicio": 35959,
+    "fim": 35989
+  },
+  {
+    "id": 69,
+    "tag": "?",
+    "texto": "Warum KRANNIK BAU?",
+    "inicio": 36239,
+    "fim": 36257
+  },
+  {
+    "id": 70,
+    "tag": "h2",
+    "texto": "Weil Ihre Betonage nicht warten kann.",
+    "inicio": 36396,
+    "fim": 36433
+  },
+  {
+    "id": 71,
+    "tag": "p",
+    "texto": "Verzögerungen in der Bewehrung kosten Geld, Takt und Nerven. Wir sorgen dafür, dass Ihre Abnahme planmäßig läuft – mit eingespielten Teams und klarer Kommunikation.",
+    "inicio": 36502,
+    "fim": 36666
+  },
+  {
+    "id": 72,
+    "tag": "p",
+    "texto": "Meistergeführte Kolonnen",
+    "inicio": 37088,
+    "fim": 37112
+  },
+  {
+    "id": 73,
+    "tag": "p",
+    "texto": "Erfahrene Vorarbeiter mit Verantwortung – auch bei komplexen Bewehrungsgraden.",
+    "inicio": 37187,
+    "fim": 37265
+  },
+  {
+    "id": 74,
+    "tag": "p",
+    "texto": "Termintreue",
+    "inicio": 37713,
+    "fim": 37724
+  },
+  {
+    "id": 75,
+    "tag": "p",
+    "texto": "Wir halten Taktpläne ein – und melden uns frühzeitig, wenn etwas zu klären ist.",
+    "inicio": 37799,
+    "fim": 37878
+  },
+  {
+    "id": 76,
+    "tag": "p",
+    "texto": "Saubere Ausführung nach Bewehrungsplan",
+    "inicio": 38337,
+    "fim": 38375
+  },
+  {
+    "id": 77,
+    "tag": "p",
+    "texto": "Lagen, Übergreifungen, Abstände – exakt nach Statik. Abnahmebereit, ohne Nacharbeit.",
+    "inicio": 38450,
+    "fim": 38534
+  },
+  {
+    "id": 78,
+    "tag": "p",
+    "texto": "Einsatz in NRW & Niedersachsen",
+    "inicio": 38985,
+    "fim": 39019
+  },
+  {
+    "id": 79,
+    "tag": "p",
+    "texto": "Von Herford aus schnell auf Ihrer Baustelle – auch kurzfristig.",
+    "inicio": 39094,
+    "fim": 39157
+  },
+  {
+    "id": 80,
+    "tag": "p",
+    "texto": "Für wen arbeiten wir?",
+    "inicio": 39596,
+    "fim": 39617
+  },
+  {
+    "id": 81,
+    "tag": "h2",
+    "texto": "Ihr Partner im Rohbau",
+    "inicio": 39749,
+    "fim": 39770
+  },
+  {
+    "id": 82,
+    "tag": "h3",
+    "texto": "Bauunternehmen",
+    "inicio": 40326,
+    "fim": 40340
+  },
+  {
+    "id": 83,
+    "tag": "p",
+    "texto": "Verstärkung für Ihre Rohbauprojekte – flexibel und eingespielt.",
+    "inicio": 40412,
+    "fim": 40475
+  },
+  {
+    "id": 84,
+    "tag": "h3",
+    "texto": "Generalunternehmer",
+    "inicio": 41013,
+    "fim": 41031
+  },
+  {
+    "id": 85,
+    "tag": "p",
+    "texto": "Verlässlicher Nachunternehmer mit sauberer Vertragsabwicklung.",
+    "inicio": 41103,
+    "fim": 41165
+  },
+  {
+    "id": 86,
+    "tag": "h3",
+    "texto": "Projektleiter",
+    "inicio": 41712,
+    "fim": 41725
+  },
+  {
+    "id": 87,
+    "tag": "p",
+    "texto": "Ein Ansprechpartner, schnelle Rückmeldung, klare Absprachen.",
+    "inicio": 41797,
+    "fim": 41857
+  },
+  {
+    "id": 88,
+    "tag": "?",
+    "texto": "So einfach geht's",
+    "inicio": 42402,
+    "fim": 42419
+  },
+  {
+    "id": 89,
+    "tag": "h2",
+    "texto": "Von der Anfrage zur Abnahme",
+    "inicio": 42551,
+    "fim": 42578
+  },
+  {
+    "id": 90,
+    "tag": "h3",
+    "texto": "Anfrage senden",
+    "inicio": 43338,
+    "fim": 43352
+  },
+  {
+    "id": 91,
+    "tag": "p",
+    "texto": "Pläne, Mengen oder Eckdaten an uns – per Formular, E-Mail oder Telefon.",
+    "inicio": 43424,
+    "fim": 43495
+  },
+  {
+    "id": 92,
+    "tag": "h3",
+    "texto": "Rückmeldung in 24h",
+    "inicio": 43903,
+    "fim": 43921
+  },
+  {
+    "id": 93,
+    "tag": "p",
+    "texto": "Wir prüfen Ihr Projekt und melden uns schnell mit Verfügbarkeit und Angebot.",
+    "inicio": 43993,
+    "fim": 44069
+  },
+  {
+    "id": 94,
+    "tag": "h3",
+    "texto": "Ausführung nach Plan",
+    "inicio": 44477,
+    "fim": 44497
+  },
+  {
+    "id": 95,
+    "tag": "p",
+    "texto": "Unsere Kolonne verlegt exakt nach Bewehrungsplan und Statik – im Takt Ihrer Baustelle.",
+    "inicio": 44569,
+    "fim": 44655
+  },
+  {
+    "id": 96,
+    "tag": "h3",
+    "texto": "Abnahmebereit",
+    "inicio": 45269,
+    "fim": 45282
+  },
+  {
+    "id": 97,
+    "tag": "p",
+    "texto": "Saubere Übergabe zur Bewehrungsabnahme – bereit für die Betonage.",
+    "inicio": 45354,
+    "fim": 45419
+  },
+  {
+    "id": 98,
+    "tag": "?",
+    "texto": "Projektgalerie",
+    "inicio": 45985,
+    "fim": 45999
+  },
+  {
+    "id": 99,
+    "tag": "h2",
+    "texto": "Einblicke in unsere Arbeit",
+    "inicio": 46133,
+    "fim": 46159
+  },
+  {
+    "id": 100,
+    "tag": "button",
+    "texto": "Alle",
+    "inicio": 46474,
+    "fim": 46478
+  },
+  {
+    "id": 101,
+    "tag": "button",
+    "texto": "Bodenplatten",
+    "inicio": 46720,
+    "fim": 46732
+  },
+  {
+    "id": 102,
+    "tag": "button",
+    "texto": "Decken",
+    "inicio": 46968,
+    "fim": 46974
+  },
+  {
+    "id": 103,
+    "tag": "button",
+    "texto": "Wände",
+    "inicio": 47210,
+    "fim": 47215
+  },
+  {
+    "id": 104,
+    "tag": "button",
+    "texto": "Ingenieurbau",
+    "inicio": 47457,
+    "fim": 47469
+  },
+  {
+    "id": 105,
+    "tag": "span",
+    "texto": "Bodenplatten",
+    "inicio": 48437,
+    "fim": 48449
+  },
+  {
+    "id": 106,
+    "tag": "p",
+    "texto": "Bodenplatte Gewerbehalle",
+    "inicio": 48621,
+    "fim": 48645
+  },
+  {
+    "id": 107,
+    "tag": "span",
+    "texto": "Decken",
+    "inicio": 49901,
+    "fim": 49907
+  },
+  {
+    "id": 108,
+    "tag": "p",
+    "texto": "Deckenbewehrung Wohnbau",
+    "inicio": 50079,
+    "fim": 50102
+  },
+  {
+    "id": 109,
+    "tag": "span",
+    "texto": "Wände",
+    "inicio": 51318,
+    "fim": 51323
+  },
+  {
+    "id": 110,
+    "tag": "p",
+    "texto": "Ortbetonwand Kellergeschoss",
+    "inicio": 51495,
+    "fim": 51522
+  },
+  {
+    "id": 111,
+    "tag": "span",
+    "texto": "Ingenieurbau",
+    "inicio": 52722,
+    "fim": 52734
+  },
+  {
+    "id": 112,
+    "tag": "p",
+    "texto": "Ingenieurbauwerk",
+    "inicio": 52906,
+    "fim": 52922
+  },
+  {
+    "id": 113,
+    "tag": "span",
+    "texto": "Bodenplatten",
+    "inicio": 54174,
+    "fim": 54186
+  },
+  {
+    "id": 114,
+    "tag": "p",
+    "texto": "Fundamentplatte Logistikzentrum",
+    "inicio": 54358,
+    "fim": 54389
+  },
+  {
+    "id": 115,
+    "tag": "span",
+    "texto": "Decken",
+    "inicio": 55633,
+    "fim": 55639
+  },
+  {
+    "id": 116,
+    "tag": "p",
+    "texto": "Geschossdecke Bürogebäude",
+    "inicio": 55811,
+    "fim": 55836
+  },
+  {
+    "id": 117,
+    "tag": "?",
+    "texto": "Einsatzgebiete",
+    "inicio": 57029,
+    "fim": 57043
+  },
+  {
+    "id": 118,
+    "tag": "h2",
+    "texto": "Von Herford aus in ganz NRW & Niedersachsen",
+    "inicio": 57175,
+    "fim": 57222
+  },
+  {
+    "id": 119,
+    "tag": "p",
+    "texto": "Unser Standort in Herford liegt zentral in Ostwestfalen – ideal für schnelle Einsätze in Bielefeld, Osnabrück, Hannover, Münster, dem Ruhrgebiet und darüber hinaus. Auch überregionale Projekte nach Absprache.",
+    "inicio": 57292,
+    "fim": 57500
+  },
+  {
+    "id": 120,
+    "tag": "span",
+    "texto": "Herford",
+    "inicio": 57829,
+    "fim": 57836
+  },
+  {
+    "id": 121,
+    "tag": "span",
+    "texto": "Bielefeld",
+    "inicio": 58069,
+    "fim": 58078
+  },
+  {
+    "id": 122,
+    "tag": "span",
+    "texto": "Osnabrück",
+    "inicio": 58311,
+    "fim": 58320
+  },
+  {
+    "id": 123,
+    "tag": "span",
+    "texto": "Hannover",
+    "inicio": 58553,
+    "fim": 58561
+  },
+  {
+    "id": 124,
+    "tag": "span",
+    "texto": "Münster",
+    "inicio": 58794,
+    "fim": 58801
+  },
+  {
+    "id": 125,
+    "tag": "span",
+    "texto": "Paderborn",
+    "inicio": 59034,
+    "fim": 59043
+  },
+  {
+    "id": 126,
+    "tag": "span",
+    "texto": "Ruhrgebiet",
+    "inicio": 59276,
+    "fim": 59286
+  },
+  {
+    "id": 127,
+    "tag": "span",
+    "texto": "+ auf Anfrage",
+    "inicio": 59531,
+    "fim": 59544
+  },
+  {
+    "id": 128,
+    "tag": "p",
+    "texto": "FAQ",
+    "inicio": 59912,
+    "fim": 59915
+  },
+  {
+    "id": 129,
+    "tag": "h2",
+    "texto": "Häufige Fragen",
+    "inicio": 60047,
+    "fim": 60061
+  },
+  {
+    "id": 130,
+    "tag": "summary",
+    "texto": "Wie schnell können Sie auf der Baustelle sein?",
+    "inicio": 60467,
+    "fim": 60513
+  },
+  {
+    "id": 131,
+    "tag": "p",
+    "texto": "Je nach Auslastung sind wir oft kurzfristig einsatzbereit. Senden Sie uns Ihre Anfrage – wir melden uns in der Regel innerhalb von 24 Stunden mit einer konkreten Verfügbarkeit zurück.",
+    "inicio": 60785,
+    "fim": 60968
+  },
+  {
+    "id": 132,
+    "tag": "summary",
+    "texto": "Arbeiten Sie als Nachunternehmer für Generalunternehmer?",
+    "inicio": 61372,
+    "fim": 61428
+  },
+  {
+    "id": 133,
+    "tag": "p",
+    "texto": "Ja, Nachunternehmerleistungen sind unser Kerngeschäft. Wir arbeiten für Bauunternehmen und Generalunternehmer – mit klaren Schnittstellen, sauberer Dokumentation und vertragstreuer Abwicklung.",
+    "inicio": 61700,
+    "fim": 61892
+  },
+  {
+    "id": 134,
+    "tag": "summary",
+    "texto": "Welche Unterlagen benötigen Sie für ein Angebot?",
+    "inicio": 62297,
+    "fim": 62345
+  },
+  {
+    "id": 135,
+    "tag": "p",
+    "texto": "Ideal sind Bewehrungspläne und Stahllisten. Für eine erste Einschätzung reichen auch Eckdaten wie Bauteilart, Stahltonnage und Ausführungszeitraum.",
+    "inicio": 62617,
+    "fim": 62764
+  },
+  {
+    "id": 136,
+    "tag": "summary",
+    "texto": "Übernehmen Sie auch große Tonnagen und Taktbaustellen?",
+    "inicio": 63169,
+    "fim": 63223
+  },
+  {
+    "id": 137,
+    "tag": "p",
+    "texto": "Ja. Unsere Kolonnen sind auf Industrie- und Gewerbeprojekte mit engen Taktplänen eingestellt und skalieren je nach Projektgröße.",
+    "inicio": 63495,
+    "fim": 63623
+  },
+  {
+    "id": 138,
+    "tag": "summary",
+    "texto": "In welchen Regionen sind Sie tätig?",
+    "inicio": 64028,
+    "fim": 64063
+  },
+  {
+    "id": 139,
+    "tag": "p",
+    "texto": "Unser Schwerpunkt liegt in Nordrhein-Westfalen und Niedersachsen – insbesondere Ostwestfalen-Lippe, Hannover, Osnabrück und Münster. Überregionale Einsätze sind nach Absprache möglich.",
+    "inicio": 64335,
+    "fim": 64519
+  },
+  {
+    "id": 140,
+    "tag": "h2",
+    "texto": "Ihr nächstes Projekt braucht",
+    "inicio": 65723,
+    "fim": 65751
+  },
+  {
+    "id": 141,
+    "tag": "br",
+    "texto": "eine",
+    "inicio": 65780,
+    "fim": 65784
+  },
+  {
+    "id": 142,
+    "tag": "span",
+    "texto": "starke Bewehrung",
+    "inicio": 65994,
+    "fim": 66010
+  },
+  {
+    "id": 143,
+    "tag": "p",
+    "texto": "Senden Sie uns Ihre Pläne oder Eckdaten – wir melden uns schnell mit Verfügbarkeit und Angebot.",
+    "inicio": 66134,
+    "fim": 66229
+  },
+  {
+    "id": 144,
+    "tag": "span",
+    "texto": "Jetzt Kontakt aufnehmen",
+    "inicio": 66880,
+    "fim": 66903
+  },
+  {
+    "id": 145,
+    "tag": "?",
+    "texto": "Direkt anrufen",
+    "inicio": 67382,
+    "fim": 67396
+  },
+  {
+    "id": 146,
+    "tag": "?",
+    "texto": "Kontakt",
+    "inicio": 68229,
+    "fim": 68236
+  },
+  {
+    "id": 147,
+    "tag": "h2",
+    "texto": "Projekt anfragen",
+    "inicio": 68375,
+    "fim": 68391
+  },
+  {
+    "id": 148,
+    "tag": "p",
+    "texto": "Schnelle Rückmeldung garantiert: Wir antworten in der Regel innerhalb von 24 Stunden – auch bei kurzfristigen Anfragen.",
+    "inicio": 68468,
+    "fim": 68587
+  },
+  {
+    "id": 149,
+    "tag": "span",
+    "texto": "Telefon",
+    "inicio": 69248,
+    "fim": 69255
+  },
+  {
+    "id": 150,
+    "tag": "span",
+    "texto": "05221 / 00 00 00",
+    "inicio": 69340,
+    "fim": 69356
+  },
+  {
+    "id": 151,
+    "tag": "span",
+    "texto": "E-Mail",
+    "inicio": 70052,
+    "fim": 70058
+  },
+  {
+    "id": 152,
+    "tag": "span",
+    "texto": "info@krannikbau.de",
+    "inicio": 70143,
+    "fim": 70161
+  },
+  {
+    "id": 153,
+    "tag": "span",
+    "texto": "Standort",
+    "inicio": 70724,
+    "fim": 70732
+  },
+  {
+    "id": 154,
+    "tag": "span",
+    "texto": "32049 Herford, Nordrhein-Westfalen",
+    "inicio": 70817,
+    "fim": 70851
+  },
+  {
+    "id": 155,
+    "tag": "label",
+    "texto": "Name / Firma *",
+    "inicio": 71813,
+    "fim": 71827
+  },
+  {
+    "id": 156,
+    "tag": "label",
+    "texto": "E-Mail *",
+    "inicio": 72280,
+    "fim": 72288
+  },
+  {
+    "id": 157,
+    "tag": "label",
+    "texto": "Telefon",
+    "inicio": 72737,
+    "fim": 72744
+  },
+  {
+    "id": 158,
+    "tag": "label",
+    "texto": "Projektstandort",
+    "inicio": 73184,
+    "fim": 73199
+  },
+  {
+    "id": 159,
+    "tag": "label",
+    "texto": "Ihr Projekt *",
+    "inicio": 73658,
+    "fim": 73671
+  },
+  {
+    "id": 160,
+    "tag": "button",
+    "texto": "Anfrage senden",
+    "inicio": 74408,
+    "fim": 74422
+  },
+  {
+    "id": 161,
+    "tag": "p",
+    "texto": "Mit dem Absenden stimmen Sie unserer Datenschutzerklärung zu.",
+    "inicio": 74576,
+    "fim": 74637
+  },
+  {
+    "id": 162,
+    "tag": "span",
+    "texto": "KB",
+    "inicio": 75197,
+    "fim": 75199
+  },
+  {
+    "id": 163,
+    "tag": "span",
+    "texto": "KRANNIK BAU GmbH",
+    "inicio": 75324,
+    "fim": 75340
+  }
+]

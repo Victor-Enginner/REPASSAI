@@ -1,0 +1,520 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "Vidalli Andrea | Handgefertigter Schmuck",
+    "inicio": 3172,
+    "fim": 3212
+  },
+  {
+    "id": 1,
+    "tag": "a",
+    "texto": "Kollektion",
+    "inicio": 5362,
+    "fim": 5372
+  },
+  {
+    "id": 2,
+    "tag": "a",
+    "texto": "ÜBER MICH",
+    "inicio": 5521,
+    "fim": 5530
+  },
+  {
+    "id": 3,
+    "tag": "h1",
+    "texto": "Westend Juwelier",
+    "inicio": 8183,
+    "fim": 8199
+  },
+  {
+    "id": 4,
+    "tag": "span",
+    "texto": "Haider",
+    "inicio": 8262,
+    "fim": 8268
+  },
+  {
+    "id": 5,
+    "tag": "p",
+    "texto": "Ihr Juwelier in Berlin für professionellen Ankauf von Luxuswaren.",
+    "inicio": 8409,
+    "fim": 8474
+  },
+  {
+    "id": 6,
+    "tag": "br",
+    "texto": "Seit über 40 Jahren stehen wir unseren Kunden besten Gewissens zur\n            Seite.",
+    "inicio": 8525,
+    "fim": 8610
+  },
+  {
+    "id": 7,
+    "tag": "span",
+    "texto": "Kollektion ansehen",
+    "inicio": 9051,
+    "fim": 9069
+  },
+  {
+    "id": 8,
+    "tag": "a",
+    "texto": "ÜBER MICH",
+    "inicio": 9576,
+    "fim": 9585
+  },
+  {
+    "id": 9,
+    "tag": "span",
+    "texto": "Est. 2023",
+    "inicio": 10331,
+    "fim": 10340
+  },
+  {
+    "id": 10,
+    "tag": "span",
+    "texto": "Krottendorf, AT",
+    "inicio": 10423,
+    "fim": 10438
+  },
+  {
+    "id": 11,
+    "tag": "span",
+    "texto": "Handmade",
+    "inicio": 10949,
+    "fim": 10957
+  },
+  {
+    "id": 12,
+    "tag": "span",
+    "texto": "Vidalli",
+    "inicio": 11117,
+    "fim": 11124
+  },
+  {
+    "id": 13,
+    "tag": "span",
+    "texto": "Timeless",
+    "inicio": 11271,
+    "fim": 11279
+  },
+  {
+    "id": 14,
+    "tag": "span",
+    "texto": "Unique",
+    "inicio": 11439,
+    "fim": 11445
+  },
+  {
+    "id": 15,
+    "tag": "span",
+    "texto": "Handmade",
+    "inicio": 11790,
+    "fim": 11798
+  },
+  {
+    "id": 16,
+    "tag": "span",
+    "texto": "Vidalli",
+    "inicio": 11958,
+    "fim": 11965
+  },
+  {
+    "id": 17,
+    "tag": "span",
+    "texto": "Timeless",
+    "inicio": 12112,
+    "fim": 12120
+  },
+  {
+    "id": 18,
+    "tag": "span",
+    "texto": "Unique",
+    "inicio": 12280,
+    "fim": 12286
+  },
+  {
+    "id": 19,
+    "tag": "span",
+    "texto": "Aktuelle Kollektion",
+    "inicio": 12755,
+    "fim": 12774
+  },
+  {
+    "id": 20,
+    "tag": "h2",
+    "texto": "Signature Pieces",
+    "inicio": 12881,
+    "fim": 12897
+  },
+  {
+    "id": 21,
+    "tag": "a",
+    "texto": "Alle Produkte",
+    "inicio": 13120,
+    "fim": 13133
+  },
+  {
+    "id": 22,
+    "tag": "span",
+    "texto": "Neu",
+    "inicio": 14214,
+    "fim": 14217
+  },
+  {
+    "id": 23,
+    "tag": "h3",
+    "texto": "Aura Ring",
+    "inicio": 14405,
+    "fim": 14414
+  },
+  {
+    "id": 24,
+    "tag": "p",
+    "texto": "18k Gold",
+    "inicio": 14584,
+    "fim": 14592
+  },
+  {
+    "id": 25,
+    "tag": "span",
+    "texto": "€240",
+    "inicio": 14677,
+    "fim": 14681
+  },
+  {
+    "id": 26,
+    "tag": "h3",
+    "texto": "Luna Halskette",
+    "inicio": 15502,
+    "fim": 15516
+  },
+  {
+    "id": 27,
+    "tag": "p",
+    "texto": "Süßwasserperle",
+    "inicio": 15701,
+    "fim": 15715
+  },
+  {
+    "id": 28,
+    "tag": "span",
+    "texto": "€180",
+    "inicio": 15800,
+    "fim": 15804
+  },
+  {
+    "id": 29,
+    "tag": "h3",
+    "texto": "Nova Ohrringe",
+    "inicio": 16745,
+    "fim": 16758
+  },
+  {
+    "id": 30,
+    "tag": "p",
+    "texto": "Silber 925",
+    "inicio": 16943,
+    "fim": 16953
+  },
+  {
+    "id": 31,
+    "tag": "span",
+    "texto": "€120",
+    "inicio": 17038,
+    "fim": 17042
+  },
+  {
+    "id": 32,
+    "tag": "h3",
+    "texto": "Helix Armreif",
+    "inicio": 17848,
+    "fim": 17861
+  },
+  {
+    "id": 33,
+    "tag": "p",
+    "texto": "Gold Vermeil",
+    "inicio": 18046,
+    "fim": 18058
+  },
+  {
+    "id": 34,
+    "tag": "span",
+    "texto": "€160",
+    "inicio": 18143,
+    "fim": 18147
+  },
+  {
+    "id": 35,
+    "tag": "h3",
+    "texto": "Signum Ring",
+    "inicio": 18948,
+    "fim": 18959
+  },
+  {
+    "id": 36,
+    "tag": "p",
+    "texto": "Massivgold",
+    "inicio": 19129,
+    "fim": 19139
+  },
+  {
+    "id": 37,
+    "tag": "span",
+    "texto": "€210",
+    "inicio": 19224,
+    "fim": 19228
+  },
+  {
+    "id": 38,
+    "tag": "span",
+    "texto": "Set",
+    "inicio": 20044,
+    "fim": 20047
+  },
+  {
+    "id": 39,
+    "tag": "h3",
+    "texto": "Abend-Set",
+    "inicio": 20226,
+    "fim": 20235
+  },
+  {
+    "id": 40,
+    "tag": "p",
+    "texto": "Complete Collection",
+    "inicio": 20405,
+    "fim": 20424
+  },
+  {
+    "id": 41,
+    "tag": "span",
+    "texto": "€380",
+    "inicio": 20509,
+    "fim": 20513
+  },
+  {
+    "id": 42,
+    "tag": "h2",
+    "texto": "Vidalli Andrea",
+    "inicio": 21726,
+    "fim": 21740
+  },
+  {
+    "id": 43,
+    "tag": "span",
+    "texto": "Handwerk & Seele",
+    "inicio": 21807,
+    "fim": 21827
+  },
+  {
+    "id": 44,
+    "tag": "p",
+    "texto": "Abseits der Massenproduktion entsteht hier Schmuck mit Charakter.\n              Jedes Stück geht durch meine Hände – vom Entwurf bis zur Politur.\n              Ich nutze ausschließlich recyceltes Gold und konfliktfreie Steine,\n              weil wahrer Luxus Verantwortung bedeutet.",
+    "inicio": 21940,
+    "fim": 22222
+  },
+  {
+    "id": 45,
+    "tag": "p",
+    "texto": "Recycelte Edelmetalle",
+    "inicio": 22492,
+    "fim": 22513
+  },
+  {
+    "id": 46,
+    "tag": "h4",
+    "texto": "Krottendorf, Steiermark",
+    "inicio": 22681,
+    "fim": 22704
+  },
+  {
+    "id": 47,
+    "tag": "p",
+    "texto": "Lokale Produktion",
+    "inicio": 22776,
+    "fim": 22793
+  },
+  {
+    "id": 48,
+    "tag": "a",
+    "texto": "Mehr über den Prozess",
+    "inicio": 23116,
+    "fim": 23137
+  },
+  {
+    "id": 49,
+    "tag": "h3",
+    "texto": "Lebenslange Garantie",
+    "inicio": 24092,
+    "fim": 24112
+  },
+  {
+    "id": 50,
+    "tag": "p",
+    "texto": "Auf alle Material- und Verarbeitungsfehler.",
+    "inicio": 24208,
+    "fim": 24251
+  },
+  {
+    "id": 51,
+    "tag": "h3",
+    "texto": "Kostenlose Aufarbeitung",
+    "inicio": 24733,
+    "fim": 24756
+  },
+  {
+    "id": 52,
+    "tag": "p",
+    "texto": "Einmal jährlich polieren wir Ihr Schmuckstück.",
+    "inicio": 24852,
+    "fim": 24898
+  },
+  {
+    "id": 53,
+    "tag": "h3",
+    "texto": "Premium Verpackung",
+    "inicio": 25374,
+    "fim": 25392
+  },
+  {
+    "id": 54,
+    "tag": "p",
+    "texto": "Nachhaltig und elegant verpackt als Geschenk.",
+    "inicio": 25488,
+    "fim": 25533
+  },
+  {
+    "id": 55,
+    "tag": "span",
+    "texto": "Vidalli Andrea",
+    "inicio": 26930,
+    "fim": 26944
+  },
+  {
+    "id": 56,
+    "tag": "p",
+    "texto": "Wir kreieren Schmuck für Individualisten. Zeitloses Design trifft\n              auf steirische Handwerkskunst.",
+    "inicio": 27076,
+    "fim": 27186
+  },
+  {
+    "id": 57,
+    "tag": "h5",
+    "texto": "Shop",
+    "inicio": 28269,
+    "fim": 28273
+  },
+  {
+    "id": 58,
+    "tag": "a",
+    "texto": "Neuheiten",
+    "inicio": 28477,
+    "fim": 28486
+  },
+  {
+    "id": 59,
+    "tag": "a",
+    "texto": "Bestseller",
+    "inicio": 28656,
+    "fim": 28666
+  },
+  {
+    "id": 60,
+    "tag": "a",
+    "texto": "Geschenke",
+    "inicio": 28836,
+    "fim": 28845
+  },
+  {
+    "id": 61,
+    "tag": "a",
+    "texto": "Gutscheine",
+    "inicio": 29015,
+    "fim": 29025
+  },
+  {
+    "id": 62,
+    "tag": "h5",
+    "texto": "Service",
+    "inicio": 29274,
+    "fim": 29281
+  },
+  {
+    "id": 63,
+    "tag": "a",
+    "texto": "Kontakt",
+    "inicio": 29485,
+    "fim": 29492
+  },
+  {
+    "id": 64,
+    "tag": "a",
+    "texto": "Versand & Retouren",
+    "inicio": 29662,
+    "fim": 29684
+  },
+  {
+    "id": 65,
+    "tag": "a",
+    "texto": "Ringgröße finden",
+    "inicio": 29854,
+    "fim": 29870
+  },
+  {
+    "id": 66,
+    "tag": "a",
+    "texto": "FAQ",
+    "inicio": 30019,
+    "fim": 30022
+  },
+  {
+    "id": 67,
+    "tag": "h5",
+    "texto": "Newsletter",
+    "inicio": 30276,
+    "fim": 30286
+  },
+  {
+    "id": 68,
+    "tag": "p",
+    "texto": "Erhalten Sie 10% Rabatt auf Ihre erste Bestellung.",
+    "inicio": 30376,
+    "fim": 30426
+  },
+  {
+    "id": 69,
+    "tag": "button",
+    "texto": "Senden",
+    "inicio": 30923,
+    "fim": 30929
+  },
+  {
+    "id": 70,
+    "tag": "p",
+    "texto": "© 2023 Vidalli Andrea. Krottendorf.",
+    "inicio": 31200,
+    "fim": 31235
+  },
+  {
+    "id": 71,
+    "tag": "a",
+    "texto": "Impressum",
+    "inicio": 31373,
+    "fim": 31382
+  },
+  {
+    "id": 72,
+    "tag": "a",
+    "texto": "Datenschutz",
+    "inicio": 31485,
+    "fim": 31496
+  },
+  {
+    "id": 73,
+    "tag": "a",
+    "texto": "AGB",
+    "inicio": 31584,
+    "fim": 31587
+  }
+]

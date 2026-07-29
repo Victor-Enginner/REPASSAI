@@ -1,0 +1,86 @@
+{
+  "slug": "aura-template-luxury-eco-lodge-66",
+  "titulo": "Luxury Nature Lodge Landing Page Template",
+  "descricao": "A high-end vacation rental and hospitality template designed for luxury eco-lodges, cabins, and boutique nature resorts. Fonte: https://www.aura.build/templates/luxury-eco-lodge-66",
+  "arquivo": "77lib/aura-template-luxury-eco-lodge-66.html",
+  "tamanho_html": 59625,
+  "paleta": [
+    {
+      "cor": "#282828",
+      "usos": 3
+    },
+    {
+      "cor": "#555b00",
+      "usos": 2
+    },
+    {
+      "cor": "#f6efe5",
+      "usos": 2
+    },
+    {
+      "cor": "#ada89a",
+      "usos": 2
+    },
+    {
+      "cor": "#be7f00",
+      "usos": 1
+    },
+    {
+      "cor": "#1e1e1e",
+      "usos": 1
+    },
+    {
+      "cor": "#25d366",
+      "usos": 1
+    },
+    {
+      "cor": "#128c7e",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(85, 91, 0, 0.18)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(0, 0, 0, 0.36)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Playfair Display",
+    "Public Sans"
+  ],
+  "secoes": [
+    "Refugio de Exclusividad",
+    "Catálogo de Amenidades",
+    "Distribución de Habitaciones",
+    "Nuestra Fauna",
+    "Tarifas Planas",
+    "Reglas de Convivencia",
+    "Interacción con la Fauna",
+    "Tour 360°",
+    "Solicitud de Reserva",
+    "Ubicación Estratégica"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations",
+    "IntersectionObserver"
+  ],
+  "imagens": 14,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-luxury-eco-lodge-66?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Luxury Nature Lodge Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-luxury-eco-lodge-66`\n\n## Objetivo\nA high-end vacation rental and hospitality template designed for luxury eco-lodges, cabins, and boutique nature resorts. Fonte: https://www.aura.build/templates/luxury-eco-lodge-66\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #282828  (3x)\n- #555b00  (2x)\n- #f6efe5  (2x)\n- #ada89a  (2x)\n- #be7f00  (1x)\n- #1e1e1e  (1x)\n- #25d366  (1x)\n- #128c7e  (1x)\n- rgba(85, 91, 0, 0.18)  (1x)\n- rgba(0, 0, 0, 0.36)  (1x)\n\n## Tipografia detectada\n- Playfair Display\n- Public Sans\n\n## Estrutura de seções\n- Refugio de Exclusividad\n- Catálogo de Amenidades\n- Distribución de Habitaciones\n- Nuestra Fauna\n- Tarifas Planas\n- Reglas de Convivencia\n- Interacción con la Fauna\n- Tour 360°\n- Solicitud de Reserva\n- Ubicación Estratégica\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Luxury Nature Lodge Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Luxury Nature Lodge Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-luxury-eco-lodge-66`\n\n## Objetivo\nA high-end vacation rental and hospitality template designed for luxury eco-lodges, cabins, and boutique nature resorts. Fonte: https://www.aura.build/templates/luxury-eco-lodge-66\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #282828  (3x)\n- #555b00  (2x)\n- #f6efe5  (2x)\n- #ada89a  (2x)\n- #be7f00  (1x)\n- #1e1e1e  (1x)\n- #25d366  (1x)\n- #128c7e  (1x)\n- rgba(85, 91, 0, 0.18)  (1x)\n- rgba(0, 0, 0, 0.36)  (1x)\n\n## Tipografia detectada\n- Playfair Display\n- Public Sans\n\n## Estrutura de seções\n- Refugio de Exclusividad\n- Catálogo de Amenidades\n- Distribución de Habitaciones\n- Nuestra Fauna\n- Tarifas Planas\n- Reglas de Convivencia\n- Interacción con la Fauna\n- Tour 360°\n- Solicitud de Reserva\n- Ubicación Estratégica\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-07-29T07:01:56"
+}

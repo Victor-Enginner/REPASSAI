@@ -1,0 +1,1381 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "micsas.ff — La pizza de barri, ara amb motor",
+    "inicio": 3165,
+    "fim": 3209
+  },
+  {
+    "id": 1,
+    "tag": "span",
+    "texto": "micsas.ff",
+    "inicio": 5367,
+    "fim": 5376
+  },
+  {
+    "id": 2,
+    "tag": "a",
+    "texto": "Nosaltres",
+    "inicio": 5580,
+    "fim": 5589
+  },
+  {
+    "id": 3,
+    "tag": "a",
+    "texto": "Carta",
+    "inicio": 5698,
+    "fim": 5703
+  },
+  {
+    "id": 4,
+    "tag": "a",
+    "texto": "Serveis",
+    "inicio": 5814,
+    "fim": 5821
+  },
+  {
+    "id": 5,
+    "tag": "a",
+    "texto": "Testimonis",
+    "inicio": 5933,
+    "fim": 5943
+  },
+  {
+    "id": 6,
+    "tag": "a",
+    "texto": "Contacte",
+    "inicio": 6055,
+    "fim": 6063
+  },
+  {
+    "id": 7,
+    "tag": "a",
+    "texto": "Escriu-nos",
+    "inicio": 7375,
+    "fim": 7385
+  },
+  {
+    "id": 8,
+    "tag": "a",
+    "texto": "Nosaltres",
+    "inicio": 8403,
+    "fim": 8412
+  },
+  {
+    "id": 9,
+    "tag": "a",
+    "texto": "Carta",
+    "inicio": 8552,
+    "fim": 8557
+  },
+  {
+    "id": 10,
+    "tag": "a",
+    "texto": "Serveis",
+    "inicio": 8699,
+    "fim": 8706
+  },
+  {
+    "id": 11,
+    "tag": "a",
+    "texto": "Testimonis",
+    "inicio": 8849,
+    "fim": 8859
+  },
+  {
+    "id": 12,
+    "tag": "a",
+    "texto": "Contacte",
+    "inicio": 9002,
+    "fim": 9010
+  },
+  {
+    "id": 13,
+    "tag": "a",
+    "texto": "Escriu-nos",
+    "inicio": 9723,
+    "fim": 9733
+  },
+  {
+    "id": 14,
+    "tag": "h1",
+    "texto": "micsas.ff",
+    "inicio": 10388,
+    "fim": 10397
+  },
+  {
+    "id": 15,
+    "tag": "p",
+    "texto": "MICSAS FRIENDS & FAMILY",
+    "inicio": 10609,
+    "fim": 10636
+  },
+  {
+    "id": 16,
+    "tag": "a",
+    "texto": "Demana aqui!",
+    "inicio": 10957,
+    "fim": 10969
+  },
+  {
+    "id": 17,
+    "tag": "a",
+    "texto": "Segueix-nos",
+    "inicio": 11258,
+    "fim": 11269
+  },
+  {
+    "id": 18,
+    "tag": "span",
+    "texto": "Descobreix",
+    "inicio": 11984,
+    "fim": 11994
+  },
+  {
+    "id": 19,
+    "tag": "span",
+    "texto": "sobre nosaltres",
+    "inicio": 12726,
+    "fim": 12741
+  },
+  {
+    "id": 20,
+    "tag": "h2",
+    "texto": "Nascuts a Matadepera,",
+    "inicio": 12863,
+    "fim": 12884
+  },
+  {
+    "id": 21,
+    "tag": "span",
+    "texto": "fets",
+    "inicio": 12914,
+    "fim": 12918
+  },
+  {
+    "id": 22,
+    "tag": "br",
+    "texto": "per compartir.",
+    "inicio": 12931,
+    "fim": 12945
+  },
+  {
+    "id": 23,
+    "tag": "p",
+    "texto": "Micsas neix a Matadepera, d'un grup d'amics obsessionats amb la pizza napolitana de veritat: massa fermentada x hores i amb ingredients escollits un per un. Sense app, sense intermediaris.",
+    "inicio": 13071,
+    "fim": 13259
+  },
+  {
+    "id": 24,
+    "tag": "br",
+    "texto": "Cuinem i entreguem nosaltres mateixos perquè la caixa arribi al teu portal encara calenta. També tenim el servei de esdevemients, per tot aquell públic que vol la pizza tradicional napolitana en la seva festa.",
+    "inicio": 13270,
+    "fim": 13479
+  },
+  {
+    "id": 25,
+    "tag": "p",
+    "texto": "Pizza napolitana tradicional",
+    "inicio": 15338,
+    "fim": 15366
+  },
+  {
+    "id": 26,
+    "tag": "p",
+    "texto": "Sense pressa, només amor i temps. L'olor de la massa al matí, el so de\n          les motos al vespre, la calor del forn de pedra. Així és Micsas. Així\n          és el nostre barri.",
+    "inicio": 15478,
+    "fim": 15658
+  },
+  {
+    "id": 27,
+    "tag": "span",
+    "texto": "Testimonis",
+    "inicio": 16070,
+    "fim": 16080
+  },
+  {
+    "id": 28,
+    "tag": "h2",
+    "texto": "Què diuen els nostres veïns",
+    "inicio": 16210,
+    "fim": 16237
+  },
+  {
+    "id": 29,
+    "tag": "p",
+    "texto": "\"La millor pizza de Matadepera, sens dubte. La massa és\n                increïble i arriba súper calenta gràcies a la moto.\"",
+    "inicio": 17222,
+    "fim": 17346
+  },
+  {
+    "id": 30,
+    "tag": "div",
+    "texto": "Marta P.",
+    "inicio": 17531,
+    "fim": 17539
+  },
+  {
+    "id": 31,
+    "tag": "p",
+    "texto": "\"Es nota que fan la fermentació de 72h. No es fa gens pesada, i\n                els ingredients són de primera qualitat.\"",
+    "inicio": 18711,
+    "fim": 18832
+  },
+  {
+    "id": 32,
+    "tag": "div",
+    "texto": "Jordi C.",
+    "inicio": 19017,
+    "fim": 19025
+  },
+  {
+    "id": 33,
+    "tag": "p",
+    "texto": "\"Un tracte excepcional pel telèfon i la pizza impressionant. Ens\n                va encantar 'La Bèstia de Matadepera'.\"",
+    "inicio": 20178,
+    "fim": 20298
+  },
+  {
+    "id": 34,
+    "tag": "div",
+    "texto": "Aina R.",
+    "inicio": 20483,
+    "fim": 20490
+  },
+  {
+    "id": 35,
+    "tag": "p",
+    "texto": "\"Molt bona relació qualitat-preu. Finalment una pizzeria\n                autèntica napolitana al barri sense complicacions.\"",
+    "inicio": 21689,
+    "fim": 21813
+  },
+  {
+    "id": 36,
+    "tag": "div",
+    "texto": "Marc V.",
+    "inicio": 21998,
+    "fim": 22005
+  },
+  {
+    "id": 37,
+    "tag": "p",
+    "texto": "\"Ràpids, amables i amb un forn de pedra que es nota a cada\n                mossegada. Totalment recomanable per divendres a la nit.\"",
+    "inicio": 23186,
+    "fim": 23318
+  },
+  {
+    "id": 38,
+    "tag": "div",
+    "texto": "Laia S.",
+    "inicio": 23503,
+    "fim": 23510
+  },
+  {
+    "id": 39,
+    "tag": "span",
+    "texto": "Carta · Primavera 2025",
+    "inicio": 27525,
+    "fim": 27547
+  },
+  {
+    "id": 40,
+    "tag": "h2",
+    "texto": "Les nostres pizzes",
+    "inicio": 27677,
+    "fim": 27695
+  },
+  {
+    "id": 41,
+    "tag": "h3",
+    "texto": "Pizzes clàssiques",
+    "inicio": 28004,
+    "fim": 28021
+  },
+  {
+    "id": 42,
+    "tag": "p",
+    "texto": "tradició napolitana",
+    "inicio": 28111,
+    "fim": 28130
+  },
+  {
+    "id": 43,
+    "tag": "span",
+    "texto": "La Moto",
+    "inicio": 28520,
+    "fim": 28527
+  },
+  {
+    "id": 44,
+    "tag": "span",
+    "texto": "Mortadel·la, burrata, pesto de rúcula, orenga",
+    "inicio": 28619,
+    "fim": 28664
+  },
+  {
+    "id": 45,
+    "tag": "span",
+    "texto": "€16.00",
+    "inicio": 28813,
+    "fim": 28819
+  },
+  {
+    "id": 46,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 29263,
+    "fim": 29269
+  },
+  {
+    "id": 47,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 30510,
+    "fim": 30523
+  },
+  {
+    "id": 48,
+    "tag": "span",
+    "texto": "El Telèfon Vermell",
+    "inicio": 31427,
+    "fim": 31445
+  },
+  {
+    "id": 49,
+    "tag": "span",
+    "texto": "Salami picant, mel de romaní, gorgonzola, nous",
+    "inicio": 31537,
+    "fim": 31583
+  },
+  {
+    "id": 50,
+    "tag": "span",
+    "texto": "€15.00",
+    "inicio": 31732,
+    "fim": 31738
+  },
+  {
+    "id": 51,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 32193,
+    "fim": 32199
+  },
+  {
+    "id": 52,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 33440,
+    "fim": 33453
+  },
+  {
+    "id": 53,
+    "tag": "span",
+    "texto": "La Bèstia de Matadepera",
+    "inicio": 34357,
+    "fim": 34380
+  },
+  {
+    "id": 54,
+    "tag": "span",
+    "texto": "Botifarra, ceba caramel·litzada, salsa romesco, mozzarella",
+    "inicio": 34472,
+    "fim": 34530
+  },
+  {
+    "id": 55,
+    "tag": "span",
+    "texto": "€17.00",
+    "inicio": 34679,
+    "fim": 34685
+  },
+  {
+    "id": 56,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 35145,
+    "fim": 35151
+  },
+  {
+    "id": 57,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 36392,
+    "fim": 36405
+  },
+  {
+    "id": 58,
+    "tag": "span",
+    "texto": "L'Avi Fresc",
+    "inicio": 37309,
+    "fim": 37320
+  },
+  {
+    "id": 59,
+    "tag": "span",
+    "texto": "Pernil ibèric, rúcula, parmesà, tàperes, filet de llimona",
+    "inicio": 37412,
+    "fim": 37469
+  },
+  {
+    "id": 60,
+    "tag": "span",
+    "texto": "€16.00",
+    "inicio": 37618,
+    "fim": 37624
+  },
+  {
+    "id": 61,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 38073,
+    "fim": 38079
+  },
+  {
+    "id": 62,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 39320,
+    "fim": 39333
+  },
+  {
+    "id": 63,
+    "tag": "span",
+    "texto": "La Cremosa",
+    "inicio": 40208,
+    "fim": 40218
+  },
+  {
+    "id": 64,
+    "tag": "span",
+    "texto": "Mascarpone, bolets de temporada, tòfona negra",
+    "inicio": 40310,
+    "fim": 40355
+  },
+  {
+    "id": 65,
+    "tag": "span",
+    "texto": "€15.00",
+    "inicio": 40504,
+    "fim": 40510
+  },
+  {
+    "id": 66,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 40957,
+    "fim": 40963
+  },
+  {
+    "id": 67,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 42204,
+    "fim": 42217
+  },
+  {
+    "id": 68,
+    "tag": "h3",
+    "texto": "Les clàssiques",
+    "inicio": 43116,
+    "fim": 43130
+  },
+  {
+    "id": 69,
+    "tag": "p",
+    "texto": "Tradició napolitana",
+    "inicio": 43255,
+    "fim": 43274
+  },
+  {
+    "id": 70,
+    "tag": "span",
+    "texto": "Margherita",
+    "inicio": 43691,
+    "fim": 43701
+  },
+  {
+    "id": 71,
+    "tag": "span",
+    "texto": "Tomàquet San Marzano, mozzarella fior di latte, alfàbrega fresca",
+    "inicio": 43793,
+    "fim": 43857
+  },
+  {
+    "id": 72,
+    "tag": "span",
+    "texto": "€11.00",
+    "inicio": 44006,
+    "fim": 44012
+  },
+  {
+    "id": 73,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 44462,
+    "fim": 44468
+  },
+  {
+    "id": 74,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 45715,
+    "fim": 45728
+  },
+  {
+    "id": 75,
+    "tag": "span",
+    "texto": "Marinara",
+    "inicio": 46636,
+    "fim": 46644
+  },
+  {
+    "id": 76,
+    "tag": "span",
+    "texto": "Tomàquet, all, orenga, oli d'oliva verge extra",
+    "inicio": 46736,
+    "fim": 46782
+  },
+  {
+    "id": 77,
+    "tag": "span",
+    "texto": "€9.00",
+    "inicio": 46931,
+    "fim": 46936
+  },
+  {
+    "id": 78,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 47383,
+    "fim": 47389
+  },
+  {
+    "id": 79,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 48636,
+    "fim": 48649
+  },
+  {
+    "id": 80,
+    "tag": "span",
+    "texto": "Napolitana",
+    "inicio": 49557,
+    "fim": 49567
+  },
+  {
+    "id": 81,
+    "tag": "span",
+    "texto": "Tomàquet, mozzarella, anxoves, tàperes, olives negres",
+    "inicio": 49659,
+    "fim": 49712
+  },
+  {
+    "id": 82,
+    "tag": "span",
+    "texto": "€13.00",
+    "inicio": 49861,
+    "fim": 49867
+  },
+  {
+    "id": 83,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 50317,
+    "fim": 50323
+  },
+  {
+    "id": 84,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 51570,
+    "fim": 51583
+  },
+  {
+    "id": 85,
+    "tag": "span",
+    "texto": "Quatre formatges",
+    "inicio": 52491,
+    "fim": 52507
+  },
+  {
+    "id": 86,
+    "tag": "span",
+    "texto": "Mozzarella, gorgonzola, parmesà, provolone, mel",
+    "inicio": 52599,
+    "fim": 52646
+  },
+  {
+    "id": 87,
+    "tag": "span",
+    "texto": "€14.00",
+    "inicio": 52795,
+    "fim": 52801
+  },
+  {
+    "id": 88,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 53257,
+    "fim": 53263
+  },
+  {
+    "id": 89,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 54510,
+    "fim": 54523
+  },
+  {
+    "id": 90,
+    "tag": "span",
+    "texto": "Calzone",
+    "inicio": 55402,
+    "fim": 55409
+  },
+  {
+    "id": 91,
+    "tag": "span",
+    "texto": "Ricotta, mozzarella, pernil dolç, alfàbrega",
+    "inicio": 55501,
+    "fim": 55544
+  },
+  {
+    "id": 92,
+    "tag": "span",
+    "texto": "€13.00",
+    "inicio": 55693,
+    "fim": 55699
+  },
+  {
+    "id": 93,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 56146,
+    "fim": 56152
+  },
+  {
+    "id": 94,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 57399,
+    "fim": 57412
+  },
+  {
+    "id": 95,
+    "tag": "span",
+    "texto": "Aigua mineral",
+    "inicio": 58430,
+    "fim": 58443
+  },
+  {
+    "id": 96,
+    "tag": "span",
+    "texto": "50 cl",
+    "inicio": 58535,
+    "fim": 58540
+  },
+  {
+    "id": 97,
+    "tag": "span",
+    "texto": "€2.00",
+    "inicio": 58689,
+    "fim": 58694
+  },
+  {
+    "id": 98,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 59143,
+    "fim": 59149
+  },
+  {
+    "id": 99,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 60390,
+    "fim": 60403
+  },
+  {
+    "id": 100,
+    "tag": "span",
+    "texto": "Refresc",
+    "inicio": 61307,
+    "fim": 61314
+  },
+  {
+    "id": 101,
+    "tag": "span",
+    "texto": "Coca-Cola, Fanta, Sprite · 33 cl",
+    "inicio": 61406,
+    "fim": 61438
+  },
+  {
+    "id": 102,
+    "tag": "span",
+    "texto": "€2.50",
+    "inicio": 61587,
+    "fim": 61592
+  },
+  {
+    "id": 103,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 62037,
+    "fim": 62043
+  },
+  {
+    "id": 104,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 63284,
+    "fim": 63297
+  },
+  {
+    "id": 105,
+    "tag": "span",
+    "texto": "Cervesa artesana",
+    "inicio": 64201,
+    "fim": 64217
+  },
+  {
+    "id": 106,
+    "tag": "span",
+    "texto": "Producció local · 33 cl",
+    "inicio": 64309,
+    "fim": 64332
+  },
+  {
+    "id": 107,
+    "tag": "span",
+    "texto": "€4.00",
+    "inicio": 64481,
+    "fim": 64486
+  },
+  {
+    "id": 108,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 64938,
+    "fim": 64944
+  },
+  {
+    "id": 109,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 66185,
+    "fim": 66198
+  },
+  {
+    "id": 110,
+    "tag": "span",
+    "texto": "Tiramisú casolà",
+    "inicio": 67073,
+    "fim": 67088
+  },
+  {
+    "id": 111,
+    "tag": "span",
+    "texto": "Fet a la cuina cada dia",
+    "inicio": 67180,
+    "fim": 67203
+  },
+  {
+    "id": 112,
+    "tag": "span",
+    "texto": "€5.00",
+    "inicio": 67352,
+    "fim": 67357
+  },
+  {
+    "id": 113,
+    "tag": "button",
+    "texto": "Afegir",
+    "inicio": 67808,
+    "fim": 67814
+  },
+  {
+    "id": 114,
+    "tag": "button",
+    "texto": "✎ Afegir nota",
+    "inicio": 69055,
+    "fim": 69068
+  },
+  {
+    "id": 115,
+    "tag": "span",
+    "texto": "0 pizzes · €0,00",
+    "inicio": 70200,
+    "fim": 70216
+  },
+  {
+    "id": 116,
+    "tag": "span",
+    "texto": "Veure cistella",
+    "inicio": 70293,
+    "fim": 70307
+  },
+  {
+    "id": 117,
+    "tag": "span",
+    "texto": "Veure cistella →",
+    "inicio": 70376,
+    "fim": 70392
+  },
+  {
+    "id": 118,
+    "tag": "span",
+    "texto": "Com t'ajudem",
+    "inicio": 70916,
+    "fim": 70928
+  },
+  {
+    "id": 119,
+    "tag": "h3",
+    "texto": "A les teves mans",
+    "inicio": 71058,
+    "fim": 71074
+  },
+  {
+    "id": 120,
+    "tag": "h4",
+    "texto": "Recollida",
+    "inicio": 71796,
+    "fim": 71805
+  },
+  {
+    "id": 121,
+    "tag": "p",
+    "texto": "Passa pel local a buscar la teva pizza calenta. Sense espera,\n              sense sorpreses.",
+    "inicio": 71912,
+    "fim": 72004
+  },
+  {
+    "id": 122,
+    "tag": "h4",
+    "texto": "A domicili",
+    "inicio": 72604,
+    "fim": 72614
+  },
+  {
+    "id": 123,
+    "tag": "p",
+    "texto": "Matadepera, Terrassa nord i Castellar. La moto del Riki arriba\n              calenteta.",
+    "inicio": 72721,
+    "fim": 72808
+  },
+  {
+    "id": 124,
+    "tag": "h4",
+    "texto": "Telèfon",
+    "inicio": 73415,
+    "fim": 73422
+  },
+  {
+    "id": 125,
+    "tag": "p",
+    "texto": "Truca'ns, digues el que vols i ja ho fem nosaltres. Com sempre\n              s'ha fet.",
+    "inicio": 73529,
+    "fim": 73615
+  },
+  {
+    "id": 126,
+    "tag": "a",
+    "texto": "93 XXX XX XX →",
+    "inicio": 73782,
+    "fim": 73796
+  },
+  {
+    "id": 127,
+    "tag": "h2",
+    "texto": "De Matadepera,",
+    "inicio": 74319,
+    "fim": 74333
+  },
+  {
+    "id": 128,
+    "tag": "br",
+    "texto": "a la teva taula.",
+    "inicio": 74359,
+    "fim": 74375
+  },
+  {
+    "id": 129,
+    "tag": "span",
+    "texto": "On som",
+    "inicio": 74930,
+    "fim": 74936
+  },
+  {
+    "id": 130,
+    "tag": "p",
+    "texto": "Carrer de la Pau, 1",
+    "inicio": 75049,
+    "fim": 75068
+  },
+  {
+    "id": 131,
+    "tag": "br",
+    "texto": "Matadepera, 08230",
+    "inicio": 75106,
+    "fim": 75123
+  },
+  {
+    "id": 132,
+    "tag": "span",
+    "texto": "Contacte per esdeveniments",
+    "inicio": 75609,
+    "fim": 75635
+  },
+  {
+    "id": 133,
+    "tag": "a",
+    "texto": "@micsas.ff",
+    "inicio": 75828,
+    "fim": 75838
+  },
+  {
+    "id": 134,
+    "tag": "span",
+    "texto": "Horaris",
+    "inicio": 76324,
+    "fim": 76331
+  },
+  {
+    "id": 135,
+    "tag": "span",
+    "texto": "Dl – Dj",
+    "inicio": 76536,
+    "fim": 76543
+  },
+  {
+    "id": 136,
+    "tag": "span",
+    "texto": "Tancat",
+    "inicio": 76582,
+    "fim": 76588
+  },
+  {
+    "id": 137,
+    "tag": "span",
+    "texto": "Dv – Dg",
+    "inicio": 76711,
+    "fim": 76718
+  },
+  {
+    "id": 138,
+    "tag": "h3",
+    "texto": "On arriben les nostres pizzes",
+    "inicio": 77294,
+    "fim": 77323
+  },
+  {
+    "id": 139,
+    "tag": "p",
+    "texto": "Matadepera, Vallès Occidental",
+    "inicio": 77399,
+    "fim": 77428
+  },
+  {
+    "id": 140,
+    "tag": "span",
+    "texto": "Obre Google Maps →",
+    "inicio": 78568,
+    "fim": 78586
+  },
+  {
+    "id": 141,
+    "tag": "p",
+    "texto": "micsas.ff",
+    "inicio": 79019,
+    "fim": 79028
+  },
+  {
+    "id": 142,
+    "tag": "p",
+    "texto": "Pasta, foc i moto. Res més.",
+    "inicio": 79126,
+    "fim": 79153
+  },
+  {
+    "id": 143,
+    "tag": "p",
+    "texto": "© 2025 micsas.ff · Tots els drets reservats",
+    "inicio": 79824,
+    "fim": 79867
+  },
+  {
+    "id": 144,
+    "tag": "span",
+    "texto": "Efectiu",
+    "inicio": 79986,
+    "fim": 79993
+  },
+  {
+    "id": 145,
+    "tag": "span",
+    "texto": "Targeta",
+    "inicio": 80090,
+    "fim": 80097
+  },
+  {
+    "id": 146,
+    "tag": "span",
+    "texto": "Pagament online",
+    "inicio": 80194,
+    "fim": 80209
+  },
+  {
+    "id": 147,
+    "tag": "span",
+    "texto": "La teva cistella",
+    "inicio": 81383,
+    "fim": 81399
+  },
+  {
+    "id": 148,
+    "tag": "p",
+    "texto": "La cistella és buida",
+    "inicio": 82128,
+    "fim": 82148
+  },
+  {
+    "id": 149,
+    "tag": "p",
+    "texto": "Afegeix pizzes des de la carta per començar.",
+    "inicio": 82226,
+    "fim": 82270
+  },
+  {
+    "id": 150,
+    "tag": "button",
+    "texto": "Veure carta",
+    "inicio": 82479,
+    "fim": 82490
+  },
+  {
+    "id": 151,
+    "tag": "span",
+    "texto": "Subtotal",
+    "inicio": 82860,
+    "fim": 82868
+  },
+  {
+    "id": 152,
+    "tag": "span",
+    "texto": "€0.00",
+    "inicio": 82947,
+    "fim": 82952
+  },
+  {
+    "id": 153,
+    "tag": "span",
+    "texto": "Lliurament",
+    "inicio": 83074,
+    "fim": 83084
+  },
+  {
+    "id": 154,
+    "tag": "span",
+    "texto": "€2.50",
+    "inicio": 83145,
+    "fim": 83150
+  },
+  {
+    "id": 155,
+    "tag": "span",
+    "texto": "Total",
+    "inicio": 83353,
+    "fim": 83358
+  },
+  {
+    "id": 156,
+    "tag": "span",
+    "texto": "€0.00",
+    "inicio": 83478,
+    "fim": 83483
+  },
+  {
+    "id": 157,
+    "tag": "label",
+    "texto": "⚠️ Al·lèrgies o intoleràncies",
+    "inicio": 83627,
+    "fim": 83656
+  },
+  {
+    "id": 158,
+    "tag": "button",
+    "texto": "Continuar → Checkout",
+    "inicio": 84288,
+    "fim": 84308
+  },
+  {
+    "id": 159,
+    "tag": "h2",
+    "texto": "Dades de lliurament",
+    "inicio": 86133,
+    "fim": 86152
+  },
+  {
+    "id": 160,
+    "tag": "p",
+    "texto": "On t'enviem la pizza?",
+    "inicio": 86242,
+    "fim": 86263
+  },
+  {
+    "id": 161,
+    "tag": "label",
+    "texto": "Nom *",
+    "inicio": 86496,
+    "fim": 86501
+  },
+  {
+    "id": 162,
+    "tag": "label",
+    "texto": "Telèfon *",
+    "inicio": 86955,
+    "fim": 86964
+  },
+  {
+    "id": 163,
+    "tag": "label",
+    "texto": "Adreça *",
+    "inicio": 87432,
+    "fim": 87440
+  },
+  {
+    "id": 164,
+    "tag": "label",
+    "texto": "Pis / Porta",
+    "inicio": 87945,
+    "fim": 87956
+  },
+  {
+    "id": 165,
+    "tag": "label",
+    "texto": "Codi postal",
+    "inicio": 88406,
+    "fim": 88417
+  },
+  {
+    "id": 166,
+    "tag": "label",
+    "texto": "Nota per al repartidor",
+    "inicio": 88878,
+    "fim": 88900
+  },
+  {
+    "id": 167,
+    "tag": "p",
+    "texto": "Si us plau, omple els camps obligatoris (nom, telèfon i adreça).",
+    "inicio": 89377,
+    "fim": 89441
+  },
+  {
+    "id": 168,
+    "tag": "button",
+    "texto": "Cancel·lar",
+    "inicio": 89688,
+    "fim": 89698
+  },
+  {
+    "id": 169,
+    "tag": "button",
+    "texto": "Continuar →",
+    "inicio": 89901,
+    "fim": 89912
+  },
+  {
+    "id": 170,
+    "tag": "h2",
+    "texto": "Forma de pagament",
+    "inicio": 90140,
+    "fim": 90157
+  },
+  {
+    "id": 171,
+    "tag": "p",
+    "texto": "Com vols pagar?",
+    "inicio": 90234,
+    "fim": 90249
+  },
+  {
+    "id": 172,
+    "tag": "span",
+    "texto": "Pagar ara amb targeta",
+    "inicio": 90996,
+    "fim": 91017
+  },
+  {
+    "id": 173,
+    "tag": "label",
+    "texto": "Número de targeta",
+    "inicio": 91640,
+    "fim": 91657
+  },
+  {
+    "id": 174,
+    "tag": "label",
+    "texto": "Caducitat",
+    "inicio": 92264,
+    "fim": 92273
+  },
+  {
+    "id": 175,
+    "tag": "label",
+    "texto": "CVV",
+    "inicio": 92814,
+    "fim": 92817
+  },
+  {
+    "id": 176,
+    "tag": "span",
+    "texto": "Pagar al repartidor",
+    "inicio": 94055,
+    "fim": 94074
+  },
+  {
+    "id": 177,
+    "tag": "?",
+    "texto": "Targeta (datàfon)",
+    "inicio": 95283,
+    "fim": 95300
+  },
+  {
+    "id": 178,
+    "tag": "?",
+    "texto": "Efectiu",
+    "inicio": 96046,
+    "fim": 96053
+  },
+  {
+    "id": 179,
+    "tag": "p",
+    "texto": "Si us plau, tria una forma de pagament i el mètode exacte.",
+    "inicio": 96216,
+    "fim": 96274
+  },
+  {
+    "id": 180,
+    "tag": "button",
+    "texto": "← Enrere",
+    "inicio": 96515,
+    "fim": 96523
+  },
+  {
+    "id": 181,
+    "tag": "button",
+    "texto": "Continuar →",
+    "inicio": 96726,
+    "fim": 96737
+  },
+  {
+    "id": 182,
+    "tag": "h2",
+    "texto": "Confirmació",
+    "inicio": 96965,
+    "fim": 96976
+  },
+  {
+    "id": 183,
+    "tag": "p",
+    "texto": "Revisa la teva comanda abans d'enviar-la.",
+    "inicio": 97066,
+    "fim": 97107
+  },
+  {
+    "id": 184,
+    "tag": "p",
+    "texto": "Articles",
+    "inicio": 97355,
+    "fim": 97363
+  },
+  {
+    "id": 185,
+    "tag": "p",
+    "texto": "Lliurament",
+    "inicio": 97677,
+    "fim": 97687
+  },
+  {
+    "id": 186,
+    "tag": "p",
+    "texto": "Pagament",
+    "inicio": 98020,
+    "fim": 98028
+  },
+  {
+    "id": 187,
+    "tag": "span",
+    "texto": "Total",
+    "inicio": 98361,
+    "fim": 98366
+  },
+  {
+    "id": 188,
+    "tag": "p",
+    "texto": "Hi ha hagut un error. Torna-ho a intentar.",
+    "inicio": 98594,
+    "fim": 98636
+  },
+  {
+    "id": 189,
+    "tag": "button",
+    "texto": "← Enrere",
+    "inicio": 98872,
+    "fim": 98880
+  },
+  {
+    "id": 190,
+    "tag": "button",
+    "texto": "Confirma ✓",
+    "inicio": 99101,
+    "fim": 99111
+  },
+  {
+    "id": 191,
+    "tag": "h2",
+    "texto": "Gràcies!",
+    "inicio": 99588,
+    "fim": 99596
+  },
+  {
+    "id": 192,
+    "tag": "p",
+    "texto": "La teva comanda és en camí.",
+    "inicio": 99690,
+    "fim": 99717
+  },
+  {
+    "id": 193,
+    "tag": "p",
+    "texto": "Temps estimat d'entrega:",
+    "inicio": 99806,
+    "fim": 99830
+  },
+  {
+    "id": 194,
+    "tag": "strong",
+    "texto": "30–45 minuts",
+    "inicio": 99871,
+    "fim": 99883
+  },
+  {
+    "id": 195,
+    "tag": "p",
+    "texto": "El Riki et trucarà per confirmar quan surti.",
+    "inicio": 99982,
+    "fim": 100026
+  },
+  {
+    "id": 196,
+    "tag": "button",
+    "texto": "Tornar a l'inici",
+    "inicio": 100226,
+    "fim": 100242
+  }
+]

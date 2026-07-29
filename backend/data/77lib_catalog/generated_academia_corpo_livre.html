@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<!--
+ REPASS AI — Template Base para Negócio Local
+ ============================================
+ Escrito por nós, não importado. Por isso pula as camadas 2 e 3 do pipeline
+ (extração e tradução): já nasce em português, com os marcadores no lugar.
+
+ Três decisões que valem ser mantidas:
+
+ 1. ZERO dependência externa. Sem Tailwind de CDN, sem Google Fonts, sem
+ biblioteca de ícones. O site do cliente não pode quebrar porque um
+ serviço de terceiro saiu do ar. Só as imagens são remotas, e isso é da
+ natureza delas.
+
+ 2. Cada seção serve o NEGÓCIO LOCAL. O template de origem era de uma
+ agência de design: tinha "Realizações", "Na mídia", Behance e Dribbble.
+ Aqui é serviço, ambiente, avaliação do Google e WhatsApp.
+
+ 3. O menu NAVEGA. No template antigo os quatro links do topo abriam a mesma
+ conversa de WhatsApp. Aqui cada um rola até a sua seção.
+
+ Marcadores preenchidos pelo compilador:
+ Academia Corpo Livre Academia Franca SP Rua XV, 200
+ (16) 3333-5555 https://wa.me/551633335555 contato@academiacorpolivre.com.br 4.6 92 2026
+ {{FOTO_1}} … {{FOTO_5}}
+ {{SERVICO_1_TITULO}} {{SERVICO_1_TEXTO}} … até 4
+-->
+<html lang="pt-BR">
+<head><meta name="description" content="Academia Corpo Livre em Franca - SP. Academia. Fale pelo WhatsApp e conheca nossos servicos."><meta property="og:type" content="website"><meta property="og:title" content="Academia Corpo Livre | Academia em Franca - SP"><meta property="og:description" content="Academia Corpo Livre em Franca - SP. Academia. Fale pelo WhatsApp e conheca nossos servicos."><meta property="og:image" content="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80"><meta property="og:locale" content="pt_BR"><meta name="twitter:card" content="summary_large_image">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Academia Corpo Livre | Academia em Franca - SP</title>
+<style>
+ :root {
+ --tinta: #0b0b0d;
+ --papel: #f7f6f3;
+ --claro: #ffffff;
+ --texto: #1c1c20;
+ --suave: #6b6b73;
+ --linha: rgba(11, 11, 13, 0.12);
+ --marca: #c8a65a;
+ --zap: #25d366;
+
+ --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+ --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+ }
+
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+
+ html { scroll-behavior: smooth; }
+ @media (prefers-reduced-motion: reduce) {
+ html { scroll-behavior: auto; }
+ * { animation: none !important; transition: none !important; }
+ }
+
+ body {
+ font-family: var(--sans);
+ background: var(--tinta);
+ color: var(--claro);
+ line-height: 1.6;
+ -webkit-font-smoothing: antialiased;
+ overflow-x: hidden;
+ }
+
+ img { max-width: 100%; display: block; }
+ a { color: inherit; text-decoration: none; }
+ :focus-visible { outline: 2px solid var(--marca); outline-offset: 3px; }
+
+ .env { width: min(100% - 2.5rem, 1180px); margin-inline: auto; }
+
+ /* ---------------------------------------------------------- cabeçalho */
+ .topo {
+ position: fixed; inset: 0 0 auto 0; z-index: 50;
+ display: flex; align-items: center; justify-content: space-between;
+ gap: 1rem;
+ padding: 1.1rem clamp(1.25rem, 4vw, 3rem);
+ background: rgba(11, 11, 13, 0.72);
+ backdrop-filter: blur(12px);
+ border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+ }
+ .marca {
+ font-weight: 700; letter-spacing: -0.02em;
+ font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+ text-transform: uppercase;
+ }
+ .menu { display: none; gap: clamp(1rem, 2.5vw, 2.2rem); font-size: 0.9rem; }
+ .menu a { color: rgba(255,255,255,0.72); transition: color .2s; }
+ .menu a:hover { color: var(--claro); }
+ @media (min-width: 820px) { .menu { display: flex; } }
+
+ .botao-zap {
+ display: inline-flex; align-items: center; gap: 0.5rem;
+ background: var(--zap); color: #04140a;
+ font-weight: 700; font-size: 0.85rem;
+ padding: 0.6rem 1.1rem; border-radius: 999px;
+ white-space: nowrap; transition: transform .15s;
+ }
+ .botao-zap:hover { transform: translateY(-1px); }
+ .botao-zap::before { content: "✆"; font-size: 1em; }
+
+ /* --------------------------------------------------------------- hero */
+ .hero {
+ position: relative; min-height: 100svh;
+ display: flex; flex-direction: column; justify-content: flex-end;
+ padding: 7rem clamp(1.25rem, 4vw, 3rem) clamp(3rem, 8vh, 6rem);
+ overflow: hidden;
+ }
+ .hero-fundo { position: absolute; inset: 0; z-index: -2; }
+ .hero-fundo img { width: 100%; height: 100%; object-fit: cover; }
+ .hero::after {
+ content: ""; position: absolute; inset: 0; z-index: -1;
+ background: linear-gradient(to top, var(--tinta) 8%, rgba(11,11,13,.55) 55%, rgba(11,11,13,.25));
+ }
+ .selo {
+ font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
+ color: var(--marca); margin-bottom: 1.1rem;
+ }
+ .hero h1 {
+ font-family: var(--serif);
+ font-size: clamp(2.6rem, 11vw, 7rem);
+ line-height: 0.95; letter-spacing: -0.03em; font-weight: 400;
+ text-wrap: balance; margin-bottom: 1.4rem;
+ }
+ .hero-sub {
+ font-size: clamp(1rem, 2.2vw, 1.2rem);
+ color: rgba(255,255,255,0.82);
+ max-width: 38ch; margin-bottom: 2rem;
+ }
+ .hero-acoes { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+ .botao-vazado {
+ display: inline-flex; align-items: center; gap: 0.6rem;
+ border: 1px solid rgba(255,255,255,0.35); color: var(--claro);
+ padding: 0.7rem 1.4rem; border-radius: 999px;
+ font-size: 0.88rem; transition: background .2s, color .2s;
+ }
+ .botao-vazado:hover { background: var(--claro); color: var(--tinta); }
+
+ /* ------------------------------------------------------------ serviços */
+ .bloco { padding: clamp(4rem, 12vh, 8rem) 0; }
+ .bloco-claro { background: var(--papel); color: var(--texto); }
+
+ .cabeca { max-width: 46ch; margin-bottom: clamp(2.5rem, 6vh, 4rem); }
+ .cabeca h2 {
+ font-family: var(--serif); font-weight: 400;
+ font-size: clamp(1.9rem, 5.5vw, 3.4rem);
+ line-height: 1.05; letter-spacing: -0.02em;
+ text-wrap: balance; margin-bottom: 0.9rem;
+ }
+ .cabeca p { color: var(--suave); font-size: 1.02rem; }
+ .bloco-claro .rotulo { color: #8a7433; }
+ .rotulo {
+ font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase;
+ color: var(--marca); margin-bottom: 0.8rem;
+ }
+
+ .servicos { display: grid; gap: 1.4rem; grid-template-columns: 1fr; }
+ @media (min-width: 700px) { .servicos { grid-template-columns: repeat(2, 1fr); } }
+ @media (min-width: 1040px) { .servicos { grid-template-columns: repeat(4, 1fr); } }
+
+ .servico {
+ background: var(--claro);
+ border: 1px solid var(--linha);
+ border-radius: 4px; overflow: hidden;
+ display: flex; flex-direction: column;
+ }
+ .servico-foto { aspect-ratio: 4 / 3; overflow: hidden; background: #e6e4df; }
+ .servico-foto img {
+ width: 100%; height: 100%; object-fit: cover;
+ transition: transform 1.2s ease-out;
+ }
+ .servico:hover .servico-foto img { transform: scale(1.04); }
+ .servico-corpo { padding: 1.3rem 1.4rem 1.6rem; }
+ .servico h3 {
+ font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em;
+ margin-bottom: 0.45rem;
+ }
+ .servico p { color: var(--suave); font-size: 0.92rem; }
+
+ /* -------------------------------------------------------------- ambiente */
+ .ambiente { position: relative; min-height: 82svh; display: grid; place-items: center;
+ text-align: center; overflow: hidden; padding: 4rem 1.5rem; }
+ .ambiente img { position: absolute; inset: 0; width: 100%; height: 100%;
+ object-fit: cover; opacity: 0.42; z-index: -1; }
+ .ambiente h2 {
+ font-family: var(--serif); font-weight: 400;
+ font-size: clamp(2.2rem, 9vw, 5.5rem); line-height: 0.98;
+ letter-spacing: -0.03em; text-wrap: balance;
+ }
+ .ambiente p { color: rgba(255,255,255,0.75); max-width: 34ch; margin: 1.2rem auto 0; }
+
+ /* ------------------------------------------------------------ avaliação */
+ .avaliacao { display: grid; gap: 2.5rem; align-items: center; }
+ @media (min-width: 860px) { .avaliacao { grid-template-columns: auto 1fr; gap: 4rem; } }
+
+ .nota { text-align: center; }
+ .nota .valor {
+ font-family: var(--serif);
+ font-size: clamp(4rem, 14vw, 7rem); line-height: 1;
+ letter-spacing: -0.04em; color: var(--marca);
+ font-variant-numeric: tabular-nums;
+ }
+ .estrelas { font-size: 1.3rem; color: var(--marca); letter-spacing: 0.14em; margin-top: 0.4rem; }
+ .nota .fonte { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 0.7rem;
+ letter-spacing: 0.12em; text-transform: uppercase; }
+
+ /* --------------------------------------------------------------- rodapé */
+ .rodape { background: #050506; padding: clamp(3.5rem, 9vh, 6rem) 0 2.5rem; }
+ .rodape-grade { display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
+ @media (min-width: 760px) { .rodape-grade { grid-template-columns: 1.6fr 1fr 1fr; } }
+
+ .rodape h2 {
+ font-family: var(--serif); font-weight: 400;
+ font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.05;
+ letter-spacing: -0.02em; margin-bottom: 1rem;
+ }
+ .rodape-col h3 {
+ font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase;
+ color: var(--marca); margin-bottom: 1rem;
+ }
+ .rodape-col a, .rodape-col p {
+ display: block; color: rgba(255,255,255,0.7);
+ font-size: 0.94rem; margin-bottom: 0.55rem;
+ }
+ .rodape-col a:hover { color: var(--claro); }
+
+ .assinatura {
+ margin-top: 3rem; padding-top: 1.6rem;
+ border-top: 1px solid rgba(255,255,255,0.1);
+ display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: space-between;
+ font-size: 0.82rem; color: rgba(255,255,255,0.45);
+ }
+
+ /* Barra fixa de WhatsApp no celular: o CTA nunca some da tela. */
+ .zap-fixo {
+ position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+ display: flex; justify-content: center;
+ padding: 0.8rem 1rem calc(0.8rem + env(safe-area-inset-bottom));
+ background: linear-gradient(to top, rgba(11,11,13,0.96), rgba(11,11,13,0));
+ }
+ .zap-fixo .botao-zap { width: 100%; max-width: 420px; justify-content: center; padding: 0.9rem; }
+ @media (min-width: 820px) { .zap-fixo { display: none; } }
+ @media (max-width: 819px) { .rodape { padding-bottom: 6rem; } }
+</style>
+</head>
+
+<body>
+
+<header class="topo">
+ <a href="#topo" class="marca">Academia Corpo Livre</a>
+ <nav class="menu" aria-label="Navegação principal">
+ <a href="#servicos">Serviços</a>
+ <a href="#ambiente">Ambiente</a>
+ <a href="#avaliacoes">Avaliações</a>
+ <a href="#contato">Contato</a>
+ </nav>
+ <a class="botao-zap" href="https://wa.me/551633335555" target="_blank" rel="noopener">WhatsApp</a>
+</header>
+
+<main id="topo">
+
+ <section class="hero">
+ <div class="hero-fundo">
+ <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80" alt="Ambiente do Academia Corpo Livre">
+ </div>
+ <p class="selo">Academia · Franca - SP</p>
+ <h1>Academia Corpo Livre</h1>
+ <p class="hero-sub">Referência em atendimento no coração de Franca. Avaliação 4.6★ no Google (92 clientes satisfeitos).</p>
+ <div class="hero-acoes">
+ <a class="botao-zap" href="https://wa.me/551633335555" target="_blank" rel="noopener">Garanta Sua Aula Experimental</a>
+ <a class="botao-vazado" href="#servicos">Ver o que fazemos</a>
+ </div>
+ </section>
+
+ <section class="bloco bloco-claro" id="servicos">
+ <div class="env">
+ <div class="cabeca">
+ <p class="rotulo">O que oferecemos</p>
+ <h2>Transforme Seu Corpo e Energia na Academia Corpo Livre</h2>
+ <p>A Academia Corpo Livre é destaque no segmento de Academia em Franca. Oferecemos infraestrutura moderna, profissionais qualificados e um compromisso inabalável com a satisfação de nossos clientes.</p>
+ </div>
+
+ <div class="servicos">
+ <article class="servico">
+ <div class="servico-foto"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80" alt="{{SERVICO_1_TITULO}}"></div>
+ <div class="servico-corpo">
+ <h3>{{SERVICO_1_TITULO}}</h3>
+ <p>{{SERVICO_1_TEXTO}}</p>
+ </div>
+ </article>
+ <article class="servico">
+ <div class="servico-foto"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80" alt="{{SERVICO_2_TITULO}}"></div>
+ <div class="servico-corpo">
+ <h3>{{SERVICO_2_TITULO}}</h3>
+ <p>{{SERVICO_2_TEXTO}}</p>
+ </div>
+ </article>
+ <article class="servico">
+ <div class="servico-foto"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80" alt="{{SERVICO_3_TITULO}}"></div>
+ <div class="servico-corpo">
+ <h3>{{SERVICO_3_TITULO}}</h3>
+ <p>{{SERVICO_3_TEXTO}}</p>
+ </div>
+ </article>
+ <article class="servico">
+ <div class="servico-foto"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80" alt="{{SERVICO_4_TITULO}}"></div>
+ <div class="servico-corpo">
+ <h3>{{SERVICO_4_TITULO}}</h3>
+ <p>{{SERVICO_4_TEXTO}}</p>
+ </div>
+ </article>
+ </div>
+ </div>
+ </section>
+
+ <section class="ambiente" id="ambiente">
+ <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80" alt="Espaço do Academia Corpo Livre">
+ <div class="env">
+ <p class="selo">Conheça de perto</p>
+ <h2>Nosso espaço<br>em Franca</h2>
+ <p>Venha conhecer o Academia Corpo Livre de perto. Estamos em Rua XV, 200.</p>
+ </div>
+ </section>
+
+ <section class="bloco" id="avaliacoes">
+ <div class="env avaliacao">
+ <div class="nota">
+ <div class="valor">4.6</div>
+ <div class="estrelas" aria-hidden="true">★★★★★</div>
+ <p class="fonte">92 avaliações no Google</p>
+ </div>
+ <div>
+ <p class="rotulo">Quem já veio</p>
+ <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,4.5vw,2.8rem);line-height:1.08;letter-spacing:-0.02em;margin-bottom:1rem;">
+ O que dizem quem já foi atendido
+ </h2>
+ <p style="color:rgba(255,255,255,0.72);max-width:52ch;">A reputação do Academia Corpo Livre é construída no atendimento do dia a dia, uma pessoa de cada vez.</p>
+ <a class="botao-vazado" style="margin-top:1.6rem;" href="https://wa.me/551633335555" target="_blank" rel="noopener">
+ Falar com a gente
+ </a>
+ </div>
+ </div>
+ </section>
+
+</main>
+
+<footer class="rodape" id="contato">
+ <div class="env">
+ <div class="rodape-grade">
+ <div>
+ <h2>Academia Corpo Livre</h2>
+ <p style="color:rgba(255,255,255,0.6);max-width:34ch;">Academia em Franca. Fale com a gente pelo WhatsApp e agende seu atendimento.</p>
+ </div>
+
+ <div class="rodape-col">
+ <h3>Onde estamos</h3>
+ <p>Rua XV, 200</p>
+ <p>Franca - SP</p>
+ </div>
+
+ <div class="rodape-col">
+ <h3>Fale com a gente</h3>
+ <a href="https://wa.me/551633335555" target="_blank" rel="noopener">WhatsApp</a>
+ <a href="tel:+551633335555">(16) 3333-5555</a>
+ <a href="mailto:contato@academiacorpolivre.com.br">contato@academiacorpolivre.com.br</a>
+ </div>
+ </div>
+
+ <div class="assinatura">
+ <span>© 2026 Academia Corpo Livre</span>
+ <span>Academia em Franca - SP</span>
+ </div>
+ </div>
+</footer>
+
+<div class="zap-fixo">
+ <a class="botao-zap" href="https://wa.me/551633335555" target="_blank" rel="noopener">Garanta Sua Aula Experimental</a>
+</div>
+
+</body>
+</html>

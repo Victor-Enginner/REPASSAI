@@ -69,7 +69,7 @@ export default function LandingPage({ onOpenApp }) {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', width: '100%', background: '#000000', color: '#ffffff', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', width: '100%', background: 'var(--fg-black)', color: 'var(--fg-white)', position: 'relative', overflowX: 'hidden' }}>
       
       {/* SVG Scroll Journey Connector Line */}
       <ScrollJourneyLine strokeColor="#6366f1" glowColor="#ec4899" />
@@ -99,8 +99,8 @@ export default function LandingPage({ onOpenApp }) {
           <span className="font-headline" style={{ fontSize: '24px', letterSpacing: '-0.06em' }}>
             REPASS
           </span>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ffffff', display: 'inline-block' }} />
-          <span className="mono-label" style={{ color: '#6366f1' }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--fg-white)', display: 'inline-block' }} />
+          <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>
             VERSÃO_BETA
           </span>
         </div>
@@ -149,7 +149,7 @@ export default function LandingPage({ onOpenApp }) {
           {/* Cell 1: Top-Left */}
           <div className="hero-cell hero-cell-1" style={{ alignItems: 'flex-end' }}>
             <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px' }}>QUADRANTE_01 // NÚCLEO</span>
-            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: 'var(--fg-white)', margin: 0 }}>
               RE
             </h1>
           </div>
@@ -157,7 +157,7 @@ export default function LandingPage({ onOpenApp }) {
           {/* Cell 2: Top-Right */}
           <div className="hero-cell hero-cell-2" style={{ alignItems: 'flex-end' }}>
             <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px' }}>QUADRANTE_02 // SISTEMA</span>
-            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: 'var(--fg-white)', margin: 0 }}>
               PASS
             </h1>
           </div>
@@ -165,7 +165,7 @@ export default function LandingPage({ onOpenApp }) {
           {/* Cell 3: Bottom-Left */}
           <div className="hero-cell hero-cell-3" style={{ alignItems: 'flex-start' }}>
             <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px' }}>QUADRANTE_03 // NEURAL</span>
-            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: 'var(--fg-white)', margin: 0 }}>
               A
             </h1>
           </div>
@@ -173,7 +173,7 @@ export default function LandingPage({ onOpenApp }) {
           {/* Cell 4: Bottom-Right */}
           <div className="hero-cell hero-cell-4" style={{ alignItems: 'flex-start' }}>
             <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px' }}>QUADRANTE_04 // OSINT</span>
-            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: '#ffffff', margin: 0 }}>
+            <h1 className="font-headline" style={{ fontSize: 'clamp(3rem, 15vw, 12rem)', lineHeight: 0.85, color: 'var(--fg-white)', margin: 0 }}>
               I
             </h1>
           </div>
@@ -189,7 +189,7 @@ export default function LandingPage({ onOpenApp }) {
         gridTemplateColumns: '2fr 1fr 1fr 1fr',
         borderTop: '0.5px solid rgba(255, 255, 255, 0.15)',
         borderBottom: '0.5px solid rgba(255, 255, 255, 0.15)',
-        background: '#000000'
+        background: 'var(--fg-black)'
       }}>
         {/* Cell 1: Email / Niche Input */}
         <div className="hairline-r" style={{ padding: '0 24px', display: 'flex', alignItems: 'center' }}>
@@ -198,13 +198,14 @@ export default function LandingPage({ onOpenApp }) {
             value={nicheInput}
             onChange={(e) => setNicheInput(e.target.value)}
             placeholder="DIGITE_SEU_NICHO_OU_EMAIL..."
+            aria-label="Seu nicho de atuação ou e-mail"
             className="font-mono"
             style={{
               width: '100%',
               background: 'transparent',
               border: 'none',
               outline: 'none',
-              color: '#ffffff',
+              color: 'var(--fg-white)',
               fontSize: '11px',
               letterSpacing: '0.25em'
             }}
@@ -220,7 +221,7 @@ export default function LandingPage({ onOpenApp }) {
 
         {/* Cell 3: Real-Time Status Countdown Timer */}
         <div className="hairline-r" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 20px' }}>
-          <div className="font-mono" style={{ fontSize: '20px', letterSpacing: '0.15em', color: '#ffffff' }}>
+          <div className="font-mono" style={{ fontSize: '20px', letterSpacing: '0.15em', color: 'var(--fg-white)' }}>
             {time.hh} <span style={{ opacity: 0.2 }}>:</span> {time.mm} <span style={{ opacity: 0.2 }}>:</span> {time.ss}
           </div>
         </div>
@@ -235,15 +236,15 @@ export default function LandingPage({ onOpenApp }) {
 
       {/* 4. Section Guia Oficial & Copy useleadsite.com */}
       <section style={{ padding: '80px 40px 60px 80px', maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(99, 102, 241, 0.15)', color: '#a5b4fc', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontFamily: 'var(--font-mono)', border: '0.5px solid rgba(99, 102, 241, 0.3)', marginBottom: '24px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-indigo-suave)', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontFamily: 'var(--font-mono)', border: '0.5px solid rgba(99, 102, 241, 0.3)', marginBottom: '24px' }}>
           <Sparkles size={14} color="#6366f1" /> FEITO PARA O BRASIL · TUDO DENTRO DO PAINEL · SEM INSTALAR NADA
         </div>
 
-        <h2 className="font-headline" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: '#ffffff', lineHeight: 1.05, maxWidth: '1100px', marginBottom: '20px' }}>
+        <h2 className="font-headline" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: 'var(--fg-white)', lineHeight: 1.05, maxWidth: '1100px', marginBottom: '20px' }}>
           Aprenda a usar o REPASS AI & LeadSite e feche clientes em minutos
         </h2>
 
-        <p style={{ fontSize: '18px', color: '#cbd5e1', maxWidth: '850px', lineHeight: 1.6, marginBottom: '32px' }}>
+        <p style={{ fontSize: '18px', color: 'var(--fg-soft)', maxWidth: '850px', lineHeight: 1.6, marginBottom: '32px' }}>
           Este guia mostra, passo a passo, como usar cada tela: buscar negócios sem site no menu Leads, gerar e editar o site com um clique, e fechar no CRM com o script pronto.
         </p>
 
@@ -259,24 +260,24 @@ export default function LandingPage({ onOpenApp }) {
 
         {/* 4 Cards de Estatísticas em Tempo Real */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', borderTop: '0.5px solid rgba(255, 255, 255, 0.12)', paddingTop: '32px' }}>
-          <div style={{ background: '#0a0e1a', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
-            <div className="font-headline" style={{ fontSize: '28px', color: '#6366f1' }}>12.000+</div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>negócios analisados</div>
+          <div style={{ background: 'var(--bg-surface)', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
+            <div className="font-headline" style={{ fontSize: '28px', color: 'var(--accent-indigo)' }}>12.000+</div>
+            <div style={{ fontSize: '12px', color: 'var(--fg-muted)', marginTop: '4px' }}>negócios analisados</div>
           </div>
 
-          <div style={{ background: '#0a0e1a', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
-            <div className="font-headline" style={{ fontSize: '28px', color: '#22c55e' }}>3.400+</div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>sites publicados</div>
+          <div style={{ background: 'var(--bg-surface)', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
+            <div className="font-headline" style={{ fontSize: '28px', color: 'var(--estado-sucesso)' }}>3.400+</div>
+            <div style={{ fontSize: '12px', color: 'var(--fg-muted)', marginTop: '4px' }}>sites publicados</div>
           </div>
 
-          <div style={{ background: '#0a0e1a', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
-            <div className="font-headline" style={{ fontSize: '28px', color: '#f59e0b' }}>4,9 / 5</div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>avaliação dos usuários</div>
+          <div style={{ background: 'var(--bg-surface)', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
+            <div className="font-headline" style={{ fontSize: '28px', color: 'var(--estado-alerta)' }}>4,9 / 5</div>
+            <div style={{ fontSize: '12px', color: 'var(--fg-muted)', marginTop: '4px' }}>avaliação dos usuários</div>
           </div>
 
-          <div style={{ background: '#0a0e1a', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
-            <div className="font-headline" style={{ fontSize: '28px', color: '#ec4899' }}>&lt; 30s</div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>para gerar um site</div>
+          <div style={{ background: 'var(--bg-surface)', padding: '20px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
+            <div className="font-headline" style={{ fontSize: '28px', color: 'var(--accent-rosa)' }}>&lt; 30s</div>
+            <div style={{ fontSize: '12px', color: 'var(--fg-muted)', marginTop: '4px' }}>para gerar um site</div>
           </div>
         </div>
       </section>
@@ -284,11 +285,11 @@ export default function LandingPage({ onOpenApp }) {
       {/* 5. Passo a Passo em 6 Etapas */}
       <section id="passo-a-passo" style={{ padding: '80px 40px 80px 80px', maxWidth: '1400px', margin: '0 auto', borderTop: '0.5px solid rgba(255,255,255,0.1)' }}>
         
-        <span className="mono-label" style={{ color: '#6366f1' }}>GUIA DE EXECUÇÃO // 6 PASSO A PASSO</span>
-        <h2 className="font-headline" style={{ fontSize: '32px', color: '#ffffff', marginTop: '8px', marginBottom: '12px' }}>
+        <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>GUIA DE EXECUÇÃO // 6 PASSO A PASSO</span>
+        <h2 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '8px', marginBottom: '12px' }}>
           Como usar o LeadSite, do começo ao fechamento
         </h2>
-        <p style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '40px', maxWidth: '700px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--fg-muted)', marginBottom: '40px', maxWidth: '700px' }}>
           Seis passos, na ordem exata em que você faz no painel. Siga cada um e feche seu primeiro cliente hoje.
         </p>
 
@@ -325,14 +326,14 @@ export default function LandingPage({ onOpenApp }) {
               desc: 'Abra o lead no CRM e gere na hora Mensagem WhatsApp, Roteiro de ligação, Roteiro da Reunião e Quebrar Objeção de Fechamento. Marque um Novo agendamento e acompanhe tudo em Agendamentos.'
             }
           ].map(step => (
-            <div key={step.n} className="glass-panel" style={{ padding: '28px', background: '#0a0e1a', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#6366f1', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', marginBottom: '16px' }}>
+            <div key={step.n} className="glass-panel" style={{ padding: '28px', background: 'var(--bg-surface)', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent-indigo)', color: 'var(--fg-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', marginBottom: '16px' }}>
                 {step.n}
               </div>
-              <h3 className="font-headline" style={{ fontSize: '20px', color: '#ffffff', marginBottom: '10px' }}>
+              <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)', marginBottom: '10px' }}>
                 {step.title}
               </h3>
-              <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '13px', color: 'var(--fg-muted)', lineHeight: 1.6 }}>
                 {step.desc}
               </p>
             </div>
@@ -342,13 +343,13 @@ export default function LandingPage({ onOpenApp }) {
       </section>
 
       {/* 6. Simulador Interativo de Faturamento Recorrente (Modelo de Receita) */}
-      <section id="calculadora" style={{ padding: '80px 40px 80px 80px', maxWidth: '1400px', margin: '0 auto', background: '#0a0e1a', borderTop: '0.5px solid rgba(255,255,255,0.1)', borderBottom: '0.5px solid rgba(255,255,255,0.1)' }}>
+      <section id="calculadora" style={{ padding: '80px 40px 80px 80px', maxWidth: '1400px', margin: '0 auto', background: 'var(--bg-surface)', borderTop: '0.5px solid rgba(255,255,255,0.1)', borderBottom: '0.5px solid rgba(255,255,255,0.1)' }}>
         
-        <span className="mono-label" style={{ color: '#38bdf8' }}>MODELO DE RECEITA // PROJEÇÃO INTERATIVA</span>
-        <h2 className="font-headline" style={{ fontSize: '32px', color: '#ffffff', marginTop: '8px', marginBottom: '12px' }}>
+        <span className="mono-label" style={{ color: 'var(--accent-cyan)' }}>MODELO DE RECEITA // PROJEÇÃO INTERATIVA</span>
+        <h2 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '8px', marginBottom: '12px' }}>
           Transforme uma venda única em receita todo mês
         </h2>
-        <p style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '40px', maxWidth: '700px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--fg-muted)', marginBottom: '40px', maxWidth: '700px' }}>
           Você não vende só um site, vende tranquilidade. Cobre pela hospedagem, atualizações e manutenção enquanto o LeadSite faz o trabalho pesado.
         </p>
 
@@ -359,15 +360,15 @@ export default function LandingPage({ onOpenApp }) {
             
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-                <span style={{ color: '#cbd5e1' }}>Sites vendidos / mês</span>
-                <strong style={{ color: '#6366f1', fontSize: '18px' }}>{sitesPorMes}</strong>
+                <span style={{ color: 'var(--fg-soft)' }}>Sites vendidos / mês</span>
+                <strong style={{ color: 'var(--accent-indigo)', fontSize: '18px' }}>{sitesPorMes}</strong>
               </div>
               <input 
-                type="range" min="1" max="15" value={sitesPorMes} 
+                type="range" min="1" max="15" value={sitesPorMes} aria-label="Sites entregues por mês" 
                 onChange={(e) => setSitesPorMes(Number(e.target.value))}
-                style={{ width: '100%', accentColor: '#6366f1' }} 
+                style={{ width: '100%', accentColor: 'var(--accent-indigo)' }} 
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--fg-muted)', marginTop: '4px' }}>
                 <span>1 site</span>
                 <span>15 sites</span>
               </div>
@@ -375,15 +376,15 @@ export default function LandingPage({ onOpenApp }) {
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-                <span style={{ color: '#cbd5e1' }}>Preço à vista (por site)</span>
-                <strong style={{ color: '#22c55e', fontSize: '18px' }}>R$ {precoAvista.toLocaleString('pt-BR')}</strong>
+                <span style={{ color: 'var(--fg-soft)' }}>Preço à vista (por site)</span>
+                <strong style={{ color: 'var(--estado-sucesso)', fontSize: '18px' }}>R$ {precoAvista.toLocaleString('pt-BR')}</strong>
               </div>
               <input 
-                type="range" min="300" max="3000" step="100" value={precoAvista} 
+                type="range" min="300" max="3000" step="100" value={precoAvista} aria-label="Preço cobrado à vista por site" 
                 onChange={(e) => setPrecoAvista(Number(e.target.value))}
-                style={{ width: '100%', accentColor: '#22c55e' }} 
+                style={{ width: '100%', accentColor: 'var(--estado-sucesso)' }} 
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--fg-muted)', marginTop: '4px' }}>
                 <span>R$ 300</span>
                 <span>R$ 3.000</span>
               </div>
@@ -391,15 +392,15 @@ export default function LandingPage({ onOpenApp }) {
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-                <span style={{ color: '#cbd5e1' }}>Manutenção mensal (por cliente)</span>
-                <strong style={{ color: '#ec4899', fontSize: '18px' }}>R$ {manutencaoMensal.toLocaleString('pt-BR')}</strong>
+                <span style={{ color: 'var(--fg-soft)' }}>Manutenção mensal (por cliente)</span>
+                <strong style={{ color: 'var(--accent-rosa)', fontSize: '18px' }}>R$ {manutencaoMensal.toLocaleString('pt-BR')}</strong>
               </div>
               <input 
-                type="range" min="50" max="300" step="10" value={manutencaoMensal} 
+                type="range" min="50" max="300" step="10" value={manutencaoMensal} aria-label="Valor da manutenção mensal" 
                 onChange={(e) => setManutencaoMensal(Number(e.target.value))}
-                style={{ width: '100%', accentColor: '#ec4899' }} 
+                style={{ width: '100%', accentColor: 'var(--accent-rosa)' }} 
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--fg-muted)', marginTop: '4px' }}>
                 <span>R$ 50/mês</span>
                 <span>R$ 300/mês</span>
               </div>
@@ -408,25 +409,25 @@ export default function LandingPage({ onOpenApp }) {
           </div>
 
           {/* Quadro de Projeção Financeira */}
-          <div style={{ background: '#111726', padding: '32px', borderRadius: '12px', border: '0.5px solid rgba(99, 102, 241, 0.3)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '32px', borderRadius: '12px', border: '0.5px solid rgba(99, 102, 241, 0.3)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <span className="mono-label" style={{ fontSize: '10px', color: '#94a3b8' }}>RECEITA RECORRENTE MENSAL (APÓS 12 MESES)</span>
-              <div className="font-headline" style={{ fontSize: '32px', color: '#6366f1', marginTop: '4px' }}>
-                R$ {receitaRecorrenteMensal.toLocaleString('pt-BR')} <span style={{ fontSize: '14px', color: '#94a3b8' }}>/mês ({totalClientesEmUmAno} clientes)</span>
+              <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-muted)' }}>RECEITA RECORRENTE MENSAL (APÓS 12 MESES)</span>
+              <div className="font-headline" style={{ fontSize: '32px', color: 'var(--accent-indigo)', marginTop: '4px' }}>
+                R$ {receitaRecorrenteMensal.toLocaleString('pt-BR')} <span style={{ fontSize: '14px', color: 'var(--fg-muted)' }}>/mês ({totalClientesEmUmAno} clientes)</span>
               </div>
             </div>
 
             <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
-              <span className="mono-label" style={{ fontSize: '10px', color: '#94a3b8' }}>RECEITA ANUAL POTENCIAL (VENDAS + RECORRÊNCIA)</span>
-              <div className="font-headline" style={{ fontSize: '32px', color: '#22c55e', marginTop: '4px' }}>
+              <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-muted)' }}>RECEITA ANUAL POTENCIAL (VENDAS + RECORRÊNCIA)</span>
+              <div className="font-headline" style={{ fontSize: '32px', color: 'var(--estado-sucesso)', marginTop: '4px' }}>
                 R$ {receitaAnualPotencial.toLocaleString('pt-BR')}
               </div>
             </div>
 
             <div style={{ background: 'rgba(236, 72, 153, 0.15)', padding: '16px', borderRadius: '8px', border: '0.5px solid rgba(236, 72, 153, 0.3)' }}>
-              <span className="mono-label" style={{ fontSize: '10px', color: '#ec4899' }}>SEU NÚMERO DA LIBERDADE (RENDA TOTAL MÊS 12)</span>
-              <div className="font-headline" style={{ fontSize: '28px', color: '#ffffff', marginTop: '2px' }}>
-                R$ {numeroLiberdade.toLocaleString('pt-BR')} <span style={{ fontSize: '12px', color: '#cbd5e1' }}>/mês</span>
+              <span className="mono-label" style={{ fontSize: '10px', color: 'var(--accent-rosa)' }}>SEU NÚMERO DA LIBERDADE (RENDA TOTAL MÊS 12)</span>
+              <div className="font-headline" style={{ fontSize: '28px', color: 'var(--fg-white)', marginTop: '2px' }}>
+                R$ {numeroLiberdade.toLocaleString('pt-BR')} <span style={{ fontSize: '12px', color: 'var(--fg-soft)' }}>/mês</span>
               </div>
             </div>
 
@@ -443,24 +444,24 @@ export default function LandingPage({ onOpenApp }) {
       <section id="planos" style={{ padding: '80px 40px 80px 80px', maxWidth: '1400px', margin: '0 auto' }}>
         
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <span className="mono-label" style={{ color: '#6366f1' }}>PLANOS E PREÇOS // SEM FIDELIDADE</span>
-          <h2 className="font-headline" style={{ fontSize: '36px', color: '#ffffff', marginTop: '8px', marginBottom: '16px' }}>
+          <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>PLANOS E PREÇOS // SEM FIDELIDADE</span>
+          <h2 className="font-headline" style={{ fontSize: '36px', color: 'var(--fg-white)', marginTop: '8px', marginBottom: '16px' }}>
             Escolha o plano e comece a vender
           </h2>
 
           {/* Toggle Mensal / Anual */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#0a0e1a', padding: '4px', borderRadius: '30px', border: '0.5px solid rgba(255,255,255,0.15)' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--bg-surface)', padding: '4px', borderRadius: '30px', border: '0.5px solid rgba(255,255,255,0.15)' }}>
             <button 
               onClick={() => setBillingCycle('mensal')}
-              style={{ padding: '8px 20px', borderRadius: '20px', border: 'none', background: billingCycle === 'mensal' ? '#6366f1' : 'transparent', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+              style={{ padding: '8px 20px', borderRadius: '20px', border: 'none', background: billingCycle === 'mensal' ? '#6366f1' : 'transparent', color: 'var(--fg-white)', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
             >
               Mensal
             </button>
             <button 
               onClick={() => setBillingCycle('anual')}
-              style={{ padding: '8px 20px', borderRadius: '20px', border: 'none', background: billingCycle === 'anual' ? '#6366f1' : 'transparent', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{ padding: '8px 20px', borderRadius: '20px', border: 'none', background: billingCycle === 'anual' ? '#6366f1' : 'transparent', color: 'var(--fg-white)', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              Anual <span style={{ background: '#22c55e', color: '#fff', fontSize: '9px', padding: '2px 6px', borderRadius: '10px' }}>-30% OFF</span>
+              Anual <span style={{ background: 'var(--estado-sucesso)', color: 'var(--fg-white)', fontSize: '9px', padding: '2px 6px', borderRadius: '10px' }}>-30% OFF</span>
             </button>
           </div>
         </div>
@@ -468,13 +469,13 @@ export default function LandingPage({ onOpenApp }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: '20px' }}>
           
           {/* Gratuito */}
-          <div className="glass-panel" style={{ padding: '28px', background: '#0a0e1a', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className="glass-panel" style={{ padding: '28px', background: 'var(--bg-surface)', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <h3 className="font-headline" style={{ fontSize: '20px', color: '#ffffff' }}>Gratuito</h3>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 16px' }}>Para explorar a plataforma</p>
-              <div className="font-headline" style={{ fontSize: '32px', color: '#ffffff' }}>Grátis</div>
+              <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)' }}>Gratuito</h3>
+              <p style={{ fontSize: '12px', color: 'var(--fg-muted)', margin: '4px 0 16px' }}>Para explorar a plataforma</p>
+              <div className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)' }}>Grátis</div>
 
-              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: 'var(--fg-soft)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 40 leads por mês</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 5 categorias de negócio</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 2 sites por mês</li>
@@ -488,15 +489,15 @@ export default function LandingPage({ onOpenApp }) {
           </div>
 
           {/* Starter */}
-          <div className="glass-panel" style={{ padding: '28px', background: '#0a0e1a', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className="glass-panel" style={{ padding: '28px', background: 'var(--bg-surface)', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <h3 className="font-headline" style={{ fontSize: '20px', color: '#ffffff' }}>Starter</h3>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 16px' }}>Para freelancers iniciantes</p>
-              <div className="font-headline" style={{ fontSize: '32px', color: '#ffffff' }}>
-                {billingCycle === 'anual' ? 'R$ 33,08' : 'R$ 47,00'} <span style={{ fontSize: '13px', color: '#94a3b8' }}>/mês</span>
+              <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)' }}>Starter</h3>
+              <p style={{ fontSize: '12px', color: 'var(--fg-muted)', margin: '4px 0 16px' }}>Para freelancers iniciantes</p>
+              <div className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)' }}>
+                {billingCycle === 'anual' ? 'R$ 33,08' : 'R$ 47,00'} <span style={{ fontSize: '13px', color: 'var(--fg-muted)' }}>/mês</span>
               </div>
 
-              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: 'var(--fg-soft)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 500 leads por mês</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 12 categorias de negócio</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 15 sites por mês</li>
@@ -510,16 +511,16 @@ export default function LandingPage({ onOpenApp }) {
           </div>
 
           {/* Pro (Mais Popular) */}
-          <div className="glass-panel" style={{ padding: '28px', background: '#111726', borderRadius: '8px', border: '1px solid #6366f1', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 10px 30px rgba(99,102,241,0.2)' }}>
-            <span style={{ position: 'absolute', top: '-12px', right: '20px', background: '#6366f1', color: '#fff', fontSize: '10px', fontWeight: '800', padding: '3px 10px', borderRadius: '10px' }}>MAIS POPULAR</span>
+          <div className="glass-panel" style={{ padding: '28px', background: 'var(--bg-card)', borderRadius: '8px', border: '1px solid #6366f1', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 10px 30px rgba(99,102,241,0.2)' }}>
+            <span style={{ position: 'absolute', top: '-12px', right: '20px', background: 'var(--accent-indigo)', color: 'var(--fg-white)', fontSize: '10px', fontWeight: '800', padding: '3px 10px', borderRadius: '10px' }}>MAIS POPULAR</span>
             <div>
-              <h3 className="font-headline" style={{ fontSize: '20px', color: '#ffffff' }}>Pro</h3>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 16px' }}>Para freelancers ativos</p>
-              <div className="font-headline" style={{ fontSize: '32px', color: '#6366f1' }}>
-                {billingCycle === 'anual' ? 'R$ 66,42' : 'R$ 89,00'} <span style={{ fontSize: '13px', color: '#94a3b8' }}>/mês</span>
+              <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)' }}>Pro</h3>
+              <p style={{ fontSize: '12px', color: 'var(--fg-muted)', margin: '4px 0 16px' }}>Para freelancers ativos</p>
+              <div className="font-headline" style={{ fontSize: '32px', color: 'var(--accent-indigo)' }}>
+                {billingCycle === 'anual' ? 'R$ 66,42' : 'R$ 89,00'} <span style={{ fontSize: '13px', color: 'var(--fg-muted)' }}>/mês</span>
               </div>
 
-              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: 'var(--fg-soft)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#6366f1" /> 1.500 leads por mês</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#6366f1" /> 29 categorias de negócio</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#6366f1" /> 50 sites por mês</li>
@@ -533,15 +534,15 @@ export default function LandingPage({ onOpenApp }) {
           </div>
 
           {/* Agência */}
-          <div className="glass-panel" style={{ padding: '28px', background: '#0a0e1a', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className="glass-panel" style={{ padding: '28px', background: 'var(--bg-surface)', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <h3 className="font-headline" style={{ fontSize: '20px', color: '#ffffff' }}>Agência</h3>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 16px' }}>Para agências e equipes</p>
-              <div className="font-headline" style={{ fontSize: '32px', color: '#ffffff' }}>
-                {billingCycle === 'anual' ? 'R$ 133,08' : 'R$ 179,00'} <span style={{ fontSize: '13px', color: '#94a3b8' }}>/mês</span>
+              <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)' }}>Agência</h3>
+              <p style={{ fontSize: '12px', color: 'var(--fg-muted)', margin: '4px 0 16px' }}>Para agências e equipes</p>
+              <div className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)' }}>
+                {billingCycle === 'anual' ? 'R$ 133,08' : 'R$ 179,00'} <span style={{ fontSize: '13px', color: 'var(--fg-muted)' }}>/mês</span>
               </div>
 
-              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '24px 0', fontSize: '12px', color: 'var(--fg-soft)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 3.000 leads por mês</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> Todas as categorias</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#22c55e" /> 90 sites por mês</li>
@@ -561,8 +562,8 @@ export default function LandingPage({ onOpenApp }) {
       {/* 8. FAQ Accordion */}
       <section style={{ padding: '80px 40px 80px 80px', maxWidth: '1000px', margin: '0 auto', borderTop: '0.5px solid rgba(255,255,255,0.1)' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <span className="mono-label" style={{ color: '#38bdf8' }}>PERGUNTAS FREQUENTES</span>
-          <h2 className="font-headline" style={{ fontSize: '32px', color: '#ffffff', marginTop: '8px' }}>
+          <span className="mono-label" style={{ color: 'var(--accent-cyan)' }}>PERGUNTAS FREQUENTES</span>
+          <h2 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '8px' }}>
             Tire suas dúvidas antes de começar
           </h2>
         </div>
@@ -572,7 +573,7 @@ export default function LandingPage({ onOpenApp }) {
             <div 
               key={index}
               style={{
-                background: '#0a0e1a',
+                background: 'var(--bg-surface)',
                 border: '0.5px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '6px',
                 overflow: 'hidden'
@@ -585,7 +586,7 @@ export default function LandingPage({ onOpenApp }) {
                   padding: '20px 24px',
                   background: 'none',
                   border: 'none',
-                  color: '#ffffff',
+                  color: 'var(--fg-white)',
                   fontSize: '15px',
                   fontWeight: '700',
                   textAlign: 'left',
@@ -600,7 +601,7 @@ export default function LandingPage({ onOpenApp }) {
               </button>
 
               {openFaqIndex === index && (
-                <div style={{ padding: '0 24px 20px', color: '#94a3b8', fontSize: '13.5px', lineHeight: 1.6, borderTop: '0.5px solid rgba(255,255,255,0.08)', paddingTop: '12px' }}>
+                <div style={{ padding: '0 24px 20px', color: 'var(--fg-muted)', fontSize: '13.5px', lineHeight: 1.6, borderTop: '0.5px solid rgba(255,255,255,0.08)', paddingTop: '12px' }}>
                   {faq.a}
                 </div>
               )}

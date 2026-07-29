@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { Sparkles, Link as LinkIcon, Users, Lock, Zap, ChevronUp, ArrowUp, Check, Search } from 'lucide-react';
+import { Sparkles, Link as LinkIcon, Users, Lock, Zap, ChevronUp, ArrowUp, Check, Search, RefreshCw } from 'lucide-react';
 
 export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBack }) {
   const [activeTab, setActiveTab] = useState('lead'); // 'descrever' | 'google' | 'lead'
@@ -25,9 +25,38 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
 
   const selectedLead = leads.find(l => l.id === selectedLeadId) || leads[0];
 
+  const [isGenerating, setIsGenerating] = useState(false);
+
   const handleExecuteGenerate = () => {
+    if (isGenerating) return;
+    setIsGenerating(true);
+
+    let target = selectedLead || { id: 'default', nome: 'Empresa Exemplo', categoria: 'Geral', cidade: 'Brasil' };
+
+    if (activeTab === 'descrever') {
+      target = {
+        id: `prompt_${Date.now()}`,
+        nome: searchTerm.trim() ? searchTerm.slice(0, 40) : 'Projeto por Descrição',
+        categoria: 'IA Custom',
+        cidade: 'Brasil',
+        orientacao: searchTerm
+      };
+    } else if (activeTab === 'google') {
+      target = {
+        id: `gmaps_${Date.now()}`,
+        nome: 'Empresa Google Maps',
+        categoria: 'Google Places',
+        cidade: 'Brasil',
+        googleUrl: searchTerm
+      };
+    }
+
+    target = { ...target, modelo: selectedModel };
+
     if (onGenerateSite) {
-      onGenerateSite(selectedLead);
+      onGenerateSite(target);
+    } else if (onBack) {
+      onBack();
     }
   };
 
@@ -58,14 +87,14 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'radial-gradient(ellipse at 50% 20%, #f4f7fb 0%, #e2e8f0 100%)',
+      background: 'radial-gradient(ellipse at 50% 20%, #f4f7fb 0%, var(--fg-bright) 100%)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '40px 20px',
       position: 'relative',
-      color: '#0f172a',
+      color: 'var(--bg-slate)',
       animation: 'fadeIn 0.3s ease'
     }}>
       
@@ -86,10 +115,10 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
 
       {/* Título & Subtítulo */}
       <div style={{ textAlign: 'center', maxWidth: '640px', marginBottom: '32px', position: 'relative', zIndex: 10 }}>
-        <h1 style={{ fontSize: '34px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: '#0f172a', letterSpacing: '-0.8px', margin: 0 }}>
+        <h1 style={{ fontSize: '34px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: 'var(--bg-slate)', letterSpacing: '-0.8px', margin: 0 }}>
           Site pra negócio fora da busca
         </h1>
-        <p style={{ fontSize: '14.5px', color: '#64748b', marginTop: '10px', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '14.5px', color: 'var(--fg-subtle)', marginTop: '10px', lineHeight: 1.5 }}>
           Descreva o negócio, cole um link do Google ou escolha um lead existente — sem precisar buscar primeiro
         </p>
       </div>
@@ -98,7 +127,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
       <div style={{
         width: '100%',
         maxWidth: '680px',
-        background: '#ffffff',
+        background: 'var(--fg-white)',
         borderRadius: '24px',
         border: '1px solid rgba(226, 232, 240, 0.8)',
         boxShadow: '0 20px 60px -10px rgba(0, 0, 0, 0.08), 0 8px 25px rgba(0,0,0,0.03)',
@@ -112,7 +141,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '4px',
-          background: '#f1f5f9',
+          background: 'var(--fg-lightest)',
           padding: '4px',
           borderRadius: '14px',
           marginBottom: '20px'
@@ -185,81 +214,144 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
           </button>
         </div>
 
-        {/* Conteúdo Interno: Busca & Seleção de Leads */}
+        {/* Conteúdo Interno Condicional pelas Abas */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-          
-          {/* Campo de Busca */}
-          <div style={{ position: 'relative' }}>
-            <input 
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Buscar lead por nome ou cidade..."
-              style={{
-                width: '100%',
-                padding: '12px 16px 12px 40px',
-                borderRadius: '14px',
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                fontSize: '13px',
-                color: '#0f172a',
-                outline: 'none'
-              }}
-            />
-            <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
-          </div>
+          {activeTab === 'descrever' && (
+            <div>
+              <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--fg-subtle)', marginBottom: '6px', display: 'block' }}>
+                Descrição do Negócio ou Prompt
+              </label>
+              <textarea
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Ex: Criar landing page de alta conversão para uma clínica odontológica especializada em implantes em SP..."
+                rows={4}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: '14px',
+                  background: 'var(--fg-quase-branco)',
+                  border: '1px solid #e2e8f0',
+                  fontSize: '13px',
+                  color: 'var(--bg-slate)',
+                  outline: 'none',
+                  resize: 'vertical',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              />
+            </div>
+          )}
 
-          {/* Lista de Leads */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '220px', overflowY: 'auto' }}>
-            {filteredLeads.map(lead => {
-              const isSelected = selectedLeadId === lead.id;
-              const initial = (lead.nome || 'L').charAt(0).toUpperCase();
-
-              return (
-                <div
-                  key={lead.id}
-                  onClick={() => setSelectedLeadId(lead.id)}
+          {activeTab === 'google' && (
+            <div>
+              <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--fg-subtle)', marginBottom: '6px', display: 'block' }}>
+                URL do Google Places / Google Maps
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="https://maps.google.com/?cid=..."
                   style={{
-                    padding: '12px 16px',
+                    width: '100%',
+                    padding: '12px 16px 12px 40px',
                     borderRadius: '14px',
-                    background: isSelected ? '#f1f5f9' : '#ffffff',
-                    border: isSelected ? '1px solid #cbd5e1' : '1px solid #f1f5f9',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease'
+                    background: 'var(--fg-quase-branco)',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '13px',
+                    color: 'var(--bg-slate)',
+                    outline: 'none'
                   }}
-                >
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
-                    background: '#e2e8f0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    color: '#475569'
-                  }}>
-                    {initial}
-                  </div>
+                />
+                <LinkIcon size={16} color="#94a3b8" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+              </div>
+            </div>
+          )}
 
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
-                      {lead.nome}
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '1px' }}>
-                      {lead.categoria} · {lead.cidade}
-                    </div>
-                  </div>
+          {activeTab === 'lead' && (
+            <>
+              {/* Campo de Busca */}
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Buscar lead por nome ou cidade..."
+                  aria-label="Buscar lead por nome ou cidade"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px 12px 40px',
+                    borderRadius: '14px',
+                    background: 'var(--fg-quase-branco)',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '13px',
+                    color: 'var(--bg-slate)',
+                    outline: 'none'
+                  }}
+                />
+                <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+              </div>
 
-                  {isSelected && <Check size={16} color="#0070f3" />}
-                </div>
-              );
-            })}
-          </div>
+              {/* Lista de Leads */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '220px', overflowY: 'auto' }}>
+                {filteredLeads.length === 0 ? (
+                  <div style={{ padding: '24px', textAlign: 'center', color: 'var(--fg-muted)', fontSize: '13px' }}>
+                    Nenhum lead encontrado com esse termo.
+                  </div>
+                ) : (
+                  filteredLeads.map(lead => {
+                    const isSelected = selectedLeadId === lead.id;
+                    const initial = (lead.nome || 'L').charAt(0).toUpperCase();
+
+                    return (
+                      <div
+                        key={lead.id}
+                        onClick={() => setSelectedLeadId(lead.id)}
+                        style={{
+                          padding: '12px 16px',
+                          borderRadius: '14px',
+                          background: isSelected ? '#f1f5f9' : '#ffffff',
+                          border: isSelected ? '1px solid #cbd5e1' : '1px solid #f1f5f9',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <div style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '8px',
+                          background: 'var(--fg-bright)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '12px',
+                          fontWeight: '700',
+                          color: 'var(--fg-fraco)'
+                        }}>
+                          {initial}
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--bg-slate)' }}>
+                            {lead.nome}
+                          </div>
+                          <div style={{ fontSize: '11px', color: 'var(--fg-subtle)', marginTop: '1px' }}>
+                            {lead.categoria} · {lead.cidade}
+                          </div>
+                        </div>
+
+                        {isSelected && <Check size={16} color="#0070f3" />}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Rodapé do Card: Seletor de Modelo Pop-up & Botão Gerar */}
@@ -279,9 +371,9 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
               style={{
                 padding: '10px 16px',
                 borderRadius: '12px',
-                background: '#f1f5f9',
+                background: 'var(--fg-lightest)',
                 border: '1px solid #e2e8f0',
-                color: '#0f172a',
+                color: 'var(--bg-slate)',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -303,7 +395,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                 left: 0,
                 marginBottom: '8px',
                 width: '320px',
-                background: '#ffffff',
+                background: 'var(--fg-white)',
                 borderRadius: '16px',
                 border: '1px solid #e2e8f0',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
@@ -340,10 +432,10 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                     >
                       <IconComp size={16} color={isOptSelected ? '#0070f3' : '#64748b'} style={{ marginTop: '2px' }} />
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--bg-slate)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                           {opt.title} {opt.locked && <Lock size={12} color="#94a3b8" />}
                         </div>
-                        <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', lineHeight: 1.4 }}>
+                        <div style={{ fontSize: '11px', color: 'var(--fg-subtle)', marginTop: '2px', lineHeight: 1.4 }}>
                           {opt.desc}
                         </div>
                       </div>
@@ -354,29 +446,40 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
             )}
           </div>
 
-          <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+          <span style={{ fontSize: '12px', color: 'var(--fg-muted)' }}>
             Escolha um modelo pra começar
           </span>
 
           {/* Botão Gerar */}
           <button
             onClick={handleExecuteGenerate}
+            disabled={isGenerating}
             style={{
-              padding: '10px 20px',
+              padding: '10px 22px',
               borderRadius: '12px',
-              background: '#0070f3',
+              background: isGenerating ? '#3b82f6' : '#0070f3',
               border: 'none',
-              color: '#ffffff',
+              color: 'var(--fg-white)',
               fontSize: '13px',
               fontWeight: '700',
-              cursor: 'pointer',
+              cursor: isGenerating ? 'wait' : 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 4px 14px rgba(0, 112, 243, 0.35)'
+              gap: '8px',
+              boxShadow: '0 4px 14px rgba(0, 112, 243, 0.35)',
+              opacity: isGenerating ? 0.85 : 1,
+              transition: 'all 0.2s ease'
             }}
           >
-            <ArrowUp size={15} /> Gerar
+            {isGenerating ? (
+              <>
+                <RefreshCw size={15} className="animate-spin" /> Compilando site...
+              </>
+            ) : (
+              <>
+                <ArrowUp size={15} /> Gerar
+              </>
+            )}
           </button>
         </div>
 

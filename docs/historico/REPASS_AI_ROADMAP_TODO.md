@@ -1,3 +1,8 @@
+> **HISTÓRICO — não é referência.**
+> CONTEM ERRO: diz React 19 (e 18.2) e trata modal_engine como parte da arquitetura, quando ele tem zero referencias no codigo.
+> A referência atual está em [../ARQUITETURA.md](../ARQUITETURA.md) e
+> [../ROADMAP.md](../ROADMAP.md). Índice em [../README.md](../README.md).
+
 # 🚀 REPASS AI — DASHBOARD ROADMAP DE ENGENHARIA & TODO LIST
 
 > **Plataforma**: REPASS AI — B2B Commercial Intelligence & AI Landing Page Generator  

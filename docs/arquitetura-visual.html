@@ -1,0 +1,670 @@
+<title>REPASS AI — Mapa de Arquitetura</title>
+
+<style>
+  :root {
+    --ground: #050711;
+    --surface: #0a0e1a;
+    --card: #111726;
+    --line: rgba(148, 163, 184, 0.16);
+    --fg: #f1f5f9;
+    --fg-muted: #94a3b8;
+    --fg-subtle: #64748b;
+    --accent: #6366f1;
+    --accent-2: #38bdf8;
+    --ok: #22c55e;
+    --wait: #f59e0b;
+    --stop: #f87171;
+
+    --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, monospace;
+    --sans: "Inter Tight", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+    --measure: 68ch;
+    --step: clamp(0.5rem, 1.6vw, 1rem);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --ground: #f6f7fb;
+      --surface: #ffffff;
+      --card: #ffffff;
+      --line: rgba(15, 23, 42, 0.12);
+      --fg: #0f172a;
+      --fg-muted: #475569;
+      --fg-subtle: #64748b;
+      --accent: #4f46e5;
+      --accent-2: #0284c7;
+      --ok: #15803d;
+      --wait: #b45309;
+      --stop: #b91c1c;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #f6f7fb; --surface: #ffffff; --card: #ffffff;
+    --line: rgba(15, 23, 42, 0.12);
+    --fg: #0f172a; --fg-muted: #475569; --fg-subtle: #64748b;
+    --accent: #4f46e5; --accent-2: #0284c7;
+    --ok: #15803d; --wait: #b45309; --stop: #b91c1c;
+  }
+  :root[data-theme="dark"] {
+    --ground: #050711; --surface: #0a0e1a; --card: #111726;
+    --line: rgba(148, 163, 184, 0.16);
+    --fg: #f1f5f9; --fg-muted: #94a3b8; --fg-subtle: #64748b;
+    --accent: #6366f1; --accent-2: #38bdf8;
+    --ok: #22c55e; --wait: #f59e0b; --stop: #f87171;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--fg);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4.5rem) clamp(1rem, 4vw, 2.5rem) 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 6vw, 5rem);
+  }
+
+  .prose { max-width: var(--measure); }
+
+  /* ---------- cabeçalho ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  h1 {
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    letter-spacing: -0.035em;
+    line-height: 1.03;
+    text-wrap: balance;
+    font-weight: 800;
+    margin-bottom: 0.7rem;
+  }
+  .lede { color: var(--fg-muted); font-size: 1.03rem; }
+
+  h2 {
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-wrap: balance;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 1.4rem;
+  }
+  h2 .n {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+  p { color: var(--fg-muted); }
+  p + p { margin-top: 0.8rem; }
+  strong { color: var(--fg); font-weight: 650; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--accent-2);
+  }
+
+  section { display: flex; flex-direction: column; gap: 1.2rem; }
+
+  /* ---------- placar ---------- */
+  .placar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .placar div { background: var(--surface); padding: 1.1rem 1.2rem; }
+  .placar .v {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+  .placar .k {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin-top: 0.35rem;
+  }
+  .placar .antes { color: var(--fg-subtle); font-size: 0.72rem; margin-top: 0.5rem; }
+
+  /* ---------- diagrama ---------- */
+  .diagrama {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: clamp(1rem, 3vw, 2rem);
+    overflow-x: auto;
+  }
+  .diagrama pre.mermaid { background: none; border: 0; padding: 0; margin: 0; }
+
+  /* ---------- tabela ---------- */
+  .tabela-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+  th, td {
+    text-align: left;
+    padding: 0.7rem 0.95rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    background: var(--card);
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: 0; }
+  td { color: var(--fg-muted); }
+  td:first-child { color: var(--fg); font-weight: 550; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- selo de estado ---------- */
+  .selo {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2em 0.55em;
+    border-radius: 3px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .selo.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+  .selo.wait { color: var(--wait); border-color: color-mix(in srgb, var(--wait) 45%, transparent); }
+  .selo.stop { color: var(--stop); border-color: color-mix(in srgb, var(--stop) 45%, transparent); }
+
+  /* ---------- protecoes ---------- */
+  .protecoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px;
+               background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .protecao { background: var(--surface); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .protecao .t { font-weight: 650; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+  .protecao .t::before {
+    content: ""; width: 3px; height: 1.05em; background: var(--stop); border-radius: 2px; flex-shrink: 0;
+  }
+  .protecao .d { font-size: 0.83rem; color: var(--fg-muted); }
+  .protecao .d em { color: var(--fg-subtle); font-style: normal; font-family: var(--mono); font-size: 0.94em; }
+
+  /* ---------- rodape ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0.04em;
+  }
+
+  ul { padding-left: 1.1rem; color: var(--fg-muted); font-size: 0.9rem; }
+  li + li { margin-top: 0.35rem; }
+  li::marker { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="prose">
+    <div class="eyebrow">Documentação técnica · 27 jul 2026</div>
+    <h1>REPASS AI — Mapa de Arquitetura</h1>
+    <p class="lede">
+      Como o sistema encontra negócios sem site, gera uma página para cada um e
+      organiza a venda. Todo número aqui foi medido no repositório, não estimado.
+    </p>
+  </header>
+
+  <section>
+    <div class="placar">
+      <div>
+        <div class="v">24.264</div>
+        <div class="k">linhas escritas</div>
+        <div class="antes">sem contar arquivo gerado</div>
+      </div>
+      <div>
+        <div class="v" style="color: var(--ok)">14<span style="font-size:0.6em"> ms</span></div>
+        <div class="k">por site gerado</div>
+        <div class="antes">antes: 1.200 ms</div>
+      </div>
+      <div>
+        <div class="v">8</div>
+        <div class="k">templates pt-BR</div>
+        <div class="antes">antes: 1, em francês</div>
+      </div>
+      <div>
+        <div class="v">R$ 0,00</div>
+        <div class="k">custo por site</div>
+        <div class="antes">IA só na importação</div>
+      </div>
+      <div>
+        <div class="v">27</div>
+        <div class="k">testes automáticos</div>
+        <div class="antes">23 API · 4 motor</div>
+      </div>
+      <div>
+        <div class="v">935</div>
+        <div class="k">trechos traduzidos</div>
+        <div class="antes">nenhum perdido</div>
+      </div>
+      <div>
+        <div class="v">65</div>
+        <div class="k">issues no Linear</div>
+        <div class="antes">13 projetos · 6 documentos</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">00</span> Sobre o número de linhas</h2>
+    <p class="prose">
+      O repositório inteiro soma <strong>371.638 linhas</strong>, e ferramentas
+      de contagem costumam apresentar esse número como "tamanho do projeto".
+      Ele não descreve trabalho de engenharia.
+    </p>
+    <div class="tabela-wrap">
+      <table>
+        <thead><tr><th>Origem</th><th>Linhas</th><th>O que é</th></tr></thead>
+        <tbody>
+          <tr><td>Código que escrevemos</td><td class="num">24.264</td><td>Python, JSX, JS, CSS — 109 arquivos</td></tr>
+          <tr><td>Binários contados como texto</td><td class="num">71.084</td><td>PNG, um MP4 e dois ZIP</td></tr>
+          <tr><td>Componentes minerados</td><td class="num">36.330</td><td>biblioteca MIT de terceiros</td></tr>
+          <tr><td>Templates preparados</td><td class="num">38.120</td><td>HTML e planos de tradução gerados</td></tr>
+          <tr><td>Sites gerados e amostras</td><td class="num">29.315</td><td>saída do compilador</td></tr>
+          <tr><td>package-lock e afins</td><td class="num">9.101</td><td>travas de dependência</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">
+      Um vídeo de 19 mil "linhas" tem esse tamanho porque o contador soma bytes
+      de quebra de linha dentro do binário. <strong>Só a primeira linha da
+      tabela descreve código escrito por alguém</strong> — e é o primeiro
+      número que um revisor confere.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">01</span> O produto em três passos</h2>
+    <div class="diagrama">
+<pre class="mermaid">
+flowchart LR
+    A["Encontrar · Google Places"] --> B["Gerar site · 8 templates"]
+    B --> C["Vender · CRM + WhatsApp"]
+</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">02</span> Mapa do sistema</h2>
+    <div class="diagrama">
+<pre class="mermaid">
+flowchart TB
+    UI["Painel React 18 · 14 telas"]
+    GATE["Portão das rotas caras · token + limite de taxa"]
+    SCAN["Varredura OSINT"]
+    GEN["Geração de sites"]
+    SITES["CRUD de sites"]
+    PLACES["places_engine"]
+    COMP["template_compiler"]
+    HYB["hybrid_engine"]
+    LLM["llm_gateway"]
+    SUPA[("Supabase")]
+    R2[("Cloudflare R2")]
+    DISCO[("Templates · preparados")]
+
+    UI --> GATE
+    GATE --> SCAN
+    GATE --> GEN
+    GATE --> SITES
+    SCAN --> PLACES
+    GEN --> COMP
+    GEN --> HYB
+    COMP --> DISCO
+    COMP --> AUD["template_auditor · read-only"]
+    HYB -.->|"só na exceção"| LLM
+    SITES --> SUPA
+    GEN --> R2
+</pre>
+    </div>
+    <p class="prose">
+      A IA <strong>não participa</strong> da geração de sites. Ela roda uma vez
+      por template, na importação. Gerar site é troca de texto.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">03</span> Pipeline de templates — 5 camadas</h2>
+    <p class="prose">
+      A ideia central do produto: separar o que é caro e raro (traduzir) do que
+      é barato e constante (gerar).
+    </p>
+    <div class="diagrama">
+<pre class="mermaid">
+flowchart TB
+    subgraph raro["UMA VEZ POR TEMPLATE — com IA · ~90s · ~R$ 0,40"]
+        direction TB
+        C1["1 · Catálogo · nicho → template"]
+        C2["2 · Preparador · remove rastreador · extrai por posição"]
+        C3["3 · Classificador · traduzir · variável · adaptar"]
+        C1 --> C2 --> C3
+    end
+    subgraph rapido["TODA GERAÇÃO DE SITE — sem IA · 14ms · R$ 0,00"]
+        direction TB
+        C5["5 · Seletor · casa nicho do lead"]
+        C4["4 · Compilador · preenche · troca mídia · audita"]
+        C5 --> C4
+    end
+    C3 -->|"template.pt.html"| C5
+    C4 --> OUT["Site do cliente"]
+</pre>
+    </div>
+
+    <h3>Por que o texto é trocado por posição, e não por frase</h3>
+    <p class="prose">
+      O motor antigo procurava frases conhecidas e substituía. Isso exigia uma
+      regra à mão por frase, por template, por idioma — e os 8 templates
+      chegaram em <strong>6 idiomas</strong>: inglês, catalão, alemão, búlgaro,
+      espanhol e francês. Seriam cerca de 200 regras impossíveis de revisar.
+    </p>
+    <p class="prose">
+      Hoje cada trecho é localizado pelo deslocamento em bytes dentro do HTML.
+      Recortar e colar por posição funciona igual em qualquer idioma.
+    </p>
+
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr><th>Destino</th><th>O que é</th><th>Exemplo real</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>traduzir</td><td>interface do template</td><td class="num">Home → Início</td></tr>
+          <tr><td>variavel</td><td>dado do negócio</td><td class="num">Little Latte Cafe → {{NOME}}</td></tr>
+          <tr><td>adaptar</td><td>conteúdo do dono original</td><td class="num">Strawberry Dirty Soda → Pão de Queijo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">04</span> A auditoria que bloqueia</h2>
+    <div class="diagrama">
+<pre class="mermaid">
+flowchart TB
+    IN["HTML compilado"] --> A1{"idioma pt-BR?"}
+    A1 -->|não| X["BLOQUEIA · site não é salvo"]
+    A1 -->|sim| A2{"palavra estrangeira?"}
+    A2 -->|sim| X
+    A2 -->|não| A3{"moeda estrangeira?"}
+    A3 -->|sim| X
+    A3 -->|não| A4{"dado do negócio original?"}
+    A4 -->|sim| X
+    A4 -->|não| A5{"marcador vazio?"}
+    A5 -->|sim| X
+    A5 -->|não| OK["grava em disco"]
+</pre>
+    </div>
+
+    <p class="prose">
+      Cada proteção nasceu de um defeito que <strong>chegou a acontecer</strong>.
+      Estão listadas aqui para não serem removidas por parecerem redundantes.
+    </p>
+
+    <div class="protecoes">
+      <div class="protecao">
+        <div class="t">Idioma do documento</div>
+        <div class="d">Todo site declarava ser francês para o Google — <em>&lt;html lang="fr"&gt;</em>. Anulava a promessa do produto.</div>
+      </div>
+      <div class="protecao">
+        <div class="t">Moeda estrangeira</div>
+        <div class="d">Padaria em Franca com cardápio em dólar: <em>$6</em>, <em>$7</em>, <em>$5</em>.</div>
+      </div>
+      <div class="protecao">
+        <div class="t">Dados do negócio original</div>
+        <div class="d">Telefone <em>+31 772 086 200</em> e <em>hello@exoape.com</em> no site do cliente.</div>
+      </div>
+      <div class="protecao">
+        <div class="t">Consistência de variáveis</div>
+        <div class="d">A IA traduziu a marca ao pé da letra: <em>Little Latte Cafe → "Café com Leite Pequeno"</em>.</div>
+      </div>
+      <div class="protecao">
+        <div class="t">Preço determinístico</div>
+        <div class="d">A IA <strong>inventou</strong> valores: <em>"Entrada: R$ 1.000.000"</em> numa pousada. Todo preço vira "Sob consulta".</div>
+      </div>
+      <div class="protecao">
+        <div class="t">Alinhamento plano × extração</div>
+        <div class="d">Ids deslocados colariam cada texto no lugar errado — página embaralhada, sem erro nenhum aparecendo.</div>
+      </div>
+    </div>
+
+    <p class="prose">
+      <strong>A auditoria não julga aparência.</strong> Ela garante que não há
+      resíduo; não garante que o layout está bonito. O texto sobrepondo o menu
+      passou por ela e só foi pego olhando a tela.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">05</span> Varredura de leads</h2>
+    <div class="diagrama">
+<pre class="mermaid">
+sequenceDiagram
+    participant O as Operador
+    participant A as API
+    participant G as Google Places
+    participant S as Supabase
+
+    O->>A: POST /api/leads/scan + token
+    A->>A: limite de taxa (IP, depois usuário)
+    A->>A: token válido? senão 401
+    A->>S: cota do plano? senão 429
+    A->>G: busca por nicho e cidade
+    G-->>A: lugares, fotos, avaliações
+    A->>A: pontua (sem site = oportunidade)
+    A->>S: grava os leads
+    A-->>O: leads + modo (real ou demo)
+</pre>
+    </div>
+    <p class="prose">
+      Quando a busca real falha, o sistema mostra exemplos de layout — com
+      contato <strong>vazio</strong> e selo de demonstração. Nunca inventa
+      telefone: um número sorteado pertence a alguém de verdade.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">06</span> Geração de um site</h2>
+    <div class="diagrama">
+<pre class="mermaid">
+sequenceDiagram
+    participant O as Operador
+    participant A as API
+    participant H as hybrid_engine
+    participant C as template_compiler
+    participant R as R2
+
+    O->>A: POST /api/site/generate
+    A->>H: schema pelas regras do nicho
+    H-->>A: título, CTA, diferenciais
+    A->>C: compila com o schema
+    C->>C: seleciona template pelo nicho
+    C->>C: preenche marcadores
+    C->>C: troca imagens e vídeo
+    C->>C: ajusta idioma e SEO
+    C->>C: AUDITA
+    alt reprovada
+        C-->>A: exceção
+        A-->>O: 422 em português
+    else aprovada
+        A->>R: sobe para o R2
+        A-->>O: preview + métricas
+    end
+</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">07</span> Navegação do painel</h2>
+    <div class="diagrama">
+<pre class="mermaid">
+flowchart TB
+    LP["Landing"] --> LOGIN["Login"]
+    LOGIN --> DASH["Painel"]
+    DASH --> LEADS["Scanner de Leads"]
+    DASH --> CRM["Funil de Vendas"]
+    DASH --> PROJ["Meus Sites"]
+    LEADS -->|"Enviar para CRM · não troca de aba"| LEADS
+    LEADS -->|"Criar site"| EDITOR["Editor de Site"]
+    LEADS --> WIZARD["Criar Site"]
+    CRM --> BULK["Abordagem 1-a-1"]
+    WIZARD --> EDITOR
+    PROJ --> EDITOR
+    EDITOR --> CHAT["Chatbot Agêntico"]
+    DASH --> TPL["Loja de Templates"]
+    DASH --> OUTRAS["Motor · Agenda · Faturamento · Indicações · Ranking"]
+</pre>
+    </div>
+    <p class="prose">
+      Scanner, Editor e Funil formam o caminho que gera receita:
+      <strong>encontra → gera → vende</strong>. O resto é apoio.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">08</span> Cobertura por nicho</h2>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr><th>Categoria do lead</th><th>Template</th><th>Tempo</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Padaria &amp; Cafeteria</td><td>Cafeteria e Padaria</td><td class="num">21 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Barbearia</td><td>Barbearia Premium</td><td class="num">16 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Salão de Unhas</td><td>Studio de Beleza</td><td class="num">14 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Pizzaria</td><td>Pizzaria e Delivery</td><td class="num">22 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Restaurante</td><td>Pizzaria e Delivery</td><td class="num">19 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Joalheria</td><td>Joalheria e Loja Premium</td><td class="num">7 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Construção</td><td>Construção e Serviços</td><td class="num">18 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Oficina Mecânica</td><td>Construção e Serviços</td><td class="num">19 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Pousada</td><td>Pousada e Hospedagem</td><td class="num">13 ms</td><td><span class="selo ok">aprovado</span></td></tr>
+          <tr><td>Petshop</td><td>Genérico Editorial</td><td class="num">8 ms</td><td><span class="selo wait">sem template próprio</span></td></tr>
+          <tr><td>Academia</td><td>Genérico Editorial</td><td class="num">8 ms</td><td><span class="selo wait">sem template próprio</span></td></tr>
+          <tr><td>Comércio geral</td><td>Genérico Editorial</td><td class="num">9 ms</td><td><span class="selo wait">sem template próprio</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <section>
+    <h2><span class="n">08</span> Template base próprio</h2>
+    <p class="prose">
+      Os 8 templates da 77lib funcionam, mas todos carregam Tailwind, ícones e
+      fontes de servidores externos. Se qualquer um cair, o site do cliente
+      aparece quebrado — e quem responde por isso é você, não o CDN.
+    </p>
+    <p class="prose">
+      Por isso existe <strong>repass-base-local</strong>: escrito por nós, em
+      português, com <strong>zero dependência externa</strong>. É o padrão para
+      qualquer nicho sem template específico.
+    </p>
+    <div class="tabela-wrap">
+      <table>
+        <thead><tr><th>Seção do template de agência</th><th>Virou</th></tr></thead>
+        <tbody>
+          <tr><td>"Realizações" com 4 projetos fictícios</td><td>Serviços, vindos das regras do nicho</td></tr>
+          <tr><td>Vídeo institucional de terceiro</td><td>Nosso espaço, com foto do lugar</td></tr>
+          <tr><td>"Na mídia" · Behance · Dribbble</td><td>Avaliações do Google, com nota real</td></tr>
+          <tr><td>Menu com 4 links abrindo o WhatsApp</td><td>Menu que rola até cada seção</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">
+      Ele pula as camadas 2 e 3 do pipeline: já nasce em pt-BR com os
+      marcadores no lugar, então não precisa de extração nem de IA.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">09</span> Ferramentas de manutenção</h2>
+    <div class="tabela-wrap">
+      <table>
+        <thead><tr><th>Ferramenta</th><th>O que faz</th></tr></thead>
+        <tbody>
+          <tr><td>template_auditor.py</td><td>diagnostica estrutura, responsividade, dependência externa e acessibilidade dos templates. <strong>Não altera arquivo</strong> — mexer em 8 templates às cegas é o caminho mais rápido para quebrar o que funciona</td></tr>
+          <tr><td>verificar-tokens.mjs</td><td>reprova cor hex escrita à mão no JSX. Existe porque o número subiu de 619 para 870 entre sprints, sem trava</td></tr>
+          <tr><td>linear-sync.mjs</td><td>cria as issues no Linear a partir dos CSVs. Idempotente</td></tr>
+          <tr><td>linear-docs.mjs</td><td>publica a documentação como Documents no Linear. Atualiza em vez de duplicar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">10</span> O que ainda não foi verificado</h2>
+    <p class="prose">
+      Honestidade sobre os limites do que foi testado importa mais que o placar
+      verde. Nada disso precisa de código novo — precisa de olho.
+    </p>
+    <ul class="prose">
+      <li>Aparência das 12 páginas geradas em navegador real</li>
+      <li>Lighthouse no painel e num site gerado</li>
+      <li>Ciclo login → gerar site → recarregar, com conta de verdade</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">11</span> Dívida conhecida</h2>
+    <div class="tabela-wrap">
+      <table>
+        <thead><tr><th>Item</th><th>Impacto</th></tr></thead>
+        <tbody>
+          <tr><td>/api/site/clone não clona</td><td>devolve schema fixo, mas aparece na interface como se funcionasse</td></tr>
+          <tr><td>Tailwind vem de CDN externo</td><td>site do cliente quebra se o CDN cair</td></tr>
+          <tr><td>Loja e catálogo são listas separadas</td><td>template novo na loja não aparece no gerador</td></tr>
+          <tr><td>modal_engine.py</td><td>zero referências — código morto</td></tr>
+          <tr><td>6 except Exception genéricos</td><td>mascaram a causa real da falha</td></tr>
+          <tr><td>Site gerado sem &lt;main&gt;</td><td>hierarquia de títulos pula um nível</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    REPASS AI · backlog completo no Linear · gerado em 27/07/2026
+  </footer>
+
+</div>

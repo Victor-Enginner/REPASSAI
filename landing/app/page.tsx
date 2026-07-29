@@ -10,10 +10,10 @@ import { GlassButton } from "@/components/ui/glass-button"
 import { PixelIcon } from "@/components/pixel-icon"
 import { URL_PAINEL, PRECOS_DEFINIDOS } from "@/lib/config"
 
-// Video de fundo do hero, herdado do template. Continua hospedado no blob da
-// Vercel de origem -- ver README, secao "Video do hero".
-const VIDEO_HERO =
-  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/agentic-hero-9yW3wnTNMfn2U6lsVhTTZSJFEvAoSj.mp4"
+// Video de fundo do hero. Servido pelo proprio site: antes vinha do blob da
+// Vercel do template de origem, que e armazenamento de terceiro -- se o
+// arquivo sumisse de la, o hero ficava sem fundo para todos os visitantes.
+const VIDEO_HERO = "/video/hero.mp4"
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)

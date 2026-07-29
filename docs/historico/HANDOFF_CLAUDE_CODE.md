@@ -1,3 +1,8 @@
+> **HISTÓRICO — não é referência.**
+> Passagem de contexto entre sessoes, versao anterior.
+> A referência atual está em [../ARQUITETURA.md](../ARQUITETURA.md) e
+> [../ROADMAP.md](../ROADMAP.md). Índice em [../README.md](../README.md).
+
 # REPASS AI — Documentação de Handoff & Guia de Arquitetura de Produção
 
 > **Destinado a**: Claude Code / AGY Agent / Equipe de Engenharia Sênior no Modo **Ultra Code**.  

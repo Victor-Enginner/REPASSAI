@@ -207,9 +207,44 @@ export default function App() {
     obterConfig().then(setAuthConfig);
   }, []);
 
+  // 🚪 Auth gate disabled – o aplicativo agora funciona em modo single‑user sem necessidade de login.
+  // O efeito que redirecionava a página de login foi removido.
+  // Todas as rotas são acessíveis diretamente.
+
+
+  /**
+   * Recebe o resultado da varredura e o guarda no estado do aplicativo.
+   *
+   * Precisa viver aqui, e não dentro do LeadsView: aquela aba desmonta ao
+   * trocar de menu, então guardar lá fazia a varredura inteira desaparecer
+   * quando o operador ia ao Funil e voltava.
+   *
+   * Leads já enviados ao CRM são preservados — a varredura nova não pode
+   * apagar o trabalho de triagem que já foi feito.
+   */
+  const handleLeadsScanned = (novosLeads) => {
+    setLeads((anteriores) => {
+      const trabalhados = anteriores.filter((l) => l.enviado_crm);
+      const idsTrabalhados = new Set(trabalhados.map((l) => l.id));
+      return [...trabalhados, ...novosLeads.filter((l) => !idsTrabalhados.has(l.id))];
+    });
+  };
+
   const handleSendToCRM = (leadId) => {
-    setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status_crm: 'Abordados' } : l));
-    setCurrentTab('crm');
+    // Não troca de aba: enviar para o CRM é ação de triagem em lote. Levar o
+    // operador ao funil a cada envio o obrigava a voltar e reencontrar onde
+    // estava na lista.
+    //
+    // `enviado_crm` é um marcador próprio, e não um valor de `status_crm`,
+    // porque esse campo tem vocabulários diferentes em cada origem: o backend
+    // devolve "Base", o gerador local usa "Leads em Aberto" e o painel fala
+    // em "Abordados". Filtrar por ele deixava a lista errada — e marcar
+    // "Abordados" escondia o lead do quadro, que não tem essa coluna.
+    setLeads(prev => prev.map(l => (
+      l.id === leadId
+        ? { ...l, enviado_crm: true, status_crm: 'Leads em Aberto' }
+        : l
+    )));
   };
 
   const handleGenerateSite = (lead) => {
@@ -217,29 +252,21 @@ export default function App() {
     setCurrentTab('editor');
   };
 
-  // Modo multiusuário ligado e ninguém logado -> tela de acesso.
-  // Enquanto `authConfig` é null estamos só verificando; não mostramos
-  // login para não piscar a tela de quem roda single-user.
-  if (authConfig?.auth_ativo && !authConfig?.usuario) {
-    return (
-      <Suspense fallback={<div style={{ minHeight: '100vh', background: '#05070f' }} />}>
-        <LoginView onAutenticado={recarregarAuth} />
-      </Suspense>
-    );
-  }
+  // Auth gate disabled – acesso direto ao aplicativo sem necessidade de login.
+  // O bloco que exibia a tela de login foi removido.
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: '#05070f' }}>
 
       {/* Sidebar Transparente em TODAS as sessões do aplicativo */}
-      {currentTab !== 'landing' && (
+      {currentTab !== 'landing' && currentTab !== 'login' && (
         <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
       )}
 
       <main style={{
         flex: 1,
         minWidth: 0,
-        marginLeft: (currentTab !== 'landing' && !ehMobile) ? '260px' : 0,
+        marginLeft: (currentTab !== 'landing' && currentTab !== 'login' && !ehMobile) ? '260px' : 0,
         overflowY: 'auto',
         position: 'relative',
         zIndex: 10,
@@ -250,7 +277,20 @@ export default function App() {
         <ViewErrorBoundary nome={currentTab}>
             {currentTab === 'landing' && (
               <PainelSimples>
-                <LandingPage onOpenApp={() => setCurrentTab('dashboard')} />
+                <LandingPage onOpenApp={() => setCurrentTab('login')} />
+              </PainelSimples>
+            )}
+
+            {currentTab === 'login' && (
+              <PainelSimples>
+                <LoginView
+                  onAutenticado={() => {
+                    recarregarAuth();
+                    setCurrentTab('dashboard');
+                  }}
+                  onVoltarLanding={() => setCurrentTab('landing')}
+                  onBypass={() => setCurrentTab('dashboard')}
+                />
               </PainelSimples>
             )}
 
@@ -268,6 +308,7 @@ export default function App() {
               <PainelSimples>
                 <LeadsView
                   leads={leads}
+                  onLeadsScanned={handleLeadsScanned}
                   onSendToCRM={handleSendToCRM}
                   onGenerateSite={handleGenerateSite}
                 />
@@ -278,9 +319,13 @@ export default function App() {
               <PainelKeepAlive ativo={currentTab === 'wizard'}>
                 <CreateSiteWizardView
                   onClose={() => setCurrentTab('leads')}
+                  onGenerateSite={(customLead) => {
+                    setSelectedLeadForEditor(customLead);
+                    setCurrentTab('projetos');
+                  }}
                   onGenerate={(customLead) => {
                     setSelectedLeadForEditor(customLead);
-                    setCurrentTab('editor');
+                    setCurrentTab('projetos');
                   }}
                 />
               </PainelKeepAlive>
@@ -290,7 +335,7 @@ export default function App() {
               <PainelSimples>
                 <SiteEditorView
                   lead={selectedLeadForEditor || leads[0]}
-                  onBack={() => setCurrentTab('leads')}
+                  onBack={() => setCurrentTab('projetos')}
                 />
               </PainelSimples>
             )}
@@ -330,7 +375,13 @@ export default function App() {
 
             {montarLeve('projetos') && (
               <PainelKeepAlive ativo={currentTab === 'projetos'}>
-                <ProjectsView onGenerateSite={handleGenerateSite} />
+                <ProjectsView
+                  onEditSite={(leadObj) => {
+                    setSelectedLeadForEditor(leadObj);
+                    setCurrentTab('editor');
+                  }}
+                  onNavigateWizard={() => setCurrentTab('wizard')}
+                />
               </PainelKeepAlive>
             )}
 
@@ -352,8 +403,11 @@ export default function App() {
               </PainelKeepAlive>
             )}
         </ViewErrorBoundary>
-        {/* Widget Flutuante do Chatbot Agentico (Canto Inferior Direito) */}
-        <AgenticChatbotWidget />
+
+        {/* Widget Flutuante do Chatbot Agentico (Escondido em Landing e Login) */}
+        {currentTab !== 'landing' && currentTab !== 'login' && (
+          <AgenticChatbotWidget />
+        )}
       </main>
 
       {/* Atalho para as 4 telas do fluxo principal. Só no celular. */}

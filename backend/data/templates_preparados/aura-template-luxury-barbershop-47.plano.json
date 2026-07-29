@@ -1,0 +1,842 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "ST. JOCP | Experiencia de Barbería Premium",
+      "destino": "traduzir",
+      "texto": "Barbearia Premium | Experiência de Barbearia Premium"
+    },
+    {
+      "id": 1,
+      "tag": "a",
+      "original": "ST. JOCP",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "La Experiencia",
+      "destino": "traduzir",
+      "texto": "A Experiência"
+    },
+    {
+      "id": 3,
+      "tag": "a",
+      "original": "Servicios",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Galería",
+      "destino": "traduzir",
+      "texto": "Galeria"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Reservar Cita",
+      "destino": "traduzir",
+      "texto": "Reservar Consulta"
+    },
+    {
+      "id": 6,
+      "tag": "?",
+      "original": "Exclusividad Masculina",
+      "destino": "adaptar",
+      "texto": "Exclusividade Masculina"
+    },
+    {
+      "id": 7,
+      "tag": "h1",
+      "original": "Más que un corte.",
+      "destino": "traduzir",
+      "texto": "Mais que um corte."
+    },
+    {
+      "id": 8,
+      "tag": "br",
+      "original": "Una experiencia de distinción.",
+      "destino": "traduzir",
+      "texto": "Uma experiência de distinção."
+    },
+    {
+      "id": 9,
+      "tag": "p",
+      "original": "Transformamos tu imagen a través de una experiencia premium diseñada exclusivamente para hombres que exigen excelencia.",
+      "destino": "adaptar",
+      "texto": "Transformamos sua imagem através de uma experiência premium projetada exclusivamente para homens que exigem excelência."
+    },
+    {
+      "id": 10,
+      "tag": "a",
+      "original": "Reservar mi cita",
+      "destino": "traduzir",
+      "texto": "Reservar minha consulta"
+    },
+    {
+      "id": 11,
+      "tag": "?",
+      "original": "Hablar por WhatsApp",
+      "destino": "adaptar",
+      "texto": "Falar por WhatsApp"
+    },
+    {
+      "id": 12,
+      "tag": "span",
+      "original": "Clientes satisfechos",
+      "destino": "traduzir",
+      "texto": "Clientes satisfeitos"
+    },
+    {
+      "id": 13,
+      "tag": "span",
+      "original": "Atención personalizada",
+      "destino": "traduzir",
+      "texto": "Atendimento personalizado"
+    },
+    {
+      "id": 14,
+      "tag": "span",
+      "original": "Experiencia Luxury",
+      "destino": "traduzir",
+      "texto": "Experiência de Luxo"
+    },
+    {
+      "id": 15,
+      "tag": "h2",
+      "original": "Tu imagen abre puertas.",
+      "destino": "adaptar",
+      "texto": "Sua imagem abre portas."
+    },
+    {
+      "id": 16,
+      "tag": "p",
+      "original": "En el mundo de los negocios y el liderazgo, la primera impresión no es solo estética, es comunicación estratégica. Una imagen impecable proyecta seguridad, autoridad y atención al detalle.",
+      "destino": "adaptar",
+      "texto": "No mundo dos negócios e do liderança, a primeira impressão não é apenas estética, é comunicação estratégica. Uma imagem impecável projeta segurança, autoridade e atenção ao detalhe."
+    },
+    {
+      "id": 17,
+      "tag": "p",
+      "original": "En ST. JOCP entendemos que tu tiempo es valioso. Hemos creado un refugio donde la maestría clásica se encuentra con el confort moderno, ofreciendo un servicio que va más allá de un simple corte, para brindarte la presencia que mereces.",
+      "destino": "adaptar",
+      "texto": "Entendemos que seu tempo é valioso. Criamos um refúgio onde a maestria clássica se encontra com o confort moderno, oferecendo um serviço que vai além de um simples corte, para lhe proporcionar a presença que merece."
+    },
+    {
+      "id": 18,
+      "tag": "h2",
+      "original": "Donde la barbería se convierte en un ritual.",
+      "destino": "adaptar",
+      "texto": "Onde a barbearia se torna um ritual."
+    },
+    {
+      "id": 19,
+      "tag": "p",
+      "original": "Cada detalle está meticulosamente cuidado para ofrecerte una pausa en tu día y un resultado excepcional.",
+      "destino": "adaptar",
+      "texto": "Cada detalhe está meticulosamente cuidado para lhe oferecer uma pausa em seu dia e um resultado excepcional."
+    },
+    {
+      "id": 20,
+      "tag": "h3",
+      "original": "Atención Personalizada",
+      "destino": "traduzir",
+      "texto": "Atendimento Personalizado"
+    },
+    {
+      "id": 21,
+      "tag": "p",
+      "original": "Entendemos tu estilo de vida y fisonomía para ofrecerte un servicio a medida que potencie tus facciones.",
+      "destino": "adaptar",
+      "texto": "Entendemos seu estilo de vida e fisionomia para lhe oferecer um serviço personalizado que potencialize suas feições."
+    },
+    {
+      "id": 22,
+      "tag": "h3",
+      "original": "Experiencia Premium",
+      "destino": "traduzir",
+      "texto": "Experiência Premium"
+    },
+    {
+      "id": 23,
+      "tag": "p",
+      "original": "Disfruta de bebidas de cortesía, toallas calientes aromatizadas y un ambiente de club privado exclusivo.",
+      "destino": "adaptar",
+      "texto": "Desfrute de bebidas cortesia, toalhas quentes aromatizadas e um ambiente de clube privado exclusivo."
+    },
+    {
+      "id": 24,
+      "tag": "h3",
+      "original": "Técnicas Especializadas",
+      "destino": "adaptar",
+      "texto": "Técnicas Especializadas"
+    },
+    {
+      "id": 25,
+      "tag": "p",
+      "original": "Barberos formados en las escuelas más prestigiosas, dominando técnicas clásicas y tendencias contemporáneas.",
+      "destino": "traduzir",
+      "texto": "Barbeiros formados nas escolas mais prestigiadas, dominando técnicas clássicas e tendências contemporâneas."
+    },
+    {
+      "id": 26,
+      "tag": "h3",
+      "original": "Diagnóstico de Imagen",
+      "destino": "traduzir",
+      "texto": "Diagnóstico de Imagem"
+    },
+    {
+      "id": 27,
+      "tag": "p",
+      "original": "Asesoramiento profesional previo para determinar el estilo que mejor proyecte tu identidad profesional.",
+      "destino": "traduzir",
+      "texto": "Assessoramento profissional prévio para determinar o estilo que melhor projete sua identidade profissional."
+    },
+    {
+      "id": 28,
+      "tag": "h3",
+      "original": "Productos Profesionales",
+      "destino": "traduzir",
+      "texto": "Produtos Profissionais"
+    },
+    {
+      "id": 29,
+      "tag": "p",
+      "original": "Utilizamos exclusivamente líneas de alta gama para el cuidado capilar y facial, asegurando salud y fijación.",
+      "destino": "traduzir",
+      "texto": "Utilizamos exclusivamente linhas de alta gama para o cuidado capilar e facial, assegurando saúde e fixação."
+    },
+    {
+      "id": 30,
+      "tag": "h3",
+      "original": "Resultados Consistentes",
+      "destino": "traduzir",
+      "texto": "Resultados Consistentes"
+    },
+    {
+      "id": 31,
+      "tag": "p",
+      "original": "Mantén tu imagen impecable visita tras visita gracias a nuestro registro detallado de tus preferencias.",
+      "destino": "traduzir",
+      "texto": "Mantenha sua imagem impecável visita após visita graças ao nosso registro detalhado de suas preferências."
+    },
+    {
+      "id": 32,
+      "tag": "span",
+      "original": "Menú de Servicios",
+      "destino": "traduzir",
+      "texto": "Menu de Serviços"
+    },
+    {
+      "id": 33,
+      "tag": "h2",
+      "original": "Elige tu experiencia",
+      "destino": "traduzir",
+      "texto": "Escolha sua experiência"
+    },
+    {
+      "id": 34,
+      "tag": "h3",
+      "original": "Corte Signature",
+      "destino": "traduzir",
+      "texto": "Corte Assinatura"
+    },
+    {
+      "id": 35,
+      "tag": "p",
+      "original": "El estándar de excelencia para el cuidado capilar masculino.",
+      "destino": "traduzir",
+      "texto": "O padrão de excelência para o cuidado capilar masculino."
+    },
+    {
+      "id": 36,
+      "tag": "?",
+      "original": "Diagnóstico de imagen",
+      "destino": "adaptar",
+      "texto": "Avaliação de Corte"
+    },
+    {
+      "id": 37,
+      "tag": "?",
+      "original": "Lavado capilar con masaje",
+      "destino": "adaptar",
+      "texto": "Lavagem capilar com massagem"
+    },
+    {
+      "id": 38,
+      "tag": "?",
+      "original": "Corte a tijera/máquina de precisión",
+      "destino": "adaptar",
+      "texto": "Corte com tesoura ou máquina de precisão"
+    },
+    {
+      "id": 39,
+      "tag": "?",
+      "original": "Peinado con productos premium",
+      "destino": "adaptar",
+      "texto": "Penteadura com produtos premium"
+    },
+    {
+      "id": 40,
+      "tag": "?",
+      "original": "Bebida de cortesía",
+      "destino": "adaptar",
+      "texto": "Bebida cortesia"
+    },
+    {
+      "id": 41,
+      "tag": "a",
+      "original": "Reservar Cita",
+      "destino": "traduzir",
+      "texto": "Reservar Consulta"
+    },
+    {
+      "id": 42,
+      "tag": "div",
+      "original": "Más Solicitado",
+      "destino": "traduzir",
+      "texto": "Mais Solicitado"
+    },
+    {
+      "id": 43,
+      "tag": "h3",
+      "original": "Corte + Barba Premium",
+      "destino": "traduzir",
+      "texto": "Corte + Barba Premium"
+    },
+    {
+      "id": 44,
+      "tag": "p",
+      "original": "El ritual completo para una presencia impecable y autoritaria.",
+      "destino": "traduzir",
+      "texto": "O ritual completo para uma presença impecável e autoritária."
+    },
+    {
+      "id": 45,
+      "tag": "?",
+      "original": "Todo lo incluido en Corte Signature",
+      "destino": "adaptar",
+      "texto": "Todo o incluído no Corte Assinatura"
+    },
+    {
+      "id": 46,
+      "tag": "?",
+      "original": "Diseño y perfilado de barba",
+      "destino": "adaptar",
+      "texto": "Desenho e perfilado de barba"
+    },
+    {
+      "id": 47,
+      "tag": "?",
+      "original": "Ritual de toallas calientes",
+      "destino": "adaptar",
+      "texto": "Ritual de toalhas quentes"
+    },
+    {
+      "id": 48,
+      "tag": "?",
+      "original": "Afeitado clásico a navaja",
+      "destino": "adaptar",
+      "texto": "Barbear clássico com navalha"
+    },
+    {
+      "id": 49,
+      "tag": "?",
+      "original": "Hidratación facial y aceites esenciales",
+      "destino": "adaptar",
+      "texto": "Hidratação facial e óleos essenciais"
+    },
+    {
+      "id": 50,
+      "tag": "a",
+      "original": "Reservar Cita",
+      "destino": "traduzir",
+      "texto": "Reservar Cita"
+    },
+    {
+      "id": 51,
+      "tag": "h3",
+      "original": "Luxury Experience",
+      "destino": "traduzir",
+      "texto": "Experiência de Luxo"
+    },
+    {
+      "id": 52,
+      "tag": "p",
+      "original": "Nuestra experiencia cumbre diseñada para la desconexión total.",
+      "destino": "adaptar",
+      "texto": "Nossa experiência de ponta, projetada para o desconforto total."
+    },
+    {
+      "id": 53,
+      "tag": "?",
+      "original": "Corte + Barba Premium",
+      "destino": "adaptar",
+      "texto": "Corte + Barba Premium"
+    },
+    {
+      "id": 54,
+      "tag": "?",
+      "original": "Tratamiento capilar revitalizante",
+      "destino": "adaptar",
+      "texto": "Tratamento capilar revitalizante"
+    },
+    {
+      "id": 55,
+      "tag": "?",
+      "original": "Limpieza facial exprés",
+      "destino": "adaptar",
+      "texto": "Limpieza facial express"
+    },
+    {
+      "id": 56,
+      "tag": "?",
+      "original": "Masaje relajante craneal y de hombros",
+      "destino": "adaptar",
+      "texto": "Massagem relaxante de crânio e ombros"
+    },
+    {
+      "id": 57,
+      "tag": "?",
+      "original": "Selección de licores premium",
+      "destino": "adaptar",
+      "texto": "Seleção de drinques premium"
+    },
+    {
+      "id": 58,
+      "tag": "a",
+      "original": "Reservar Cita",
+      "destino": "traduzir",
+      "texto": "Reservar Cita"
+    },
+    {
+      "id": 59,
+      "tag": "h2",
+      "original": "La Experiencia ST. JOCP",
+      "destino": "adaptar",
+      "texto": "A Experiência da Barbearia"
+    },
+    {
+      "id": 60,
+      "tag": "p",
+      "original": "Un proceso diseñado meticulosamente para tu confort.",
+      "destino": "adaptar",
+      "texto": "Um processo projetado meticulosamente para o seu confort."
+    },
+    {
+      "id": 61,
+      "tag": "h4",
+      "original": "Recepción Exclusiva",
+      "destino": "adaptar",
+      "texto": "Recepção Exclusiva"
+    },
+    {
+      "id": 62,
+      "tag": "p",
+      "original": "Bienvenida en nuestro lounge con la bebida de tu preferencia mientras te preparas para tu momento.",
+      "destino": "adaptar",
+      "texto": "Bem-vindo ao nosso lounge com a bebida da sua preferência, enquanto se prepara para o seu momento."
+    },
+    {
+      "id": 63,
+      "tag": "h4",
+      "original": "Diagnóstico Personalizado",
+      "destino": "adaptar",
+      "texto": "Diagnóstico Personalizado"
+    },
+    {
+      "id": 64,
+      "tag": "p",
+      "original": "Análisis de tu fisonomía, tipo de cabello y estilo de vida para acordar el look perfecto.",
+      "destino": "adaptar",
+      "texto": "Análise da sua fisionomia, tipo de cabelo e estilo de vida para acordar o look perfeito."
+    },
+    {
+      "id": 65,
+      "tag": "h4",
+      "original": "Servicio Premium",
+      "destino": "adaptar",
+      "texto": "Serviço Premium"
+    },
+    {
+      "id": 66,
+      "tag": "p",
+      "original": "Ejecución impecable con técnicas precisas y herramientas de alta gama en un ambiente de total relajación.",
+      "destino": "adaptar",
+      "texto": "Execução impecável com técnicas precisas e ferramentas de alta gama em um ambiente de total relaxamento."
+    },
+    {
+      "id": 67,
+      "tag": "h4",
+      "original": "Acabados Profesionales",
+      "destino": "adaptar",
+      "texto": "Acabados Profissionais"
+    },
+    {
+      "id": 68,
+      "tag": "p",
+      "original": "Limpieza cuidadosa, perfilado de contornos a navaja y peinado estructurado con productos específicos.",
+      "destino": "adaptar",
+      "texto": "Limpeza cuidadosa, perfilado de contornos a navalha e penteado estruturado com produtos específicos."
+    },
+    {
+      "id": 69,
+      "tag": "h4",
+      "original": "Tu Mejor Versión",
+      "destino": "adaptar",
+      "texto": "Sua Melhor Versão"
+    },
+    {
+      "id": 70,
+      "tag": "p",
+      "original": "Sales de nuestras instalaciones con una imagen renovada, mayor confianza y listo para cualquier desafío.",
+      "destino": "adaptar",
+      "texto": "Saia de nossas instalações com uma imagem renovada, maior confiança e pronto para qualquer desafio."
+    },
+    {
+      "id": 71,
+      "tag": "h2",
+      "original": "La voz de nuestros clientes",
+      "destino": "traduzir",
+      "texto": "A voz dos nossos clientes"
+    },
+    {
+      "id": 72,
+      "tag": "p",
+      "original": "\"El nivel de atención al detalle es insuperable. No es solo venir a cortarte el pelo, es un momento de desconexión total. Desde el recibimiento hasta el acabado final, todo es impecable.\"",
+      "destino": "adaptar",
+      "texto": "O nível de atenção ao detalhe é insuperável. Não é só vir cortar o cabelo, é um momento de desconexão total. Desde o recebimento até o acabado final, tudo é impecável."
+    },
+    {
+      "id": 73,
+      "tag": "div",
+      "original": "AR",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 74,
+      "tag": "p",
+      "original": "Alejandro R.",
+      "destino": "adaptar",
+      "texto": "Alexandre R."
+    },
+    {
+      "id": 75,
+      "tag": "p",
+      "original": "Director Ejecutivo",
+      "destino": "traduzir",
+      "texto": "Diretor Executivo"
+    },
+    {
+      "id": 76,
+      "tag": "p",
+      "original": "\"Llevaba años buscando una barbería que entendiera exactamente lo que necesitaba para mi imagen profesional. ST. JOCP no solo lo entendió, lo mejoró. Servicio de 5 estrellas.\"",
+      "destino": "adaptar",
+      "texto": "Há anos procurava por uma barbearia que entendesse exatamente o que eu precisava para minha imagem profissional. {{NOME}} não só entendeu, como melhorou. Serviço de 5 estrelas."
+    },
+    {
+      "id": 77,
+      "tag": "div",
+      "original": "MV",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 78,
+      "tag": "p",
+      "original": "Mateo V.",
+      "destino": "traduzir",
+      "texto": "Mateus V."
+    },
+    {
+      "id": 79,
+      "tag": "p",
+      "original": "Empresario",
+      "destino": "traduzir",
+      "texto": "Empresário"
+    },
+    {
+      "id": 80,
+      "tag": "p",
+      "original": "\"El ritual de barba es una verdadera obra de arte. Toallas calientes, productos que huelen increíble y una precisión absoluta con la navaja. El mejor lugar de la ciudad, sin duda.\"",
+      "destino": "adaptar",
+      "texto": "O ritual de barba é uma verdadeira obra de arte. Toalhas quentes, produtos que cheiram incrível e uma precisão absoluta com a navalha. O melhor lugar da cidade, sem dúvida."
+    },
+    {
+      "id": 81,
+      "tag": "div",
+      "original": "CM",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 82,
+      "tag": "p",
+      "original": "Carlos M.",
+      "destino": "traduzir",
+      "texto": "Carlos M."
+    },
+    {
+      "id": 83,
+      "tag": "p",
+      "original": "Abogado Socio",
+      "destino": "traduzir",
+      "texto": "Advogado Sócio"
+    },
+    {
+      "id": 84,
+      "tag": "span",
+      "original": "Invitación Especial",
+      "destino": "traduzir",
+      "texto": "Convite Especial"
+    },
+    {
+      "id": 85,
+      "tag": "h2",
+      "original": "Primera Visita Exclusiva",
+      "destino": "traduzir",
+      "texto": "Primeira Visita Exclusiva"
+    },
+    {
+      "id": 86,
+      "tag": "p",
+      "original": "Experimenta el estándar ST. JOCP. Al reservar tu primera cita, incluimos sin costo adicional un diagnóstico de imagen completo y asesoría de estilo personalizada.",
+      "destino": "adaptar",
+      "texto": "Experimente o padrão {{NOME}}. Ao reservar sua primeira consulta, incluímos sem custo adicional um diagnóstico de imagem completo e assessoria de estilo personalizada."
+    },
+    {
+      "id": 87,
+      "tag": "span",
+      "original": "Agenda con anticipación:",
+      "destino": "traduzir",
+      "texto": "Agende com antecedência:"
+    },
+    {
+      "id": 88,
+      "tag": "p",
+      "original": "Trabajamos con espacios limitados diarios para garantizar la privacidad y atención meticulosa que cada cliente merece.",
+      "destino": "adaptar",
+      "texto": "Trabalhamos com espaços limitados diários para garantir a privacidade e atenção meticulosa que cada cliente merece."
+    },
+    {
+      "id": 89,
+      "tag": "a",
+      "original": "Quiero mi experiencia",
+      "destino": "traduzir",
+      "texto": "Quero minha experiência"
+    },
+    {
+      "id": 90,
+      "tag": "h2",
+      "original": "Preguntas Frecuentes",
+      "destino": "traduzir",
+      "texto": "Perguntas Frequentes"
+    },
+    {
+      "id": 91,
+      "tag": "span",
+      "original": "¿Necesito cita previa?",
+      "destino": "traduzir",
+      "texto": "Preciso de consulta prévia?"
+    },
+    {
+      "id": 92,
+      "tag": "div",
+      "original": "Sí. Para garantizar la exclusividad, privacidad y el tiempo necesario para ofrecer nuestro estándar de servicio, trabajamos únicamente mediante cita previa.",
+      "destino": "traduzir",
+      "texto": "Sim. Para garantir a exclusividade, privacidade e o tempo necessário para oferecer nosso padrão de serviço, trabalhamos apenas mediante consulta prévia."
+    },
+    {
+      "id": 93,
+      "tag": "span",
+      "original": "¿Cómo reservo mi espacio?",
+      "destino": "traduzir",
+      "texto": "Como reservo meu espaço?"
+    },
+    {
+      "id": 94,
+      "tag": "div",
+      "original": "Puedes reservar directamente a través de los botones de esta página que te llevarán a nuestra plataforma segura, o si prefieres asistencia personal, contactándonos vía WhatsApp.",
+      "destino": "adaptar",
+      "texto": "Você pode reservar diretamente através dos botões desta página que o levarão à nossa plataforma segura, ou se preferir assistência pessoal, entrando em contato conosco via {{TELEFONE}} ou {{WHATSAPP}}."
+    },
+    {
+      "id": 95,
+      "tag": "span",
+      "original": "¿Qué incluye exactamente la experiencia premium?",
+      "destino": "traduzir",
+      "texto": "O que inclui exatamente a experiência premium?"
+    },
+    {
+      "id": 96,
+      "tag": "div",
+      "original": "Incluye asesoría de imagen, lavado capilar estimulante, el corte o arreglo de barba con técnicas avanzadas, uso de productos de lujo, bebidas de cortesía (café de especialidad o licores) y un ambiente relajante.",
+      "destino": "adaptar",
+      "texto": "Inclui assessoria de imagem, lavagem capilar estimulante, o corte ou arranjo de barba com técnicas avançadas, uso de produtos de luxo, bebidas de cortesia (café especial ou licor) e um ambiente relaxante."
+    },
+    {
+      "id": 97,
+      "tag": "span",
+      "original": "¿Cuánto dura aproximadamente una cita?",
+      "destino": "traduzir",
+      "texto": "Quanto dura aproximadamente uma consulta?"
+    },
+    {
+      "id": 98,
+      "tag": "div",
+      "original": "Un Corte Signature toma aproximadamente 45 minutos. El servicio de Corte + Barba Premium dura 75 minutos, y la Luxury Experience alrededor de 90 minutos, asegurando que nada se haga con prisa.",
+      "destino": "adaptar",
+      "texto": "Um Corte Signature dura aproximadamente 45 minutos. O serviço de Corte + Barba Premium dura 75 minutos, e a Luxury Experience cerca de 90 minutos, garantindo que nada seja feito com pressa."
+    },
+    {
+      "id": 99,
+      "tag": "h2",
+      "original": "Tu imagen es una inversión.",
+      "destino": "traduzir",
+      "texto": "Sua imagem é um investimento."
+    },
+    {
+      "id": 100,
+      "tag": "p",
+      "original": "Haz que cada reunión, evento o presentación comience con la mejor versión de ti mismo.",
+      "destino": "traduzir",
+      "texto": "Faça com que cada reunião, evento ou apresentação comece com a melhor versão de si mesmo."
+    },
+    {
+      "id": 101,
+      "tag": "a",
+      "original": "Reservar Cita Ahora",
+      "destino": "traduzir",
+      "texto": "Reservar Agora"
+    },
+    {
+      "id": 102,
+      "tag": "?",
+      "original": "Contactar Asesor",
+      "destino": "traduzir",
+      "texto": "Contatar Assistente"
+    },
+    {
+      "id": 103,
+      "tag": "a",
+      "original": "ST. JOCP",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 104,
+      "tag": "p",
+      "original": "Más que una barbería, una experiencia de lujo diseñada para hombres que valoran su imagen y su tiempo.",
+      "destino": "adaptar",
+      "texto": "Mais que uma barbearia, uma experiência de luxo projetada para homens que valorizam sua imagem e seu tempo."
+    },
+    {
+      "id": 105,
+      "tag": "h4",
+      "original": "Contacto",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 106,
+      "tag": "?",
+      "original": "Av. Presidente Masaryk 123, Polanco",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 107,
+      "tag": "?",
+      "original": "+52 55 1234 5678",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 108,
+      "tag": "?",
+      "original": "concierge@stjocp.com",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 109,
+      "tag": "h4",
+      "original": "Horarios",
+      "destino": "traduzir",
+      "texto": "Horários"
+    },
+    {
+      "id": 110,
+      "tag": "span",
+      "original": "Lun - Vie",
+      "destino": "traduzir",
+      "texto": "Seg - Sex"
+    },
+    {
+      "id": 111,
+      "tag": "span",
+      "original": "Sábados",
+      "destino": "traduzir",
+      "texto": "Sábados"
+    },
+    {
+      "id": 112,
+      "tag": "span",
+      "original": "Domingos",
+      "destino": "traduzir",
+      "texto": "Domingos"
+    },
+    {
+      "id": 113,
+      "tag": "span",
+      "original": "Cerrado",
+      "destino": "traduzir",
+      "texto": "Fechado"
+    },
+    {
+      "id": 114,
+      "tag": "h4",
+      "original": "Redes Sociales",
+      "destino": "traduzir",
+      "texto": "Redes Sociais"
+    },
+    {
+      "id": 115,
+      "tag": "p",
+      "original": "© 2026 ST. JOCP Luxury Barbershop. Todos los derechos reservados.",
+      "destino": "adaptar",
+      "texto": "2026 {{NOME}}. Todos os direitos reservados."
+    },
+    {
+      "id": 116,
+      "tag": "a",
+      "original": "Aviso de Privacidad",
+      "destino": "traduzir",
+      "texto": "Aviso de Privacidade"
+    },
+    {
+      "id": 117,
+      "tag": "a",
+      "original": "Términos y Condiciones",
+      "destino": "traduzir",
+      "texto": "Termos e Condições"
+    },
+    {
+      "id": 118,
+      "tag": "a",
+      "original": "Reservar Cita",
+      "destino": "traduzir",
+      "texto": "Reservar Agora"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 119,
+  "marcas_removidas": [],
+  "corrigidos_por_consistencia": [],
+  "precos_neutralizados": []
+}

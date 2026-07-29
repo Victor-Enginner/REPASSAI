@@ -1,0 +1,893 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "Ina Beauty Studio | Маникюр, Миглопластика, Козметика — Пловдив",
+      "destino": "traduzir",
+      "texto": "Studio de Beleza | Manicure, Cilios, Estética — Brasil"
+    },
+    {
+      "id": 1,
+      "tag": "a",
+      "original": "Начало",
+      "destino": "traduzir",
+      "texto": "Início"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "Услуги",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 3,
+      "tag": "a",
+      "original": "За мен",
+      "destino": "traduzir",
+      "texto": "Sobre Nós"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Галерия",
+      "destino": "traduzir",
+      "texto": "Galeria"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Контакти",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 6,
+      "tag": "span",
+      "original": "Запази час",
+      "destino": "traduzir",
+      "texto": "Agendar Horário"
+    },
+    {
+      "id": 7,
+      "tag": "a",
+      "original": "Начало",
+      "destino": "traduzir",
+      "texto": "Início"
+    },
+    {
+      "id": 8,
+      "tag": "a",
+      "original": "Услуги",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 9,
+      "tag": "a",
+      "original": "За мен",
+      "destino": "traduzir",
+      "texto": "Sobre Nós"
+    },
+    {
+      "id": 10,
+      "tag": "a",
+      "original": "Галерия",
+      "destino": "traduzir",
+      "texto": "Galeria"
+    },
+    {
+      "id": 11,
+      "tag": "a",
+      "original": "Контакти",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 12,
+      "tag": "a",
+      "original": "Запази час",
+      "destino": "traduzir",
+      "texto": "Agendar Horário"
+    },
+    {
+      "id": 13,
+      "tag": "p",
+      "original": "Be beautiful. Be you.",
+      "destino": "traduzir",
+      "texto": "Seja linda. Seja você."
+    },
+    {
+      "id": 14,
+      "tag": "p",
+      "original": "Перфектна грижа. Перфектен поглед. Всеки ден.",
+      "destino": "traduzir",
+      "texto": "Cuidado perfeito. Visão perfeita. Todos os dias."
+    },
+    {
+      "id": 15,
+      "tag": "span",
+      "original": "Запази час",
+      "destino": "traduzir",
+      "texto": "Agendar Horário"
+    },
+    {
+      "id": 16,
+      "tag": "a",
+      "original": "Разгледай услугите",
+      "destino": "traduzir",
+      "texto": "Ver Serviços"
+    },
+    {
+      "id": 17,
+      "tag": "p",
+      "original": "Нашите услуги",
+      "destino": "traduzir",
+      "texto": "Nossos Serviços"
+    },
+    {
+      "id": 18,
+      "tag": "h2",
+      "original": "Красота с грижа",
+      "destino": "traduzir",
+      "texto": "Beleza com Cuidado"
+    },
+    {
+      "id": 19,
+      "tag": "p",
+      "original": "Подбрани процедури, които съчетават естетика, комфорт и внимание към всеки детайл.",
+      "destino": "traduzir",
+      "texto": "Procedimentos selecionados que combinam estética, confort e atenção a cada detalhe."
+    },
+    {
+      "id": 20,
+      "tag": "span",
+      "original": "Популярно",
+      "destino": "traduzir",
+      "texto": "Popular"
+    },
+    {
+      "id": 21,
+      "tag": "h3",
+      "original": "Маникюр",
+      "destino": "adaptar",
+      "texto": "Manicure"
+    },
+    {
+      "id": 22,
+      "tag": "p",
+      "original": "Перфектни нокти с траен гел лак. Форма, блясък и дълготрайност — всеки път.",
+      "destino": "adaptar",
+      "texto": "Unhas perfeitas com esmalte gel durável. Forma, brilho e durabilidade — sempre."
+    },
+    {
+      "id": 23,
+      "tag": "span",
+      "original": "~ 60 мин",
+      "destino": "adaptar",
+      "texto": "~ 60 min"
+    },
+    {
+      "id": 24,
+      "tag": "span",
+      "original": "Гел лак",
+      "destino": "adaptar",
+      "texto": "Esmalte Gel"
+    },
+    {
+      "id": 25,
+      "tag": "p",
+      "original": "от €20",
+      "destino": "adaptar",
+      "texto": "a partir de sob consulta"
+    },
+    {
+      "id": 26,
+      "tag": "span",
+      "original": "Фин детайл • Траен ефект",
+      "destino": "traduzir",
+      "texto": "Detalhe fino • Efeito treinado"
+    },
+    {
+      "id": 27,
+      "tag": "span",
+      "original": "Виж повече",
+      "destino": "traduzir",
+      "texto": "Ver mais"
+    },
+    {
+      "id": 28,
+      "tag": "span",
+      "original": "Премиум",
+      "destino": "traduzir",
+      "texto": "Premium"
+    },
+    {
+      "id": 29,
+      "tag": "h3",
+      "original": "Миглопластика",
+      "destino": "adaptar",
+      "texto": "Cílios"
+    },
+    {
+      "id": 30,
+      "tag": "p",
+      "original": "Обемни, копринени мигли — косъм по косъм, 4D или руски обем. Погледът, за който мечтаеш.",
+      "destino": "adaptar",
+      "texto": "Cílios volumosos, sedosos — cílio a cílio, 4D ou volume russo. O olhar que você sempre sonhou."
+    },
+    {
+      "id": 31,
+      "tag": "span",
+      "original": "~ 90 мин",
+      "destino": "adaptar",
+      "texto": "~ 90 min"
+    },
+    {
+      "id": 32,
+      "tag": "span",
+      "original": "Косъм по косъм / обем",
+      "destino": "adaptar",
+      "texto": "Cílio a cílio / volume"
+    },
+    {
+      "id": 33,
+      "tag": "p",
+      "original": "от €30",
+      "destino": "adaptar",
+      "texto": "a partir de sob consulta"
+    },
+    {
+      "id": 34,
+      "tag": "span",
+      "original": "Изразителен поглед",
+      "destino": "adaptar",
+      "texto": "Olhar expressivo"
+    },
+    {
+      "id": 35,
+      "tag": "span",
+      "original": "Виж повече",
+      "destino": "traduzir",
+      "texto": "Ver mais"
+    },
+    {
+      "id": 36,
+      "tag": "span",
+      "original": "Персонално",
+      "destino": "traduzir",
+      "texto": "Pessoal"
+    },
+    {
+      "id": 37,
+      "tag": "h3",
+      "original": "Козметика",
+      "destino": "adaptar",
+      "texto": "Estética"
+    },
+    {
+      "id": 38,
+      "tag": "p",
+      "original": "Козметични процедури за сияйна кожа. Отпусни се и се довери на опитни ръце.",
+      "destino": "adaptar",
+      "texto": "Procedimentos estéticos para uma pele radiante. Relaxamento e confiança nas mãos experientes."
+    },
+    {
+      "id": 39,
+      "tag": "span",
+      "original": "~ 75 мин",
+      "destino": "adaptar",
+      "texto": "~ 75 min"
+    },
+    {
+      "id": 40,
+      "tag": "span",
+      "original": "Персонална консултация",
+      "destino": "adaptar",
+      "texto": "Consulta pessoal"
+    },
+    {
+      "id": 41,
+      "tag": "p",
+      "original": "От €50",
+      "destino": "adaptar",
+      "texto": "a partir de sob consulta"
+    },
+    {
+      "id": 42,
+      "tag": "span",
+      "original": "Грижа според кожата",
+      "destino": "adaptar",
+      "texto": "Cuidado personalizado"
+    },
+    {
+      "id": 43,
+      "tag": "span",
+      "original": "Виж повече",
+      "destino": "traduzir",
+      "texto": "Ver mais"
+    },
+    {
+      "id": 44,
+      "tag": "p",
+      "original": "Специалитетът ни",
+      "destino": "adaptar",
+      "texto": "Nossa especialidade"
+    },
+    {
+      "id": 45,
+      "tag": "h2",
+      "original": "Миглопластика",
+      "destino": "adaptar",
+      "texto": "Cílios"
+    },
+    {
+      "id": 46,
+      "tag": "p",
+      "original": "Красивите мигли не са лукс — те са начин да спестиш време сутрин и да изглеждаш завършено през целия ден.",
+      "destino": "adaptar",
+      "texto": "Cílios bonitos não são um luxo — são uma maneira de economizar tempo pela manhã e parecer perfeito o dia todo."
+    },
+    {
+      "id": 47,
+      "tag": "h3",
+      "original": "Поставяне",
+      "destino": "adaptar",
+      "texto": "Aplicação"
+    },
+    {
+      "id": 48,
+      "tag": "span",
+      "original": "Нов сет",
+      "destino": "adaptar",
+      "texto": "Novo conjunto"
+    },
+    {
+      "id": 49,
+      "tag": "p",
+      "original": "Косъм по косъм",
+      "destino": "adaptar",
+      "texto": "Cílio a cílio"
+    },
+    {
+      "id": 50,
+      "tag": "p",
+      "original": "Естествен и нежен ефект",
+      "destino": "adaptar",
+      "texto": "Efeito natural e suave"
+    },
+    {
+      "id": 51,
+      "tag": "span",
+      "original": "€33",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 52,
+      "tag": "p",
+      "original": "4D обем",
+      "destino": "adaptar",
+      "texto": "Volume 4D"
+    },
+    {
+      "id": 53,
+      "tag": "p",
+      "original": "По-плътен и изразителен вид",
+      "destino": "adaptar",
+      "texto": "Visual mais cheio e expressivo"
+    },
+    {
+      "id": 54,
+      "tag": "span",
+      "original": "€35",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 55,
+      "tag": "p",
+      "original": "Руски обем",
+      "destino": "adaptar",
+      "texto": "Volume russo"
+    },
+    {
+      "id": 56,
+      "tag": "p",
+      "original": "Максимален обем и драма",
+      "destino": "adaptar",
+      "texto": "Volume máximo e drama"
+    },
+    {
+      "id": 57,
+      "tag": "span",
+      "original": "€40",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 58,
+      "tag": "h3",
+      "original": "Поддръжка",
+      "destino": "traduzir",
+      "texto": "Manutenção"
+    },
+    {
+      "id": 59,
+      "tag": "span",
+      "original": "на 3 седмици",
+      "destino": "adaptar",
+      "texto": "a cada 3 semanas"
+    },
+    {
+      "id": 60,
+      "tag": "p",
+      "original": "Косъм по косъм",
+      "destino": "adaptar",
+      "texto": "Cílio a cílio"
+    },
+    {
+      "id": 61,
+      "tag": "p",
+      "original": "Освежаване и попълване",
+      "destino": "adaptar",
+      "texto": "Renovação e reforço"
+    },
+    {
+      "id": 62,
+      "tag": "span",
+      "original": "€22",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 63,
+      "tag": "p",
+      "original": "4D обем",
+      "destino": "adaptar",
+      "texto": "Volume 4D"
+    },
+    {
+      "id": 64,
+      "tag": "p",
+      "original": "Запазва плътността и формата",
+      "destino": "adaptar",
+      "texto": "Mantém a densidade e a forma"
+    },
+    {
+      "id": 65,
+      "tag": "span",
+      "original": "€25",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 66,
+      "tag": "p",
+      "original": "Руски обем",
+      "destino": "adaptar",
+      "texto": "Volume russo"
+    },
+    {
+      "id": 67,
+      "tag": "p",
+      "original": "За плътен и поддържан резултат",
+      "destino": "adaptar",
+      "texto": "Para um resultado cheio e mantido"
+    },
+    {
+      "id": 68,
+      "tag": "span",
+      "original": "€30",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 69,
+      "tag": "p",
+      "original": "Сваляне на мигли",
+      "destino": "adaptar",
+      "texto": "Remoção de cílios"
+    },
+    {
+      "id": 70,
+      "tag": "p",
+      "original": "Бързо и щадящо премахване",
+      "destino": "adaptar",
+      "texto": "Remoção rápida e suave"
+    },
+    {
+      "id": 71,
+      "tag": "span",
+      "original": "€8",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 72,
+      "tag": "p",
+      "original": "Поддръжката се прави на 3 седмици. При паднали над 50% мигли",
+      "destino": "adaptar",
+      "texto": "A manutenção é feita a cada 3 semanas. Se mais de 50% dos cílios caírem, é cobrada como aplicação inicial."
+    },
+    {
+      "id": 73,
+      "tag": "br",
+      "original": "се таксува като първоначално поставяне.",
+      "destino": "traduzir",
+      "texto": "<br>"
+    },
+    {
+      "id": 74,
+      "tag": "a",
+      "original": "Запази час",
+      "destino": "traduzir",
+      "texto": "Agendar horário"
+    },
+    {
+      "id": 75,
+      "tag": "p",
+      "original": "Пловдив",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}"
+    },
+    {
+      "id": 76,
+      "tag": "p",
+      "original": "Тракия",
+      "destino": "variavel",
+      "texto": "{{ESTADO}}"
+    },
+    {
+      "id": 77,
+      "tag": "p",
+      "original": "За мен",
+      "destino": "traduzir",
+      "texto": "Sobre mim"
+    },
+    {
+      "id": 78,
+      "tag": "h2",
+      "original": "Ина и",
+      "destino": "traduzir",
+      "texto": "Ina e"
+    },
+    {
+      "id": 79,
+      "tag": "br",
+      "original": "нейното студио",
+      "destino": "traduzir",
+      "texto": "seu estúdio"
+    },
+    {
+      "id": 80,
+      "tag": "p",
+      "original": "Здравей, аз съм Ина — създадох това студио като спокойно и уютно място, в което всяка жена може да се отпусне и да\n    се почувства специална.",
+      "destino": "adaptar",
+      "texto": "Olá, eu sou Ina — criei este salão de beleza como um lugar calmo e aconchegante, onde toda mulher pode relaxar e se sentir especial."
+    },
+    {
+      "id": 81,
+      "tag": "p",
+      "original": "Работя с внимание към детайла и лично отношение, специализирайки в миглопластика, маникюр с гел лак и козметични\n    процедури.",
+      "destino": "adaptar",
+      "texto": "Trabalho com atenção aos detalhes e atendimento personalizado, especializando-me em extensão de cílios, manicure com gel e procedimentos estéticos."
+    },
+    {
+      "id": 82,
+      "tag": "a",
+      "original": "Запази час",
+      "destino": "traduzir",
+      "texto": "Agendar horário"
+    },
+    {
+      "id": 83,
+      "tag": "p",
+      "original": "Нашата работа",
+      "destino": "traduzir",
+      "texto": "Nosso trabalho"
+    },
+    {
+      "id": 84,
+      "tag": "h2",
+      "original": "Галерия",
+      "destino": "traduzir",
+      "texto": "Galeria"
+    },
+    {
+      "id": 85,
+      "tag": "p",
+      "original": "Малка селекция от резултати, създадени с внимание към детайла и усет към красивото.",
+      "destino": "adaptar",
+      "texto": "Uma pequena seleção de resultados, feita com atenção aos detalhes e olho para a beleza."
+    },
+    {
+      "id": 86,
+      "tag": "a",
+      "original": "Виж повече в Instagram",
+      "destino": "traduzir",
+      "texto": "Ver mais no Instagram"
+    },
+    {
+      "id": 87,
+      "tag": "p",
+      "original": "Намери ни",
+      "destino": "traduzir",
+      "texto": "Nos encontrar"
+    },
+    {
+      "id": 88,
+      "tag": "h2",
+      "original": "Контакти",
+      "destino": "traduzir",
+      "texto": "Contatos"
+    },
+    {
+      "id": 89,
+      "tag": "p",
+      "original": "Свържи се с нас лесно и избери най-удобния начин за записване или посещение.",
+      "destino": "adaptar",
+      "texto": "Entre em contato conosco facilmente e escolha a maneira mais conveniente de agendar ou visitar."
+    },
+    {
+      "id": 90,
+      "tag": "p",
+      "original": "Адрес",
+      "destino": "traduzir",
+      "texto": "Endereço"
+    },
+    {
+      "id": 91,
+      "tag": "p",
+      "original": "Пловдив, ж.к. Тракия, бл. 83Б, вх. Б",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 92,
+      "tag": "p",
+      "original": "срещу ветеринарна клиника Провет",
+      "destino": "adaptar",
+      "texto": "Em frente à clínica veterinária"
+    },
+    {
+      "id": 93,
+      "tag": "p",
+      "original": "Телефон",
+      "destino": "traduzir",
+      "texto": "Telefone"
+    },
+    {
+      "id": 94,
+      "tag": "a",
+      "original": "0896 306 313",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 95,
+      "tag": "p",
+      "original": "Instagram",
+      "destino": "traduzir",
+      "texto": "Instagram"
+    },
+    {
+      "id": 96,
+      "tag": "a",
+      "original": "@inabeautystudio2026",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 97,
+      "tag": "p",
+      "original": "Локация",
+      "destino": "traduzir",
+      "texto": "Localização"
+    },
+    {
+      "id": 98,
+      "tag": "p",
+      "original": "Ina beauty studio",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 99,
+      "tag": "a",
+      "original": "Отвори карта",
+      "destino": "traduzir",
+      "texto": "Abrir mapa"
+    },
+    {
+      "id": 100,
+      "tag": "p",
+      "original": "Уютно студио за красота с внимание към детайла, спокойна атмосфера и услуги, създадени да подчертаят\n          естествената ти красота.",
+      "destino": "traduzir",
+      "texto": "Estúdio de beleza com atenção aos detalhes, atmosfera tranquila e serviços criados para realçar a sua beleza natural."
+    },
+    {
+      "id": 101,
+      "tag": "span",
+      "original": "Маникюр",
+      "destino": "adaptar",
+      "texto": "Manicure"
+    },
+    {
+      "id": 102,
+      "tag": "span",
+      "original": "Миглопластика",
+      "destino": "adaptar",
+      "texto": "Cílios"
+    },
+    {
+      "id": 103,
+      "tag": "span",
+      "original": "Козметика",
+      "destino": "adaptar",
+      "texto": "Estética Facial"
+    },
+    {
+      "id": 104,
+      "tag": "p",
+      "original": "Навигация",
+      "destino": "traduzir",
+      "texto": "Navegação"
+    },
+    {
+      "id": 105,
+      "tag": "span",
+      "original": "Начало",
+      "destino": "traduzir",
+      "texto": "Início"
+    },
+    {
+      "id": 106,
+      "tag": "span",
+      "original": "Услуги",
+      "destino": "traduzir",
+      "texto": "Serviços"
+    },
+    {
+      "id": 107,
+      "tag": "span",
+      "original": "Галерия",
+      "destino": "traduzir",
+      "texto": "Galeria"
+    },
+    {
+      "id": 108,
+      "tag": "span",
+      "original": "За мен",
+      "destino": "traduzir",
+      "texto": "Sobre Nós"
+    },
+    {
+      "id": 109,
+      "tag": "span",
+      "original": "Контакти",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 110,
+      "tag": "p",
+      "original": "Свържи се",
+      "destino": "traduzir",
+      "texto": "Entre em Contato"
+    },
+    {
+      "id": 111,
+      "tag": "span",
+      "original": "0896 306 313",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 112,
+      "tag": "span",
+      "original": "@inabeautystudio2026",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 113,
+      "tag": "span",
+      "original": "Facebook",
+      "destino": "traduzir",
+      "texto": "Facebook"
+    },
+    {
+      "id": 114,
+      "tag": "p",
+      "original": "Работно време",
+      "destino": "traduzir",
+      "texto": "Horário de Funcionamento"
+    },
+    {
+      "id": 115,
+      "tag": "p",
+      "original": "Пон–Съб: 9:00 – 19:00 • Неделя: почивен ден",
+      "destino": "traduzir",
+      "texto": "Seg-Sáb: 9:00 – 19:00 • Dom: fechado"
+    },
+    {
+      "id": 116,
+      "tag": "p",
+      "original": "© 2026 Ina Beauty Studio. Всички права запазени.",
+      "destino": "traduzir",
+      "texto": "{{ANO}} {{NOME}}. Todos os direitos reservados."
+    },
+    {
+      "id": 117,
+      "tag": "p",
+      "original": "Пловдив, ж.к. Тракия, бл. 83Б",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}, {{ENDERECO}}"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 118,
+  "marcas_removidas": [],
+  "corrigidos_por_consistencia": [
+    {
+      "id": 96,
+      "original": "@inabeautystudio2026",
+      "era": "@estudiobeleza",
+      "virou": "{{EMAIL}}"
+    }
+  ],
+  "precos_neutralizados": [
+    {
+      "id": 25,
+      "era": "a partir de R$50",
+      "modo": "embutido"
+    },
+    {
+      "id": 33,
+      "era": "a partir de R$70",
+      "modo": "embutido"
+    },
+    {
+      "id": 41,
+      "era": "a partir de R$120",
+      "modo": "embutido"
+    },
+    {
+      "id": 51,
+      "era": "€33",
+      "modo": "total"
+    },
+    {
+      "id": 54,
+      "era": "€35",
+      "modo": "total"
+    },
+    {
+      "id": 57,
+      "era": "€40",
+      "modo": "total"
+    },
+    {
+      "id": 62,
+      "era": "€22",
+      "modo": "total"
+    },
+    {
+      "id": 65,
+      "era": "€25",
+      "modo": "total"
+    },
+    {
+      "id": 68,
+      "era": "€30",
+      "modo": "total"
+    },
+    {
+      "id": 71,
+      "era": "€8",
+      "modo": "total"
+    }
+  ]
+}

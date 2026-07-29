@@ -1,0 +1,558 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "Vidalli Andrea | Handgefertigter Schmuck",
+      "destino": "traduzir",
+      "texto": "Vidalli Andrea | Joias Artesanais"
+    },
+    {
+      "id": 1,
+      "tag": "a",
+      "original": "Kollektion",
+      "destino": "traduzir",
+      "texto": "Coleção"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "ÜBER MICH",
+      "destino": "traduzir",
+      "texto": "Sobre Mim"
+    },
+    {
+      "id": 3,
+      "tag": "h1",
+      "original": "Westend Juwelier",
+      "destino": "adaptar",
+      "texto": "Joalheria Vidalli"
+    },
+    {
+      "id": 4,
+      "tag": "span",
+      "original": "Haider",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 5,
+      "tag": "p",
+      "original": "Ihr Juwelier in Berlin für professionellen Ankauf von Luxuswaren.",
+      "destino": "adaptar",
+      "texto": "Sua joalheria para compra e venda de joias de luxo."
+    },
+    {
+      "id": 6,
+      "tag": "br",
+      "original": "Seit über 40 Jahren stehen wir unseren Kunden besten Gewissens zur\n            Seite.",
+      "destino": "traduzir",
+      "texto": "Há mais de 40 anos estamos ao lado de nossos clientes com total confiança."
+    },
+    {
+      "id": 7,
+      "tag": "span",
+      "original": "Kollektion ansehen",
+      "destino": "traduzir",
+      "texto": "Ver coleção"
+    },
+    {
+      "id": 8,
+      "tag": "a",
+      "original": "ÜBER MICH",
+      "destino": "traduzir",
+      "texto": "Sobre Mim"
+    },
+    {
+      "id": 9,
+      "tag": "span",
+      "original": "Est. 2023",
+      "destino": "variavel",
+      "texto": "{{ANO}}"
+    },
+    {
+      "id": 10,
+      "tag": "span",
+      "original": "Krottendorf, AT",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}"
+    },
+    {
+      "id": 11,
+      "tag": "span",
+      "original": "Handmade",
+      "destino": "traduzir",
+      "texto": "Artesanal"
+    },
+    {
+      "id": 12,
+      "tag": "span",
+      "original": "Vidalli",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 13,
+      "tag": "span",
+      "original": "Timeless",
+      "destino": "traduzir",
+      "texto": "Atemporal"
+    },
+    {
+      "id": 14,
+      "tag": "span",
+      "original": "Unique",
+      "destino": "traduzir",
+      "texto": "Único"
+    },
+    {
+      "id": 15,
+      "tag": "span",
+      "original": "Handmade",
+      "destino": "traduzir",
+      "texto": "Artesanal"
+    },
+    {
+      "id": 16,
+      "tag": "span",
+      "original": "Vidalli",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 17,
+      "tag": "span",
+      "original": "Timeless",
+      "destino": "traduzir",
+      "texto": "Atemporal"
+    },
+    {
+      "id": 18,
+      "tag": "span",
+      "original": "Unique",
+      "destino": "traduzir",
+      "texto": "Único"
+    },
+    {
+      "id": 19,
+      "tag": "span",
+      "original": "Aktuelle Kollektion",
+      "destino": "traduzir",
+      "texto": "Coleção Atual"
+    },
+    {
+      "id": 20,
+      "tag": "h2",
+      "original": "Signature Pieces",
+      "destino": "traduzir",
+      "texto": "Peças de Assinatura"
+    },
+    {
+      "id": 21,
+      "tag": "a",
+      "original": "Alle Produkte",
+      "destino": "traduzir",
+      "texto": "Todos os Produtos"
+    },
+    {
+      "id": 22,
+      "tag": "span",
+      "original": "Neu",
+      "destino": "traduzir",
+      "texto": "Novo"
+    },
+    {
+      "id": 23,
+      "tag": "h3",
+      "original": "Aura Ring",
+      "destino": "adaptar",
+      "texto": "Anel Elegância"
+    },
+    {
+      "id": 24,
+      "tag": "p",
+      "original": "18k Gold",
+      "destino": "adaptar",
+      "texto": "Ouro 18k"
+    },
+    {
+      "id": 25,
+      "tag": "span",
+      "original": "€240",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 26,
+      "tag": "h3",
+      "original": "Luna Halskette",
+      "destino": "adaptar",
+      "texto": "Colar de Pérola"
+    },
+    {
+      "id": 27,
+      "tag": "p",
+      "original": "Süßwasserperle",
+      "destino": "adaptar",
+      "texto": "Pérola Cultivada"
+    },
+    {
+      "id": 28,
+      "tag": "span",
+      "original": "€180",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 29,
+      "tag": "h3",
+      "original": "Nova Ohrringe",
+      "destino": "adaptar",
+      "texto": "Brinco Novo"
+    },
+    {
+      "id": 30,
+      "tag": "p",
+      "original": "Silber 925",
+      "destino": "adaptar",
+      "texto": "Prata 925"
+    },
+    {
+      "id": 31,
+      "tag": "span",
+      "original": "€120",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 32,
+      "tag": "h3",
+      "original": "Helix Armreif",
+      "destino": "adaptar",
+      "texto": "Pulseira Helix"
+    },
+    {
+      "id": 33,
+      "tag": "p",
+      "original": "Gold Vermeil",
+      "destino": "adaptar",
+      "texto": "Dourado"
+    },
+    {
+      "id": 34,
+      "tag": "span",
+      "original": "€160",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 35,
+      "tag": "h3",
+      "original": "Signum Ring",
+      "destino": "adaptar",
+      "texto": "Anel Signum"
+    },
+    {
+      "id": 36,
+      "tag": "p",
+      "original": "Massivgold",
+      "destino": "adaptar",
+      "texto": "Ouro Maciço"
+    },
+    {
+      "id": 37,
+      "tag": "span",
+      "original": "€210",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 38,
+      "tag": "span",
+      "original": "Set",
+      "destino": "traduzir",
+      "texto": "Conjunto"
+    },
+    {
+      "id": 39,
+      "tag": "h3",
+      "original": "Abend-Set",
+      "destino": "adaptar",
+      "texto": "Conjunto Noturno"
+    },
+    {
+      "id": 40,
+      "tag": "p",
+      "original": "Complete Collection",
+      "destino": "adaptar",
+      "texto": "Coleção Completa"
+    },
+    {
+      "id": 41,
+      "tag": "span",
+      "original": "€380",
+      "destino": "adaptar",
+      "texto": "Sob consulta"
+    },
+    {
+      "id": 42,
+      "tag": "h2",
+      "original": "Vidalli Andrea",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 43,
+      "tag": "span",
+      "original": "Handwerk & Seele",
+      "destino": "traduzir",
+      "texto": "Artesanato e Alma"
+    },
+    {
+      "id": 44,
+      "tag": "p",
+      "original": "Abseits der Massenproduktion entsteht hier Schmuck mit Charakter.\n              Jedes Stück geht durch meine Hände – vom Entwurf bis zur Politur.\n              Ich nutze ausschließlich recyceltes Gold und konfliktfreie Steine,\n              weil wahrer Luxus Verantwortung bedeutet.",
+      "destino": "adaptar",
+      "texto": "Longe da produção em massa, aqui é criada joia com personalidade. Cada peça passa por minhas mãos – desde o design até o polimento. Eu uso apenas metais nobres reciclados e pedras sem conflitos, porque o verdadeiro luxo significa responsabilidade."
+    },
+    {
+      "id": 45,
+      "tag": "p",
+      "original": "Recycelte Edelmetalle",
+      "destino": "adaptar",
+      "texto": "Metais Nobres Reciclados"
+    },
+    {
+      "id": 46,
+      "tag": "h4",
+      "original": "Krottendorf, Steiermark",
+      "destino": "variavel",
+      "texto": "{{CIDADE}}"
+    },
+    {
+      "id": 47,
+      "tag": "p",
+      "original": "Lokale Produktion",
+      "destino": "traduzir",
+      "texto": "Produção Local"
+    },
+    {
+      "id": 48,
+      "tag": "a",
+      "original": "Mehr über den Prozess",
+      "destino": "traduzir",
+      "texto": "Saiba mais sobre o processo"
+    },
+    {
+      "id": 49,
+      "tag": "h3",
+      "original": "Lebenslange Garantie",
+      "destino": "traduzir",
+      "texto": "Garantia Vitalícia"
+    },
+    {
+      "id": 50,
+      "tag": "p",
+      "original": "Auf alle Material- und Verarbeitungsfehler.",
+      "destino": "adaptar",
+      "texto": "Garantia contra defeitos de material e fabricação."
+    },
+    {
+      "id": 51,
+      "tag": "h3",
+      "original": "Kostenlose Aufarbeitung",
+      "destino": "traduzir",
+      "texto": "Reconstrução gratuita"
+    },
+    {
+      "id": 52,
+      "tag": "p",
+      "original": "Einmal jährlich polieren wir Ihr Schmuckstück.",
+      "destino": "adaptar",
+      "texto": "Polimos sua joia uma vez por ano."
+    },
+    {
+      "id": 53,
+      "tag": "h3",
+      "original": "Premium Verpackung",
+      "destino": "traduzir",
+      "texto": "Embalagem premium"
+    },
+    {
+      "id": 54,
+      "tag": "p",
+      "original": "Nachhaltig und elegant verpackt als Geschenk.",
+      "destino": "adaptar",
+      "texto": "Presenteado de forma sustentável e elegante."
+    },
+    {
+      "id": 55,
+      "tag": "span",
+      "original": "Vidalli Andrea",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 56,
+      "tag": "p",
+      "original": "Wir kreieren Schmuck für Individualisten. Zeitloses Design trifft\n              auf steirische Handwerkskunst.",
+      "destino": "adaptar",
+      "texto": "Criamos joias para personalidades únicas. Design atemporal encontra artesanato brasileiro."
+    },
+    {
+      "id": 57,
+      "tag": "h5",
+      "original": "Shop",
+      "destino": "traduzir",
+      "texto": "Loja"
+    },
+    {
+      "id": 58,
+      "tag": "a",
+      "original": "Neuheiten",
+      "destino": "traduzir",
+      "texto": "Novidades"
+    },
+    {
+      "id": 59,
+      "tag": "a",
+      "original": "Bestseller",
+      "destino": "traduzir",
+      "texto": "Mais vendidos"
+    },
+    {
+      "id": 60,
+      "tag": "a",
+      "original": "Geschenke",
+      "destino": "traduzir",
+      "texto": "Presentes"
+    },
+    {
+      "id": 61,
+      "tag": "a",
+      "original": "Gutscheine",
+      "destino": "traduzir",
+      "texto": "Vales-presente"
+    },
+    {
+      "id": 62,
+      "tag": "h5",
+      "original": "Service",
+      "destino": "traduzir",
+      "texto": "Atendimento"
+    },
+    {
+      "id": 63,
+      "tag": "a",
+      "original": "Kontakt",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 64,
+      "tag": "a",
+      "original": "Versand & Retouren",
+      "destino": "traduzir",
+      "texto": "Envio e devoluções"
+    },
+    {
+      "id": 65,
+      "tag": "a",
+      "original": "Ringgröße finden",
+      "destino": "traduzir",
+      "texto": "Encontrar tamanho de anel"
+    },
+    {
+      "id": 66,
+      "tag": "a",
+      "original": "FAQ",
+      "destino": "traduzir",
+      "texto": "Perguntas frequentes"
+    },
+    {
+      "id": 67,
+      "tag": "h5",
+      "original": "Newsletter",
+      "destino": "traduzir",
+      "texto": "Newsletter"
+    },
+    {
+      "id": 68,
+      "tag": "p",
+      "original": "Erhalten Sie 10% Rabatt auf Ihre erste Bestellung.",
+      "destino": "adaptar",
+      "texto": "Ganhe 10% de desconto na sua primeira compra."
+    },
+    {
+      "id": 69,
+      "tag": "button",
+      "original": "Senden",
+      "destino": "traduzir",
+      "texto": "Enviar"
+    },
+    {
+      "id": 70,
+      "tag": "p",
+      "original": "© 2023 Vidalli Andrea. Krottendorf.",
+      "destino": "variavel",
+      "texto": "{{ANO}} {{NOME}}. {{CIDADE}}"
+    },
+    {
+      "id": 71,
+      "tag": "a",
+      "original": "Impressum",
+      "destino": "traduzir",
+      "texto": "Sobre nós"
+    },
+    {
+      "id": 72,
+      "tag": "a",
+      "original": "Datenschutz",
+      "destino": "traduzir",
+      "texto": "Privacidade"
+    },
+    {
+      "id": 73,
+      "tag": "a",
+      "original": "AGB",
+      "destino": "traduzir",
+      "texto": "Termos e condições"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 74,
+  "corrigidos_por_consistencia": [],
+  "precos_neutralizados": [
+    {
+      "id": 25,
+      "era": "€240",
+      "modo": "total"
+    },
+    {
+      "id": 28,
+      "era": "€180",
+      "modo": "total"
+    },
+    {
+      "id": 31,
+      "era": "€120",
+      "modo": "total"
+    },
+    {
+      "id": 34,
+      "era": "€160",
+      "modo": "total"
+    },
+    {
+      "id": 37,
+      "era": "€210",
+      "modo": "total"
+    },
+    {
+      "id": 41,
+      "era": "€380",
+      "modo": "total"
+    }
+  ],
+  "marcas_removidas": []
+}

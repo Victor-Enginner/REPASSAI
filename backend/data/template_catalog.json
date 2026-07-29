@@ -1,0 +1,147 @@
+{
+  "_doc": "Catálogo de templates do 77lib. `nichos` são as palavras que aparecem na categoria do Google Places; o seletor casa por elas. Adicionar template novo = mais um objeto aqui, sem tocar em código.",
+  "_idioma_origem": "Cada template vem no idioma em que foi publicado. O preparador traduz uma vez para pt-BR e guarda; a geração de site nunca traduz nada.",
+  "templates": [
+    {
+      "slug": "aura-template-luxury-barbershop-47",
+      "nome": "Barbearia Premium",
+      "idioma_origem": "es",
+      "nichos": [
+        "barbearia",
+        "barber",
+        "corte masculino",
+        "cabeleireiro masculino",
+        "barbeiro"
+      ],
+      "tom": "escuro, dourado, sofisticado",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-beauty-studio-72",
+      "nome": "Studio de Beleza",
+      "idioma_origem": "bg",
+      "nichos": [
+        "salao de beleza",
+        "salão de unhas",
+        "estetica",
+        "estética facial",
+        "manicure",
+        "sobrancelha",
+        "cilios",
+        "depilacao",
+        "spa"
+      ],
+      "tom": "claro, bege, elegante",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-neapolitan-pizzeria-28",
+      "nome": "Pizzaria e Delivery",
+      "idioma_origem": "ca",
+      "nichos": [
+        "pizzaria",
+        "pizza",
+        "delivery",
+        "lanchonete",
+        "hamburgueria",
+        "esfiha",
+        "restaurante",
+        "churrascaria",
+        "bar",
+        "marmita",
+        "comida",
+        "sushi",
+        "japones"
+      ],
+      "tom": "quente, artesanal, vermelho",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-cafelittlelatte",
+      "nome": "Cafeteria e Padaria",
+      "idioma_origem": "en",
+      "nichos": [
+        "cafeteria",
+        "cafe",
+        "padaria",
+        "confeitaria",
+        "doceria",
+        "bistro",
+        "brunch"
+      ],
+      "tom": "claro, editorial, minimalista",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-vidalli-andrea-60",
+      "nome": "Joalheria e Loja Premium",
+      "idioma_origem": "de",
+      "nichos": [
+        "joalheria",
+        "joias",
+        "relojoaria",
+        "otica",
+        "óptica",
+        "boutique",
+        "semijoias",
+        "acessorios"
+      ],
+      "tom": "dourado, minimalista, alto padrão",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-industrial-constructi-38",
+      "nome": "Construção e Serviços Técnicos",
+      "idioma_origem": "de",
+      "nichos": [
+        "construcao",
+        "construtora",
+        "reforma",
+        "engenharia",
+        "marcenaria",
+        "serralheria",
+        "oficina mecanica",
+        "eletricista",
+        "encanador"
+      ],
+      "tom": "industrial, âmbar, robusto",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-luxury-eco-lodge-66",
+      "nome": "Pousada e Hospedagem",
+      "idioma_origem": "es",
+      "nichos": [
+        "pousada",
+        "hotel",
+        "chacara",
+        "hospedagem",
+        "turismo",
+        "eventos",
+        "sitio"
+      ],
+      "tom": "natural, verde e ocre, acolhedor",
+      "ativo": true
+    },
+    {
+      "slug": "aura-template-digital-creative-30",
+      "nome": "Genérico Editorial",
+      "idioma_origem": "fr",
+      "nichos": [],
+      "tom": "escuro, tipografia gigante",
+      "ativo": true,
+      "nota": "Editorial da 77lib. Mantido como amostra; nao e mais o padrao."
+    },
+    {
+      "slug": "repass-base-local",
+      "nome": "Base REPASS — Negocio Local",
+      "idioma_origem": "pt-BR",
+      "nichos": [],
+      "tom": "escuro, serifado, foco em WhatsApp",
+      "ativo": true,
+      "padrao": true,
+      "proprio": true,
+      "nota": "Escrito por nos, nao importado do 77lib. Sem dependencia externa: nada de CDN de CSS, fonte ou icone. Pula as camadas 2 e 3 do pipeline porque ja nasce em pt-BR com os marcadores no lugar."
+    }
+  ]
+}

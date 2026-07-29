@@ -1,0 +1,944 @@
+{
+  "plano": [
+    {
+      "id": 0,
+      "tag": "title",
+      "original": "Cabaña La Martina | Lujo y Naturaleza en Sabanagrande",
+      "destino": "traduzir",
+      "texto": "Cabanha La Martina | Luxo e Natureza em Sabanagrande"
+    },
+    {
+      "id": 1,
+      "tag": "div",
+      "original": "La Martina",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 2,
+      "tag": "a",
+      "original": "Amenidades",
+      "destino": "traduzir",
+      "texto": "Comodidades"
+    },
+    {
+      "id": 3,
+      "tag": "a",
+      "original": "Habitaciones",
+      "destino": "traduzir",
+      "texto": "Acomodações"
+    },
+    {
+      "id": 4,
+      "tag": "a",
+      "original": "Tarifas",
+      "destino": "traduzir",
+      "texto": "Tarifas"
+    },
+    {
+      "id": 5,
+      "tag": "a",
+      "original": "Convivencia",
+      "destino": "traduzir",
+      "texto": "Convivência"
+    },
+    {
+      "id": 6,
+      "tag": "a",
+      "original": "Reservar",
+      "destino": "traduzir",
+      "texto": "Reservar"
+    },
+    {
+      "id": 7,
+      "tag": "p",
+      "original": "Sabanagrande, Atlántico",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 8,
+      "tag": "h1",
+      "original": "Refugio de",
+      "destino": "traduzir",
+      "texto": "Refúgio de"
+    },
+    {
+      "id": 9,
+      "tag": "br",
+      "original": "Exclusividad",
+      "destino": "traduzir",
+      "texto": "Exclusividade"
+    },
+    {
+      "id": 10,
+      "tag": "p",
+      "original": "Alquiler completo y privado. Una experiencia campestre de lujo con\n          diseño orgánico, rodeado de fauna exótica e instalaciones premium para\n          su total descanso.",
+      "destino": "adaptar",
+      "texto": "Hospedagem completa e privativa. Experiência aconchegante em pousada com área verde, piscina e café da manhã incluso para seu descanso total."
+    },
+    {
+      "id": 11,
+      "tag": "a",
+      "original": "Inicia tu Reserva",
+      "destino": "traduzir",
+      "texto": "Inicie sua Reserva"
+    },
+    {
+      "id": 12,
+      "tag": "a",
+      "original": "Ver Tour 360",
+      "destino": "traduzir",
+      "texto": "Ver Tour 360"
+    },
+    {
+      "id": 13,
+      "tag": "h2",
+      "original": "Catálogo de Amenidades",
+      "destino": "traduzir",
+      "texto": "Catálogo de Comodidades"
+    },
+    {
+      "id": 14,
+      "tag": "p",
+      "original": "Diseñado bajo un ecosistema de privacidad absoluta. Nuestras\n            instalaciones combinan recreación al aire libre con confort\n            doméstico contemporáneo.",
+      "destino": "adaptar",
+      "texto": "Projetado para privacidade total. Nossa área oferece lazer ao ar livre e conforto moderno."
+    },
+    {
+      "id": 15,
+      "tag": "h3",
+      "original": "Recreación y Exterior",
+      "destino": "traduzir",
+      "texto": "Recreação e Área Externa"
+    },
+    {
+      "id": 16,
+      "tag": "?",
+      "original": "Piscina Privada (12m x 4m)",
+      "destino": "traduzir",
+      "texto": "Piscina Privada (12m x 4m)"
+    },
+    {
+      "id": 17,
+      "tag": "?",
+      "original": "Jacuzzi integrado",
+      "destino": "traduzir",
+      "texto": "Jacuzzi Integrado"
+    },
+    {
+      "id": 18,
+      "tag": "?",
+      "original": "Cancha de Fútbol privada",
+      "destino": "traduzir",
+      "texto": "Quadra de Futebol Privada"
+    },
+    {
+      "id": 19,
+      "tag": "?",
+      "original": "Kiosco Tradicional cubierto",
+      "destino": "traduzir",
+      "texto": "Quiosque Tradicional coberto"
+    },
+    {
+      "id": 20,
+      "tag": "?",
+      "original": "Amplias Zonas Verdes y Caballeriza",
+      "destino": "traduzir",
+      "texto": "Amplas Áreas Verdes e Curral"
+    },
+    {
+      "id": 21,
+      "tag": "h3",
+      "original": "Confort Interior",
+      "destino": "traduzir",
+      "texto": "Conforto Interno"
+    },
+    {
+      "id": 22,
+      "tag": "?",
+      "original": "Aire Acondicionado integral",
+      "destino": "traduzir",
+      "texto": "Ar Condicionado central"
+    },
+    {
+      "id": 23,
+      "tag": "?",
+      "original": "Cocina Integral equipada",
+      "destino": "traduzir",
+      "texto": "Cozinha equipada"
+    },
+    {
+      "id": 24,
+      "tag": "?",
+      "original": "Televisores distribuidos",
+      "destino": "traduzir",
+      "texto": "Televisores distribuídos"
+    },
+    {
+      "id": 25,
+      "tag": "?",
+      "original": "Conectividad Wifi de alta velocidad",
+      "destino": "traduzir",
+      "texto": "Conectividade Wi-Fi de alta velocidade"
+    },
+    {
+      "id": 26,
+      "tag": "h3",
+      "original": "Servicios Ecosistémicos",
+      "destino": "traduzir",
+      "texto": "Serviços Ecossistêmicos"
+    },
+    {
+      "id": 27,
+      "tag": "?",
+      "original": "Sistema de Sonido propio (Controlado)",
+      "destino": "traduzir",
+      "texto": "Sistema de Som próprio (Controlado)"
+    },
+    {
+      "id": 28,
+      "tag": "?",
+      "original": "Mascotas Permitidas (Pet-Friendly)",
+      "destino": "traduzir",
+      "texto": "Animais de estimação permitidos (Pet Friendly)"
+    },
+    {
+      "id": 29,
+      "tag": "?",
+      "original": "Parqueadero Privado (Máx 9 vehículos)",
+      "destino": "traduzir",
+      "texto": "Estacionamento Privado (Máx 9 veículos)"
+    },
+    {
+      "id": 30,
+      "tag": "h2",
+      "original": "Distribución de Habitaciones",
+      "destino": "traduzir",
+      "texto": "Distribuição de Quartos"
+    },
+    {
+      "id": 31,
+      "tag": "p",
+      "original": "La cabaña cuenta con 3 habitaciones independientes, configuradas\n            para garantizar el máximo confort. Cada espacio asegura\n            climatización y servicios privados.",
+      "destino": "adaptar",
+      "texto": "A chalé possui 3 quartos independentes, preparados para garantir o máximo conforto. Cada ambiente oferece climatização e serviços privativos."
+    },
+    {
+      "id": 32,
+      "tag": "h4",
+      "original": "Habitación 1",
+      "destino": "traduzir",
+      "texto": "Quarto 1"
+    },
+    {
+      "id": 33,
+      "tag": "p",
+      "original": "2 Literas",
+      "destino": "adaptar",
+      "texto": "2 beliches"
+    },
+    {
+      "id": 34,
+      "tag": "h4",
+      "original": "Habitación 2",
+      "destino": "traduzir",
+      "texto": "Quarto 2"
+    },
+    {
+      "id": 35,
+      "tag": "p",
+      "original": "2 Literas",
+      "destino": "adaptar",
+      "texto": "2 beliches"
+    },
+    {
+      "id": 36,
+      "tag": "h4",
+      "original": "Habitación 3",
+      "destino": "traduzir",
+      "texto": "Quarto 3"
+    },
+    {
+      "id": 37,
+      "tag": "p",
+      "original": "1 Cama Doble",
+      "destino": "adaptar",
+      "texto": "1 cama de casal"
+    },
+    {
+      "id": 38,
+      "tag": "h2",
+      "original": "Nuestra Fauna",
+      "destino": "traduzir",
+      "texto": "Nossa Fauna"
+    },
+    {
+      "id": 39,
+      "tag": "p",
+      "original": "Convive con especies exóticas y de granja en un entorno controlado y\n          seguro. Un contacto directo y responsable con la naturaleza.",
+      "destino": "adaptar",
+      "texto": "Convivência com animais exóticos e de fazenda em ambiente controlado e seguro. Contato direto e responsável com a natureza."
+    },
+    {
+      "id": 40,
+      "tag": "h3",
+      "original": "Avestruces",
+      "destino": "adaptar",
+      "texto": "Avestruzes"
+    },
+    {
+      "id": 41,
+      "tag": "p",
+      "original": "Interacción Permitida",
+      "destino": "traduzir",
+      "texto": "Interação Permitida"
+    },
+    {
+      "id": 42,
+      "tag": "h3",
+      "original": "Llamas y Alpacas",
+      "destino": "adaptar",
+      "texto": "Cabras e Ovelhas"
+    },
+    {
+      "id": 43,
+      "tag": "p",
+      "original": "Interacción Permitida",
+      "destino": "traduzir",
+      "texto": "Interação Permitida"
+    },
+    {
+      "id": 44,
+      "tag": "h3",
+      "original": "Venados Sika",
+      "destino": "adaptar",
+      "texto": "Veado Silvestre"
+    },
+    {
+      "id": 45,
+      "tag": "p",
+      "original": "Avistamiento en manada",
+      "destino": "traduzir",
+      "texto": "Observação em manada"
+    },
+    {
+      "id": 46,
+      "tag": "h3",
+      "original": "Caballos Percherones",
+      "destino": "adaptar",
+      "texto": "Cavalo de tração"
+    },
+    {
+      "id": 47,
+      "tag": "p",
+      "original": "Zona Ecuestre",
+      "destino": "traduzir",
+      "texto": "Área Equestre"
+    },
+    {
+      "id": 48,
+      "tag": "h3",
+      "original": "Pavos Reales",
+      "destino": "adaptar",
+      "texto": "Pavões"
+    },
+    {
+      "id": 49,
+      "tag": "p",
+      "original": "Aves Exóticas",
+      "destino": "traduzir",
+      "texto": "Aves Exóticas"
+    },
+    {
+      "id": 50,
+      "tag": "h3",
+      "original": "Granja Interactiva",
+      "destino": "traduzir",
+      "texto": "Fazenda Interativa"
+    },
+    {
+      "id": 51,
+      "tag": "p",
+      "original": "Ovejas, Cabras y más",
+      "destino": "traduzir",
+      "texto": "Ovelhas, Cabras e mais"
+    },
+    {
+      "id": 52,
+      "tag": "h2",
+      "original": "Tarifas Planas",
+      "destino": "traduzir",
+      "texto": "Tarifas Fixas"
+    },
+    {
+      "id": 53,
+      "tag": "p",
+      "original": "Sin variaciones de temporada. Precios fijos y cerrados por bloque de\n          servicio, garantizando transparencia total en su reserva.",
+      "destino": "traduzir",
+      "texto": "Sem variações de temporada. Preços fixos e fechados por bloco de serviço, garantindo transparência total na sua reserva."
+    },
+    {
+      "id": 54,
+      "tag": "h3",
+      "original": "Pasadía Diurno",
+      "destino": "traduzir",
+      "texto": "Passeio Diurno"
+    },
+    {
+      "id": 55,
+      "tag": "p",
+      "original": "Máx 20 Personas",
+      "destino": "traduzir",
+      "texto": "Máx 20 Pessoas"
+    },
+    {
+      "id": 56,
+      "tag": "div",
+      "original": "$1.2M",
+      "destino": "adaptar",
+      "texto": "sob consultaM"
+    },
+    {
+      "id": 57,
+      "tag": "span",
+      "original": "COP",
+      "destino": "adaptar",
+      "texto": "BRL"
+    },
+    {
+      "id": 58,
+      "tag": "?",
+      "original": "Tarifa plana asistan 1 o 20 personas.",
+      "destino": "traduzir",
+      "texto": "Tarifa fixa para 1 a 20 pessoas."
+    },
+    {
+      "id": 59,
+      "tag": "?",
+      "original": "Acceso a todas las zonas húmedas y recreativas.",
+      "destino": "traduzir",
+      "texto": "Acesso a todas as áreas úmidas e recreativas."
+    },
+    {
+      "id": 60,
+      "tag": "?",
+      "original": "Anticipo de reserva: 30% ($360.000 COP).",
+      "destino": "adaptar",
+      "texto": "Entrada: 30% (sob consulta)"
+    },
+    {
+      "id": 61,
+      "tag": "h3",
+      "original": "Alojamiento Completo",
+      "destino": "traduzir",
+      "texto": "Hospedagem Completa"
+    },
+    {
+      "id": 62,
+      "tag": "p",
+      "original": "Máx 14 Personas",
+      "destino": "traduzir",
+      "texto": "Máx 14 Pessoas"
+    },
+    {
+      "id": 63,
+      "tag": "div",
+      "original": "$3.0M",
+      "destino": "adaptar",
+      "texto": "sob consultaM"
+    },
+    {
+      "id": 64,
+      "tag": "span",
+      "original": "COP / Noche",
+      "destino": "adaptar",
+      "texto": "BRL / Noite"
+    },
+    {
+      "id": 65,
+      "tag": "?",
+      "original": "Tarifa plana idéntica fines de semana y festivos.",
+      "destino": "traduzir",
+      "texto": "Tarifa fixa idêntica aos fins de semana e feriados."
+    },
+    {
+      "id": 66,
+      "tag": "?",
+      "original": "Exclusividad total de habitaciones y predio.",
+      "destino": "traduzir",
+      "texto": "Exclusividade total de quartos e propriedade."
+    },
+    {
+      "id": 67,
+      "tag": "?",
+      "original": "Anticipo de reserva: $1.000.000 COP.",
+      "destino": "adaptar",
+      "texto": "Entrada: sob consulta"
+    },
+    {
+      "id": 68,
+      "tag": "h2",
+      "original": "Reglas de Convivencia",
+      "destino": "traduzir",
+      "texto": "Regras de Convivência"
+    },
+    {
+      "id": 69,
+      "tag": "p",
+      "original": "Para mantener la integridad acústica y la armonía del ecosistema,\n        establecemos regulaciones estrictas.",
+      "destino": "traduzir",
+      "texto": "Para manter a integridade acústica e a harmonia do ecossistema, estabelecemos regulamentos rigorosos."
+    },
+    {
+      "id": 70,
+      "tag": "strong",
+      "original": "Sonido Externo Prohibido",
+      "destino": "traduzir",
+      "texto": "Som Externo Proibido"
+    },
+    {
+      "id": 71,
+      "tag": "span",
+      "original": "Estrictamente prohibido el uso de bafles o amplificadores\n                  externos. Debe usarse el sonido integrado.",
+      "destino": "traduzir",
+      "texto": "Estritamente proibido o uso de caixas de som ou amplificadores externos. Deve ser usado o som integrado."
+    },
+    {
+      "id": 72,
+      "tag": "strong",
+      "original": "Horario y Seguridad en Piscina",
+      "destino": "traduzir",
+      "texto": "Horário e Segurança na Piscina"
+    },
+    {
+      "id": 73,
+      "tag": "span",
+      "original": "Uso permitido hasta las 10:00 PM. Prohibido ingresar envases o\n                  vasos de vidrio en la zona perimetral.",
+      "destino": "traduzir",
+      "texto": "Uso permitido até as 22:00. Proibido entrar com recipientes ou copos de vidrio na área periférica."
+    },
+    {
+      "id": 74,
+      "tag": "strong",
+      "original": "Zonas de No Fumar",
+      "destino": "traduzir",
+      "texto": "Áreas Não Fumantes"
+    },
+    {
+      "id": 75,
+      "tag": "span",
+      "original": "Prohibido fumar tabaco o cigarrillos electrónicos en el\n                  interior de la casa y todo el Kiosco.",
+      "destino": "traduzir",
+      "texto": "Proibido fumar tabaco ou cigarros eletrônicos no interior da casa e todo o quiosque."
+    },
+    {
+      "id": 76,
+      "tag": "h2",
+      "original": "Interacción con la Fauna",
+      "destino": "traduzir",
+      "texto": "Interação com a Fauna"
+    },
+    {
+      "id": 77,
+      "tag": "p",
+      "original": "Nuestro predio es hogar de avestruces, llamas, venados, caballos,\n        pavos reales y más. Protegemos su dieta activamente.",
+      "destino": "adaptar",
+      "texto": "Nossa propriedade é lar de capivaras, jacarés, veados, cavalos, araras e mais. Protegemos sua dieta ativamente."
+    },
+    {
+      "id": 78,
+      "tag": "strong",
+      "original": "Alimentación Controlada",
+      "destino": "traduzir",
+      "texto": "Alimentação Controlada"
+    },
+    {
+      "id": 79,
+      "tag": "span",
+      "original": "Prohibido suministrar comida externa a los animales. Las\n                  interacciones se realizan exclusivamente mediante la compra de\n                  kits de comida controlados internamente.",
+      "destino": "traduzir",
+      "texto": "Proibido fornecer comida externa aos animais. As interações são realizadas exclusivamente mediante a compra de kits de comida controlados internamente."
+    },
+    {
+      "id": 80,
+      "tag": "div",
+      "original": "Permitido alimentar con kit únicamente: Llamas, Avestruces y\n          Guacamayas.",
+      "destino": "adaptar",
+      "texto": "Permitido alimentar com kit apenas: Capivaras, Avestruz e Araras."
+    },
+    {
+      "id": 81,
+      "tag": "h2",
+      "original": "Tour 360°",
+      "destino": "traduzir",
+      "texto": "Tour 360°"
+    },
+    {
+      "id": 82,
+      "tag": "p",
+      "original": "Explora cada rincón de Cabaña La Martina de manera interactiva. Un\n          recorrido inmersivo por nuestras instalaciones antes de tu visita.",
+      "destino": "adaptar",
+      "texto": "Explore cada cantinho da Pousada Boa Vista de forma interativa. Uma experiência imersiva pelas nossas instalações antes da sua visita."
+    },
+    {
+      "id": 83,
+      "tag": "?",
+      "original": "Iniciar Recorrido",
+      "destino": "traduzir",
+      "texto": "Iniciar Percurso"
+    },
+    {
+      "id": 84,
+      "tag": "button",
+      "original": "Explorar Tour Interactivo",
+      "destino": "traduzir",
+      "texto": "Explorar Tour Interativo"
+    },
+    {
+      "id": 85,
+      "tag": "h2",
+      "original": "Solicitud de Reserva",
+      "destino": "traduzir",
+      "texto": "Solicitação de Reserva"
+    },
+    {
+      "id": 86,
+      "tag": "p",
+      "original": "Proceso en 3 pasos",
+      "destino": "traduzir",
+      "texto": "Processo em 3 etapas"
+    },
+    {
+      "id": 87,
+      "tag": "h3",
+      "original": "Paso 1: Seleccione su Plan",
+      "destino": "traduzir",
+      "texto": "Etapa 1: Selecione seu Plano"
+    },
+    {
+      "id": 88,
+      "tag": "h4",
+      "original": "Pasadía Diurno",
+      "destino": "traduzir",
+      "texto": "Dia Diurno"
+    },
+    {
+      "id": 89,
+      "tag": "p",
+      "original": "Tarifa plana para hasta 20 personas.",
+      "destino": "traduzir",
+      "texto": "Tarifa fixa para até 20 pessoas."
+    },
+    {
+      "id": 90,
+      "tag": "h4",
+      "original": "Alojamiento",
+      "destino": "traduzir",
+      "texto": "Hospedagem"
+    },
+    {
+      "id": 91,
+      "tag": "p",
+      "original": "Privacidad total hasta 14 personas.",
+      "destino": "traduzir",
+      "texto": "Privacidade total para até 14 pessoas."
+    },
+    {
+      "id": 92,
+      "tag": "h3",
+      "original": "Paso 2: Datos del Grupo",
+      "destino": "traduzir",
+      "texto": "Etapa 2: Dados do Grupo"
+    },
+    {
+      "id": 93,
+      "tag": "button",
+      "original": "← Cambiar Plan",
+      "destino": "traduzir",
+      "texto": "← Alterar Plano"
+    },
+    {
+      "id": 94,
+      "tag": "p",
+      "original": "Disponibilidad garantizada en tiempo real al contactar.",
+      "destino": "traduzir",
+      "texto": "Disponibilidade garantida em tempo real ao entrar em contato."
+    },
+    {
+      "id": 95,
+      "tag": "label",
+      "original": "Nombre Completo",
+      "destino": "traduzir",
+      "texto": "Nome Completo"
+    },
+    {
+      "id": 96,
+      "tag": "label",
+      "original": "Fecha Solicitada",
+      "destino": "traduzir",
+      "texto": "Data Solicitada"
+    },
+    {
+      "id": 97,
+      "tag": "label",
+      "original": "Cantidad de Personas",
+      "destino": "traduzir",
+      "texto": "Quantidade de Pessoas"
+    },
+    {
+      "id": 98,
+      "tag": "span",
+      "original": "(Máx)",
+      "destino": "traduzir",
+      "texto": "(Máx)"
+    },
+    {
+      "id": 99,
+      "tag": "button",
+      "original": "Continuar a Verificación",
+      "destino": "traduzir",
+      "texto": "Continuar para Verificação"
+    },
+    {
+      "id": 100,
+      "tag": "h3",
+      "original": "Paso 3: Verificación y Resumen",
+      "destino": "traduzir",
+      "texto": "Etapa 3: Verificação e Resumo"
+    },
+    {
+      "id": 101,
+      "tag": "p",
+      "original": "Plan Seleccionado",
+      "destino": "traduzir",
+      "texto": "Plano Selecionado"
+    },
+    {
+      "id": 102,
+      "tag": "button",
+      "original": "Modificar",
+      "destino": "traduzir",
+      "texto": "Modificar"
+    },
+    {
+      "id": 103,
+      "tag": "p",
+      "original": "Contacto y Fecha",
+      "destino": "traduzir",
+      "texto": "Contato e Data"
+    },
+    {
+      "id": 104,
+      "tag": "button",
+      "original": "Modificar",
+      "destino": "traduzir",
+      "texto": "Modificar"
+    },
+    {
+      "id": 105,
+      "tag": "p",
+      "original": "Tarifa Plana Total",
+      "destino": "traduzir",
+      "texto": "Tarifa Total"
+    },
+    {
+      "id": 106,
+      "tag": "strong",
+      "original": "Nota Importante",
+      "destino": "traduzir",
+      "texto": "Nota Importante"
+    },
+    {
+      "id": 107,
+      "tag": "?",
+      "original": "Se requiere un depósito de garantía de $300.000 COP antes del\n            ingreso, reembolsable tras inventario. El cierre se realiza vía\n            WhatsApp.",
+      "destino": "adaptar",
+      "texto": "É necessário um depósito de garantia de sob consulta antes da entrada, reembolsável após inventário. O fechamento é realizado via WhatsApp."
+    },
+    {
+      "id": 108,
+      "tag": "?",
+      "original": "Confirmar y Enviar a WhatsApp",
+      "destino": "traduzir",
+      "texto": "Confirmar e Enviar para WhatsApp"
+    },
+    {
+      "id": 109,
+      "tag": "h2",
+      "original": "Ubicación Estratégica",
+      "destino": "traduzir",
+      "texto": "Localização Estratégica"
+    },
+    {
+      "id": 110,
+      "tag": "p",
+      "original": "Sabanagrande, Atlántico. Un escape orgánico y privado, a minutos del\n            entorno urbano. Rutas de acceso pavimentadas y seguras para todo\n            tipo de vehículos.",
+      "destino": "adaptar",
+      "texto": "Região serrana, a minutos do entorno urbano. Rotas de acesso pavimentadas e seguras para todo tipo de veículos."
+    },
+    {
+      "id": 111,
+      "tag": "?",
+      "original": "Vía Oriental, Sabanagrande, Atlántico",
+      "destino": "adaptar",
+      "texto": "Rodovia dos Tamoios"
+    },
+    {
+      "id": 112,
+      "tag": "?",
+      "original": "A 30 minutos de Barranquilla",
+      "destino": "adaptar",
+      "texto": "A 30 minutos de São Paulo"
+    },
+    {
+      "id": 113,
+      "tag": "?",
+      "original": "Parqueadero privado interno (9 cupos)",
+      "destino": "traduzir",
+      "texto": "Estacionamento privado interno (9 vagas)"
+    },
+    {
+      "id": 114,
+      "tag": "a",
+      "original": "Abrir en Google Maps",
+      "destino": "traduzir",
+      "texto": "Abrir no Google Maps"
+    },
+    {
+      "id": 115,
+      "tag": "h3",
+      "original": "La Martina",
+      "destino": "variavel",
+      "texto": "{{NOME}}"
+    },
+    {
+      "id": 116,
+      "tag": "p",
+      "original": "Lujo exclusivo y contacto orgánico con la naturaleza en\n            Sabanagrande, Atlántico. Tu refugio privado.",
+      "destino": "adaptar",
+      "texto": "Luxo exclusivo e contato com a natureza. Seu refúgio privado."
+    },
+    {
+      "id": 117,
+      "tag": "h4",
+      "original": "Contacto",
+      "destino": "traduzir",
+      "texto": "Contato"
+    },
+    {
+      "id": 118,
+      "tag": "a",
+      "original": "+57 301 578 0509",
+      "destino": "variavel",
+      "texto": "{{TELEFONE}}"
+    },
+    {
+      "id": 119,
+      "tag": "a",
+      "original": "info.lamartina.co@gmail.com",
+      "destino": "variavel",
+      "texto": "{{EMAIL}}"
+    },
+    {
+      "id": 120,
+      "tag": "li",
+      "original": "Sabanagrande, Atlántico",
+      "destino": "variavel",
+      "texto": "{{ENDERECO}}"
+    },
+    {
+      "id": 121,
+      "tag": "br",
+      "original": "Colombia",
+      "destino": "adaptar",
+      "texto": "Brasil"
+    },
+    {
+      "id": 122,
+      "tag": "h4",
+      "original": "Legal",
+      "destino": "traduzir",
+      "texto": "Legal"
+    },
+    {
+      "id": 123,
+      "tag": "li",
+      "original": "Políticas de Cancelación",
+      "destino": "traduzir",
+      "texto": "Políticas de Cancelamento"
+    },
+    {
+      "id": 124,
+      "tag": "li",
+      "original": "Reglamento de Penalizaciones",
+      "destino": "traduzir",
+      "texto": "Regulamento de Penalidades"
+    },
+    {
+      "id": 125,
+      "tag": "li",
+      "original": "Términos de Privacidad",
+      "destino": "traduzir",
+      "texto": "Termos de Privacidade"
+    },
+    {
+      "id": 126,
+      "tag": "?",
+      "original": "Cabaña La Martina. Todos los derechos reservados.",
+      "destino": "adaptar",
+      "texto": "Pousada Serra Verde. Todos os direitos reservados."
+    },
+    {
+      "id": 127,
+      "tag": "p",
+      "original": "Diseñado bajo ecosistema natural",
+      "destino": "traduzir",
+      "texto": "Desenvolvido sob ecossistema natural"
+    }
+  ],
+  "nao_resolvidos": [],
+  "total": 128,
+  "marcas_removidas": [],
+  "corrigidos_por_consistencia": [
+    {
+      "id": 115,
+      "original": "La Martina",
+      "era": "Pousada do Sol",
+      "virou": "{{NOME}}"
+    },
+    {
+      "id": 120,
+      "original": "Sabanagrande, Atlántico",
+      "era": "Região serrana",
+      "virou": "{{ENDERECO}}"
+    }
+  ],
+  "precos_neutralizados": [
+    {
+      "id": 56,
+      "era": "R$1,2M",
+      "modo": "embutido"
+    },
+    {
+      "id": 60,
+      "era": "Entrada: 30% (R$360.000)",
+      "modo": "embutido"
+    },
+    {
+      "id": 63,
+      "era": "R$3,0M",
+      "modo": "embutido"
+    },
+    {
+      "id": 67,
+      "era": "Entrada: R$1.000.000",
+      "modo": "embutido"
+    },
+    {
+      "id": 107,
+      "era": "É necessário um depósito de garantia de R$ 1.500,00 antes da entrada, reembolsável após inventário. O fechamento é realizado via WhatsApp.",
+      "modo": "embutido"
+    }
+  ]
+}

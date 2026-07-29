@@ -8,6 +8,7 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, X, Send, Sparkles, Bot, RefreshCw } from 'lucide-react';
+import { apiUrl } from '../config';
 import { executePromptWithFallback } from '../services/llmRouter';
 
 export default function AgenticChatbotWidget() {
@@ -30,12 +31,52 @@ export default function AgenticChatbotWidget() {
     setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
     setIsThinking(true);
 
+    // Detecta se o usuário colou uma URL para clonagem
+    const urlMatch = userMsg.match(/https?:\/\/[^\s]+/);
+
+    if (urlMatch) {
+      const urlToClone = urlMatch[0];
+      try {
+        const res = await fetch(apiUrl('/api/site/clone'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlToClone })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const cloned = data.clonedSchema || {};
+          const brandName = cloned.systemista?.brandName || 'NOVO SITE';
+          setMessages(prev => [
+            ...prev,
+            {
+              sender: 'agent',
+              text: `🎯 **Página clonada com sucesso!**\n\nExtraí a estrutura de **${urlToClone}** via Open Lovable Engine.\n\n- **Projeto**: ${brandName}\n- **Componentes**: React 19 + Tailwind CSS\n\nAbrindo o Editor de Sites você poderá pré-visualizar e publicar este layout.`
+            }
+          ]);
+        } else {
+          setMessages(prev => [
+            ...prev,
+            { sender: 'agent', text: `Recebi a URL ${urlToClone}. Processando extração de layout...` }
+          ]);
+        }
+      } catch (err) {
+        setMessages(prev => [
+          ...prev,
+          { sender: 'agent', text: `Desculpe, ocorreu uma falha ao tentar conectar ao clonador para a URL ${urlToClone}.` }
+        ]);
+      } finally {
+        setIsThinking(false);
+      }
+      return;
+    }
+
     try {
       const res = await executePromptWithFallback(
         userMsg,
         'Você é o Assistente Pessoal do REPASS AI. Responda de forma direta, amigável e profissional em português.'
       );
-      const text = typeof res === 'string' ? res : res?.texto || 'Entendido! Como posso ajudar mais?';
+      const text = typeof res === 'string' ? res : (res?.output || res?.texto || 'Entendido! Como posso ajudar mais?');
       setMessages(prev => [...prev, { sender: 'agent', text }]);
     } catch {
       setMessages(prev => [...prev, { sender: 'agent', text: 'Desculpe, ocorreu um pequeno imprevisto na conexão. Pode tentar novamente?' }]);
@@ -58,7 +99,7 @@ export default function AgenticChatbotWidget() {
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          background: 'linear-gradient(135deg, var(--accent-esmeralda) 0%, #059669 100%)',
           border: '2px solid #34d399',
           boxShadow: '0 8px 24px rgba(16, 185, 129, 0.45)',
           display: 'flex',
@@ -98,7 +139,7 @@ export default function AgenticChatbotWidget() {
           <div
             style={{
               padding: '14px 18px',
-              background: 'linear-gradient(90deg, #0f172a 0%, #1e1b4b 100%)',
+              background: 'linear-gradient(90deg, var(--bg-slate) 0%, #1e1b4b 100%)',
               borderBottom: '1px solid rgba(255,255,255,0.1)',
               display: 'flex',
               alignItems: 'center',
@@ -111,7 +152,7 @@ export default function AgenticChatbotWidget() {
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  background: '#10b981',
+                  background: 'var(--accent-esmeralda)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -120,19 +161,19 @@ export default function AgenticChatbotWidget() {
                 <Bot size={18} color="#fff" />
               </div>
               <div>
-                <h4 style={{ fontSize: '13px', color: '#fff', margin: 0, fontWeight: 700 }}>
+                <h4 style={{ fontSize: '13px', color: 'var(--fg-white)', margin: 0, fontWeight: 700 }}>
                   REPASS ASSISTANT
                 </h4>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e' }} />
-                  <span style={{ fontSize: '10px', color: '#94a3b8' }}>Assistente Pessoal do Site</span>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--estado-sucesso)' }} />
+                  <span style={{ fontSize: '10px', color: 'var(--fg-muted)' }}>Assistente Pessoal do Site</span>
                 </div>
               </div>
             </div>
 
             <button
               onClick={() => setIsOpen(false)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--fg-muted)' }}
             >
               <X size={18} />
             </button>
@@ -157,7 +198,7 @@ export default function AgenticChatbotWidget() {
                   maxWidth: '82%',
                   background: m.sender === 'user' ? '#6366f1' : 'rgba(255,255,255,0.06)',
                   border: m.sender === 'user' ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                  color: '#ffffff',
+                  color: 'var(--fg-white)',
                   padding: '10px 14px',
                   borderRadius: m.sender === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
                   fontSize: '12.5px',
@@ -168,7 +209,7 @@ export default function AgenticChatbotWidget() {
               </div>
             ))}
             {isThinking && (
-              <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontSize: '11px' }}>
+              <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-esmeralda)', fontSize: '11px' }}>
                 <RefreshCw size={12} className="animate-spin" /> Pensando...
               </div>
             )}
@@ -179,7 +220,7 @@ export default function AgenticChatbotWidget() {
             onSubmit={handleSend}
             style={{
               padding: '12px',
-              background: '#05070f',
+              background: 'var(--bg-deep)',
               borderTop: '1px solid rgba(255,255,255,0.1)',
               display: 'flex',
               gap: '8px'
@@ -190,25 +231,27 @@ export default function AgenticChatbotWidget() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Digite sua dúvida ou instrução..."
+              aria-label="Mensagem para o assistente"
               style={{
                 flex: 1,
                 padding: '10px 14px',
-                background: '#0a0e1a',
+                background: 'var(--bg-surface)',
                 border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: '8px',
-                color: '#fff',
+                color: 'var(--fg-white)',
                 fontSize: '12px'
               }}
             />
             <button
               type="submit"
+              aria-label="Enviar mensagem"
               disabled={isThinking}
               style={{
                 padding: '10px 14px',
-                background: '#10b981',
+                background: 'var(--accent-esmeralda)',
                 border: 'none',
                 borderRadius: '8px',
-                color: '#fff',
+                color: 'var(--fg-white)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',

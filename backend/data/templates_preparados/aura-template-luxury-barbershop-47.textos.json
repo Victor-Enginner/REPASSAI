@@ -1,0 +1,835 @@
+[
+  {
+    "id": 0,
+    "tag": "title",
+    "texto": "ST. JOCP | Experiencia de Barbería Premium",
+    "inicio": 3166,
+    "fim": 3208
+  },
+  {
+    "id": 1,
+    "tag": "a",
+    "texto": "ST. JOCP",
+    "inicio": 4137,
+    "fim": 4145
+  },
+  {
+    "id": 2,
+    "tag": "a",
+    "texto": "La Experiencia",
+    "inicio": 4342,
+    "fim": 4356
+  },
+  {
+    "id": 3,
+    "tag": "a",
+    "texto": "Servicios",
+    "inicio": 4445,
+    "fim": 4454
+  },
+  {
+    "id": 4,
+    "tag": "a",
+    "texto": "Galería",
+    "inicio": 4541,
+    "fim": 4548
+  },
+  {
+    "id": 5,
+    "tag": "a",
+    "texto": "Reservar Cita",
+    "inicio": 4724,
+    "fim": 4737
+  },
+  {
+    "id": 6,
+    "tag": "?",
+    "texto": "Exclusividad Masculina",
+    "inicio": 5682,
+    "fim": 5704
+  },
+  {
+    "id": 7,
+    "tag": "h1",
+    "texto": "Más que un corte.",
+    "inicio": 5965,
+    "fim": 5982
+  },
+  {
+    "id": 8,
+    "tag": "br",
+    "texto": "Una experiencia de distinción.",
+    "inicio": 5986,
+    "fim": 6016
+  },
+  {
+    "id": 9,
+    "tag": "p",
+    "texto": "Transformamos tu imagen a través de una experiencia premium diseñada exclusivamente para hombres que exigen excelencia.",
+    "inicio": 6153,
+    "fim": 6272
+  },
+  {
+    "id": 10,
+    "tag": "a",
+    "texto": "Reservar mi cita",
+    "inicio": 6581,
+    "fim": 6597
+  },
+  {
+    "id": 11,
+    "tag": "?",
+    "texto": "Hablar por WhatsApp",
+    "inicio": 7122,
+    "fim": 7141
+  },
+  {
+    "id": 12,
+    "tag": "span",
+    "texto": "Clientes satisfechos",
+    "inicio": 7993,
+    "fim": 8013
+  },
+  {
+    "id": 13,
+    "tag": "span",
+    "texto": "Atención personalizada",
+    "inicio": 8255,
+    "fim": 8277
+  },
+  {
+    "id": 14,
+    "tag": "span",
+    "texto": "Experiencia Luxury",
+    "inicio": 8517,
+    "fim": 8535
+  },
+  {
+    "id": 15,
+    "tag": "h2",
+    "texto": "Tu imagen abre puertas.",
+    "inicio": 9018,
+    "fim": 9041
+  },
+  {
+    "id": 16,
+    "tag": "p",
+    "texto": "En el mundo de los negocios y el liderazgo, la primera impresión no es solo estética, es comunicación estratégica. Una imagen impecable proyecta seguridad, autoridad y atención al detalle.",
+    "inicio": 9262,
+    "fim": 9450
+  },
+  {
+    "id": 17,
+    "tag": "p",
+    "texto": "En ST. JOCP entendemos que tu tiempo es valioso. Hemos creado un refugio donde la maestría clásica se encuentra con el confort moderno, ofreciendo un servicio que va más allá de un simple corte, para brindarte la presencia que mereces.",
+    "inicio": 9594,
+    "fim": 9829
+  },
+  {
+    "id": 18,
+    "tag": "h2",
+    "texto": "Donde la barbería se convierte en un ritual.",
+    "inicio": 10762,
+    "fim": 10806
+  },
+  {
+    "id": 19,
+    "tag": "p",
+    "texto": "Cada detalle está meticulosamente cuidado para ofrecerte una pausa en tu día y un resultado excepcional.",
+    "inicio": 10941,
+    "fim": 11045
+  },
+  {
+    "id": 20,
+    "tag": "h3",
+    "texto": "Atención Personalizada",
+    "inicio": 11661,
+    "fim": 11683
+  },
+  {
+    "id": 21,
+    "tag": "p",
+    "texto": "Entendemos tu estilo de vida y fisonomía para ofrecerte un servicio a medida que potencie tus facciones.",
+    "inicio": 11769,
+    "fim": 11873
+  },
+  {
+    "id": 22,
+    "tag": "h3",
+    "texto": "Experiencia Premium",
+    "inicio": 12396,
+    "fim": 12415
+  },
+  {
+    "id": 23,
+    "tag": "p",
+    "texto": "Disfruta de bebidas de cortesía, toallas calientes aromatizadas y un ambiente de club privado exclusivo.",
+    "inicio": 12501,
+    "fim": 12605
+  },
+  {
+    "id": 24,
+    "tag": "h3",
+    "texto": "Técnicas Especializadas",
+    "inicio": 13126,
+    "fim": 13149
+  },
+  {
+    "id": 25,
+    "tag": "p",
+    "texto": "Barberos formados en las escuelas más prestigiosas, dominando técnicas clásicas y tendencias contemporáneas.",
+    "inicio": 13235,
+    "fim": 13343
+  },
+  {
+    "id": 26,
+    "tag": "h3",
+    "texto": "Diagnóstico de Imagen",
+    "inicio": 13864,
+    "fim": 13885
+  },
+  {
+    "id": 27,
+    "tag": "p",
+    "texto": "Asesoramiento profesional previo para determinar el estilo que mejor proyecte tu identidad profesional.",
+    "inicio": 13971,
+    "fim": 14074
+  },
+  {
+    "id": 28,
+    "tag": "h3",
+    "texto": "Productos Profesionales",
+    "inicio": 14593,
+    "fim": 14616
+  },
+  {
+    "id": 29,
+    "tag": "p",
+    "texto": "Utilizamos exclusivamente líneas de alta gama para el cuidado capilar y facial, asegurando salud y fijación.",
+    "inicio": 14702,
+    "fim": 14810
+  },
+  {
+    "id": 30,
+    "tag": "h3",
+    "texto": "Resultados Consistentes",
+    "inicio": 15333,
+    "fim": 15356
+  },
+  {
+    "id": 31,
+    "tag": "p",
+    "texto": "Mantén tu imagen impecable visita tras visita gracias a nuestro registro detallado de tus preferencias.",
+    "inicio": 15442,
+    "fim": 15545
+  },
+  {
+    "id": 32,
+    "tag": "span",
+    "texto": "Menú de Servicios",
+    "inicio": 15901,
+    "fim": 15918
+  },
+  {
+    "id": 33,
+    "tag": "h2",
+    "texto": "Elige tu experiencia",
+    "inicio": 16082,
+    "fim": 16102
+  },
+  {
+    "id": 34,
+    "tag": "h3",
+    "texto": "Corte Signature",
+    "inicio": 16524,
+    "fim": 16539
+  },
+  {
+    "id": 35,
+    "tag": "p",
+    "texto": "El estándar de excelencia para el cuidado capilar masculino.",
+    "inicio": 16614,
+    "fim": 16674
+  },
+  {
+    "id": 36,
+    "tag": "?",
+    "texto": "Diagnóstico de imagen",
+    "inicio": 16942,
+    "fim": 16963
+  },
+  {
+    "id": 37,
+    "tag": "?",
+    "texto": "Lavado capilar con masaje",
+    "inicio": 17140,
+    "fim": 17165
+  },
+  {
+    "id": 38,
+    "tag": "?",
+    "texto": "Corte a tijera/máquina de precisión",
+    "inicio": 17342,
+    "fim": 17377
+  },
+  {
+    "id": 39,
+    "tag": "?",
+    "texto": "Peinado con productos premium",
+    "inicio": 17554,
+    "fim": 17583
+  },
+  {
+    "id": 40,
+    "tag": "?",
+    "texto": "Bebida de cortesía",
+    "inicio": 17760,
+    "fim": 17778
+  },
+  {
+    "id": 41,
+    "tag": "a",
+    "texto": "Reservar Cita",
+    "inicio": 17992,
+    "fim": 18005
+  },
+  {
+    "id": 42,
+    "tag": "div",
+    "texto": "Más Solicitado",
+    "inicio": 18437,
+    "fim": 18451
+  },
+  {
+    "id": 43,
+    "tag": "h3",
+    "texto": "Corte + Barba Premium",
+    "inicio": 18593,
+    "fim": 18614
+  },
+  {
+    "id": 44,
+    "tag": "p",
+    "texto": "El ritual completo para una presencia impecable y autoritaria.",
+    "inicio": 18689,
+    "fim": 18751
+  },
+  {
+    "id": 45,
+    "tag": "?",
+    "texto": "Todo lo incluido en Corte Signature",
+    "inicio": 19019,
+    "fim": 19054
+  },
+  {
+    "id": 46,
+    "tag": "?",
+    "texto": "Diseño y perfilado de barba",
+    "inicio": 19231,
+    "fim": 19258
+  },
+  {
+    "id": 47,
+    "tag": "?",
+    "texto": "Ritual de toallas calientes",
+    "inicio": 19435,
+    "fim": 19462
+  },
+  {
+    "id": 48,
+    "tag": "?",
+    "texto": "Afeitado clásico a navaja",
+    "inicio": 19639,
+    "fim": 19664
+  },
+  {
+    "id": 49,
+    "tag": "?",
+    "texto": "Hidratación facial y aceites esenciales",
+    "inicio": 19841,
+    "fim": 19880
+  },
+  {
+    "id": 50,
+    "tag": "a",
+    "texto": "Reservar Cita",
+    "inicio": 20077,
+    "fim": 20090
+  },
+  {
+    "id": 51,
+    "tag": "h3",
+    "texto": "Luxury Experience",
+    "inicio": 20434,
+    "fim": 20451
+  },
+  {
+    "id": 52,
+    "tag": "p",
+    "texto": "Nuestra experiencia cumbre diseñada para la desconexión total.",
+    "inicio": 20526,
+    "fim": 20588
+  },
+  {
+    "id": 53,
+    "tag": "?",
+    "texto": "Corte + Barba Premium",
+    "inicio": 20856,
+    "fim": 20877
+  },
+  {
+    "id": 54,
+    "tag": "?",
+    "texto": "Tratamiento capilar revitalizante",
+    "inicio": 21054,
+    "fim": 21087
+  },
+  {
+    "id": 55,
+    "tag": "?",
+    "texto": "Limpieza facial exprés",
+    "inicio": 21264,
+    "fim": 21286
+  },
+  {
+    "id": 56,
+    "tag": "?",
+    "texto": "Masaje relajante craneal y de hombros",
+    "inicio": 21463,
+    "fim": 21500
+  },
+  {
+    "id": 57,
+    "tag": "?",
+    "texto": "Selección de licores premium",
+    "inicio": 21677,
+    "fim": 21705
+  },
+  {
+    "id": 58,
+    "tag": "a",
+    "texto": "Reservar Cita",
+    "inicio": 21919,
+    "fim": 21932
+  },
+  {
+    "id": 59,
+    "tag": "h2",
+    "texto": "La Experiencia ST. JOCP",
+    "inicio": 22401,
+    "fim": 22424
+  },
+  {
+    "id": 60,
+    "tag": "p",
+    "texto": "Un proceso diseñado meticulosamente para tu confort.",
+    "inicio": 22520,
+    "fim": 22572
+  },
+  {
+    "id": 61,
+    "tag": "h4",
+    "texto": "Recepción Exclusiva",
+    "inicio": 23246,
+    "fim": 23265
+  },
+  {
+    "id": 62,
+    "tag": "p",
+    "texto": "Bienvenida en nuestro lounge con la bebida de tu preferencia mientras te preparas para tu momento.",
+    "inicio": 23343,
+    "fim": 23441
+  },
+  {
+    "id": 63,
+    "tag": "h4",
+    "texto": "Diagnóstico Personalizado",
+    "inicio": 24914,
+    "fim": 24939
+  },
+  {
+    "id": 64,
+    "tag": "p",
+    "texto": "Análisis de tu fisonomía, tipo de cabello y estilo de vida para acordar el look perfecto.",
+    "inicio": 25017,
+    "fim": 25106
+  },
+  {
+    "id": 65,
+    "tag": "h4",
+    "texto": "Servicio Premium",
+    "inicio": 25547,
+    "fim": 25563
+  },
+  {
+    "id": 66,
+    "tag": "p",
+    "texto": "Ejecución impecable con técnicas precisas y herramientas de alta gama en un ambiente de total relajación.",
+    "inicio": 25641,
+    "fim": 25746
+  },
+  {
+    "id": 67,
+    "tag": "h4",
+    "texto": "Acabados Profesionales",
+    "inicio": 27219,
+    "fim": 27241
+  },
+  {
+    "id": 68,
+    "tag": "p",
+    "texto": "Limpieza cuidadosa, perfilado de contornos a navaja y peinado estructurado con productos específicos.",
+    "inicio": 27319,
+    "fim": 27420
+  },
+  {
+    "id": 69,
+    "tag": "h4",
+    "texto": "Tu Mejor Versión",
+    "inicio": 27865,
+    "fim": 27881
+  },
+  {
+    "id": 70,
+    "tag": "p",
+    "texto": "Sales de nuestras instalaciones con una imagen renovada, mayor confianza y listo para cualquier desafío.",
+    "inicio": 27959,
+    "fim": 28063
+  },
+  {
+    "id": 71,
+    "tag": "h2",
+    "texto": "La voz de nuestros clientes",
+    "inicio": 31787,
+    "fim": 31814
+  },
+  {
+    "id": 72,
+    "tag": "p",
+    "texto": "\"El nivel de atención al detalle es insuperable. No es solo venir a cortarte el pelo, es un momento de desconexión total. Desde el recibimiento hasta el acabado final, todo es impecable.\"",
+    "inicio": 32635,
+    "fim": 32822
+  },
+  {
+    "id": 73,
+    "tag": "div",
+    "texto": "AR",
+    "inicio": 33017,
+    "fim": 33019
+  },
+  {
+    "id": 74,
+    "tag": "p",
+    "texto": "Alejandro R.",
+    "inicio": 33126,
+    "fim": 33138
+  },
+  {
+    "id": 75,
+    "tag": "p",
+    "texto": "Director Ejecutivo",
+    "inicio": 33204,
+    "fim": 33222
+  },
+  {
+    "id": 76,
+    "tag": "p",
+    "texto": "\"Llevaba años buscando una barbería que entendiera exactamente lo que necesitaba para mi imagen profesional. ST. JOCP no solo lo entendió, lo mejoró. Servicio de 5 estrellas.\"",
+    "inicio": 34033,
+    "fim": 34208
+  },
+  {
+    "id": 77,
+    "tag": "div",
+    "texto": "MV",
+    "inicio": 34403,
+    "fim": 34405
+  },
+  {
+    "id": 78,
+    "tag": "p",
+    "texto": "Mateo V.",
+    "inicio": 34512,
+    "fim": 34520
+  },
+  {
+    "id": 79,
+    "tag": "p",
+    "texto": "Empresario",
+    "inicio": 34586,
+    "fim": 34596
+  },
+  {
+    "id": 80,
+    "tag": "p",
+    "texto": "\"El ritual de barba es una verdadera obra de arte. Toallas calientes, productos que huelen increíble y una precisión absoluta con la navaja. El mejor lugar de la ciudad, sin duda.\"",
+    "inicio": 35407,
+    "fim": 35587
+  },
+  {
+    "id": 81,
+    "tag": "div",
+    "texto": "CM",
+    "inicio": 35782,
+    "fim": 35784
+  },
+  {
+    "id": 82,
+    "tag": "p",
+    "texto": "Carlos M.",
+    "inicio": 35891,
+    "fim": 35900
+  },
+  {
+    "id": 83,
+    "tag": "p",
+    "texto": "Abogado Socio",
+    "inicio": 35966,
+    "fim": 35979
+  },
+  {
+    "id": 84,
+    "tag": "span",
+    "texto": "Invitación Especial",
+    "inicio": 36500,
+    "fim": 36519
+  },
+  {
+    "id": 85,
+    "tag": "h2",
+    "texto": "Primera Visita Exclusiva",
+    "inicio": 36680,
+    "fim": 36704
+  },
+  {
+    "id": 86,
+    "tag": "p",
+    "texto": "Experimenta el estándar ST. JOCP. Al reservar tu primera cita, incluimos sin costo adicional un diagnóstico de imagen completo y asesoría de estilo personalizada.",
+    "inicio": 36832,
+    "fim": 36994
+  },
+  {
+    "id": 87,
+    "tag": "span",
+    "texto": "Agenda con anticipación:",
+    "inicio": 37397,
+    "fim": 37421
+  },
+  {
+    "id": 88,
+    "tag": "p",
+    "texto": "Trabajamos con espacios limitados diarios para garantizar la privacidad y atención meticulosa que cada cliente merece.",
+    "inicio": 37522,
+    "fim": 37640
+  },
+  {
+    "id": 89,
+    "tag": "a",
+    "texto": "Quiero mi experiencia",
+    "inicio": 37925,
+    "fim": 37946
+  },
+  {
+    "id": 90,
+    "tag": "h2",
+    "texto": "Preguntas Frecuentes",
+    "inicio": 38313,
+    "fim": 38333
+  },
+  {
+    "id": 91,
+    "tag": "span",
+    "texto": "¿Necesito cita previa?",
+    "inicio": 38746,
+    "fim": 38768
+  },
+  {
+    "id": 92,
+    "tag": "div",
+    "texto": "Sí. Para garantizar la exclusividad, privacidad y el tiempo necesario para ofrecer nuestro estándar de servicio, trabajamos únicamente mediante cita previa.",
+    "inicio": 39208,
+    "fim": 39364
+  },
+  {
+    "id": 93,
+    "tag": "span",
+    "texto": "¿Cómo reservo mi espacio?",
+    "inicio": 39765,
+    "fim": 39790
+  },
+  {
+    "id": 94,
+    "tag": "div",
+    "texto": "Puedes reservar directamente a través de los botones de esta página que te llevarán a nuestra plataforma segura, o si prefieres asistencia personal, contactándonos vía WhatsApp.",
+    "inicio": 40230,
+    "fim": 40407
+  },
+  {
+    "id": 95,
+    "tag": "span",
+    "texto": "¿Qué incluye exactamente la experiencia premium?",
+    "inicio": 40808,
+    "fim": 40856
+  },
+  {
+    "id": 96,
+    "tag": "div",
+    "texto": "Incluye asesoría de imagen, lavado capilar estimulante, el corte o arreglo de barba con técnicas avanzadas, uso de productos de lujo, bebidas de cortesía (café de especialidad o licores) y un ambiente relajante.",
+    "inicio": 41296,
+    "fim": 41507
+  },
+  {
+    "id": 97,
+    "tag": "span",
+    "texto": "¿Cuánto dura aproximadamente una cita?",
+    "inicio": 41908,
+    "fim": 41946
+  },
+  {
+    "id": 98,
+    "tag": "div",
+    "texto": "Un Corte Signature toma aproximadamente 45 minutos. El servicio de Corte + Barba Premium dura 75 minutos, y la Luxury Experience alrededor de 90 minutos, asegurando que nada se haga con prisa.",
+    "inicio": 42386,
+    "fim": 42578
+  },
+  {
+    "id": 99,
+    "tag": "h2",
+    "texto": "Tu imagen es una inversión.",
+    "inicio": 43293,
+    "fim": 43320
+  },
+  {
+    "id": 100,
+    "tag": "p",
+    "texto": "Haz que cada reunión, evento o presentación comience con la mejor versión de ti mismo.",
+    "inicio": 43449,
+    "fim": 43535
+  },
+  {
+    "id": 101,
+    "tag": "a",
+    "texto": "Reservar Cita Ahora",
+    "inicio": 43838,
+    "fim": 43857
+  },
+  {
+    "id": 102,
+    "tag": "?",
+    "texto": "Contactar Asesor",
+    "inicio": 44281,
+    "fim": 44297
+  },
+  {
+    "id": 103,
+    "tag": "a",
+    "texto": "ST. JOCP",
+    "inicio": 44828,
+    "fim": 44836
+  },
+  {
+    "id": 104,
+    "tag": "p",
+    "texto": "Más que una barbería, una experiencia de lujo diseñada para hombres que valoran su imagen y su tiempo.",
+    "inicio": 44967,
+    "fim": 45069
+  },
+  {
+    "id": 105,
+    "tag": "h4",
+    "texto": "Contacto",
+    "inicio": 45251,
+    "fim": 45259
+  },
+  {
+    "id": 106,
+    "tag": "?",
+    "texto": "Av. Presidente Masaryk 123, Polanco",
+    "inicio": 45484,
+    "fim": 45519
+  },
+  {
+    "id": 107,
+    "tag": "?",
+    "texto": "+52 55 1234 5678",
+    "inicio": 45664,
+    "fim": 45680
+  },
+  {
+    "id": 108,
+    "tag": "?",
+    "texto": "concierge@stjocp.com",
+    "inicio": 45826,
+    "fim": 45846
+  },
+  {
+    "id": 109,
+    "tag": "h4",
+    "texto": "Horarios",
+    "inicio": 46018,
+    "fim": 46026
+  },
+  {
+    "id": 110,
+    "tag": "span",
+    "texto": "Lun - Vie",
+    "inicio": 46202,
+    "fim": 46211
+  },
+  {
+    "id": 111,
+    "tag": "span",
+    "texto": "Sábados",
+    "inicio": 46345,
+    "fim": 46352
+  },
+  {
+    "id": 112,
+    "tag": "span",
+    "texto": "Domingos",
+    "inicio": 46501,
+    "fim": 46509
+  },
+  {
+    "id": 113,
+    "tag": "span",
+    "texto": "Cerrado",
+    "inicio": 46523,
+    "fim": 46530
+  },
+  {
+    "id": 114,
+    "tag": "h4",
+    "texto": "Redes Sociales",
+    "inicio": 46709,
+    "fim": 46723
+  },
+  {
+    "id": 115,
+    "tag": "p",
+    "texto": "© 2026 ST. JOCP Luxury Barbershop. Todos los derechos reservados.",
+    "inicio": 47683,
+    "fim": 47753
+  },
+  {
+    "id": 116,
+    "tag": "a",
+    "texto": "Aviso de Privacidad",
+    "inicio": 47887,
+    "fim": 47906
+  },
+  {
+    "id": 117,
+    "tag": "a",
+    "texto": "Términos y Condiciones",
+    "inicio": 47986,
+    "fim": 48008
+  },
+  {
+    "id": 118,
+    "tag": "a",
+    "texto": "Reservar Cita",
+    "inicio": 48848,
+    "fim": 48861
+  }
+]

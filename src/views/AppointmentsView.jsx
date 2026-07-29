@@ -11,16 +11,16 @@ export default function AppointmentsView({ leads }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
         <div>
           <span className="mono-label">MODULE // SCHEDULE_APPOINTMENTS_06</span>
-          <h1 className="font-headline" style={{ fontSize: '32px', color: '#ffffff', marginTop: '4px' }}>
+          <h1 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '4px' }}>
             AGENDA DE REUNIÕES & DEMOS
           </h1>
-          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '4px' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--fg-muted)', marginTop: '4px' }}>
             Acompanhe suas reuniões agendadas com tomadores de decisão
           </p>
         </div>
 
-        <div style={{ background: '#0a0e1a', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
-          <span className="mono-label" style={{ color: '#f59e0b' }}>{agendados.length} DEMOS AGENDADAS</span>
+        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
+          <span className="mono-label" style={{ color: 'var(--estado-alerta)' }}>{agendados.length} DEMOS AGENDADAS</span>
         </div>
       </div>
 
@@ -36,24 +36,24 @@ export default function AppointmentsView({ leads }) {
               gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
               alignItems: 'center',
               gap: '20px',
-              background: '#0a0e1a',
+              background: 'var(--bg-surface)',
               border: '0.5px solid rgba(255, 255, 255, 0.12)'
             }}
           >
             <div>
-              <h3 className="font-headline" style={{ fontSize: '16px', color: '#ffffff' }}>
+              <h3 className="font-headline" style={{ fontSize: '16px', color: 'var(--fg-white)' }}>
                 {lead.nome}
               </h3>
-              <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--fg-muted)', marginTop: '2px' }}>
                 {lead.categoria} · {lead.cidade}, {lead.estado}
               </div>
             </div>
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#ffffff' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--fg-white)' }}>
                 <Clock size={13} color="#f59e0b" /> Hoje às 15:30h
               </div>
-              <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>
+              <div style={{ fontSize: '10px', color: 'var(--fg-subtle)', marginTop: '2px' }}>
                 Apresentação de protótipo de site
               </div>
             </div>
@@ -80,7 +80,7 @@ export default function AppointmentsView({ leads }) {
         ))}
 
         {agendados.length === 0 && (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--fg-muted)' }}>
             Nenhum agendamento pendente no momento. Mova leads para a coluna "Agendados" no CRM.
           </div>
         )}

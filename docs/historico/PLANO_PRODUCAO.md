@@ -1,3 +1,8 @@
+> **HISTÓRICO — não é referência.**
+> Auditoria de frontend com os sprints A–F. Os criterios de aceite viraram issues no Linear.
+> A referência atual está em [../ARQUITETURA.md](../ARQUITETURA.md) e
+> [../ROADMAP.md](../ROADMAP.md). Índice em [../README.md](../README.md).
+
 # REPASS AI — Auditoria de Frontend e Plano de Produção
 
 Documento de engenharia. Todo número aqui foi **medido**, não estimado —

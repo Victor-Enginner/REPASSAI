@@ -20,19 +20,18 @@ npm run dev --prefix landing
 Sobe em <http://localhost:3100>. A porta 3000 é do painel — os dois rodam
 juntos sem conflito.
 
-## Deploy (Vercel, plano gratuito)
+## Deploy
 
-O projeto é Next.js 16, então a Vercel é o caminho natural: build sem
-configuração e HTTPS incluso.
+Publicado na **Netlify**, em `repassaiapp.netlify.app`. Base directory:
+`landing`.
 
-1. Suba o repositório para o GitHub
-2. Em <https://vercel.com/new>, importe o repositório
-3. Em **Root Directory**, selecione `landing`
-4. Deploy
+O `@vercel/analytics` que vinha no template foi removido: ele buscava
+`/_vercel/insights/script.js`, que só existe na Vercel, e dava 404 em toda
+visita fora dela. Hoje o site não carrega nenhum script de analytics — se
+quiser medir visitas, use o painel da própria Netlify.
 
-O framework é detectado sozinho. Você recebe uma URL `.vercel.app` gratuita.
-Quando houver domínio próprio, aponte-o em Settings → Domains — nada no
-código precisa mudar.
+Quando houver domínio próprio, aponte em Domain settings. Nada no código
+precisa mudar.
 
 ## Estrutura das seções
 
@@ -46,13 +45,15 @@ Decisão do dono sobre onde cada linguagem visual entra:
 
 ## Vídeo do hero
 
-O vídeo de fundo é o original do template e continua hospedado no blob da
-Vercel de onde o template veio (`hebbkx1anhila5yf.public.blob.vercel-storage.com`).
-Ele responde hoje, mas **é armazenamento de terceiro**: se for removido de
-lá, o hero fica sem fundo.
+Servido pelo próprio site, em `public/video/hero.mp4` (3,3 MB).
 
-Para eliminar esse risco, baixe o arquivo para `public/video/hero.mp4` e
-troque a constante `VIDEO_HERO` em `app/page.tsx` por `/video/hero.mp4`.
+Ele vinha do blob da Vercel de onde o template veio — armazenamento de
+terceiro. Com o site público, isso deixou de ser risco teórico: se o arquivo
+sumisse de lá, o hero ficaria sem fundo para todos os visitantes, sem aviso.
+Foi baixado para dentro do projeto.
+
+**A página não faz nenhuma requisição externa.** Verificado no build (zero
+URLs `http` no HTML gerado) e em execução (`recursosExternos: []`).
 
 ## Antes de publicar — dois placeholders travados de propósito
 

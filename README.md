@@ -1,145 +1,220 @@
 <div align="center">
-
-<img src="./docs/screenshots/repass_hero.png" alt="REPASS AI Hero Banner" width="820"/>
-
-<br/>
-<br/>
-
-# 🚀 REPASS AI — The Advanced OSINT & Agentic Engine
-
+  <img src="./docs/screenshots/repass_hero.png" alt="REPASS AI" width="760"/>
 </div>
 
-> **Estado técnico atual (27/07/2026):** frontend React 18/Vite, API Python,
-> login e banco Supabase, publicação Cloudflare R2 e gateway multi-LLM estão
-> conectados. O mapa vivo em `docs/repass-architecture-map.html` é a fonte de
-> verdade; `docs/INFRASTRUCTURE.md` contém Docker, checkpoints e recuperação.
-> O runtime Modal e o sandbox para código não confiável continuam planejados.
+# REPASS AI
 
-<div align="center">
+Encontra negócios locais sem site no Google Places, gera uma landing page para
+cada um em **14 ms**, e organiza a abordagem comercial num funil.
 
-## 💰 Prospecção Ilimitada & Sites Gerados por IA em Milissegundos
+Feito para quem vende site para pequeno negócio: barbearia, padaria, petshop,
+oficina. O trabalho manual — buscar no Maps, checar se tem site, montar a
+página, mandar mensagem — vira um fluxo só.
 
-</div>
+[![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react)](https://react.dev)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Testes](https://img.shields.io/badge/testes-27_passando-22c55e)](#verificando)
 
-> Varrer o Google Places na mão, buscar fotos e criar landing pages é doloroso. O **REPASS AI** abstrai o caos agregando um **Motor OSINT de Alta Performance**, um **Pipeline de Mídia (RAG)** e uma arquitetura **Serverless Modal** num único painel estilo Hacker UI. Raspagem de 500+ leads, fotos reais e clones de sites — tudo com 1 clique.
+---
 
-<img src="./docs/screenshots/repass_osint.png" width="100%" alt="REPASS AI Dashboard: Terminal hacker SSE com logs em tempo real, painéis glassmorphism e controle absoluto sobre estado, cidade e nichos. Automação completa OSINT."/>
-<br/>
-<img src="./docs/screenshots/repass_dashboard.png" width="100%" alt="REPASS AI Metrics: Funil de vendas, métricas de taxa de conversão e painel gerencial."/>
+## Estado, medido em 27/07/2026
 
-<br/>
+Números tirados do repositório por comando, não estimados.
 
-<div align="center">
+| | |
+|---|---|
+| Código escrito | **23.819 linhas** *(Python, JSX, JS, CSS — sem contar arquivo gerado)* |
+| Geração de site | **14 ms**, custo **R$ 0,00** |
+| Templates prontos | **8**, todos em pt-BR |
+| Nichos cobertos | 12 |
+| Testes automáticos | **27** |
+| Auditorias que bloqueiam entrega | 8 |
 
-<h3>
+### O que funciona
 
-⭐ Star o repo se o REPASS AI te ajudou a dominar a prospecção B2B.
+Varredura no Google Places com cota e limite de taxa · geração de sites em 8
+templates · persistência no Supabase com histórico de versões · publicação no
+Cloudflare R2 · autenticação em 6 rotas · CRM com funil · design system com
+lint que trava regressão.
 
-</h3>
+### O que **não** funciona ainda
 
-[![Stars](https://img.shields.io/github/stars/Victor-Enginner/REPASSAI?style=social)](https://github.com/Victor-Enginner/REPASSAI)
-[![Follow @Victor-Enginner on GitHub](https://img.shields.io/github/followers/Victor-Enginner?style=for-the-badge&logo=github&logoColor=white&label=Follow%20on%20GitHub&color=181717)](https://github.com/Victor-Enginner)
+Sendo explícito, porque promessa não cumprida num README é o jeito mais rápido
+de perder a confiança de quem vai ler o código:
 
-<br/>
+- `POST /api/site/clone` **não clona nada** — devolve um schema fixo
+- `backend/modal_engine.py` está no repositório mas tem **zero referências**
+- Os templates da 77lib carregam Tailwind de CDN externo; se o CDN cair, o
+  site do cliente quebra *(o template base próprio não tem esse problema)*
+- O site gerado não tem `<main>` e a hierarquia de títulos pula um nível
+- Sem testes end-to-end de jornada — só de backend
 
-## 🧩 Funcionalidades (O que o motor entrega)
+---
 
-[![React version](https://img.shields.io/badge/React-18.2-61DAFB?logo=react)](https://react.dev)
-[![Python Engine](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
-[![Docker Compose](https://img.shields.io/badge/Runtime-Docker_Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+## Rodando
 
-<table>
-  <tr>
-    <td align="center"><b>🚀 Scanner OSINT</b><br/>Captura de Leads e Telefones Reais</td>
-    <td align="center"><b>🎯 Proxy RAG Mídia</b><br/>Zero-copy Streaming de Imagens Google</td>
-    <td align="center"><b>🌐 Lovable Clone Engine</b><br/>Clonagem de estruturas web em React</td>
-  </tr>
-  <tr>
-    <td align="center"><b>🔌 Modal Serverless</b><br/>Poder GPU Elástico p/ Scraper</td>
-    <td align="center"><b>🗜️ Live SSE Terminal</b><br/>Comunicação Real-Time com o Backend</td>
-    <td align="center"><b>🌍 Vercel Ready</b><br/>Frontend otimizado para deploy 1-click</td>
-  </tr>
-</table>
-
-</div>
-
-<br/>
-<br/>
-
-<div align="center">
-
-## 🆓 100% Operacional no Ambiente Local (Zero Fricção)
-
-</div>
-
-O REPASS AI foi blindado com a arquitetura **SaaS Premium**. Você configura suas chaves de API uma única vez no backend (`.env`) e o sistema orquestra milhares de requisições de forma isolada do frontend, garantindo que suas chaves não vazem.
+Precisa de **Node 18+** e **Python 3.11+**.
 
 ```bash
-# 1. Instale as dependências Python
-pip install -r backend/requirements.txt
+npm install && pip install -r backend/requirements.txt
+```
 
-# 2. Crie a configuração apenas se ela ainda não existir
-if not exist backend\.env copy backend\.env.example backend\.env
-# Depois edite backend/.env e preencha só as integrações utilizadas
+```bash
+cp backend/.env.example backend/.env
+```
 
-# 3. Rode o Backend Paralelo (ThreadingHTTPServer)
+```bash
 python backend/app_api.py
+```
 
-# 4. Inicie o Frontend Vite
+```bash
 npm run dev
 ```
 
-<br/>
+O painel sobe em `localhost:3000` e a API em `localhost:8000`. Sem as chaves do
+Google Places o sistema entra em **modo demonstração**: mostra exemplos de
+layout com contato em branco e selo visível — nunca inventa telefone.
 
-<div align="center">
+### Verificando
 
-# 💥 A Promessa
+```bash
+cd backend && python test_api.py
+```
 
-</div>
-
-O **REPASS AI** resolve o funil inteiro de Vendas B2B Outbound. Você escolhe a cidade e o nicho. O nosso núcleo OSINT bate no Google, filtra os estabelecimentos, acha quem não tem site e avalia a nota. O núcleo de Mídia recupera a fachada do lugar real, e a IA monta uma Landing Page *pixel-perfect* customizada pro cara na mesma hora. 
-
-<br/>
-
-<div align="center">
-
-## 🏆 O que torna o REPASS AI único?
-
-</div>
-
-<table>
-  <tr>
-    <th>Recurso</th>
-    <th align="left">Descrição Técnica</th>
-  </tr>
-  <tr>
-    <td nowrap><code>EventSource (SSE)</code></td>
-    <td>Logs transmitidos do Python pro React em milissegundos sem bloquear thread.</td>
-  </tr>
-  <tr>
-    <td nowrap><code>Modal Cloud</code></td>
-    <td>Fallback dinâmico que manda o código pesado rodar num cluster Serverless caso você precise escalar 1.000 usuários ao mesmo tempo.</td>
-  </tr>
-  <tr>
-    <td nowrap><code>Imutabilidade VDOM</code></td>
-    <td>O motor blinda mutações fantasma congelando schemas JSON com `Object.freeze`.</td>
-  </tr>
-  <tr>
-    <td nowrap><code>Lazy Async Loading</code></td>
-    <td>A `<GallerySection/>` suporta dezenas de imagens HD usando `decoding="async"` para não travar a CPU do navegador.</td>
-  </tr>
-</table>
-
-## ❤️ Suporte & Comunidade
-
-O REPASS AI foi construído para elevar o nível da comunidade de desenvolvimento Hacking & OSINT.
-- ⭐ **Star the repo** — Ajude o algoritmo do GitHub a notar o projeto!
-- 🐛 **Report bugs** nas Issues para podermos evoluir.
-
-<br/>
+```bash
+npm run lint && npm run build
+```
 
 ---
+
+## Arquitetura
+
+```mermaid
+flowchart TB
+    UI["Painel React 18 + Vite"] --> GATE["Portão das rotas caras<br/>token + limite de taxa"]
+    GATE --> SCAN["Varredura OSINT"]
+    GATE --> GEN["Geração de sites"]
+    GATE --> SITES["CRUD de sites"]
+    SCAN --> PLACES["places_engine<br/>Google Places"]
+    GEN --> COMP["template_compiler"]
+    GEN --> HYB["hybrid_engine"]
+    COMP --> TPL[("Templates<br/>preparados")]
+    HYB -.->|"só na exceção"| LLM["llm_gateway<br/>4 provedores"]
+    SITES --> SUPA[("Supabase")]
+    GEN --> R2[("Cloudflare R2")]
+```
+
+### A decisão central
+
+**A IA não participa da geração de sites.**
+
+Ela roda **uma vez por template**, na importação: traduz, classifica cada
+trecho de texto e marca onde entram os dados do negócio. O resultado fica
+guardado em português. Gerar um site depois é troca de texto.
+
+```
+IMPORTAR TEMPLATE            GERAR SITE
+uma vez · ~90s · ~R$ 0,40    sempre · 14 ms · R$ 0,00
+```
+
+Os 8 templates chegaram em **6 idiomas** — inglês, catalão, alemão, búlgaro,
+espanhol e francês. Traduzir a cada site custaria caro e traria a
+imprevisibilidade da IA para o caminho crítico. Traduzir uma vez resolve os
+dois problemas.
+
+O texto é substituído **por posição em bytes**, não por busca de frase. Buscar
+frase exigiria uma regra escrita à mão por frase, por template, por idioma —
+cerca de 200 regras, em idiomas que ninguém da equipe revisa.
+
+---
+
+## Auditoria: site sujo é bloqueado, não publicado
+
+Todo HTML passa por 8 verificações antes de ser gravado. Cada uma existe
+porque o defeito **aconteceu**:
+
+| Verificação | O que impediu |
+|---|---|
+| Idioma do documento | `<html lang="fr">` — todo site se declarava francês para o Google |
+| Marcadores de idioma estrangeiro | parágrafos inteiros iam ao ar em francês |
+| Moeda estrangeira | padaria em Franca com o cardápio em dólar |
+| Dados do negócio original | telefone `+31 772 086 200` e `hello@exoape.com` no site do cliente |
+| Marcador não preenchido | `{{NOME}}` cru na página |
+| Consistência de variáveis | a IA traduziu a marca: `Little Latte Cafe` → *"Café com Leite Pequeno"* |
+| Preço determinístico | a IA **inventou** valores: *"Entrada: R$ 1.000.000"* numa pousada |
+| Alinhamento plano × extração | ids deslocados colariam cada texto no lugar errado, sem erro visível |
+
+Todo preço herdado de template vira **"Sob consulta"**. Não sabemos o que o
+cliente cobra, e preço errado numa página que ele vai divulgar é o pior
+defeito possível deste produto.
+
+**A auditoria não julga aparência.** Ela garante ausência de resíduo, não que
+o layout esteja bom — isso ainda depende de alguém abrir a página.
+
+---
+
+## Estrutura
+
+```
+backend/
+  app_api.py              servidor, rotas, autenticação, limite de taxa
+  template_catalog.json   nicho → template                    (camada 1)
+  template_preparer.py    extração de texto por posição       (camada 2)
+  template_translator.py  classificação com IA, uma vez       (camada 3)
+  template_compiler.py    compilação e seleção            (camadas 4 e 5)
+  template_auditor.py     diagnóstico read-only de templates
+  lib77_engine.py         motor legado + as regras de auditoria
+  hybrid_engine.py        textos por nicho, sem IA
+  rules/                  texto, validação e categorização
+  places_engine.py        Google Places
+  supabase_client.py      auth e banco
+  r2_storage_engine.py    Cloudflare R2
+  llm_gateway.py          4 provedores com rodízio de chaves
+  miners/                 minerador de componentes MIT
+
+src/
+  App.jsx                 roteamento das 14 abas
+  views/  components/     telas e peças de interface
+  services/               persistência, auth, geração agêntica
+  index.css               40 tokens de design
+
+scripts/
+  verificar-tokens.mjs    trava: reprova cor hex escrita à mão
+  linear-sync.mjs         sincroniza o backlog com o Linear
+```
+
+---
+
+## Documentação
+
+| Arquivo | O que tem |
+|---|---|
+| [docs/README.md](docs/README.md) | **índice** — o que é referência atual e o que é histórico |
+| [docs/ARQUITETURA.md](docs/ARQUITETURA.md) | mapa completo, fluxos, decisões técnicas |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | prioridades, riscos, decisões em aberto |
+| [docs/arquitetura-visual.html](docs/arquitetura-visual.html) | os fluxogramas renderizados |
+| [docs/GUIA_SUPABASE.md](docs/GUIA_SUPABASE.md) | tabelas, RLS e chaves |
+| [docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md) | Docker, checkpoints, recuperação |
+| [docs/linear/](docs/linear/) | backlog em CSV, importável no Linear |
+
+O backlog operacional fica no Linear. `scripts/linear-sync.mjs` sincroniza os
+CSVs com a API — é idempotente, então pode rodar mais de uma vez.
+
+---
+
+## Stack
+
+React 18.2 · Vite 5 · Python 3.11+ · Supabase · Cloudflare R2 · Google Places
+API · gateway multi-LLM com rodízio de chaves.
+
+O backend usa `ThreadingHTTPServer` da biblioteca padrão, sem framework web.
+É uma escolha, não um acidente: menos dependência para manter, e o volume
+atual não justifica o peso de um framework. Se a carga crescer, o ponto de
+troca está isolado em `app_api.py`.
+
 <div align="center">
-Construído com sangue, código limpo e arquitetura pesada. <br/>
-<i>Never stop coding.</i>
+<br/>
+<img src="./docs/screenshots/repass_osint.png" width="100%" alt="Scanner OSINT: varredura por nicho e cidade com log ao vivo"/>
+<br/><br/>
+<img src="./docs/screenshots/repass_dashboard.png" width="100%" alt="Funil de vendas com métricas de conversão"/>
 </div>
