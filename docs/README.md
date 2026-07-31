@@ -19,6 +19,7 @@ documento está errado e deve ser corrigido.
 | [ROADMAP.md](ROADMAP.md) | prioridades, riscos conhecidos, decisões em aberto e de quem é cada uma |
 | [arquitetura-visual.html](arquitetura-visual.html) | os mesmos fluxogramas renderizados, para abrir no navegador |
 | [GUIA_SUPABASE.md](GUIA_SUPABASE.md) | tabelas, RLS, chaves e como ligar o multiusuário |
+| [PADRAO_TYPESCRIPT_PYTHON.md](PADRAO_TYPESCRIPT_PYTHON.md) | diretrizes arquiteturais para uso de TypeScript (Frontend / UI Engine) e Python (Backend / IA) |
 | [INFRASTRUCTURE.md](INFRASTRUCTURE.md) | Docker, checkpoints e recuperação |
 | [linear/](linear/) | backlog em CSV e o gerador dele |
 
