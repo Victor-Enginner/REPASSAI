@@ -1,0 +1,2 @@
+# REPASS AI - Dependências Python do Repositório
+-r backend/requirements.txt

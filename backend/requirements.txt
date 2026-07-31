@@ -1,2 +1,7 @@
-python-dotenv>=1.0,<2
-boto3>=1.35,<2
+# REPASS AI - Dependências Python do Backend
+
+# Gerenciamento de variáveis de ambiente (.env)
+python-dotenv>=1.0.0,<2.0.0
+
+# Armazenamento de mídia Cloudflare R2 (S3-Compatible)
+boto3>=1.35.0,<2.0.0
