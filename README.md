@@ -195,6 +195,7 @@ scripts/
 | [docs/arquitetura-visual.html](docs/arquitetura-visual.html) | os fluxogramas renderizados |
 | [docs/GUIA_SUPABASE.md](docs/GUIA_SUPABASE.md) | tabelas, RLS e chaves |
 | [docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md) | Docker, checkpoints, recuperação |
+| [docs/SEGURANCA.md](docs/SEGURANCA.md) | manual de segurança, criptografia, mitigação de vulnerabilidades e hardening |
 | [docs/linear/](docs/linear/) | backlog em CSV, importável no Linear |
 | [docs/HANDOFF.md](docs/HANDOFF.md) | transferência do projeto para outro agente de IA |
 | [docs/PROMPT_IDENTIDADE_VISUAL.md](docs/PROMPT_IDENTIDADE_VISUAL.md) | prompt para aplicar a identidade visual da marca |

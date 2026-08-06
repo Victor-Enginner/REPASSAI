@@ -17,6 +17,7 @@ regra que já vale no motor da 77lib.
 
 from __future__ import annotations
 
+import html as html_lib
 import json
 import logging
 import os
@@ -35,6 +36,13 @@ logger = logging.getLogger("template_compiler")
 # preenchimento, limpeza e auditoria usam esta mesma constante, o marcador
 # aparecia cru na página e passava por todas as verificações.
 MARCADOR = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+
+
+def _esc(valor: Any) -> str:
+    """Escapa texto para HTML (texto e atributos). None/vazio vira string vazia."""
+    if valor is None:
+        return ""
+    return html_lib.escape(str(valor), quote=True)
 
 
 class CompilacaoError(Exception):
@@ -123,35 +131,44 @@ def montar_valores(lead: dict[str, Any], schema: dict[str, Any] | None = None) -
     diferenciais = schema.get("diferenciais") or []
 
     nome, nicho, cidade = lead["nome"], lead["nicho"], lead["cidade"]
+    whatsapp = lead["whatsapp"] if lead["whatsapp"] != "#contato" else "#contato"
 
     valores = {
-        "NOME": nome,
-        "CATEGORIA": nicho,
-        "CIDADE": cidade,
-        "ESTADO": lead["estado"],
-        "ENDERECO": lead["endereco"],
-        "TELEFONE": lead["telefone"] or "",
-        "WHATSAPP": lead["whatsapp"] if lead["whatsapp"] != "#contato" else "#contato",
-        "EMAIL": f"contato@{_dominio(nome)}.com.br",
-        "AVALIACAO": str(lead["avaliacao"]) if lead["avaliacao"] else "",
-        "REVIEWS": str(lead["reviews"]) if lead["reviews"] else "",
+        "NOME": _esc(nome),
+        "CATEGORIA": _esc(nicho),
+        "CIDADE": _esc(cidade),
+        "ESTADO": _esc(lead["estado"]),
+        "ENDERECO": _esc(lead["endereco"]),
+        "TELEFONE": _esc(lead["telefone"] or ""),
+        "WHATSAPP": _esc(whatsapp),
+        "EMAIL": _esc(f"contato@{_dominio(nome)}.com.br"),
+        "AVALIACAO": _esc(lead["avaliacao"]) if lead["avaliacao"] else "",
+        "REVIEWS": _esc(lead["reviews"]) if lead["reviews"] else "",
         "ANO": str(date.today().year),
 
         # Textos do template base. Vêm das regras por nicho quando há schema;
         # senão caem num texto neutro que serve para qualquer negócio.
-        "HERO_SUBTITULO": hero.get("subtitle")
-            or f"{nicho} em {cidade}. Atendimento direto pelo WhatsApp.",
-        "CTA": hero.get("cta") or "Falar no WhatsApp",
-        "SERVICOS_TITULO": hero.get("title") or f"O que o {nome} faz por você",
-        "SERVICOS_TEXTO": sobre.get("descricao")
-            or f"Conheça os serviços do {nome} em {cidade}.",
-        "AMBIENTE_TEXTO": f"Venha conhecer o {nome} de perto. Estamos em "
-                          f"{lead['endereco']}.",
-        "AVALIACOES_TITULO": "O que dizem quem já foi atendido",
-        "AVALIACOES_TEXTO": f"A reputação do {nome} é construída no atendimento "
-                            f"do dia a dia, uma pessoa de cada vez.",
-        "RODAPE_TEXTO": f"{nicho} em {cidade}. Fale com a gente pelo WhatsApp "
-                        f"e agende seu atendimento.",
+        "HERO_SUBTITULO": _esc(
+            hero.get("subtitle")
+            or f"{nicho} em {cidade}. Atendimento direto pelo WhatsApp."
+        ),
+        "CTA": _esc(hero.get("cta") or "Falar no WhatsApp"),
+        "SERVICOS_TITULO": _esc(hero.get("title") or f"O que o {nome} faz por você"),
+        "SERVICOS_TEXTO": _esc(
+            sobre.get("descricao") or f"Conheça os serviços do {nome} em {cidade}."
+        ),
+        "AMBIENTE_TEXTO": _esc(
+            f"Venha conhecer o {nome} de perto. Estamos em {lead['endereco']}."
+        ),
+        "AVALIACOES_TITULO": _esc("O que dizem quem já foi atendido"),
+        "AVALIACOES_TEXTO": _esc(
+            f"A reputação do {nome} é construída no atendimento "
+            f"do dia a dia, uma pessoa de cada vez."
+        ),
+        "RODAPE_TEXTO": _esc(
+            f"{nicho} em {cidade}. Fale com a gente pelo WhatsApp "
+            f"e agende seu atendimento."
+        ),
     }
 
     # Cards de serviço: até 4, vindos dos diferenciais das regras.
@@ -164,8 +181,8 @@ def montar_valores(lead: dict[str, Any], schema: dict[str, Any] | None = None) -
     for i in range(4):
         item = diferenciais[i] if i < len(diferenciais) else {}
         titulo, texto = padroes[i]
-        valores[f"SERVICO_{i + 1}_TITULO"] = item.get("titulo") or titulo
-        valores[f"SERVICO_{i + 1}_TEXTO"] = item.get("descricao") or texto
+        valores[f"SERVICO_{i + 1}_TITULO"] = _esc(item.get("titulo") or titulo)
+        valores[f"SERVICO_{i + 1}_TEXTO"] = _esc(item.get("descricao") or texto)
 
     # Fotos: cada slot recebe uma imagem diferente quando o lead tem galeria.
     # Repetir a mesma foto cinco vezes foi o que deixou os primeiros sites com
@@ -174,7 +191,7 @@ def montar_valores(lead: dict[str, Any], schema: dict[str, Any] | None = None) -
     if not fotos:
         fotos = [_imagem_por_nicho(nicho)]
     for i in range(5):
-        valores[f"FOTO_{i + 1}"] = fotos[i % len(fotos)]
+        valores[f"FOTO_{i + 1}"] = _esc(fotos[i % len(fotos)])
 
     return valores
 
@@ -214,14 +231,14 @@ def _trocar_imagens(html: str, lead: dict[str, Any]) -> tuple[str, int]:
     contador = {"n": 0}
 
     def troca(m: re.Match[str]) -> str:
-        url = fotos[contador["n"] % len(fotos)]
+        url = _esc(fotos[contador["n"] % len(fotos)])
         contador["n"] += 1
         return f'{m.group(1)}{url}{m.group(3)}'
 
     html = re.sub(r'(<img\b[^>]*?\bsrc=")([^"]*)(")', troca, html, flags=re.IGNORECASE)
     html = re.sub(
         r'(style="[^"]*background-image:\s*url\(\')([^\']*)(\'\))',
-        lambda m: f"{m.group(1)}{principal}{m.group(3)}",
+        lambda m: f"{m.group(1)}{_esc(principal)}{m.group(3)}",
         html,
     )
 
@@ -237,10 +254,11 @@ def _trocar_imagens(html: str, lead: dict[str, Any]) -> tuple[str, int]:
         if "storyblok" not in bloco and "aura.build" not in bloco:
             return bloco
         bloco = re.sub(r"<source\b[^>]*>", "", bloco, flags=re.IGNORECASE)
+        poster = _esc(principal)
         if "poster=" in bloco:
-            bloco = re.sub(r'poster="[^"]*"', f'poster="{principal}"', bloco)
+            bloco = re.sub(r'poster="[^"]*"', f'poster="{poster}"', bloco)
         else:
-            bloco = bloco.replace("<video", f'<video poster="{principal}"', 1)
+            bloco = bloco.replace("<video", f'<video poster="{poster}"', 1)
         contador["n"] += 1
         return bloco
 
@@ -252,12 +270,14 @@ def _ajustar_cabeca(html: str, lead: dict[str, Any]) -> str:
     """Grava idioma, título e metadados de SEO do negócio no `<head>`."""
     from lib77_engine import _imagem_por_nicho
 
-    titulo = f"{lead['nome']} | {lead['nicho']} em {lead['cidade']} - {lead['estado']}"
-    descricao = (
+    titulo = _esc(
+        f"{lead['nome']} | {lead['nicho']} em {lead['cidade']} - {lead['estado']}"
+    )
+    descricao = _esc(
         f"{lead['nome']} em {lead['cidade']} - {lead['estado']}. {lead['nicho']}. "
         f"Fale pelo WhatsApp e conheca nossos servicos."
     )
-    imagem = lead.get("hero_bg") or _imagem_por_nicho(lead["nicho"])
+    imagem = _esc(lead.get("hero_bg") or _imagem_por_nicho(lead["nicho"]))
 
     html = re.sub(r'<html[^>]*\slang="[^"]*"', '<html lang="pt-BR"', html, count=1)
     if "<html" in html and 'lang="pt-BR"' not in html:

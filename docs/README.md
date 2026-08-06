@@ -21,6 +21,9 @@ documento está errado e deve ser corrigido.
 | [GUIA_SUPABASE.md](GUIA_SUPABASE.md) | tabelas, RLS, chaves e como ligar o multiusuário |
 | [PADRAO_TYPESCRIPT_PYTHON.md](PADRAO_TYPESCRIPT_PYTHON.md) | diretrizes arquiteturais para uso de TypeScript (Frontend / UI Engine) e Python (Backend / IA) |
 | [INFRASTRUCTURE.md](INFRASTRUCTURE.md) | Docker, checkpoints e recuperação |
+| [SEGURANCA.md](SEGURANCA.md) | arquitetura de segurança, criptografia, vetores de ataque e plano de hardening |
+| [repass-ai.drawio](repass-ai.drawio) | mapa do sistema em 4 páginas para abrir no draw.io: arquitetura, pipeline, auditoria de segurança e plano de execução |
+| [PROMPT_ENGINE_FABLE5.md](PROMPT_ENGINE_FABLE5.md) | prompt de produção da Fase 1 (cota atômica, IP confiável, anti-SSRF, login neutro) com o impacto de cada alteração |
 | [linear/](linear/) | backlog em CSV e o gerador dele |
 
 O backlog operacional vive no **Linear** (time REPASS AI). Os CSVs aqui são a

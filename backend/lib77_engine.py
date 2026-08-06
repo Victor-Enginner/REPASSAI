@@ -14,6 +14,7 @@ relatório aponta exatamente qual regra parou de casar.
 
 from __future__ import annotations
 
+import html as html_lib
 import json
 import logging
 import os
@@ -496,16 +497,23 @@ class Lib77Engine:
         # produto promete: um site que indexa.
         html = padrao(html, r'<html\s+lang="[^"]*"', '<html lang="pt-BR"', "seo:lang")
 
-        titulo = f"{nome} | {nicho} em {cidade} - {estado}"
+        # Escape obrigatório: nome/nicho/cidade vêm do Places e podem carregar
+        # payload XSS. Nunca interpolar cru em HTML/atributos.
+        e_nome = html_lib.escape(nome, quote=True)
+        e_nicho = html_lib.escape(nicho, quote=True)
+        e_cidade = html_lib.escape(cidade, quote=True)
+        e_estado = html_lib.escape(estado, quote=True)
+
+        titulo = f"{e_nome} | {e_nicho} em {e_cidade} - {e_estado}"
         html = padrao(html, r"<title>.*?</title>", f"<title>{titulo}</title>", "title", re.DOTALL)
 
         # Descrição e Open Graph: sem isso o link compartilhado no WhatsApp
         # aparece sem resumo nem imagem — e WhatsApp é o canal do cliente.
         descricao = (
-            f"{nome} em {cidade} - {estado}. {nicho}. "
+            f"{e_nome} em {e_cidade} - {e_estado}. {e_nicho}. "
             f"Fale pelo WhatsApp e conheca nossos servicos."
         )
-        imagem_og = lead["hero_bg"] or _imagem_por_nicho(nicho)
+        imagem_og = html_lib.escape(lead["hero_bg"] or _imagem_por_nicho(nicho), quote=True)
         meta = (
             f'<meta name="description" content="{descricao}">'
             f'<meta property="og:type" content="website">'
@@ -518,7 +526,7 @@ class Lib77Engine:
         html = padrao(html, r"<head>", f"<head>{meta}", "seo:meta")
 
         # 2. Marca — precisa vir antes das regras que dependem de contexto.
-        html = literal(html, "Exo Ape", nome, "marca:ExoApe")
+        html = literal(html, "Exo Ape", e_nome, "marca:ExoApe")
 
         # 3. Hero H1 — o nome quebrado em até três linhas gigantes.
         #
@@ -526,14 +534,15 @@ class Lib77Engine:
         # boba quando o nicho já está no nome: "Barbearia / Cruz / Barbearia".
         # Nesse caso a cidade cumpre melhor o papel de terceira linha.
         partes = nome.split()
-        l1 = partes[0]
-        l2 = partes[1] if len(partes) > 1 else "Qualidade"
+        l1 = html_lib.escape(partes[0], quote=True)
+        l2 = html_lib.escape(partes[1] if len(partes) > 1 else "Qualidade", quote=True)
         if len(partes) > 2:
-            l3 = " ".join(partes[2:])
+            l3 = html_lib.escape(" ".join(partes[2:]), quote=True)
         else:
             palavras_nome = {p.lower() for p in partes}
             primeira_do_nicho = nicho.split()[0].lower() if nicho.split() else ""
-            l3 = cidade if primeira_do_nicho in palavras_nome else nicho.title()
+            l3_raw = cidade if primeira_do_nicho in palavras_nome else nicho.title()
+            l3 = html_lib.escape(l3_raw, quote=True)
         hero = (
             f'<h1 class="text-[14vw] lg:text-[11vw] leading-[0.85] tracking-tighter flex flex-col">'
             f'<span class="block">{l1}</span>'

@@ -4,11 +4,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:vite": "vite",
     "build": "node scripts/verificar-tokens.mjs && vite build",
     "build:index": "node scripts/build-component-index.mjs",
     "lint": "node scripts/verificar-tokens.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:visual": "playwright test tests/visual",
+    "test:visual:update": "playwright test tests/visual --update-snapshots",
+    "test:leads-real": "playwright test tests/visual/leads-real-data.spec.js --project=desktop-chromium",
+    "test:responsive": "playwright test tests/visual/responsive-accessibility.spec.js --project=desktop-chromium",
+    "audit:lighthouse": "node scripts/auditar-lighthouse.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
@@ -30,9 +36,12 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.62.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
-    "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.1.6"
+    "@vitejs/plugin-react": "^5.2.0",
+    "lighthouse": "^13.4.1",
+    "vite": "^7.3.6"
   }
 }

@@ -1,0 +1,314 @@
+<mxfile host="app.diagrams.net" version="24.7.17" type="device">
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 1 - MAPA DO SISTEMA                                   -->
+  <!-- ============================================================ -->
+  <diagram id="mapa" name="1 · Mapa do Sistema">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="t1" value="REPASS AI — Mapa do Sistema (derivado do código, não de documento)" style="text;html=1;fontSize=20;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="900" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- CAMADA CLIENTE -->
+        <mxCell id="c1" value="CLIENTE — Navegador" style="swimlane;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="720" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="c1a" value="React 18.2 + Vite 7&#10;14 telas · src/views/" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="c1">
+          <mxGeometry x="20" y="45" width="200" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c1b" value="Design System&#10;40 tokens · lint trava build" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="c1">
+          <mxGeometry x="250" y="45" width="200" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c1c" value="Three.js / GSAP / Framer&#10;camada visual" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="c1">
+          <mxGeometry x="480" y="45" width="200" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c1d" value="Sessão: cookie HttpOnly (Set-Cookie no backend) — token NÃO vive em localStorage" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="c1">
+          <mxGeometry x="20" y="115" width="660" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- BORDA DE SEGURANCA -->
+        <mxCell id="s1" value="BORDA DE SEGURANÇA — toda requisição atravessa, nesta ordem" style="swimlane;html=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="720" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1a" value="1 · CORS allowlist&#10;ORIGENS_PERMITIDAS" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="s1">
+          <mxGeometry x="15" y="45" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1b" value="2 · Body ≤ 1MB&#10;TAMANHO_MAX_BODY" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="s1">
+          <mxGeometry x="190" y="45" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1c" value="3 · Rate limit&#10;_identidade() ip:/user:" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="s1">
+          <mxGeometry x="365" y="45" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1d" value="4 · JWT + cota&#10;ROTAS_PROTEGIDAS (7)" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="s1">
+          <mxGeometry x="540" y="45" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1e" value="Headers em toda resposta: nosniff · X-Frame-Options DENY · CSP default-src 'none' · HSTS · Referrer-Policy" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="s1">
+          <mxGeometry x="15" y="105" width="685" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- BACKEND -->
+        <mxCell id="b1" value="BACKEND — Python · ThreadingHTTPServer · backend/app_api.py (1.739 linhas · 27 rotas)" style="swimlane;html=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="1180" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1a" value="AUTH&#10;/api/auth/login · signup&#10;logout · session · recover&#10;status" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="b1">
+          <mxGeometry x="20" y="45" width="180" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1b" value="LEADS (OSINT)&#10;/api/leads · leads/scan&#10;leads/status&#10;→ scraper_monster.py" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="b1">
+          <mxGeometry x="220" y="45" width="180" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1c" value="SITES&#10;/api/site/generate · clone&#10;preview_html · sites&#10;sites/detail" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="b1">
+          <mxGeometry x="420" y="45" width="180" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1d" value="TEMPLATES (loja)&#10;/api/templates · detail&#10;preview · zip · import&#10;→ templates_store.py" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="b1">
+          <mxGeometry x="620" y="45" width="180" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1e" value="IA&#10;/api/ai/generate&#10;/api/ai/status&#10;→ llm_gateway.py" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="b1">
+          <mxGeometry x="820" y="45" width="160" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1f" value="OBSERVABILIDADE&#10;/api/health&#10;/api/system/status&#10;/api/system/diagnostics&#10;/api/logs/stream (SSE)" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="b1">
+          <mxGeometry x="1000" y="45" width="160" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="b2a" value="MEDIA PROXY /api/media/proxy&#10;SSRF: HOSTS_PERMITIDOS (4 hosts)&#10;cache FIFO 200 itens / 5MB" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="b1">
+          <mxGeometry x="20" y="155" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="b2b" value="SYSTEM_PROMPTS fixos no servidor&#10;cliente escolhe `modo`, nunca manda system role&#10;→ fecha prompt injection" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="b1">
+          <mxGeometry x="310" y="155" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="b2c" value="LOG_QUEUE maxsize=500&#10;descarta o mais antigo&#10;→ telemetria nunca derruba o servidor" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="b1">
+          <mxGeometry x="600" y="155" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="b2d" value="_slug_seguro()&#10;basename + allowlist&#10;→ path traversal fechado" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="b1">
+          <mxGeometry x="890" y="155" width="270" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- MOTORES -->
+        <mxCell id="m1" value="MOTORES DE GERAÇÃO" style="swimlane;html=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="780" width="720" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1a" value="lib77_engine" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="m1">
+          <mxGeometry x="20" y="45" width="150" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1b" value="hybrid_engine" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="m1">
+          <mxGeometry x="190" y="45" width="150" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1c" value="template_compiler" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="m1">
+          <mxGeometry x="360" y="45" width="150" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1d" value="template_auditor&#10;8 regras · bloqueia site sujo" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="m1">
+          <mxGeometry x="530" y="45" width="170" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1e" value="originkit_engine · places_engine · basehub_engine · template_preparer · template_translator · miners/" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="m1">
+          <mxGeometry x="20" y="100" width="680" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- EXTERNOS -->
+        <mxCell id="e1" value="DEPENDÊNCIAS EXTERNAS" style="swimlane;html=1;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="70" width="420" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1a" value="Supabase&#10;Auth + Postgres + RLS&#10;cache JWT 60s em RAM" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="e1">
+          <mxGeometry x="20" y="45" width="380" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1b" value="Cloudflare R2 (boto3 / S3)&#10;1.140 componentes MIT + templates" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="e1">
+          <mxGeometry x="20" y="115" width="380" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1c" value="LLM Gateway — Groq · Gemini · OpenRouter&#10;Round-Robin + circuit breaker (429 → quarentena 60s)" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="e1">
+          <mxGeometry x="20" y="185" width="380" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1d" value="Google Places API&#10;fonte dos leads · custo real por chamada" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="e1">
+          <mxGeometry x="20" y="255" width="380" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- SETAS -->
+        <mxCell id="a1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#b85450;" edge="1" parent="1" source="c1" target="s1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="a2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#9673a6;" edge="1" parent="1" source="s1" target="b1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="a3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#d79b00;" edge="1" parent="1" source="b1" target="m1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="a4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;dashed=1;strokeColor=#666666;" edge="1" parent="1" source="b1" target="e1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 2 - PIPELINE 5 CAMADAS                                -->
+  <!-- ============================================================ -->
+  <diagram id="pipeline" name="2 · Pipeline de Templates (5 camadas)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="pt" value="Pipeline de geração — 8 templates · 12 nichos · 14 ms por site · R$ 0,00 de custo" style="text;html=1;fontSize=18;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1000" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="p0" value="ENTRADA&#10;lead do Google Places&#10;(nome, categoria, cidade, telefone)" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="230" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="p1" value="CAMADA 1 · PREPARER&#10;template_preparer.py&#10;&#10;HTML cru → HTML + textos.json&#10;cada trecho ganha uma POSIÇÃO" style="rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="250" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="p2" value="CAMADA 2 · TRANSLATOR&#10;template_translator.py&#10;&#10;textos.json → plano.json → pt.html&#10;935 trechos · nenhum perdido" style="rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="210" width="250" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="p3" value="CAMADA 3 · COMPILER&#10;template_compiler.py&#10;&#10;pt.html + lead → generated_*.html&#10;troca por posição, não por frase" style="rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="210" width="250" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="p4" value="CAMADA 4 · AUDITOR&#10;template_auditor.py&#10;&#10;8 regras · sobrou francês? telefone&#10;de terceiro? imagem quebrada?" style="rounded=1;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="910" y="210" width="250" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="p5" value="CAMADA 5 · STORE&#10;templates_store.py + R2&#10;&#10;persiste, versiona, publica&#10;_slug_seguro() na escrita" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="210" width="250" height="110" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pfail" value="REPROVADO → site NÃO é entregue&#10;o auditor é a última porta antes do cliente ver" style="rounded=1;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="380" width="250" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pw" value="POR QUE POSIÇÃO E NÃO FRASE&#10;&#10;Trocar por frase (&quot;Bienvenue&quot; → &quot;Bem-vindo&quot;) quebra quando a mesma frase aparece em dois&#10;contextos diferentes, e falha silenciosamente quando o template muda uma vírgula.&#10;Trocar por POSIÇÃO (índice do nó no DOM) é determinístico: ou o trecho existe naquela posição,&#10;ou o preparer acusa. É o que garante &quot;935 trechos, nenhum perdido&quot; como fato verificável." style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=left;spacingLeft=12;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="820" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pd" value="TRÊS DESTINOS DE CADA TRECHO&#10;&#10;1 · TRADUZIR — texto genérico do template (&quot;Nos services&quot;)&#10;2 · SUBSTITUIR — dado do lead (nome, telefone, cidade, categoria)&#10;3 · REMOVER — conteúdo da agência original que não pode vazar para o cliente" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=left;spacingLeft=12;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="910" y="500" width="540" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pe1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;" edge="1" parent="1" source="p0" target="p1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="pe2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;" edge="1" parent="1" source="p1" target="p2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="pe3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;" edge="1" parent="1" source="p2" target="p3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="pe4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;" edge="1" parent="1" source="p3" target="p4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="pe5" value="aprovado" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="p4" target="p5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="pe6" value="reprovado" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#b85450;dashed=1;" edge="1" parent="1" source="p4" target="pfail"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 3 - SEGURANCA: ACHADOS E ESTADO                       -->
+  <!-- ============================================================ -->
+  <diagram id="seguranca" name="3 · Segurança — auditoria 04/08/2026">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="st" value="Auditoria de segurança — o que foi VERIFICADO no código, não presumido" style="text;html=1;fontSize=18;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1000" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sok" value="JÁ FECHADO — verificado nesta auditoria" style="swimlane;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="480" height="470" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok1" value="✔ Zero segredo hardcoded&#10;grep de 8 padrões (sk-, gsk_, AIza, eyJ, ghp_, xoxb-,&#10;sk_live_, lin_api_) → só placeholders em docs/scripts" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="40" width="450" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok2" value="✔ .gitignore cobre variantes&#10;.env, .env.*, backend/.env.* — só .env.example rastreado&#10;git ls-files confirma: nenhum segredo versionado" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="105" width="450" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok3" value="✔ Headers — respostas JSON&#10;nosniff · X-Frame-Options DENY · CSP default-src 'none'&#10;· frame-ancestors 'none' · HSTS · Referrer-Policy&#10;(o preview HTML tem CSP próprio, mais permissivo — ver ao lado)" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="170" width="450" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok4" value="✔ CORS por allowlist, não '*'&#10;ORIGENS_PERMITIDAS + Vary: Origin&#10;Allow-Credentials só para origem conhecida" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="235" width="450" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok5" value="✔ SSRF no proxy de mídia&#10;HOSTS_PERMITIDOS: 4 hosts fixos&#10;→ 169.254.169.254 e localhost inalcançáveis" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="300" width="450" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok6" value="✔ Prompt injection via system role&#10;SYSTEM_PROMPTS fixos no servidor; cliente só escolhe&#10;`modo`. Nenhum caminho aceita instrução de sistema." style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="365" width="450" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sok7" value="✔ XSS no frontend — nenhum sink&#10;0 ocorrências de dangerouslySetInnerHTML, innerHTML=,&#10;eval(), new Function(), document.write em src/" style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sok">
+          <mxGeometry x="15" y="400" width="450" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sfix" value="CORRIGIDO NESTA SESSÃO" style="swimlane;html=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="480" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="sfix1" value="ALTO · Path traversal em templates_store.py&#10;&#10;extrair_slug() devolvia texto arbitrário no fallback.&#10;caminho_html/caminho_ficha faziam os.path.join direto.&#10;Alcançável por HTTP em 4 rotas:&#10;  POST /api/templates/import  → ESCRITA arbitrária&#10;  GET  /api/templates/detail  → LEITURA arbitrária&#10;  GET  /api/templates/preview → LEITURA arbitrária&#10;  GET  /api/templates/zip     → LEITURA arbitrária&#10;&#10;Correção: _slug_seguro() — basename + allowlist&#10;[a-zA-Z0-9._-] + rejeita vazio/só-pontuação.&#10;Provado com 7 payloads: todos contidos.&#10;29 testes existentes seguem passando." style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;spacingTop=8;" vertex="1" parent="sfix">
+          <mxGeometry x="15" y="40" width="450" height="175" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sopen" value="FASE 1 EXECUTADA — 42 testes verdes (eram 29)" style="swimlane;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="340" width="480" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="so1" value="✔ 1 · Denial of Wallet — NÃO era a RPC&#10;A RPC atômica já existia e estava certa. O furo era a&#10;ORDEM: trabalho caro rodava ANTES do débito, e o retorno&#10;era descartado. Agora debita antes e o retorno manda.&#10;Prova: 10 threads, cota 1 → Places chamado 1x." style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sopen">
+          <mxGeometry x="15" y="40" width="450" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="so2" value="✔ 2 · Spoofing de X-Forwarded-For&#10;_ip_de_origem(): header só vale se PROXY_HEADER_IP&#10;declarar qual confiar; senão, IP do socket.&#10;Prova: 40 headers rotativos → 1 identidade, 31º recusado." style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sopen">
+          <mxGeometry x="15" y="122" width="450" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="so3" value="✔ 3 · SSRF — o vetor descrito NÃO existia&#10;scraper_monster não busca URL do usuário; /site/clone só&#10;lê o domínio. Furo real: urlopen seguia redirect sem&#10;revalidar. Corrigido com RedirecionamentoRestrito." style="rounded=1;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sopen">
+          <mxGeometry x="15" y="194" width="450" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="so4" value="✔ 4 · Login neutro · ⚠ cadastro ainda enumera (produto)" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="sopen">
+          <mxGeometry x="15" y="266" width="450" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ssc" value="SUPPLY CHAIN&#10;&#10;npm audit — JÁ RODADO em 04/08/2026: 0 vulnerabilidades (runtime e dev).&#10;pip-audit + bandit + semgrep (offline, sem conta) · Snyk Code (requer conta) · Dependabot&#10;urlhaus.abuse.ch → feed de IOC para recusar domínio malicioso antes de buscar&#10;Elastic → índice central de log; hoje o log é fila em RAM (500) e some ao reiniciar" style="rounded=1;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;align=left;spacingLeft=12;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="590" width="1000" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sgap" value="LACUNA REAL — TRÊS ROTAS CARAS SEM COTA NENHUMA&#10;&#10;/api/ai/generate    → chama llm_gateway.gerar()  · custo de LLM por chamada&#10;/api/site/generate  → HybridSiteGenerator        · custo de LLM por chamada&#10;/api/site/clone     → Lib77Engine                 · custo de geração&#10;&#10;As três exigem login e passam pelo rate limit (30/min), mas NÃO consomem cota de plano.&#10;30/min sustentado = 43.200 chamadas de LLM por dia, por usuário, em qualquer plano.&#10;A cota de site só é cobrada ao SALVAR — gerar sem salvar é ilimitado e de graça.&#10;&#10;Não corrigido: definir o que cada plano permite é decisão de negócio, não de engenharia." style="rounded=1;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=left;spacingLeft=12;verticalAlign=top;spacingTop=10;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="590" width="700" height="200" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 4 - PLANO DE EXECUCAO                                 -->
+  <!-- ============================================================ -->
+  <diagram id="plano" name="4 · Plano de execução">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="xt" value="Plano de execução — ordem por RISCO, não por facilidade" style="text;html=1;fontSize=18;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1000" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="f0" value="FASE 0 · FEITO&#10;&#10;· Auditoria de segredos (0 achados)&#10;· Path traversal fechado&#10;· 1.038 linhas de doc recuperadas&#10;· 29 testes verdes&#10;&#10;Impacto: superfície de escrita&#10;arbitrária em disco eliminada." style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="260" height="230" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="f1" value="FASE 1 · DINHEIRO&#10;&#10;· Cota atômica (FOR UPDATE)&#10;· CF-Connecting-IP no rate limit&#10;· Filtro anti-SSRF no scraper&#10;&#10;Impacto: fecha Denial of Wallet.&#10;É o único grupo onde a falha&#10;custa dinheiro real, por isso&#10;vem primeiro.&#10;&#10;Dep: nenhuma nova." style="rounded=1;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="80" width="260" height="230" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="f2" value="FASE 2 · SUPPLY CHAIN&#10;&#10;· pip-audit + bandit&#10;· npm audit --omit=dev&#10;· semgrep --config=auto&#10;· CI no .github/workflows&#10;&#10;Impacto: qualquer dependência&#10;vulnerável passa a quebrar o&#10;build em vez de chegar em prod.&#10;&#10;Dep: 3 dev-only, offline." style="rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="80" width="260" height="230" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="f3" value="FASE 3 · OBSERVABILIDADE&#10;&#10;· Elastic / OpenSearch&#10;· log estruturado JSON&#10;· feed urlhaus como IOC&#10;&#10;Impacto: hoje o log vive em RAM&#10;(LOG_QUEUE 500) e some ao&#10;reiniciar — não há como&#10;investigar incidente passado.&#10;&#10;Dep: elasticsearch-py." style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="940" y="80" width="260" height="230" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="f4" value="FASE 4 · PRODUTO&#10;&#10;· verificação visual real&#10;· mídia do cliente&#10;· domínio próprio&#10;· acabamento e i18n&#10;&#10;Impacto: é o roadmap que já&#10;existe. Só entra depois que a&#10;base não sangra mais.&#10;&#10;Dep: a definir por item." style="rounded=1;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="80" width="260" height="230" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="xr" value="REGRA QUE ORDENA TUDO&#10;&#10;Primeiro o que perde dinheiro (cota, IA, Places são custo por chamada).&#10;Depois o que perde confiança (vazamento, site sujo entregue ao cliente).&#10;Depois o que perde tempo (retrabalho, doc errada, build lento).&#10;Por último o que perde beleza.&#10;&#10;Nenhuma fase começa antes da anterior ter teste que prove que fechou." style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;align=left;spacingLeft=14;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="370" width="700" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="xp" value="O QUE O REPASS AI É, EM TERMOS DE MODELO&#10;&#10;SaaS — é o que o cliente compra. Ele entra no painel, roda varredura, gera site.&#10;                Não instala nada, não gerencia servidor. 14 telas, cota por plano.&#10;&#10;PaaS — é o que o REPASS AI É POR DENTRO, e é a parte reaproveitável: o pipeline de&#10;                5 camadas + a loja de templates + os 1.140 componentes no R2 formam uma&#10;                plataforma de geração que outro produto poderia consumir por API.&#10;&#10;IaaS — NÃO é. Você consome IaaS de terceiros (R2, Supabase, Groq/Gemini/OpenRouter).&#10;                Não vende GPU nem máquina. É o contrário da Re-AI nesse eixo.&#10;&#10;A pilha da Re-AI (IaaS→PaaS→MaaS) descreve quem VENDE infraestrutura de IA.&#10;O REPASS AI senta na camada de cima dela: é consumidor de MaaS, produtor de SaaS." style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=left;spacingLeft=14;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="780" y="370" width="720" height="330" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+</mxfile>

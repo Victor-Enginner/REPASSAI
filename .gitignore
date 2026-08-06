@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+test-results/
+playwright-report/
+blob-report/
+lighthouse-reports/
 
 # Editor directories and files
 .vscode/*
@@ -39,7 +43,29 @@ backend/.env.*
 .vercel
 .env*
 
+# Superdesign gera HTML temporário para o canvas.
+.superdesign/tmp/
+
 # Cache local da biblioteca de assets (canonico fica no Cloudflare R2).
 # Somente o indice leve e versionado.
 backend/data/asset_library/*
 !backend/data/asset_library/index.json
+
+# ---------------------------------------------------------------
+# Segredos fora do padrao .env
+# ---------------------------------------------------------------
+# docs/ELASTIC DOC/api-key.txt guarda uma chave viva da Elastic (essu_...).
+# Segredo nao entra no repositorio nem como "documentacao": o historico do
+# git e permanente, e ja perdemos uma chave do Google Places assim.
+docs/ELASTIC DOC/
+*api-key*.txt
+*.key.txt
+
+# ---------------------------------------------------------------
+# Lixo de ferramenta e rascunho
+# ---------------------------------------------------------------
+# devtunnel.zip nao e um zip: contem o texto "Not Found", resto de um
+# download que falhou.
+devtunnel.zip
+scratch/
+.superdesign/

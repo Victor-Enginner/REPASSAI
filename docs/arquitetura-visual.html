@@ -1,4 +1,11 @@
-<title>REPASS AI — Mapa de Arquitetura</title>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REPASS AI — Mapa de Arquitetura</title>
+</head>
+<body>
 
 <style>
   :root {
@@ -668,3 +675,16 @@ flowchart TB
   </footer>
 
 </div>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: isLight ? 'default' : 'dark',
+    securityLevel: 'loose',
+    fontFamily: '"Inter Tight", "Inter", system-ui, sans-serif'
+  });
+</script>
+</body>
+</html>
