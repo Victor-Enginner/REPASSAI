@@ -32,7 +32,18 @@ GREP_INCLUDE=(--include=*.js --include=*.ts --include=*.jsx --include=*.tsx --in
   --include=*.go --include=*.rb --include=*.php --include=*.sql --include=*.yml --include=*.yaml
   --include=*.json --include=*.env --include=*.tf --include=*.html --include=*.vue
   --include=*.svelte --include=*.astro)
-EXCLUDE='node_modules|/\.git/|dist/|build/|\.next/|vendor/|\.min\.|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|/tutorial/'
+# Duas exclusões locais do REPASS AI, na mesma categoria das que já estavam
+# aqui (lock file, minificado): artefato que ninguém escreveu à mão.
+#
+#   src/data/componentIndex.js — 10.047 linhas GERADAS por
+#   scripts/build-component-index.mjs, catalogando 1.140 componentes minerados.
+#   A prop "changemenucoloronopen" casa com o padrão `changeme` da regra
+#   JWT-SECRET e reprovava o scan inteiro por um nome de propriedade.
+#
+#   scripts/secure-code/ — o scanner casa com as próprias definições de regex.
+#   Um scanner que se acusa transforma todo run em vermelho permanente, e CI
+#   sempre vermelho é CI que ninguém lê.
+EXCLUDE='node_modules|/\.git/|dist/|build/|\.next/|vendor/|\.min\.|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|/tutorial/|src/data/componentIndex\.js|scripts/secure-code/'
 
 finding() { printf '%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$4" >> "$FINDINGS"; }
 

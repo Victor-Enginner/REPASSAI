@@ -4,7 +4,12 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      # Estava `main`, branch que NÃO existe neste repositório — o scan nunca
+      # rodou num push, só em pull request. Os branches reais são `master` e
+      # os de trabalho `codex/*`; ambos entram, senão o trabalho fica sem
+      # verificação até a hora do merge.
+      - master
+      - 'codex/**'
 
 permissions:
   contents: read
