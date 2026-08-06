@@ -155,3 +155,96 @@ revoke all on table perfis       from anon, authenticated;
 revoke all on table leads        from anon, authenticated;
 revoke all on table sites        from anon, authenticated;
 revoke all on table site_versoes from anon, authenticated;
+
+
+-- ------------------------------------------------------------
+-- 9) COTAS ATÔMICAS
+--
+-- Um SELECT seguido de UPDATE permite que requisições concorrentes leiam o
+-- mesmo contador e sobrescrevam uma à outra. Estas funções fazem validação e
+-- incremento numa única instrução, sob o lock de linha do próprio UPDATE.
+--
+-- SECURITY DEFINER é necessário porque anon/authenticated não têm acesso
+-- direto às tabelas. Apenas o backend service_role pode executar as RPCs.
+-- ------------------------------------------------------------
+create or replace function consumir_varredura_atomica(p_user_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  with consumida as (
+    update perfis
+       set varreduras_usadas = varreduras_usadas + 1
+     where user_id = p_user_id
+       and varreduras_usadas < varreduras_limite
+    returning 1
+  )
+  select exists(select 1 from consumida);
+$$;
+
+create or replace function consumir_site_atomico(p_user_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  with consumida as (
+    update perfis
+       set sites_usados = sites_usados + 1
+     where user_id = p_user_id
+       and sites_usados < sites_limite
+    returning 1
+  )
+  select exists(select 1 from consumida);
+$$;
+
+-- ------------------------------------------------------------
+-- Devolução de cota.
+--
+-- A cota passou a ser debitada ANTES do trabalho caro (varredura no Places,
+-- criação do site), porque debitar depois deixa a janela onde N requisições
+-- simultâneas já gastaram o dinheiro e só uma é cobrada. Debitar antes move
+-- o problema: se o trabalho falhar, o usuário perde uma unidade que não usou.
+--
+-- Estas funções fecham isso. `greatest(0, ...)` porque um contador negativo
+-- daria crédito infinito na renovação do mês — o piso é zero, sempre.
+-- ------------------------------------------------------------
+create or replace function devolver_varredura_atomica(p_user_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  with devolvida as (
+    update perfis
+       set varreduras_usadas = greatest(0, varreduras_usadas - 1)
+     where user_id = p_user_id
+    returning 1
+  )
+  select exists(select 1 from devolvida);
+$$;
+
+create or replace function devolver_site_atomico(p_user_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  with devolvida as (
+    update perfis
+       set sites_usados = greatest(0, sites_usados - 1)
+     where user_id = p_user_id
+    returning 1
+  )
+  select exists(select 1 from devolvida);
+$$;
+
+revoke all on function consumir_varredura_atomica(uuid) from public, anon, authenticated;
+revoke all on function consumir_site_atomico(uuid) from public, anon, authenticated;
+revoke all on function devolver_varredura_atomica(uuid) from public, anon, authenticated;
+revoke all on function devolver_site_atomico(uuid) from public, anon, authenticated;
+grant execute on function consumir_varredura_atomica(uuid) to service_role;
+grant execute on function consumir_site_atomico(uuid) to service_role;
+grant execute on function devolver_varredura_atomica(uuid) to service_role;
+grant execute on function devolver_site_atomico(uuid) to service_role;

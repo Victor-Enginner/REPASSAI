@@ -8,21 +8,17 @@ conflito de versão.
 
 MODELO DE SEGURANÇA
 -------------------
-- O NAVEGADOR autentica direto no Supabase e recebe um JWT.
-- O JWT viaja para esta API no header `Authorization: Bearer <token>`.
-- Aqui o token é validado contra o `/auth/v1/user` do Supabase.
-- Toda leitura/escrita no banco usa a SERVICE_ROLE, que fica só no
-  servidor, e SEMPRE filtrando por `user_id`.
-
-Por que não deixar o navegador escrever direto no banco: a chave anon é
-pública por natureza. Com RLS bloqueando anon/authenticated (ver
-supabase/schema.sql), mesmo que ela vaze ninguém acessa dado de ninguém.
+- O NAVEGADOR autentica via BFF (`/api/auth/login` etc.).
+- JWT fica em cookie HttpOnly (`repass_at` / `repass_rt`) — JS não lê.
+- Em cada request a API lê o cookie (ou Bearer legado p/ testes/CLI).
+- Token é validado contra o `/auth/v1/user` do Supabase.
+- Toda leitura/escrita no banco usa a SERVICE_ROLE, só no servidor,
+  SEMPRE filtrando por `user_id`.
 
 DEGRADAÇÃO ELEGANTE
 -------------------
-Sem `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` no .env, `configurado()`
-devolve False e a aplicação roda exatamente como antes — single-user, sem
-login. Isso permite subir o código sem quebrar o fluxo atual.
+Sem `SUPABASE_URL` + chave secreta no .env, `configurado()` devolve False
+e a aplicação roda single-user, sem login.
 """
 
 import os
@@ -33,6 +29,10 @@ import urllib.parse
 import urllib.request
 
 TIMEOUT = 20
+
+# Nomes dos cookies de sessão (HttpOnly, setados só pelo backend).
+COOKIE_ACCESS = "repass_at"
+COOKIE_REFRESH = "repass_rt"
 
 # Cache de validação de token: o /auth/v1/user é uma chamada de rede a cada
 # requisição. 60s de cache corta isso sem atrasar logout de forma perceptível.
@@ -114,6 +114,29 @@ def _requisicao(metodo, caminho, dados=None, headers=None, timeout=TIMEOUT):
 
 # --- Autenticação ---------------------------------------------------------
 
+class AuthErro(Exception):
+    """Falha de login/signup/recover com mensagem já pronta para o cliente."""
+
+    def __init__(self, mensagem, status=400):
+        super().__init__(mensagem)
+        self.mensagem = mensagem
+        self.status = status
+
+
+def parse_cookies(cookie_header):
+    """Parse simples de `Cookie:` → dict nome→valor."""
+    out = {}
+    if not cookie_header:
+        return out
+    for parte in cookie_header.split(";"):
+        parte = parte.strip()
+        if not parte or "=" not in parte:
+            continue
+        nome, valor = parte.split("=", 1)
+        out[nome.strip()] = valor.strip()
+    return out
+
+
 def extrair_token(header_authorization):
     """Extrai o JWT de um header `Authorization: Bearer <token>`."""
     if not header_authorization:
@@ -122,6 +145,213 @@ def extrair_token(header_authorization):
     if len(partes) == 2 and partes[0].lower() == "bearer":
         return partes[1].strip()
     return ""
+
+
+def extrair_token_requisicao(header_authorization, cookie_header):
+    """
+    Token da requisição: cookie HttpOnly primeiro, Bearer legado depois.
+
+    Cookie é o caminho do navegador. Bearer permanece para testes/CLI.
+    """
+    cookies = parse_cookies(cookie_header)
+    token_cookie = (cookies.get(COOKIE_ACCESS) or "").strip()
+    if token_cookie:
+        return token_cookie
+    return extrair_token(header_authorization)
+
+
+def extrair_refresh_cookie(cookie_header):
+    """Refresh token do cookie HttpOnly, se houver."""
+    return (parse_cookies(cookie_header).get(COOKIE_REFRESH) or "").strip()
+
+
+def invalidar_cache_token(token):
+    """Remove um token do cache (logout / rotação)."""
+    if token:
+        _CACHE_TOKENS.pop(token, None)
+
+
+def _traduzir_erro_auth(msg, status=400):
+    m = str(msg or "").lower()
+    if "invalid login credentials" in m:
+        return "E-mail ou senha incorretos."
+    if "email not confirmed" in m:
+        return "Confirme seu e-mail antes de entrar."
+    if "user already registered" in m:
+        return "Este e-mail já tem cadastro."
+    if "password should be at least" in m:
+        return "A senha precisa ter ao menos 6 caracteres."
+    if "unable to validate email" in m:
+        return "E-mail inválido."
+    if "email rate limit exceeded" in m:
+        return "Muitas solicitações de e-mail – aguarde alguns minutos."
+    if "too many requests" in m:
+        return "Muitas solicitações - tente novamente em alguns minutos."
+    if status == 429:
+        return "Muitas solicitações - tente novamente em alguns minutos."
+    return str(msg or f"HTTP {status}")
+
+
+def _auth_post(caminho, corpo):
+    """POST no Auth do Supabase com a chave anon (só no servidor)."""
+    if not auth_configurado():
+        raise AuthErro("Modo multiusuário não está ativo no servidor.", 503)
+    try:
+        return _requisicao(
+            "POST",
+            caminho,
+            dados=corpo,
+            headers={"apikey": anon_key()},
+            timeout=15,
+        )
+    except SupabaseIndisponivel as exc:
+        texto = str(exc)
+        status = 400
+        if "HTTP 401" in texto or "HTTP 403" in texto:
+            status = 401
+        elif "HTTP 429" in texto:
+            status = 429
+        # Extrai JSON de erro se veio no detalhe.
+        msg = texto
+        if "{" in texto:
+            try:
+                bruto = texto[texto.index("{"):]
+                dados = json.loads(bruto)
+                msg = (
+                    dados.get("error_description")
+                    or dados.get("msg")
+                    or dados.get("message")
+                    or dados.get("error")
+                    or texto
+                )
+            except Exception:
+                pass
+        raise AuthErro(_traduzir_erro_auth(msg, status), status) from exc
+
+
+# Resposta única para qualquer login que não deu certo. Mensagem diferente
+# por motivo permite enumerar clientes: quem tenta 1.000 e-mails descobre
+# quais existem pela mudança do texto.
+LOGIN_RECUSADO = "E-mail ou senha incorretos."
+
+
+def login_email_senha(email, senha):
+    """
+    Password grant no Supabase.
+
+    Toda recusa sai com a mesma mensagem. O Supabase já responde "invalid
+    login credentials" tanto para senha errada quanto para e-mail que não
+    existe — mas respondia "email not confirmed" para conta criada e não
+    confirmada, e esse texto distinto confirmava o cadastro.
+
+    HTTP 429 é a exceção: é estado operacional do servidor, vale para
+    qualquer e-mail e não diz nada sobre a conta.
+
+    Returns:
+        dict com access_token, refresh_token, expires_in, user.
+    """
+    email = (email or "").strip()
+    if not email or not senha:
+        raise AuthErro("Informe e-mail e senha.")
+    try:
+        dados = _auth_post(
+            "/auth/v1/token?grant_type=password",
+            {"email": email, "password": senha},
+        )
+    except AuthErro as erro:
+        if erro.status == 429:
+            raise
+        raise AuthErro(LOGIN_RECUSADO, 401) from erro
+    if not dados or not dados.get("access_token"):
+        raise AuthErro(LOGIN_RECUSADO, 401)
+    return dados
+
+
+def cadastrar_email_senha(email, senha, redirect_to=None):
+    """Signup no Supabase. Pode ou não devolver tokens (confirmação de e-mail)."""
+    email = (email or "").strip()
+    if not email or not senha:
+        raise AuthErro("Informe e-mail e senha.")
+    if len(senha) < 6:
+        raise AuthErro("A senha precisa ter ao menos 6 caracteres.")
+    corpo = {"email": email, "password": senha}
+    if redirect_to:
+        corpo["options"] = {"emailRedirectTo": redirect_to}
+    dados = _auth_post("/auth/v1/signup", corpo) or {}
+    return dados
+
+
+def recuperar_senha(email, redirect_to=None):
+    """Dispara e-mail de recuperação de senha."""
+    email = (email or "").strip()
+    if not email:
+        raise AuthErro("Informe o e-mail.")
+    corpo = {"email": email}
+    if redirect_to:
+        corpo["options"] = {"emailRedirectTo": redirect_to}
+    _auth_post("/auth/v1/recover", corpo)
+    return True
+
+
+def renovar_sessao(refresh_token):
+    """Troca refresh_token por novo par access/refresh."""
+    if not refresh_token:
+        raise AuthErro("Sessão expirada. Entre novamente.", 401)
+    dados = _auth_post(
+        "/auth/v1/token?grant_type=refresh_token",
+        {"refresh_token": refresh_token},
+    )
+    if not dados or not dados.get("access_token"):
+        raise AuthErro("Sessão expirada. Entre novamente.", 401)
+    return dados
+
+
+def montar_set_cookies(access_token, refresh_token, expires_in=3600, secure=False, samesite="Lax"):
+    """
+    Lista de strings Set-Cookie para a sessão.
+
+    Args:
+        access_token / refresh_token: JWTs do Supabase.
+        expires_in: segundos de vida do access token.
+        secure: True em HTTPS/produção.
+        samesite: Lax | Strict | None (None exige Secure).
+    """
+    if samesite and samesite.lower() == "none":
+        samesite = "None"
+        secure = True
+    else:
+        samesite = samesite or "Lax"
+
+    flags = f"Path=/; HttpOnly; SameSite={samesite}"
+    if secure:
+        flags += "; Secure"
+
+    try:
+        max_at = max(60, int(expires_in or 3600))
+    except (TypeError, ValueError):
+        max_at = 3600
+    max_rt = 60 * 60 * 24 * 30  # 30 dias
+
+    return [
+        f"{COOKIE_ACCESS}={access_token}; Max-Age={max_at}; {flags}",
+        f"{COOKIE_REFRESH}={refresh_token}; Max-Age={max_rt}; {flags}",
+    ]
+
+
+def montar_clear_cookies(secure=False, samesite="Lax"):
+    """Cookies com Max-Age=0 para logout."""
+    if samesite and samesite.lower() == "none":
+        samesite = "None"
+        secure = True
+    else:
+        samesite = samesite or "Lax"
+    flags = f"Path=/; HttpOnly; SameSite={samesite}; Max-Age=0"
+    if secure:
+        flags += "; Secure"
+    return [
+        f"{COOKIE_ACCESS}=; {flags}",
+        f"{COOKIE_REFRESH}=; {flags}",
+    ]
 
 
 def usuario_do_token(token):
@@ -289,17 +519,79 @@ def obter_ou_criar_perfil(user_id, email):
 
 
 def consumir_varredura(user_id):
-    """Incrementa o contador de varreduras do ciclo."""
-    atuais = selecionar("perfis", {"user_id": user_id}, colunas="varreduras_usadas", limite=1)
-    usadas = (atuais[0].get("varreduras_usadas") if atuais else 0) or 0
-    atualizar("perfis", {"user_id": user_id}, {"varreduras_usadas": usadas + 1})
+    """
+    Debita uma varredura da cota, numa única operação no Postgres.
+
+    O antigo SELECT seguido de PATCH perdia incrementos quando duas
+    varreduras terminavam ao mesmo tempo (TOCTOU). A RPC também impede que o
+    contador ultrapasse o limite configurado no perfil.
+
+    Returns:
+        True se debitou. False se a cota já estava no limite — e nesse caso
+        quem chamou NÃO pode seguir com o trabalho. Ignorar este retorno
+        reabre o Denial of Wallet: a RPC recusa, o trabalho caro roda mesmo
+        assim, e o cliente gasta Places de graça.
+    """
+    resultado = _requisicao(
+        "POST",
+        "/rest/v1/rpc/consumir_varredura_atomica",
+        dados={"p_user_id": user_id},
+        headers=_headers_servico(),
+    )
+    return bool(resultado)
 
 
 def consumir_site(user_id):
-    """Incrementa o contador de sites gerados no ciclo."""
-    atuais = selecionar("perfis", {"user_id": user_id}, colunas="sites_usados", limite=1)
-    usados = (atuais[0].get("sites_usados") if atuais else 0) or 0
-    atualizar("perfis", {"user_id": user_id}, {"sites_usados": usados + 1})
+    """
+    Debita um site da cota, atomicamente, respeitando o limite.
+
+    Returns:
+        True se debitou; False se no limite. Vale o mesmo aviso de
+        `consumir_varredura`: o retorno decide se o trabalho pode seguir.
+    """
+    resultado = _requisicao(
+        "POST",
+        "/rest/v1/rpc/consumir_site_atomico",
+        dados={"p_user_id": user_id},
+        headers=_headers_servico(),
+    )
+    return bool(resultado)
+
+
+def devolver_varredura(user_id):
+    """
+    Estorna uma varredura debitada cujo trabalho não se concretizou.
+
+    Falha aqui é registrada e engolida: já respondemos ao cliente, e uma
+    exceção neste ponto trocaria "perdeu uma unidade de cota" por "erro 500
+    depois do trabalho pronto". O prejuízo do estorno perdido é menor.
+    """
+    try:
+        _requisicao(
+            "POST",
+            "/rest/v1/rpc/devolver_varredura_atomica",
+            dados={"p_user_id": user_id},
+            headers=_headers_servico(),
+        )
+        return True
+    except SupabaseIndisponivel as e:
+        print(f"[Supabase] Estorno de varredura falhou para {user_id}: {e}")
+        return False
+
+
+def devolver_site(user_id):
+    """Estorna um site debitado que acabou não sendo criado. Ver acima."""
+    try:
+        _requisicao(
+            "POST",
+            "/rest/v1/rpc/devolver_site_atomico",
+            dados={"p_user_id": user_id},
+            headers=_headers_servico(),
+        )
+        return True
+    except SupabaseIndisponivel as e:
+        print(f"[Supabase] Estorno de site falhou para {user_id}: {e}")
+        return False
 
 
 def status():
