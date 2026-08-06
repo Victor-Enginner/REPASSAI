@@ -56,7 +56,7 @@ const rgba = (c, alpha) => `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${c[3] * alpha})`;
  */
 export default function PixelTetris(props) {
   const {
-    boardColor = "rgba(255, 255, 255, 0.03)",
+    boardColor = "var(--sobre-03)",
     colors = ["#6366f1", "#ec4899", "#38bdf8", "#8b5cf6"],
     movement = 4,
     cellSize = 24,

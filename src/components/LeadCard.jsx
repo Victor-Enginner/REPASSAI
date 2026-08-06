@@ -8,10 +8,8 @@
  * --------------------------------------
  * - `SpotlightCard`: luz acompanha o cursor. Dá vida sem competir com o
  *   conteúdo.
- * - `ElectricBorder`: entra APENAS em lead com score >= 80. Assim a borda
- *   elétrica passa a significar "oportunidade quente" e o operador aprende
- *   a ler a tela sem precisar de legenda. Se aparecesse em todo card, seria
- *   só enfeite e o olho pararia de registrar.
+ * - Oportunidade quente: um fio verde discreto na borda esquerda preserva
+ *   a leitura da grade e mantém o significado do estado.
  *
  * INTEGRIDADE DE DADOS
  * --------------------
@@ -23,7 +21,6 @@
 import React from 'react';
 import { Phone, MapPin, Globe, Send, Star, Lightbulb, FlaskConical } from 'lucide-react';
 import SpotlightCard from './ui/SpotlightCard';
-import Cyber3DCard from './ui/Cyber3DCard';
 
 /** Score a partir do qual o lead é tratado como oportunidade quente. */
 const LIMIAR_QUENTE = 80;
@@ -41,13 +38,25 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {/* Topo: seleção, nome e score */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-        <input
-          type="checkbox"
+        <label
           aria-label={`Selecionar ${lead.nome}`}
-          checked={selecionado}
-          onChange={() => onAlternarSelecao(lead.id)}
-          style={{ marginTop: '3px', width: '17px', height: '17px', accentColor: 'var(--accent-indigo)', flexShrink: 0, cursor: 'pointer' }}
-        />
+          style={{
+            width: '44px',
+            height: '44px',
+            margin: '-10px -8px -10px -10px',
+            display: 'grid',
+            placeItems: 'center',
+            flexShrink: 0,
+            cursor: 'pointer',
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={selecionado}
+            onChange={() => onAlternarSelecao(lead.id)}
+            style={{ width: '17px', height: '17px', accentColor: 'var(--accent-indigo)', cursor: 'pointer' }}
+          />
+        </label>
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <h3 className="font-headline" style={{
@@ -66,7 +75,7 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
               <span style={{
                 fontSize: '9.5px', fontWeight: 800, fontFamily: 'var(--font-mono)',
                 padding: '2px 8px', borderRadius: '4px',
-                background: 'rgba(245, 158, 11, 0.16)', color: 'var(--estado-alerta-suave)',
+                background: 'rgba(245, 158, 11, 0.16)', color: 'var(--estado-alerta)',
                 border: '0.5px solid rgba(245, 158, 11, 0.4)',
                 display: 'inline-flex', alignItems: 'center', gap: '4px',
               }}>
@@ -98,26 +107,26 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
           flexShrink: 0, minWidth: '44px', height: '32px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           borderRadius: '6px', padding: '0 8px',
-          background: lead.score >= LIMIAR_QUENTE ? 'rgba(34,197,94,0.16)' : 'rgba(255,255,255,0.06)',
-          border: `1px solid ${lead.score >= LIMIAR_QUENTE ? 'rgba(34,197,94,0.5)' : 'rgba(255,255,255,0.15)'}`,
+          background: lead.score >= LIMIAR_QUENTE ? 'var(--estado-sucesso-suave)' : 'var(--bg-surface)',
+          border: `1px solid ${lead.score >= LIMIAR_QUENTE ? 'rgba(22,163,74,0.3)' : 'var(--hairline-color)'}`,
         }}>
           <span style={{
             fontSize: '15px', fontWeight: 800, fontFamily: 'var(--font-mono)',
-            color: lead.score >= LIMIAR_QUENTE ? '#22c55e' : '#cbd5e1',
+            color: lead.score >= LIMIAR_QUENTE ? 'var(--estado-sucesso)' : 'var(--fg-muted)',
           }}>
             {lead.score ?? '—'}
           </span>
         </div>
       </div>
 
-      <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '2px 0' }} />
+      <div style={{ height: '1px', background: 'var(--hairline-color)', margin: '2px 0' }} />
 
       {/* Contato e diagnóstico */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-          <Phone size={13} color={lead.telefone ? '#818cf8' : '#475569'} style={{ flexShrink: 0 }} />
+          <Phone size={13} color={lead.telefone ? 'var(--accent-indigo)' : 'var(--fg-subtle)'} style={{ flexShrink: 0 }} />
           <span style={{
-            color: lead.telefone ? '#ffffff' : '#64748b',
+            color: lead.telefone ? 'var(--fg-bright)' : 'var(--fg-subtle)',
             fontFamily: lead.telefone ? 'var(--font-mono)' : 'inherit',
             fontWeight: lead.telefone ? 700 : 400,
             fontStyle: lead.telefone ? 'normal' : 'italic',
@@ -128,8 +137,8 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
 
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', fontSize: '12px', color: 'var(--fg-soft)' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-            <MapPin size={13} color="#64748b" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <span style={{ lineHeight: 1.4 }}>{lead.endereco || `${lead.cidade || ''}${lead.estado ? `, ${lead.estado}` : ''}`}</span>
+            <MapPin size={13} color="var(--fg-subtle)" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <span data-testid="lead-address" style={{ lineHeight: 1.4, overflowWrap: 'anywhere' }}>{lead.endereco || `${lead.cidade || ''}${lead.estado ? `, ${lead.estado}` : ''}`}</span>
           </div>
 
           <span
@@ -143,21 +152,21 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
         {lead.orientacao && (
           <div style={{
             display: 'flex', gap: '8px', alignItems: 'flex-start',
-            fontSize: '11.5px', color: 'var(--accent-indigo-suave)', fontStyle: 'italic',
+            fontSize: '11.5px', color: 'var(--accent-indigo-forte)', fontStyle: 'italic',
             lineHeight: 1.5, marginTop: '4px',
-            background: 'rgba(99, 102, 241, 0.08)',
+            background: 'var(--bg-surface)',
             padding: '8px 12px',
             borderRadius: '6px',
-            borderLeft: '2px solid #6366f1'
+            borderLeft: '2px solid var(--accent-indigo)'
           }}>
-            <Lightbulb size={13} color="#818cf8" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <Lightbulb size={13} color="var(--accent-indigo)" style={{ flexShrink: 0, marginTop: '2px' }} />
             <span>{lead.orientacao}</span>
           </div>
         )}
       </div>
 
       {/* Ações */}
-      <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+      <div data-testid="lead-actions" style={{ display: 'flex', gap: '10px', marginTop: '8px', minWidth: 0 }}>
         <button
           onClick={() => onGerarSite(lead)}
           disabled={ehDemo}
@@ -187,8 +196,8 @@ export default function LeadCard(props) {
   const ehQuente = (lead.score ?? 0) >= LIMIAR_QUENTE && !lead.is_demo;
 
   const corDestaque = selecionado
-    ? 'rgba(99, 102, 241, 0.55)'
-    : 'rgba(255, 255, 255, 0.12)';
+    ? 'var(--accent-indigo)'   // era rgba(99,102,241,.55), índigo fora da paleta
+    : 'var(--sobre-12)';
 
   return (
     <article
@@ -200,9 +209,18 @@ export default function LeadCard(props) {
         transition: 'outline-color 0.18s ease',
       }}
     >
-      <Cyber3DCard isHot={ehQuente} style={{ padding: '20px' }}>
+      {/*
+        O SpotlightCard substitui a inclinação 3D e a varredura contínua.
+        Ele atualiza variáveis CSS diretamente, sem re-render do React em
+        cada movimento do cursor. Na grade de leads, o movimento reforça
+        o foco sem inclinar telefone, endereço ou ações.
+      */}
+      <SpotlightCard
+        className={`lead-card ${ehQuente ? 'lead-quente' : ''}`}
+        spotlightColor="var(--sobre-10)"
+      >
         <Conteudo {...props} />
-      </Cyber3DCard>
+      </SpotlightCard>
     </article>
   );
 }

@@ -10,7 +10,7 @@ const Cubes = ({
   easing = 'power3.out',
   duration = { enter: 0.3, leave: 0.6 },
   cellGap,
-  borderStyle = '1px solid rgba(255, 255, 255, 0.15)',
+  borderStyle = '1px solid var(--sobre-15)',
   faceColor = '#0a0e1a',
   shadow = false,
   autoAnimate = true,

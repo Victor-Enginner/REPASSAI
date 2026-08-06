@@ -62,10 +62,10 @@ function BotaoCopiar({ texto, rotulo = 'Copiar', estilo = {} }) {
 function BlocoPrompt({ titulo, conteudo, monospace = false }) {
   if (!conteudo) return null;
   return (
-    <div style={{ border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: '4px', background: 'var(--bg-surface)' }}>
+    <div style={{ border: '0.5px solid var(--sobre-12)', borderRadius: '4px', background: 'var(--bg-surface)' }}>
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '10px 14px', borderBottom: '0.5px solid rgba(255,255,255,0.1)', gap: '10px',
+        padding: '10px 14px', borderBottom: '0.5px solid var(--sobre-10)', gap: '10px',
       }}>
         <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-subtle)' }}>{titulo}</span>
         <BotaoCopiar texto={conteudo} rotulo="Copiar prompt" />
@@ -93,7 +93,7 @@ function CartaoTemplate({ template, onAbrir }) {
       onClick={() => onAbrir(template.slug)}
       style={{
         textAlign: 'left', padding: 0, cursor: 'pointer',
-        background: 'var(--bg-surface)', border: '0.5px solid rgba(255,255,255,0.14)',
+        background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-14)',
         borderRadius: '6px', overflow: 'hidden', display: 'flex', flexDirection: 'column',
         transition: 'border-color 0.18s ease, transform 0.18s ease',
       }}
@@ -102,18 +102,19 @@ function CartaoTemplate({ template, onAbrir }) {
         e.currentTarget.style.transform = 'translateY(-2px)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
+        e.currentTarget.style.borderColor = 'var(--sobre-14)';
         e.currentTarget.style.transform = 'none';
       }}
     >
       {/* Miniatura: o template real, escalado e sem interação. */}
       <div style={{ position: 'relative', height: '190px', overflow: 'hidden', background: 'var(--bg-deep)' }}>
         <iframe
-          src={apiUrl(`/api/templates/preview?slug=${encodeURIComponent(template.slug)}`)}
+          src={apiUrl(`/api/templates/preview?slug=${encodeURIComponent(template.slug)}&mode=thumbnail`)}
           title={template.titulo}
           loading="lazy"
           tabIndex={-1}
           scrolling="no"
+          sandbox="allow-scripts"
           style={{
             width: '1280px', height: '820px', border: 0,
             transform: 'scale(0.30)', transformOrigin: 'top left',
@@ -151,7 +152,7 @@ function CartaoTemplate({ template, onAbrir }) {
         <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '8px' }}>
           {(template.tecnologias || []).slice(0, 4).map((t) => (
             <span key={t} style={{
-              fontSize: '9.5px', color: 'var(--fg-subtle)', border: '0.5px solid rgba(255,255,255,0.14)',
+              fontSize: '9.5px', color: 'var(--fg-subtle)', border: '0.5px solid var(--sobre-14)',
               padding: '2px 7px', borderRadius: '3px', fontFamily: 'var(--font-mono, monospace)',
             }}>
               {t}
@@ -303,8 +304,8 @@ export default function TemplatesView({ onSelectTemplate }) {
             </div>
 
             {/* Preview / Código */}
-            <div style={{ border: '0.5px solid rgba(255,255,255,0.14)', borderRadius: '6px', overflow: 'hidden', marginBottom: '22px', background: 'var(--bg-surface)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', borderBottom: '0.5px solid rgba(255,255,255,0.1)', gap: '10px', flexWrap: 'wrap' }}>
+            <div style={{ border: '0.5px solid var(--sobre-14)', borderRadius: '6px', overflow: 'hidden', marginBottom: '22px', background: 'var(--bg-surface)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', borderBottom: '0.5px solid var(--sobre-10)', gap: '10px', flexWrap: 'wrap' }}>
                 <a href={urlPreview} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ fontSize: '11px', padding: '7px 12px', textDecoration: 'none' }}>
                   <ExternalLink size={12} /> Ver completo
                 </a>
@@ -318,7 +319,7 @@ export default function TemplatesView({ onSelectTemplate }) {
                         border: 'none', cursor: 'pointer', padding: '6px 14px', borderRadius: '3px',
                         fontSize: '10.5px', fontWeight: 800, letterSpacing: '0.06em',
                         fontFamily: 'var(--font-mono, monospace)',
-                        background: abaPreview === id ? 'rgba(255,255,255,0.1)' : 'transparent',
+                        background: abaPreview === id ? 'var(--sobre-10)' : 'transparent',
                         color: abaPreview === id ? '#fff' : '#64748b',
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
                       }}
@@ -333,7 +334,9 @@ export default function TemplatesView({ onSelectTemplate }) {
                 <iframe
                   src={urlPreview}
                   title={`Preview de ${detalhe.titulo}`}
-                  style={{ width: '100%', height: '540px', border: 0, display: 'block', background: 'var(--fg-white)' }}
+                  loading="lazy"
+                  sandbox="allow-scripts allow-forms allow-popups"
+                  style={{ width: '100%', height: '540px', border: 0, display: 'block', background: 'var(--papel-cartao)' }}
                 />
               ) : (
                 <div style={{ padding: '14px' }}>
@@ -344,7 +347,7 @@ export default function TemplatesView({ onSelectTemplate }) {
                     <BotaoCopiar texto={detalhe.comando_instalacao} rotulo="Copiar comando" />
                   </div>
                   <pre style={{
-                    background: 'var(--bg-deep)', border: '0.5px solid rgba(255,255,255,0.12)',
+                    background: 'var(--bg-deep)', border: '0.5px solid var(--sobre-12)',
                     padding: '14px', fontSize: '11.5px', color: 'var(--accent-indigo-suave)',
                     fontFamily: 'var(--font-mono, monospace)', whiteSpace: 'pre-wrap',
                     overflowX: 'auto', margin: 0, borderRadius: '4px',
@@ -360,8 +363,8 @@ export default function TemplatesView({ onSelectTemplate }) {
             </div>
 
             {/* Instruções / Requisitos */}
-            <div style={{ border: '0.5px solid rgba(255,255,255,0.14)', borderRadius: '6px', background: 'var(--bg-surface)', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', gap: '4px', padding: '10px 14px', borderBottom: '0.5px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ border: '0.5px solid var(--sobre-14)', borderRadius: '6px', background: 'var(--bg-surface)', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', gap: '4px', padding: '10px 14px', borderBottom: '0.5px solid var(--sobre-10)' }}>
                 {[['instrucoes', 'INSTRUÇÕES'], ['requisitos', 'REQUISITOS']].map(([id, rotulo]) => (
                   <button
                     key={id}
@@ -370,7 +373,7 @@ export default function TemplatesView({ onSelectTemplate }) {
                       border: 'none', cursor: 'pointer', padding: '6px 14px', borderRadius: '3px',
                       fontSize: '10.5px', fontWeight: 800, letterSpacing: '0.06em',
                       fontFamily: 'var(--font-mono, monospace)',
-                      background: abaInfo === id ? 'rgba(255,255,255,0.1)' : 'transparent',
+                      background: abaInfo === id ? 'var(--sobre-10)' : 'transparent',
                       color: abaInfo === id ? '#fff' : '#64748b',
                     }}
                   >
@@ -424,7 +427,7 @@ export default function TemplatesView({ onSelectTemplate }) {
                         {(detalhe.paleta || []).slice(0, 12).map((c, i) => (
                           <span key={`${c.cor}-${i}`} title={`${c.cor} · ${c.usos} usos`} style={{
                             width: '24px', height: '24px', borderRadius: '3px',
-                            background: c.cor, border: '0.5px solid rgba(255,255,255,0.2)', display: 'inline-block',
+                            background: c.cor, border: '0.5px solid var(--sobre-20)', display: 'inline-block',
                           }} />
                         ))}
                       </div>
@@ -463,7 +466,7 @@ export default function TemplatesView({ onSelectTemplate }) {
           </p>
         </div>
 
-        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255,255,255,0.14)', padding: '10px 18px', borderRadius: '4px' }}>
+        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-14)', padding: '10px 18px', borderRadius: '4px' }}>
           <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>
             {templates.length} {templates.length === 1 ? 'TEMPLATE' : 'TEMPLATES'}
           </span>
@@ -481,7 +484,7 @@ export default function TemplatesView({ onSelectTemplate }) {
             aria-label="Buscar template"
             style={{
               width: '100%', padding: '11px 12px 11px 34px', background: 'var(--bg-surface)',
-              border: '0.5px solid rgba(255,255,255,0.14)', borderRadius: '4px',
+              border: '0.5px solid var(--sobre-14)', borderRadius: '4px',
               color: 'var(--fg-white)', fontSize: '12.5px', fontFamily: 'inherit',
             }}
           />
@@ -501,7 +504,7 @@ export default function TemplatesView({ onSelectTemplate }) {
             placeholder="Cole slugs ou comandos npx — um por linha. Ctrl+Enter importa."
             style={{
               flex: 1, minWidth: 0, padding: '11px 12px', background: 'var(--bg-surface)',
-              border: '0.5px solid rgba(255,255,255,0.14)', borderRadius: '4px',
+              border: '0.5px solid var(--sobre-14)', borderRadius: '4px',
               color: 'var(--fg-white)', fontSize: '12.5px', fontFamily: 'var(--font-mono, monospace)',
               resize: 'vertical', lineHeight: 1.5,
             }}
@@ -525,14 +528,14 @@ export default function TemplatesView({ onSelectTemplate }) {
       {resumoImport && (
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center', background: 'rgba(34,197,94,0.07)', border: '0.5px solid rgba(34,197,94,0.35)', borderRadius: '4px', padding: '12px 14px', marginBottom: '16px' }}>
           <Check size={15} color="#22c55e" style={{ flexShrink: 0 }} />
-          <span style={{ fontSize: '12.5px', color: 'var(--estado-sucesso-claro)' }}>{resumoImport}</span>
+          <span style={{ fontSize: '12.5px', color: 'var(--estado-sucesso)' }}>{resumoImport}</span>
         </div>
       )}
 
       {erro && (
         <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: 'rgba(239,68,68,0.07)', border: '0.5px solid rgba(239,68,68,0.35)', borderRadius: '4px', padding: '14px', marginBottom: '20px' }}>
           <AlertCircle size={16} color="#f87171" style={{ flexShrink: 0, marginTop: '1px' }} />
-          <span style={{ fontSize: '12.5px', color: 'var(--estado-erro-suave)', lineHeight: 1.6 }}>{erro}</span>
+          <span style={{ fontSize: '12.5px', color: 'var(--estado-erro)', lineHeight: 1.6 }}>{erro}</span>
         </div>
       )}
 
@@ -542,7 +545,7 @@ export default function TemplatesView({ onSelectTemplate }) {
           <p style={{ marginTop: '12px', fontSize: '13px' }}>Carregando catálogo…</p>
         </div>
       ) : filtrados.length === 0 ? (
-        <div style={{ padding: '56px 24px', textAlign: 'center', border: '0.5px dashed rgba(255,255,255,0.2)', borderRadius: '6px', background: 'var(--bg-surface)' }}>
+        <div style={{ padding: '56px 24px', textAlign: 'center', border: '0.5px dashed var(--sobre-20)', borderRadius: '6px', background: 'var(--bg-surface)' }}>
           <LayoutTemplate size={26} color="#475569" />
           <p style={{ fontSize: '13.5px', color: 'var(--fg-muted)', marginTop: '14px' }}>
             {busca ? 'Nenhum template encontrado para esta busca.' : 'Catálogo vazio.'}
@@ -562,7 +565,7 @@ export default function TemplatesView({ onSelectTemplate }) {
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginTop: '28px', padding: '14px', background: 'var(--bg-surface)', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: '4px' }}>
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginTop: '28px', padding: '14px', background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', borderRadius: '4px' }}>
         <Cpu size={15} color="#6366f1" style={{ flexShrink: 0, marginTop: '2px' }} />
         <span style={{ fontSize: '11.5px', color: 'var(--fg-subtle)', lineHeight: 1.65 }}>
           O token do registry fica no backend e nunca é enviado ao navegador.

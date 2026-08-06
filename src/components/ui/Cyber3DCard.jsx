@@ -79,7 +79,7 @@ export default function Cyber3DCard({ children, isHot = false, className = '', s
         <div
           className="cyber-3d-glare-layer"
           style={{
-            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 65%)`,
+            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, var(--sobre-15) 0%, rgba(255, 255, 255, 0) 65%)`,
             opacity: glarePos.opacity,
             transition: 'opacity 0.3s ease'
           }}

@@ -53,8 +53,8 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'var(--fg-lightest)',
-      color: 'var(--bg-slate)',
+      background: 'var(--papel-elevado)',
+      color: 'var(--tinta)',
       padding: '40px 48px',
       fontFamily: 'Inter, sans-serif',
       boxSizing: 'border-box'
@@ -63,7 +63,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
         
         {/* Header Meus Projetos (Estilo useleadsite.com) */}
         <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: 'var(--bg-slate)', margin: 0 }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: 'var(--tinta)', margin: 0 }}>
             Meus projetos
           </h1>
           <p style={{ fontSize: '14px', color: 'var(--fg-subtle)', marginTop: '6px' }}>
@@ -73,7 +73,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
 
         {/* Caixa Principal de Projetos Criados */}
         <div style={{
-          background: 'var(--fg-white)',
+          background: 'var(--papel-cartao)',
           borderRadius: '20px',
           border: '1px solid #e2e8f0',
           boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
@@ -93,11 +93,11 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
             </div>
           ) : erro ? (
             <div style={{
-              border: '2px solid var(--estado-erro-suave)',
+              border: '2px solid var(--estado-erro)',
               borderRadius: '16px',
               padding: '32px 24px',
               textAlign: 'center',
-              color: 'var(--estado-erro-forte)',
+              color: 'var(--estado-erro)',
               fontSize: '14px'
             }}>
               {erro}
@@ -138,7 +138,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                     style={{
                       padding: '16px 20px',
                       borderRadius: '14px',
-                      background: 'var(--fg-quase-branco)',
+                      background: 'var(--papel-cartao)',
                       border: '1px solid #e2e8f0',
                       display: 'flex',
                       alignItems: 'center',
@@ -169,7 +169,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                         <Globe size={18} />
                       </div>
                       <div>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--bg-slate)' }}>
+                        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--tinta)' }}>
                           {meta.title || doc.projectId}
                         </div>
                         <div style={{ fontSize: '11.5px', color: 'var(--fg-subtle)', marginTop: '2px', display: 'flex', gap: '8px' }}>
@@ -189,7 +189,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                           style={{
                             fontSize: '11px',
                             fontWeight: '700',
-                            color: 'var(--estado-sucesso-suave)',
+                            color: 'var(--estado-sucesso)',
                             background: 'rgba(34, 197, 94, 0.1)',
                             border: '0.5px solid rgba(34, 197, 94, 0.3)',
                             padding: '3px 10px',
@@ -203,7 +203,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                           Publicado <ExternalLink size={12} />
                         </a>
                       ) : (
-                        <span style={{ fontSize: '11px', color: 'var(--fg-muted)', background: 'var(--fg-bright)', padding: '3px 8px', borderRadius: '6px' }}>
+                        <span style={{ fontSize: '11px', color: 'var(--fg-muted)', background: 'var(--papel-elevado)', padding: '3px 8px', borderRadius: '6px' }}>
                           Não publicado
                         </span>
                       )}
@@ -236,7 +236,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                 style={{
                   padding: '14px 20px',
                   borderRadius: '14px',
-                  background: 'var(--fg-white)',
+                  background: 'var(--papel-cartao)',
                   border: '1px solid #e2e8f0',
                   display: 'flex',
                   alignItems: 'center',
@@ -252,7 +252,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                     width: '32px',
                     height: '32px',
                     borderRadius: '8px',
-                    background: 'var(--fg-lightest)',
+                    background: 'var(--papel-elevado)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -261,11 +261,11 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                     <Globe size={16} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--bg-slate)' }}>
+                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--tinta)' }}>
                       {site.nome}
                     </div>
                     <div style={{ fontSize: '11px', color: 'var(--fg-muted)', marginTop: '1px', display: 'flex', gap: '8px' }}>
-                      <span style={{ background: 'var(--fg-lightest)', padding: '1px 6px', borderRadius: '4px', color: 'var(--fg-subtle)', fontSize: '10px' }}>
+                      <span style={{ background: 'var(--papel-elevado)', padding: '1px 6px', borderRadius: '4px', color: 'var(--fg-subtle)', fontSize: '10px' }}>
                         Formato antigo
                       </span>
                       <span>{site.status}</span>

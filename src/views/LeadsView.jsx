@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Phone, Globe, Star, ArrowUpRight, Download, Send, Check, Sparkles, Filter, RefreshCw, Plus, X, Tag, Eye, ShieldCheck, AlertCircle } from 'lucide-react';
 import { apiUrl } from '../config';
-import { cabecalhoAuth } from '../services/authService';
+import { fetchAutenticado } from '../services/authService';
 import LeadCard from '../components/LeadCard';
 
 function gerarLeadsLocalmente(cidade, estado, nichosStr, qtd = 20) {
@@ -167,12 +167,9 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
     setLogStream(prev => [...prev.slice(-49), logInicio]);
 
     try {
-      const res = await fetch(apiUrl('/api/leads/scan'), {
+      const res = await fetchAutenticado('/api/leads/scan', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...cabecalhoAuth()
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           estado: selectedEstado,
           cidade: selectedCidade,
@@ -285,34 +282,35 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '12px 18px', textAlign: 'right', borderRadius: '4px' }}>
+          <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', padding: '12px 18px', textAlign: 'right', borderRadius: '4px' }}>
             <div className="font-mono" style={{ fontSize: '12px', color: 'var(--fg-white)' }}>
               MOTOR OSINT // 100% OPERACIONAL
             </div>
-            <div style={{ width: '140px', height: '4px', background: 'rgba(255,255,255,0.1)', marginTop: '8px', overflow: 'hidden', borderRadius: '2px' }}>
+            <div style={{ width: '140px', height: '4px', background: 'var(--sobre-10)', marginTop: '8px', overflow: 'hidden', borderRadius: '2px' }}>
               <div style={{ width: '100%', height: '100%', background: 'var(--accent-indigo)' }} />
             </div>
           </div>
         </div>
 
         {/* Filter Bar with Responsive Grid */}
-        <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-surface)', borderRadius: '8px' }}>
+        <div data-testid="leads-controls" className="glass-panel" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-surface)', borderRadius: '8px' }}>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', alignItems: 'flex-end', marginBottom: '16px' }}>
             
             <div>
-              <label className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>País</label>
-              <select style={{ width: '100%', padding: '11px 12px', border: '0.5px solid rgba(255,255,255,0.2)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}>
+              <label htmlFor="leads-pais" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>País</label>
+              <select id="leads-pais" style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}>
                 <option>Brasil (BR)</option>
               </select>
             </div>
 
             <div>
-              <label className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Estado</label>
+              <label htmlFor="leads-estado" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Estado</label>
               <select 
+                id="leads-estado"
                 value={selectedEstado} 
                 onChange={(e) => setSelectedEstado(e.target.value)}
-                style={{ width: '100%', padding: '11px 12px', border: '0.5px solid rgba(255,255,255,0.2)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
+                style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
               >
                 <option value="SP">São Paulo (SP)</option>
                 <option value="GO">Goiás (GO)</option>
@@ -322,11 +320,12 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             </div>
 
             <div>
-              <label className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Cidade</label>
+              <label htmlFor="leads-cidade" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Cidade</label>
               <select 
+                id="leads-cidade"
                 value={selectedCidade} 
                 onChange={(e) => setSelectedCidade(e.target.value)}
-                style={{ width: '100%', padding: '11px 12px', border: '0.5px solid rgba(255,255,255,0.2)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
+                style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
               >
                 <option value="Franca">Franca</option>
                 <option value="São Paulo">São Paulo</option>
@@ -339,11 +338,12 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             </div>
 
             <div>
-              <label className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Nicho para Varredura (Selecione na Lista)</label>
+              <label htmlFor="leads-nicho" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Nicho para Varredura (Selecione na Lista)</label>
               <select 
+                id="leads-nicho"
                 value={selectedNichoPreset} 
                 onChange={handleNichoDropdownChange}
-                style={{ width: '100%', padding: '11px 14px', border: '0.5px solid rgba(255,255,255,0.2)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
+                style={{ width: '100%', padding: '11px 14px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
               >
                 {OPCOES_NICHOS_DROPDOWN.map(opt => (
                   <option key={opt.label} value={opt.value}>
@@ -371,9 +371,9 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
                   onClick={() => handleSelectCityChip(c)}
                   style={{
                     padding: '4px 10px',
-                    border: isSelected ? '0.5px solid #6366f1' : '0.5px solid rgba(255,255,255,0.15)',
-                    background: isSelected ? '#6366f1' : '#111726',
-                    color: 'var(--fg-white)',
+                    border: isSelected ? '0.5px solid var(--accent-indigo)' : '0.5px solid var(--hairline-color)',
+                    background: isSelected ? 'var(--accent-indigo)' : 'var(--bg-card)',
+                    color: isSelected ? '#ffffff' : 'var(--fg-white)',
                     fontSize: '11px',
                     fontFamily: 'var(--font-mono)',
                     cursor: 'pointer',
@@ -397,9 +397,9 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
                   onClick={() => toggleNichoChip(nicho)}
                   style={{
                     padding: '4px 10px',
-                    border: isSelected ? '0.5px solid #6366f1' : '0.5px solid rgba(255,255,255,0.15)',
-                    background: isSelected ? 'rgba(99, 102, 241, 0.2)' : '#111726',
-                    color: isSelected ? '#a5b4fc' : '#94a3b8',
+                    border: isSelected ? '0.5px solid var(--accent-indigo)' : '0.5px solid var(--hairline-color)',
+                    background: isSelected ? 'var(--estado-sucesso-suave)' : 'var(--bg-card)',
+                    color: isSelected ? 'var(--accent-indigo-claro)' : 'var(--fg-muted)',
                     fontSize: '11px',
                     fontFamily: 'var(--font-mono)',
                     cursor: 'pointer',
@@ -409,7 +409,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
                     borderRadius: '4px'
                   }}
                 >
-                  {isSelected ? <Check size={11} color="#6366f1" /> : <Plus size={11} />}
+                  {isSelected ? <Check size={11} color="var(--accent-indigo)" /> : <Plus size={11} />}
                   {nicho}
                 </button>
               );
@@ -436,8 +436,8 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             {logStream.map((log, idx) => (
               <div key={idx} style={{ 
                 wordBreak: 'break-all', 
-                color: log.includes('ERRO') || log.includes('CRITICAL') ? '#ef4444' : 
-                       log.includes('WARNING') ? '#eab308' : '#a5b4fc' 
+                color: log.includes('ERRO') || log.includes('CRITICAL') ? 'var(--estado-erro)' : 
+                       log.includes('WARNING') ? 'var(--estado-alerta)' : 'var(--accent-indigo)' 
               }}>
                 <span style={{ color: 'var(--accent-indigo-forte)' }}>[{new Date().toLocaleTimeString()}]</span> {log}
               </div>
@@ -445,9 +445,9 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
           </div>
 
           {/* Summary Info */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '14px', borderTop: '0.5px solid rgba(255,255,255,0.12)', fontSize: '12px', color: 'var(--fg-muted)', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '14px', borderTop: '0.5px solid var(--hairline-color)', fontSize: '12px', color: 'var(--fg-muted)', flexWrap: 'wrap', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Search size={14} color="#6366f1" />
+              <Search size={14} color="var(--accent-indigo)" />
               <span>
                 Configurado para <strong style={{ color: 'var(--fg-white)' }}>{nichosListActive.length} nichos ativos</strong> em {selectedCidade}, {selectedEstado}.
               </span>
@@ -496,7 +496,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         </div>
 
         {/* Lead Cards Grid - Redesenhado no estilo fiel da UseLeadSite */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div data-testid="leads-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
           {displayLeads.map((lead) => (
             <LeadCard
               key={lead.id}
@@ -526,7 +526,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         }}>
           <div style={{
             background: 'var(--bg-surface)',
-            border: '0.5px solid rgba(255,255,255,0.2)',
+            border: '0.5px solid var(--sobre-20)',
             maxWidth: '560px',
             width: '100%',
             padding: '28px',
@@ -542,14 +542,14 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
-              <div style={{ background: 'var(--bg-card)', padding: '14px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}>
+              <div style={{ background: 'var(--bg-card)', padding: '14px', border: '0.5px solid var(--hairline-color)', borderRadius: '4px' }}>
                 <div style={{ fontSize: '10px', color: 'var(--fg-muted)' }}>STATUS DO DOMÍNIO</div>
-                <div style={{ fontSize: '14px', fontWeight: '700', color: activeLeadForModal.status_site === 'tem_site' ? '#22c55e' : '#ef4444', marginTop: '4px' }}>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: activeLeadForModal.status_site === 'tem_site' ? 'var(--estado-sucesso)' : 'var(--estado-erro)', marginTop: '4px' }}>
                   {activeLeadForModal.status_site === 'tem_site' ? 'Domínio Ativo' : 'Sem Domínio Registrado'}
                 </div>
               </div>
 
-              <div style={{ background: 'var(--bg-card)', padding: '14px', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}>
+              <div style={{ background: 'var(--bg-card)', padding: '14px', border: '0.5px solid var(--sobre-10)', borderRadius: '4px' }}>
                 <div style={{ fontSize: '10px', color: 'var(--fg-muted)' }}>SCORE DE OPORTUNIDADE</div>
                 <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--accent-indigo)', marginTop: '4px' }}>
                   {activeLeadForModal.score} / 100
@@ -557,7 +557,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
               </div>
             </div>
 
-            <div style={{ background: 'var(--bg-card)', padding: '16px', border: '0.5px solid rgba(255,255,255,0.1)', marginBottom: '20px', fontSize: '12.5px', color: 'var(--fg-soft)', lineHeight: 1.6, borderRadius: '4px' }}>
+            <div style={{ background: 'var(--bg-card)', padding: '16px', border: '0.5px solid var(--sobre-10)', marginBottom: '20px', fontSize: '12.5px', color: 'var(--fg-soft)', lineHeight: 1.6, borderRadius: '4px' }}>
               <strong style={{ color: 'var(--fg-white)' }}>💡 Diagnóstico do Agente:</strong> {activeLeadForModal.orientacao}
             </div>
 

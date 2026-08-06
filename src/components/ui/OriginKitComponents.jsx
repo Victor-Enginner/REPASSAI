@@ -24,9 +24,9 @@ export function OriginKitBentoGrid({ items = [] }) {
         <div 
           key={idx}
           style={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--sobre-05)',
             backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid var(--sobre-10)',
             borderRadius: '20px',
             padding: '24px',
             transition: 'transform 0.2s ease, border-color 0.2s ease',
@@ -38,7 +38,7 @@ export function OriginKitBentoGrid({ items = [] }) {
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.borderColor = 'var(--sobre-10)';
           }}
         >
           <div style={{ fontSize: '32px', marginBottom: '12px' }}>{item.icon}</div>
@@ -64,7 +64,7 @@ export function GallerySection({ images = [], backupPrompt = "Ambiente Real" }) 
   const displayImages = images && images.length > 0 ? images : defaultImages;
 
   return (
-    <section style={{ padding: '48px 24px', background: 'rgba(9, 10, 15, 0.95)', borderTop: '0.5px solid rgba(255,255,255,0.1)', borderBottom: '0.5px solid rgba(255,255,255,0.1)', margin: '40px 0' }}>
+    <section style={{ padding: '48px 24px', background: 'rgba(9, 10, 15, 0.95)', borderTop: '0.5px solid var(--sobre-10)', borderBottom: '0.5px solid var(--sobre-10)', margin: '40px 0' }}>
       <div style={{ textAlign: 'center', marginBottom: '32px' }}>
         <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
           ● MÍDIA REAL // GOOGLE BUSINESS
@@ -84,7 +84,7 @@ export function GallerySection({ images = [], backupPrompt = "Ambiente Real" }) 
             style={{ 
               overflow: 'hidden', 
               borderRadius: '12px', 
-              border: '0.5px solid rgba(255,255,255,0.15)',
+              border: '0.5px solid var(--sobre-15)',
               boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
               height: '180px',
               position: 'relative'

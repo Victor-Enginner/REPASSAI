@@ -65,7 +65,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
         </div>
 
         <div style={{ display: 'flex', gap: '12px' }}>
-          <span className="mono-label" style={{ border: '0.5px solid rgba(255,255,255,0.2)', padding: '8px 16px', color: 'var(--fg-white)' }}>
+          <span className="mono-label" style={{ border: '0.5px solid var(--sobre-20)', padding: '8px 16px', color: 'var(--fg-white)' }}>
             TOTAL LEADS // {leads.length}
           </span>
         </div>
@@ -87,20 +87,20 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                 display: 'flex',
                 flexDirection: 'column',
                 background: 'var(--bg-surface)',
-                border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                border: '0.5px solid var(--sobre-12)',
                 position: 'relative',
                 overflow: 'hidden'
               }}
             >
               {/* Column Header (Fixo no topo da coluna) */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)', flexShrink: 0, zIndex: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '0.5px solid var(--sobre-12)', flexShrink: 0, zIndex: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: col.color }} />
                   <h2 className="font-mono" style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>
                     {col.title}
                   </h2>
                 </div>
-                <span className="mono-label" style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 8px', color: 'var(--fg-white)', borderRadius: '4px' }}>
+                <span className="mono-label" style={{ background: 'var(--sobre-06)', padding: '2px 8px', color: 'var(--fg-white)', borderRadius: '4px' }}>
                   {colLeads.length}
                 </span>
               </div>
@@ -135,7 +135,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                         className="cursor-target"
                         style={{
                           background: 'var(--bg-card)',
-                          border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                          border: '0.5px solid var(--sobre-12)',
                           borderRadius: '8px',
                           padding: '16px',
                           display: 'flex',
@@ -181,7 +181,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                               className="btn-secondary"
                               style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', textDecoration: 'none' }}
                             >
-                              <MessageSquare size={12} color="#22c55e" /> WhatsApp
+                              <MessageSquare size={12} color="var(--estado-sucesso)" /> WhatsApp
                             </a>
                           ) : (
                             <span
@@ -189,7 +189,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                               className="btn-secondary"
                               style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center', opacity: 0.4, cursor: 'not-allowed' }}
                             >
-                              <MessageSquare size={12} color="#64748b" /> Sem telefone
+                              <MessageSquare size={12} color="var(--fg-subtle)" /> Sem telefone
                             </span>
                           )}
 
@@ -198,24 +198,24 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                             className="btn-secondary" 
                             style={{ padding: '6px 8px', fontSize: '10px', justifyContent: 'center' }}
                           >
-                            <Sparkles size={12} color="#6366f1" /> Script IA
+                            <Sparkles size={12} color="var(--accent-indigo)" /> Script IA
                           </button>
                         </div>
 
                         {/* Move Stage Buttons */}
-                        <div style={{ display: 'flex', gap: '4px', paddingTop: '8px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ display: 'flex', gap: '4px', paddingTop: '8px', borderTop: '0.5px solid var(--hairline-color)' }}>
                           {col.id !== 'Em Negociação' && (
                             <button 
                               onClick={() => handleMoveStage(lead.id, 'Em Negociação')}
-                              style={{ flex: 1, padding: '4px', background: 'rgba(99, 102, 241, 0.15)', border: '0.5px solid rgba(99, 102, 241, 0.3)', color: 'var(--accent-indigo-suave)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                              style={{ flex: 1, padding: '4px', background: 'var(--estado-sucesso-suave)', border: '0.5px solid rgba(79, 70, 229, 0.2)', color: 'var(--accent-indigo)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
                             >
-                              → Negociação
+                              → Negociar
                             </button>
                           )}
                           {col.id !== 'Agendados' && (
                             <button 
                               onClick={() => handleMoveStage(lead.id, 'Agendados')}
-                              style={{ flex: 1, padding: '4px', background: 'rgba(245, 158, 11, 0.15)', border: '0.5px solid rgba(245, 158, 11, 0.3)', color: 'var(--estado-alerta-suave)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                              style={{ flex: 1, padding: '4px', background: 'var(--estado-alerta-suave)', border: '0.5px solid rgba(217, 119, 6, 0.2)', color: 'var(--estado-alerta)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
                             >
                               → Agendar
                             </button>
@@ -223,7 +223,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                           {col.id !== 'Convertidos' && (
                             <button 
                               onClick={() => handleMoveStage(lead.id, 'Convertidos')}
-                              style={{ flex: 1, padding: '4px', background: 'rgba(34, 197, 94, 0.15)', border: '0.5px solid rgba(34, 197, 94, 0.3)', color: 'var(--estado-sucesso-suave)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
+                              style={{ flex: 1, padding: '4px', background: 'var(--estado-sucesso-suave)', border: '0.5px solid rgba(22, 163, 74, 0.2)', color: 'var(--estado-sucesso)', fontSize: '9px', fontFamily: 'var(--font-mono)', cursor: 'pointer', borderRadius: '4px' }}
                             >
                               ✓ Fechar
                             </button>
@@ -256,8 +256,8 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
         <div style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0,0,0,0.85)',
-          backdropFilter: 'blur(10px)',
+          background: 'rgba(15, 23, 42, 0.4)',
+          backdropFilter: 'blur(4px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -265,22 +265,24 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
           padding: '20px'
         }}>
           <div style={{
-            background: 'var(--bg-surface)',
-            border: '0.5px solid rgba(255,255,255,0.2)',
+            background: 'var(--bg-card)',
+            border: '0.5px solid var(--hairline-color)',
+            borderRadius: '8px',
+            padding: '28px',
             maxWidth: '540px',
             width: '100%',
-            padding: '28px'
+            boxShadow: '0 20px 40px rgba(15, 23, 42, 0.12)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <span className="mono-label">SCRIPT_GENERATOR // {selectedLeadForScript.nome}</span>
-              <button onClick={() => setSelectedLeadForScript(null)} style={{ background: 'none', border: 'none', color: 'var(--fg-white)', cursor: 'pointer', fontSize: '18px' }}>✕</button>
+              <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>NEURAL SCRIPT // {selectedLeadForScript.nome}</span>
+              <button onClick={() => setSelectedLeadForScript(null)} style={{ background: 'none', border: 'none', color: 'var(--fg-bright)', cursor: 'pointer', fontSize: '18px' }}>✕</button>
             </div>
 
             <h3 className="font-headline" style={{ fontSize: '20px', color: 'var(--fg-white)', marginBottom: '12px' }}>
               Roteiro de Abordagem IA
             </h3>
 
-            <div style={{ background: 'var(--bg-card)', padding: '16px', border: '0.5px solid rgba(255,255,255,0.12)', fontSize: '13px', color: 'var(--fg-soft)', lineHeight: 1.6, fontFamily: 'monospace', marginBottom: '20px', whiteSpace: 'pre-line' }}>
+            <div style={{ background: 'var(--bg-surface)', padding: '16px', border: '0.5px solid var(--hairline-color)', fontSize: '13px', color: 'var(--fg-bright)', lineHeight: 1.6, fontFamily: 'monospace', marginBottom: '20px', whiteSpace: 'pre-line', maxHeight: '280px', overflowY: 'auto' }}>
               {generatePersonalizedScript(selectedLeadForScript)}
             </div>
 
@@ -290,7 +292,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                 className="btn-secondary" 
                 style={{ flex: 1, justifyContent: 'center' }}
               >
-                {copied ? <Check size={14} color="#22c55e" /> : <Copy size={14} />}
+                {copied ? <Check size={14} color="var(--estado-sucesso)" /> : <Copy size={14} />}
                 {copied ? 'Copiado!' : 'Copiar Texto'}
               </button>
 

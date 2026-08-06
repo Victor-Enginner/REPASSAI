@@ -72,10 +72,7 @@ export default function AgenticChatbotWidget() {
     }
 
     try {
-      const res = await executePromptWithFallback(
-        userMsg,
-        'Você é o Assistente Pessoal do REPASS AI. Responda de forma direta, amigável e profissional em português.'
-      );
+      const res = await executePromptWithFallback(userMsg, 'chat');
       const text = typeof res === 'string' ? res : (res?.output || res?.texto || 'Entendido! Como posso ajudar mais?');
       setMessages(prev => [...prev, { sender: 'agent', text }]);
     } catch {
@@ -126,7 +123,7 @@ export default function AgenticChatbotWidget() {
             height: '500px',
             background: 'rgba(10, 14, 26, 0.96)',
             backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
+            border: '1px solid var(--sobre-15)',
             borderRadius: '16px',
             boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
             display: 'flex',
@@ -140,7 +137,7 @@ export default function AgenticChatbotWidget() {
             style={{
               padding: '14px 18px',
               background: 'linear-gradient(90deg, var(--bg-slate) 0%, #1e1b4b 100%)',
-              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              borderBottom: '1px solid var(--sobre-10)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between'
@@ -196,8 +193,8 @@ export default function AgenticChatbotWidget() {
                 style={{
                   alignSelf: m.sender === 'user' ? 'flex-end' : 'flex-start',
                   maxWidth: '82%',
-                  background: m.sender === 'user' ? '#6366f1' : 'rgba(255,255,255,0.06)',
-                  border: m.sender === 'user' ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                  background: m.sender === 'user' ? '#6366f1' : 'var(--sobre-06)',
+                  border: m.sender === 'user' ? 'none' : '1px solid var(--sobre-10)',
                   color: 'var(--fg-white)',
                   padding: '10px 14px',
                   borderRadius: m.sender === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
@@ -221,7 +218,7 @@ export default function AgenticChatbotWidget() {
             style={{
               padding: '12px',
               background: 'var(--bg-deep)',
-              borderTop: '1px solid rgba(255,255,255,0.1)',
+              borderTop: '1px solid var(--sobre-10)',
               display: 'flex',
               gap: '8px'
             }}
@@ -236,7 +233,7 @@ export default function AgenticChatbotWidget() {
                 flex: 1,
                 padding: '10px 14px',
                 background: 'var(--bg-surface)',
-                border: '1px solid rgba(255,255,255,0.15)',
+                border: '1px solid var(--sobre-15)',
                 borderRadius: '8px',
                 color: 'var(--fg-white)',
                 fontSize: '12px'

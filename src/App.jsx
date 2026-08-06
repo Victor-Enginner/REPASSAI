@@ -7,7 +7,9 @@ import CursorPersonalizado from './components/CursorPersonalizado';
 import AgenticChatbotWidget from './components/AgenticChatbotWidget';
 import { useEhMobile } from './hooks/useMediaQuery';
 import { INITIAL_LEADS } from './mock/leadsData';
-import { obterConfig, limparCacheConfig, capturarSessaoUrlHash } from './services/authService';
+import { obterConfig, limparCacheConfig, capturarSessaoUrlHash, limparSessaoLegada, fetchAutenticado } from './services/authService';
+import { ThemeProvider } from './theme/ThemeContext';
+import FundoDaAba from './components/backgrounds/FundoDaAba';
 
 /**
  * Carregamento sob demanda das views.
@@ -108,9 +110,13 @@ function PainelSimples({ children }) {
   return <Suspense fallback={<CarregandoView />}>{children}</Suspense>;
 }
 
-export default function App() {
+function AppMain() {
   const ehMobile = useEhMobile();
-  const [currentTab, setCurrentTab] = useState('landing');
+  const [currentTab, setCurrentTab] = useState(() => {
+    const telaDeAuditoria = import.meta.env.DEV
+      && new URLSearchParams(window.location.search).get('audit') === 'leads';
+    return telaDeAuditoria ? 'leads' : 'landing';
+  });
   const [leads, setLeads] = useState(INITIAL_LEADS);
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
 
@@ -122,21 +128,22 @@ export default function App() {
    * qualquer resíduo que possa ter ficado salvo em uma instalação existente.
    */
   useEffect(() => {
+    // Remove JWT legado do localStorage (migração → cookie HttpOnly).
+    limparSessaoLegada();
     try {
-      // Captura token vindo do link de confirmação do e-mail
-      const sessaoConfirmada = capturarSessaoUrlHash();
-      if (sessaoConfirmada) {
-        setCurrentTab('dashboard');
-      }
-
       const chavesLegadas = [
         `${'OMNI'}${'ROUTE'}_API_KEY`,
         ['repass', 'llm', 'config'].join('_'),
       ];
       chavesLegadas.forEach((chave) => localStorage.removeItem(chave));
     } catch {
-      // Navegadores com storage bloqueado já estão seguros: nada foi salvo.
+      // storage bloqueado
     }
+
+    // Link de confirmação de e-mail: troca hash por cookie no backend.
+    capturarSessaoUrlHash().then((usuario) => {
+      if (usuario) setCurrentTab('dashboard');
+    });
   }, []);
 
   /**
@@ -207,6 +214,29 @@ export default function App() {
     obterConfig().then(setAuthConfig);
   }, []);
 
+  // Ao entrar ou recarregar, o funil volta do servidor. Leads pertencem ao
+  // usuário do cookie HttpOnly; o cliente nunca envia nem escolhe user_id.
+  useEffect(() => {
+    if (!authConfig?.usuario) return;
+    let cancelado = false;
+
+    fetchAutenticado('/api/leads')
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((dados) => {
+        if (!cancelado && Array.isArray(dados.leads)) setLeads(dados.leads);
+      })
+      .catch((erro) => {
+        console.warn('[Leads] Não foi possível restaurar o funil:', erro);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [authConfig?.usuario?.id]);
+
   // 🚪 Auth gate disabled – o aplicativo agora funciona em modo single‑user sem necessidade de login.
   // O efeito que redirecionava a página de login foi removido.
   // Todas as rotas são acessíveis diretamente.
@@ -247,6 +277,34 @@ export default function App() {
     )));
   };
 
+  const handleUpdateLeadStatus = async (leadId, novoStatus) => {
+    const lead = leads.find((item) => item.id === leadId);
+
+    // Exemplos de demonstração não viram registros comerciais. No modo local
+    // sem conta mantemos o comportamento de teste apenas em memória.
+    if (lead?.is_demo || !authConfig?.usuario) {
+      setLeads((prev) => prev.map((item) => (
+        item.id === leadId ? { ...item, status_crm: novoStatus } : item
+      )));
+      return { persistido: false, modo: 'local' };
+    }
+
+    const res = await fetchAutenticado('/api/leads/status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lead_id: leadId, status: novoStatus }),
+    });
+    const dados = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(dados.mensagem || 'Não foi possível salvar o estágio.');
+    }
+
+    setLeads((prev) => prev.map((item) => (
+      item.id === leadId ? { ...item, ...dados.lead } : item
+    )));
+    return { persistido: true, modo: 'servidor' };
+  };
+
   const handleGenerateSite = (lead) => {
     setSelectedLeadForEditor(lead);
     setCurrentTab('editor');
@@ -256,7 +314,24 @@ export default function App() {
   // O bloco que exibia a tela de login foi removido.
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: '#05070f' }}>
+    /*
+      Casca do app transparente, de propósito.
+
+      Aqui havia `background: '#05070f'` fixo — um painel preto por cima
+      de tudo, que anulava o tema claro e deixava texto tinta sobre preto
+      (1.07 de contraste). O fundo agora é o do <body>, que segue o tema,
+      e a atmosfera iridescente aparece por trás.
+    */
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: 'transparent' }}>
+
+      {/*
+        Fundo da aba atual.
+
+        Montado UMA vez, aqui, e não dentro de cada view: quem decide o
+        efeito é o registro em FundoDaAba.jsx. Fica em z-index 0, abaixo
+        do <main> (10) e da Sidebar (40).
+      */}
+      <FundoDaAba aba={currentTab} />
 
       {/* Sidebar Transparente em TODAS as sessões do aplicativo */}
       {currentTab !== 'landing' && currentTab !== 'login' && (
@@ -358,7 +433,11 @@ export default function App() {
 
             {currentTab === 'bulk_whatsapp' && (
               <PainelSimples>
-                <BulkWhatsAppView leads={leads} setLeads={setLeads} onBack={() => setCurrentTab('crm')} />
+                <BulkWhatsAppView
+                  leads={leads}
+                  onUpdateLeadStatus={handleUpdateLeadStatus}
+                  onBack={() => setCurrentTab('crm')}
+                />
               </PainelSimples>
             )}
 
@@ -417,5 +496,13 @@ export default function App() {
       <CursorPersonalizado />
 
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppMain />
+    </ThemeProvider>
   );
 }

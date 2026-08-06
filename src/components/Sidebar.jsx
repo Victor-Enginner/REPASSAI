@@ -31,12 +31,16 @@ import {
   Sparkles,
   ChevronRight,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from '../theme/ThemeContext';
 import logoOrb from '../assets/repass_logo_orb.jpg';
 import { useEhMobile } from '../hooks/useMediaQuery';
 
 export default function Sidebar({ currentTab, setCurrentTab }) {
+  const { theme, toggleTheme } = useTheme();
   const [hoveredTab, setHoveredTab] = useState(null);
   const ehMobile = useEhMobile();
   const [gavetaAberta, setGavetaAberta] = useState(false);
@@ -96,7 +100,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         transition: 'transform 0.26s cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 60,
         background: 'var(--bg-sidebar)',
-        boxShadow: gavetaAberta ? '4px 0 32px rgba(0,0,0,0.8)' : 'none',
+        boxShadow: gavetaAberta ? 'var(--sombra-md)' : 'none',
       }
     : {
         width: '260px',
@@ -128,15 +132,16 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(10, 14, 26, 0.94)',
-            border: '0.5px solid rgba(255, 255, 255, 0.18)',
-            borderRadius: '10px',
+            background: 'var(--vidro-fundo)',
+            backdropFilter: 'var(--vidro-blur)',
+            WebkitBackdropFilter: 'var(--vidro-blur)',
+            border: 'none',
+            borderRadius: 'var(--raio-md)',
             cursor: 'pointer',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
+            boxShadow: 'var(--vidro-brilho), var(--sombra-md)',
           }}
         >
-          <Menu size={21} color="#ffffff" />
+          <Menu size={21} color="var(--tinta)" />
         </button>
       )}
 
@@ -148,7 +153,9 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.7)',
+            // Scrim mais leve no claro: 70% de preto sobre papel parece
+            // apagão, não sobreposição.
+            background: 'rgba(17, 17, 17, 0.45)',
             backdropFilter: 'blur(3px)',
             zIndex: 55,
           }}
@@ -163,7 +170,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         display: 'flex',
         flexDirection: 'column',
         padding: 0,
-        borderRight: '0.5px solid rgba(255, 255, 255, 0.08)',
+        borderRight: '0.5px solid var(--sobre-08)',
         userSelect: 'none',
         overflow: 'hidden',
         ...estiloAside,
@@ -189,7 +196,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
               cursor: 'pointer',
             }}
           >
-            <X size={20} color="#94a3b8" />
+            <X size={20} color="var(--tinta-media)" />
           </button>
         )}
         
@@ -201,7 +208,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
           style={{
             height: '68px',
             padding: '0 18px',
-            borderBottom: '0.5px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '0.5px solid var(--sobre-08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -227,11 +234,11 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
 
           <span className="mono-label" style={{ 
             fontSize: '8.5px', 
-            color: 'var(--accent-indigo)', 
-            background: 'rgba(99, 102, 241, 0.12)', 
-            padding: '3px 8px', 
-            borderRadius: '12px',
-            border: '0.5px solid rgba(99, 102, 241, 0.25)',
+            color: 'var(--tinta-media)',
+            background: 'var(--sobre-08)',
+            padding: '3px 8px',
+            borderRadius: 'var(--raio-pill)',
+            border: '0.5px solid var(--aro-cor)',
             fontFamily: 'var(--font-mono)'
           }}>
             VERSÃO_BETA
@@ -278,11 +285,12 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(90deg, rgba(99, 102, 241, 0.22) 0%, rgba(99, 102, 241, 0.04) 100%)',
-                      borderLeft: '3px solid #6366f1',
-                      borderRadius: '4px',
+                      // Véu iridescente + fio da marca na borda esquerda,
+                      // no lugar do gradiente índigo chapado.
+                      background: 'var(--iris-veil)',
+                      borderRadius: 'var(--raio-sm)',
                       zIndex: -1,
-                      boxShadow: 'inset 0 0 12px rgba(99, 102, 241, 0.12)'
+                      boxShadow: 'inset 3px 0 0 0 var(--iris-violeta)'
                     }}
                   />
                 )}
@@ -296,7 +304,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'rgba(255, 255, 255, 0.04)',
+                      background: 'var(--sobre-04)',
                       borderRadius: '4px',
                       zIndex: -1
                     }}
@@ -307,7 +315,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
                   <Icon 
                     size={16} 
-                    color={isActive ? '#818cf8' : (item.highlight ? '#38bdf8' : '#64748b')} 
+                    color={isActive ? 'var(--accent-indigo)' : (item.highlight ? 'var(--iris-azul)' : 'var(--tinta-fraca)')}
                     style={{
                       flexShrink: 0,
                       transition: 'color 0.2s ease, transform 0.2s ease',
@@ -316,8 +324,10 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                   />
                   <span style={{
                     fontSize: '13px',
-                    fontWeight: isActive ? '700' : '500',
-                    color: isActive ? '#ffffff' : (isHovered ? '#f1f5f9' : '#cbd5e1'),
+                    fontWeight: isActive ? '600' : '500',
+                    // Era #cbd5e1 fixo: slate claro, escrito para fundo
+                    // escuro. Sobre papel dava 1.41 de contraste.
+                    color: isActive || isHovered ? 'var(--tinta)' : 'var(--tinta-media)',
                     letterSpacing: '-0.01em',
                     transition: 'color 0.2s ease',
                     whiteSpace: 'nowrap',
@@ -333,13 +343,23 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                   {item.badge && (
                     <span style={{
                       fontSize: '8px',
-                      fontWeight: '800',
+                      fontWeight: '500',
                       fontFamily: 'var(--font-mono)',
-                      padding: '2px 5px',
-                      borderRadius: '4px',
-                      background: item.badge === 'PRO' ? 'rgba(236, 72, 153, 0.2)' : (item.badge === 'OSINT' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(99, 102, 241, 0.2)'),
-                      color: item.badge === 'PRO' ? '#ec4899' : (item.badge === 'OSINT' ? '#38bdf8' : '#a5b4fc'),
-                      border: `0.5px solid ${item.badge === 'PRO' ? 'rgba(236, 72, 153, 0.4)' : (item.badge === 'OSINT' ? 'rgba(56, 189, 248, 0.4)' : 'rgba(99, 102, 241, 0.4)')}`
+                      letterSpacing: '0.1em',
+                      padding: '3px 6px',
+                      borderRadius: 'var(--raio-sm)',
+                      /*
+                        Antes: três cores saturadas diferentes (rosa, ciano,
+                        índigo), cada uma sobre o próprio fundo a 20% — o que
+                        dava 1.00 de contraste, texto da cor exata do fundo.
+
+                        Agora: tinta sobre véu neutro. Só 'PRO' recebe o véu
+                        iridescente, porque é o único que precisa puxar o
+                        olho. Etiqueta é rótulo, não semáforo.
+                      */
+                      background: item.badge === 'PRO' ? 'var(--iris-veil)' : 'var(--sobre-08)',
+                      color: 'var(--tinta-media)',
+                      border: 'none'
                     }}>
                       {item.badge}
                     </span>
@@ -348,8 +368,11 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                   <span style={{
                     fontSize: '9px',
                     fontFamily: 'var(--font-mono)',
-                    color: isActive ? '#818cf8' : '#475569',
-                    opacity: isActive ? 0.9 : 0.4,
+                    // --tinta-fantasma (24%) dava 1.70 de contraste: o
+                    // numerador sumia. Fantasma serve para aro e divisor,
+                    // não para texto.
+                    color: isActive ? 'var(--accent-indigo)' : 'var(--tinta-fraca)',
+                    opacity: 1,
                     letterSpacing: '0.05em',
                     transition: 'color 0.2s ease'
                   }}>
@@ -362,23 +385,59 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         </nav>
       </div>
 
+      {/* Theme Switcher Control */}
+      <div style={{ padding: '8px 12px 0', flexShrink: 0 }}>
+        <button
+          onClick={toggleTheme}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            // Era `justify` — propriedade que não existe em CSS, então o
+            // rótulo "ALTERAR" nunca chegava à direita.
+            justifyContent: 'space-between',
+            padding: '10px 12px',
+            background: 'var(--vidro-fundo)',
+            backdropFilter: 'var(--vidro-blur)',
+            WebkitBackdropFilter: 'var(--vidro-blur)',
+            boxShadow: 'var(--vidro-brilho)',
+            border: 'none',
+            borderRadius: 'var(--raio-md)',
+            color: 'var(--tinta)',
+            fontSize: '11px',
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: 'var(--tracking-rotulo)',
+            cursor: 'pointer',
+            marginBottom: '8px',
+            transition: 'background var(--dur-quick) var(--ease-marca)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {theme === 'light' ? <Sun size={14} color="var(--iris-dourado)" /> : <Moon size={14} color="var(--iris-lilas)" />}
+            <span style={{ fontWeight: 500 }}>{theme === 'light' ? 'MODO CLARO' : 'MODO ESCURO'}</span>
+          </div>
+          <span style={{ fontSize: '9px', opacity: 0.7, textTransform: 'uppercase' }}>ALTERAR</span>
+        </button>
+      </div>
+
       {/* Upgrade Footer Card */}
-      <div style={{ padding: '12px', borderTop: '0.5px solid rgba(255, 255, 255, 0.08)', flexShrink: 0 }}>
+      <div style={{ padding: '0 12px 12px', flexShrink: 0 }}>
         <motion.div 
           onClick={() => navegar('engine')}
           whileHover={{ scale: 1.01, translateY: -1 }}
           whileTap={{ scale: 0.98 }}
           style={{
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(236, 72, 153, 0.12) 100%)',
-            border: '0.5px solid rgba(99, 102, 241, 0.25)',
-            borderRadius: '8px',
+            // Véu iridescente da marca, no lugar do gradiente índigo→rosa.
+            background: 'var(--iris-veil)',
+            border: '0.5px solid var(--aro-cor)',
+            borderRadius: 'var(--raio-md)',
             padding: '12px',
             cursor: 'pointer',
             boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <Sparkles size={13} color="#ec4899" />
+            <Sparkles size={13} color="var(--iris-violeta)" />
             <span style={{ fontSize: '10.5px', fontWeight: '800', color: 'var(--fg-white)', fontFamily: 'var(--font-mono)' }}>
               REPASS PRO // ACESSO ILIMITADO
             </span>

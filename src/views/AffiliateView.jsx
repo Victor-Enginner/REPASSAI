@@ -26,7 +26,7 @@ export default function AffiliateView() {
           </p>
         </div>
 
-        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
+        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', padding: '10px 18px' }}>
           <span className="mono-label" style={{ color: 'var(--estado-sucesso)' }}>COMISSÃO RECORRENTE // 30%</span>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function AffiliateView() {
             aria-label="Seu link de afiliado"
             value={affiliateLink} 
             className="font-mono"
-            style={{ flex: 1, padding: '12px 16px', background: 'var(--bg-card)', border: '0.5px solid rgba(255,255,255,0.15)', color: 'var(--fg-white)', fontSize: '13px' }}
+            style={{ flex: 1, padding: '12px 16px', background: 'var(--bg-card)', border: '0.5px solid var(--sobre-15)', color: 'var(--fg-white)', fontSize: '13px' }}
           />
           <button onClick={copyLink} className="btn-primary">
             {copied ? <Check size={14} color="#22c55e" /> : <Copy size={14} />}

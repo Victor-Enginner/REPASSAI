@@ -94,7 +94,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
       justifyContent: 'center',
       padding: '40px 20px',
       position: 'relative',
-      color: 'var(--bg-slate)',
+      color: 'var(--tinta)',
       animation: 'fadeIn 0.3s ease'
     }}>
       
@@ -115,7 +115,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
 
       {/* Título & Subtítulo */}
       <div style={{ textAlign: 'center', maxWidth: '640px', marginBottom: '32px', position: 'relative', zIndex: 10 }}>
-        <h1 style={{ fontSize: '34px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: 'var(--bg-slate)', letterSpacing: '-0.8px', margin: 0 }}>
+        <h1 style={{ fontSize: '34px', fontWeight: '800', fontFamily: 'var(--font-headline)', color: 'var(--tinta)', letterSpacing: '-0.8px', margin: 0 }}>
           Site pra negócio fora da busca
         </h1>
         <p style={{ fontSize: '14.5px', color: 'var(--fg-subtle)', marginTop: '10px', lineHeight: 1.5 }}>
@@ -127,7 +127,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
       <div style={{
         width: '100%',
         maxWidth: '680px',
-        background: 'var(--fg-white)',
+        background: 'var(--papel-cartao)',
         borderRadius: '24px',
         border: '1px solid rgba(226, 232, 240, 0.8)',
         boxShadow: '0 20px 60px -10px rgba(0, 0, 0, 0.08), 0 8px 25px rgba(0,0,0,0.03)',
@@ -141,7 +141,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '4px',
-          background: 'var(--fg-lightest)',
+          background: 'var(--papel-elevado)',
           padding: '4px',
           borderRadius: '14px',
           marginBottom: '20px'
@@ -230,10 +230,10 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                   width: '100%',
                   padding: '12px 16px',
                   borderRadius: '14px',
-                  background: 'var(--fg-quase-branco)',
+                  background: 'var(--papel-cartao)',
                   border: '1px solid #e2e8f0',
                   fontSize: '13px',
-                  color: 'var(--bg-slate)',
+                  color: 'var(--tinta)',
                   outline: 'none',
                   resize: 'vertical',
                   fontFamily: 'Inter, sans-serif'
@@ -257,10 +257,10 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                     width: '100%',
                     padding: '12px 16px 12px 40px',
                     borderRadius: '14px',
-                    background: 'var(--fg-quase-branco)',
+                    background: 'var(--papel-cartao)',
                     border: '1px solid #e2e8f0',
                     fontSize: '13px',
-                    color: 'var(--bg-slate)',
+                    color: 'var(--tinta)',
                     outline: 'none'
                   }}
                 />
@@ -283,10 +283,10 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                     width: '100%',
                     padding: '12px 16px 12px 40px',
                     borderRadius: '14px',
-                    background: 'var(--fg-quase-branco)',
+                    background: 'var(--papel-cartao)',
                     border: '1px solid #e2e8f0',
                     fontSize: '13px',
-                    color: 'var(--bg-slate)',
+                    color: 'var(--tinta)',
                     outline: 'none'
                   }}
                 />
@@ -324,7 +324,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                           width: '32px',
                           height: '32px',
                           borderRadius: '8px',
-                          background: 'var(--fg-bright)',
+                          background: 'var(--papel-elevado)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -336,7 +336,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                         </div>
 
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--bg-slate)' }}>
+                          <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--tinta)' }}>
                             {lead.nome}
                           </div>
                           <div style={{ fontSize: '11px', color: 'var(--fg-subtle)', marginTop: '1px' }}>
@@ -371,9 +371,9 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
               style={{
                 padding: '10px 16px',
                 borderRadius: '12px',
-                background: 'var(--fg-lightest)',
+                background: 'var(--papel-elevado)',
                 border: '1px solid #e2e8f0',
-                color: 'var(--bg-slate)',
+                color: 'var(--tinta)',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -395,7 +395,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                 left: 0,
                 marginBottom: '8px',
                 width: '320px',
-                background: 'var(--fg-white)',
+                background: 'var(--papel-cartao)',
                 borderRadius: '16px',
                 border: '1px solid #e2e8f0',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
@@ -432,7 +432,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
                     >
                       <IconComp size={16} color={isOptSelected ? '#0070f3' : '#64748b'} style={{ marginTop: '2px' }} />
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--bg-slate)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--tinta)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                           {opt.title} {opt.locked && <Lock size={12} color="#94a3b8" />}
                         </div>
                         <div style={{ fontSize: '11px', color: 'var(--fg-subtle)', marginTop: '2px', lineHeight: 1.4 }}>

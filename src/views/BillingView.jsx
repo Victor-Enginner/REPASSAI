@@ -60,7 +60,7 @@ export default function BillingView() {
           </p>
         </div>
 
-        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
+        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', padding: '10px 18px' }}>
           <span className="mono-label" style={{ color: 'var(--estado-sucesso)' }}>ASSINATURA ATIVA // AGENCY PRO</span>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function BillingView() {
               flexDirection: 'column',
               justify: 'space-between',
               background: 'var(--bg-surface)',
-              border: p.popular ? `1px solid ${p.color}` : '0.5px solid rgba(255, 255, 255, 0.12)',
+              border: p.popular ? `1px solid ${p.color}` : '0.5px solid var(--sobre-12)',
               position: 'relative'
             }}
           >

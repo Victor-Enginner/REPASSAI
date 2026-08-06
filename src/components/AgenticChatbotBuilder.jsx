@@ -67,7 +67,7 @@ const TOKENS = {
   warning: 'var(--estado-alerta)',
   error: 'var(--estado-erro-forte)',
   border: '0.5px solid rgba(99, 102, 241, 0.25)',
-  borderMuted: '0.5px solid rgba(255, 255, 255, 0.1)'
+  borderMuted: '0.5px solid var(--sobre-10)'
 };
 
 /**
@@ -438,14 +438,14 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   style={{
                     textAlign: 'left',
                     background: 'rgba(16, 17, 24, 0.8)',
-                    border: '0.5px solid rgba(255, 255, 255, 0.15)',
+                    border: '0.5px solid var(--sobre-15)',
                     padding: '12px',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.borderColor = '#ec4899'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--sobre-15)'}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>2. 🍔 Cardápio & Pedidos no WhatsApp</span>
@@ -461,14 +461,14 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
                   style={{
                     textAlign: 'left',
                     background: 'rgba(16, 17, 24, 0.8)',
-                    border: '0.5px solid rgba(255, 255, 255, 0.15)',
+                    border: '0.5px solid var(--sobre-15)',
                     padding: '12px',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.borderColor = '#38bdf8'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--sobre-15)'}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--fg-white)' }}>3. ⚡ Estética Systemista Dark Tech B2B</span>

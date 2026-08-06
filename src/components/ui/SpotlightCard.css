@@ -1,13 +1,33 @@
+/*
+  SpotlightCard — cartão com halo que segue o cursor.
+
+  O componente veio de fora com visual próprio e escuro fixo
+  (`background-color: #111`, `border: #222`). Isso funcionava enquanto o
+  sistema inteiro era escuro; sobre papel, virava um bloco preto no meio
+  da tela clara — foi o que apareceu no Scanner de Leads.
+
+  Agora o material é o do design system. A mecânica do spotlight
+  (--mouse-x / --mouse-y, escritas pelo JS) continua intacta.
+*/
 .card-spotlight {
   position: relative;
-  border-radius: 1.5rem;
-  border: 1px solid #222;
-  background-color: #111;
+  border-radius: var(--raio-lg);
+  border: var(--aro) solid var(--aro-cor);
+  background-color: var(--papel-cartao);
   padding: 2rem;
   overflow: hidden;
+  transition: border-color var(--dur-quick) var(--ease-marca),
+              box-shadow var(--dur-quick) var(--ease-marca);
   --mouse-x: 50%;
   --mouse-y: 50%;
-  --spotlight-color: rgba(255, 255, 255, 0.05);
+  /* Véu da escala de sobreposição: branco no tema escuro, tinta no
+     claro. Um halo branco sobre papel branco simplesmente não aparece. */
+  --spotlight-color: var(--sobre-08);
+}
+
+.card-spotlight:hover {
+  border-color: var(--aro-hover);
+  box-shadow: var(--halo-iris);
 }
 
 .card-spotlight::before {
@@ -26,4 +46,18 @@
 .card-spotlight:hover::before,
 .card-spotlight:focus-within::before {
   opacity: 0.6;
+}
+
+/* Sem cursor não há spotlight. */
+@media (hover: none) {
+  .card-spotlight::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-spotlight,
+  .card-spotlight::before {
+    transition: none;
+  }
 }

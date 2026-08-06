@@ -46,7 +46,7 @@ export default function PrismGrid({
     backgroundColor = "rgba(0,0,0,1)",
     boxSize = 40,
     borderWidth = 1,
-    borderColor = "rgba(255,255,255,0.12)",
+    borderColor = "var(--sobre-12)",
     rotate = { x: 0, y: 0 },
     colors: colorsProp = {
         paletteCount: 6,

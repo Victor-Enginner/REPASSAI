@@ -50,7 +50,7 @@ export default function DockMobile({ currentTab, setCurrentTab }) {
         padding: '6px',
         borderRadius: '16px',
         background: 'rgba(10, 14, 26, 0.92)',
-        border: '0.5px solid rgba(255, 255, 255, 0.16)',
+        border: '0.5px solid var(--sobre-16)',
         backdropFilter: 'blur(14px)',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.55)',
         maxWidth: 'calc(100vw - 28px)',

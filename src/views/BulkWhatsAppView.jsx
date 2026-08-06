@@ -6,22 +6,40 @@
  * ética e personalização de atendimento via WhatsApp oficial.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { MessageSquare, Phone, MapPin, Sparkles, ArrowLeft, Send, CheckCircle2, Calendar, Zap, Filter, Flame } from 'lucide-react';
-import FlowFieldBackground from '../components/ui/FlowFieldBackground';
 import { generateSingleScript } from '../services/whatsappBulkEngine';
 
-export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
+export default function BulkWhatsAppView({ leads = [], onUpdateLeadStatus, onBack }) {
   const [filtro, setFiltro] = useState('todos');
   const [scriptModalLead, setScriptModalLead] = useState(null);
   const [scriptGerado, setScriptGerado] = useState('');
+  const [leadSalvando, setLeadSalvando] = useState(null);
+  const [avisoStatus, setAvisoStatus] = useState(null);
 
-  // Atualiza o estágio do lead no CRM global
-  const handleAtualizarStatus = (leadId, novoStatus) => {
-    if (!setLeads) return;
-    setLeads((prevLeads) =>
-      prevLeads.map((l) => (l.id === leadId ? { ...l, status_crm: novoStatus } : l))
-    );
+  // Só confirma visualmente depois que o servidor conclui. Se a gravação
+  // falhar, o estágio anterior permanece e o operador recebe uma mensagem.
+  const handleAtualizarStatus = async (leadId, novoStatus) => {
+    if (!onUpdateLeadStatus || leadSalvando) return;
+    setLeadSalvando(leadId);
+    setAvisoStatus(null);
+    try {
+      const resultado = await onUpdateLeadStatus(leadId, novoStatus);
+      setAvisoStatus({
+        tipo: 'sucesso',
+        texto: resultado?.persistido
+          ? `Estágio salvo: ${novoStatus}.`
+          : `Estágio atualizado no modo de teste: ${novoStatus}.`,
+      });
+    } catch (erro) {
+      setAvisoStatus({
+        tipo: 'erro',
+        texto: erro?.message || 'Não foi possível salvar o estágio. Tente novamente.',
+      });
+    } finally {
+      setLeadSalvando(null);
+    }
   };
 
   // Gerador de Script IA 1-a-1
@@ -30,6 +48,26 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
     setScriptGerado(script);
     setScriptModalLead(lead);
   };
+
+  // O modal vive num portal fora da view. Assim transforms/animações dos
+  // contêineres não transformam o `position: fixed` em posição relativa à
+  // página comprida. Enquanto aberto, o fundo também não deve rolar.
+  useEffect(() => {
+    if (!scriptModalLead) return undefined;
+
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const fecharComEscape = (event) => {
+      if (event.key === 'Escape') setScriptModalLead(null);
+    };
+    window.addEventListener('keydown', fecharComEscape);
+
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      window.removeEventListener('keydown', fecharComEscape);
+    };
+  }, [scriptModalLead]);
 
   // Filtragem de leads
   const leadsFiltrados = leads.filter((l) => {
@@ -42,26 +80,15 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
   return (
     <div style={{ position: 'relative', padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', minHeight: '100vh', animation: 'fadeIn 0.3s ease' }}>
 
-      {/* Fundo dinâmico com rastros cibernéticos */}
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        width: '100vw',
-        height: '100vh',
-        opacity: 0.35,
-        pointerEvents: 'none',
-        zIndex: 0,
-        overflow: 'hidden'
-      }}>
-        <FlowFieldBackground
-          color="#818cf8"
-          background="#05070f"
-          trailOpacity={0.1}
-          particleCount={450}
-          speed={0.8}
-        />
-      </div>
+      {/*
+        O fundo saiu daqui.
 
+        Era um <div position:fixed> com o campo de fluxo embutido na
+        própria view — o padrão que este refactor elimina. Agora quem
+        decide o fundo desta aba é o registro em
+        components/backgrounds/FundoDaAba.jsx, montado uma vez no App.
+        A view voltou a ser só conteúdo.
+      */}
       <div style={{ position: 'relative', zIndex: 10 }}>
 
         {/* Header da Central de Abordagem */}
@@ -84,7 +111,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.15)', padding: '12px 20px', borderRadius: '8px', textAlign: 'right' }}>
+          <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-15)', padding: '12px 20px', borderRadius: '8px', textAlign: 'right' }}>
             <span className="mono-label" style={{ fontSize: '11px', color: 'var(--accent-cyan)' }}>
               {leads.length} LEADS NO FUNIL DE ABORDAGEM
             </span>
@@ -92,6 +119,23 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
         </div>
 
         {/* Filtros Rápidos */}
+        {avisoStatus && (
+          <div
+            role="status"
+            style={{
+              marginBottom: '14px',
+              padding: '10px 14px',
+              borderRadius: '6px',
+              fontSize: '12px',
+              fontWeight: 700,
+              color: avisoStatus.tipo === 'erro' ? 'var(--estado-erro)' : 'var(--estado-sucesso)',
+              background: 'var(--bg-surface)',
+              border: `1px solid ${avisoStatus.tipo === 'erro' ? 'var(--estado-erro)' : 'var(--estado-sucesso)'}`,
+            }}
+          >
+            {avisoStatus.texto}
+          </div>
+        )}
         <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setFiltro('todos')}
@@ -125,7 +169,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
 
         {/* Grid dos Cards de Abordagem 1-a-1 */}
         {leadsFiltrados.length === 0 ? (
-          <div className="glass-panel" style={{ padding: '48px', textAlign: 'center', background: 'var(--bg-surface)', borderRadius: '12px', border: '0.5px dashed rgba(255,255,255,0.2)' }}>
+          <div className="glass-panel" style={{ padding: '48px', textAlign: 'center', background: 'var(--bg-surface)', borderRadius: '12px', border: '0.5px dashed var(--sobre-20)' }}>
             <MessageSquare size={32} color="#64748b" style={{ margin: '0 auto 12px' }} />
             <h3 style={{ fontSize: '16px', color: 'var(--fg-white)', fontWeight: 700 }}>Nenhum lead encontrado neste filtro</h3>
             <p style={{ fontSize: '13px', color: 'var(--fg-muted)', marginTop: '6px' }}>
@@ -136,7 +180,8 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '20px'
+            columnGap: '20px',
+            rowGap: '36px'
           }}>
             {leadsFiltrados.map((lead) => {
               const temTelefone = Boolean(lead.telefone);
@@ -150,15 +195,8 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
               return (
                 <div
                   key={lead.id}
-                  className="glass-panel cursor-target"
+                  className={`approach-card cursor-target${ehQuente ? ' approach-card--hot' : ''}`}
                   style={{
-                    padding: '24px',
-                    borderRadius: '14px',
-                    background: 'rgba(10, 14, 26, 0.85)',
-                    border: ehQuente 
-                      ? '1px solid rgba(239, 68, 68, 0.4)' 
-                      : '0.5px solid rgba(255, 255, 255, 0.12)',
-                    boxShadow: ehQuente ? '0 10px 30px rgba(239, 68, 68, 0.1)' : 'none',
                     display: 'flex',
                     flexDirection: 'column',
                     justify: 'space-between',
@@ -195,7 +233,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                   </div>
 
                   {/* Telefone & Status do Site */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '10px 14px', borderRadius: '8px', border: '0.5px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--sobre-03)', padding: '10px 14px', borderRadius: '8px', border: '0.5px solid var(--sobre-08)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--fg-white)', fontWeight: 600 }}>
                       <Phone size={14} color="#38bdf8" />
                       {lead.telefone || <span style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>SEM TELEFONE</span>}
@@ -246,13 +284,14 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                   </div>
 
                   {/* Estágios de Transição no CRM Comercial */}
-                  <div style={{ paddingTop: '12px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ paddingTop: '12px', borderTop: '0.5px solid var(--sobre-08)' }}>
                     <div style={{ fontSize: '10px', color: 'var(--fg-subtle)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
                       Mover Estágio no Funil:
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
                       <button
                         onClick={() => handleAtualizarStatus(lead.id, 'Em Negociação')}
+                        disabled={leadSalvando === lead.id}
                         style={{
                           padding: '6px 4px',
                           fontSize: '10px',
@@ -268,6 +307,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                       </button>
                       <button
                         onClick={() => handleAtualizarStatus(lead.id, 'Agendado')}
+                        disabled={leadSalvando === lead.id}
                         style={{
                           padding: '6px 4px',
                           fontSize: '10px',
@@ -283,6 +323,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                       </button>
                       <button
                         onClick={() => handleAtualizarStatus(lead.id, 'Fechados / Ganhos')}
+                        disabled={leadSalvando === lead.id}
                         style={{
                           padding: '6px 4px',
                           fontSize: '10px',
@@ -306,8 +347,12 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
         )}
 
         {/* Modal de Visualização de Script IA 1-a-1 */}
-        {scriptModalLead && (
-          <div style={{
+        {scriptModalLead && createPortal((
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-script-ia"
+            style={{
             position: 'fixed',
             inset: 0,
             background: 'rgba(5, 7, 15, 0.85)',
@@ -316,11 +361,14 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '20px'
+            padding: '20px',
+            overflowY: 'auto'
           }}>
             <div className="glass-panel" style={{
               maxWidth: '560px',
               width: '100%',
+              maxHeight: 'calc(100dvh - 40px)',
+              overflowY: 'auto',
               background: 'var(--bg-surface)',
               borderRadius: '16px',
               padding: '28px',
@@ -330,7 +378,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Sparkles size={18} color="#818cf8" />
-                  <h3 style={{ fontSize: '16px', color: 'var(--fg-white)', fontWeight: 800 }}>
+                  <h3 id="titulo-script-ia" style={{ fontSize: '16px', color: 'var(--fg-white)', fontWeight: 800 }}>
                     Script IA // {scriptModalLead.nome}
                   </h3>
                 </div>
@@ -347,7 +395,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
                 background: 'var(--bg-black)',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '0.5px solid rgba(255,255,255,0.12)',
+                border: '0.5px solid var(--sobre-12)',
                 fontSize: '13px',
                 color: 'var(--fg-bright)',
                 lineHeight: 1.6,
@@ -383,7 +431,7 @@ export default function BulkWhatsAppView({ leads = [], setLeads, onBack }) {
               </div>
             </div>
           </div>
-        )}
+        ), document.body)}
 
       </div>
     </div>

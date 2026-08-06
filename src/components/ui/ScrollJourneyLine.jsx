@@ -72,7 +72,7 @@ export default function ScrollJourneyLine({
         {/* Linha guia de fundo (Hairline tênue) */}
         <path
           d="M 20 0 L 20 1000"
-          stroke="rgba(255, 255, 255, 0.08)"
+          stroke="var(--sobre-08)"
           strokeWidth="1"
           fill="none"
           strokeDasharray="4 4"

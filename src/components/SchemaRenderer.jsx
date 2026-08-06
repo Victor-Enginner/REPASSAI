@@ -139,7 +139,7 @@ export default function SchemaRenderer({ schema, lead = {}, altura = '520px' }) 
         overflow: 'hidden',
         background: '#05070f',
         color: '#ffffff',
-        border: '0.5px solid rgba(255,255,255,0.12)',
+        border: '0.5px solid var(--sobre-12)',
       }}
     >
       {/* ---- Camada visual: decorativa, invisível para leitor de tela ---- */}
@@ -240,7 +240,7 @@ export default function SchemaRenderer({ schema, lead = {}, altura = '520px' }) 
           textAlign: 'center',
           fontSize: '12px',
           color: '#64748b',
-          borderTop: '0.5px solid rgba(255,255,255,0.08)',
+          borderTop: '0.5px solid var(--sobre-08)',
         }}
       >
         {titulo}

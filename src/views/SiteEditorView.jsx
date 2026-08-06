@@ -144,7 +144,7 @@ export default function SiteEditorView({ lead, onBack }) {
       {/* Editor Top Bar */}
       <header style={{
         background: 'var(--bg-surface)',
-        borderBottom: '0.5px solid rgba(255, 255, 255, 0.12)',
+        borderBottom: '0.5px solid var(--sobre-12)',
         // Também quebra linha: em tela estreita, título e ações não cabem
         // lado a lado.
         flexWrap: 'wrap',
@@ -260,7 +260,7 @@ export default function SiteEditorView({ lead, onBack }) {
               <div style={{
                 width: '100%',
                 height: '100%',
-                background: 'var(--fg-white)',
+                background: 'var(--papel-cartao)',
                 borderRadius: '10px',
                 overflow: 'hidden',
                 position: 'relative'
@@ -274,7 +274,7 @@ export default function SiteEditorView({ lead, onBack }) {
                     width: '100%',
                     height: '100%',
                     border: 'none',
-                    background: 'var(--fg-white)'
+                    background: 'var(--papel-cartao)'
                   }}
                 />
               </div>

@@ -1,30 +1,32 @@
 /**
- * REPASS AI - Serviço de Autenticação.
- *
- * Fala direto com a API de auth do Supabase (REST puro, sem SDK — evita
- * +80KB no bundle por algo que são três chamadas HTTP).
+ * REPASS AI - Serviço de Autenticação (BFF + cookie HttpOnly).
  *
  * COMO FUNCIONA
  * -------------
- * 1. O backend informa em `/api/auth/status` se o modo multiusuário está
- *    ligado, junto com a URL e a chave ANON (ambas públicas por natureza).
- * 2. O login acontece contra o Supabase e devolve um `access_token` (JWT).
- * 3. O token é guardado e enviado em toda chamada à API do REPASS AI.
- * 4. O backend valida o token e filtra tudo por `user_id`.
+ * 1. Login/cadastro/recuperar passam pelo backend (`/api/auth/*`).
+ * 2. O backend autentica no Supabase e grava JWT em cookies HttpOnly
+ *    (`repass_at`, `repass_rt`). JavaScript NÃO lê o token.
+ * 3. Toda chamada à API usa `credentials: 'include'` para o browser
+ *    enviar o cookie automaticamente.
+ * 4. O backend valida o cookie e filtra tudo por `user_id`.
  *
  * A chave `service_role` NUNCA passa por aqui — ela fica só no servidor.
+ * Tokens NÃO ficam em localStorage (XSS não rouba sessão).
  *
  * DEGRADAÇÃO ELEGANTE
  * -------------------
  * Com o Supabase desligado no backend, `estaAtivo()` devolve false e o app
- * roda single-user, como sempre rodou. Nada de tela de login no caminho.
+ * roda single-user, como sempre rodou.
  */
 
 import { apiUrl } from '../config.js';
 
-const CHAVE_SESSAO = 'repass_sessao';
+const CHAVE_SESSAO_LEGADA = 'repass_sessao';
 
 let configCache = null;
+
+/** Opções padrão: envia cookies cross-origin para a API. */
+const COM_CREDENCIAIS = { credentials: 'include' };
 
 /**
  * Busca a configuração de auth no backend (uma vez por sessão).
@@ -33,7 +35,7 @@ let configCache = null;
 export async function obterConfig() {
   if (configCache) return configCache;
   try {
-    const res = await fetch(apiUrl('/api/auth/status'), { headers: cabecalhoAuth() });
+    const res = await fetch(apiUrl('/api/auth/status'), COM_CREDENCIAIS);
     configCache = await res.json();
   } catch {
     configCache = { configurado: false, auth_ativo: false, modo: 'single_user', usuario: null };
@@ -46,39 +48,20 @@ export function limparCacheConfig() {
   configCache = null;
 }
 
-/** Sessão salva localmente, ou null. */
+/**
+ * @deprecated Sessão não vive mais no JS. Mantido por compat: sempre null.
+ * @returns {null}
+ */
 export function obterSessao() {
-  try {
-    const bruto = localStorage.getItem(CHAVE_SESSAO);
-    if (!bruto) return null;
-    const sessao = JSON.parse(bruto);
-    // Token expirado é o mesmo que não ter sessão.
-    if (sessao?.expires_at && Date.now() / 1000 > sessao.expires_at) {
-      localStorage.removeItem(CHAVE_SESSAO);
-      return null;
-    }
-    return sessao;
-  } catch {
-    return null;
-  }
-}
-
-function salvarSessao(sessao) {
-  try {
-    localStorage.setItem(CHAVE_SESSAO, JSON.stringify(sessao));
-  } catch {
-    // Sem localStorage (aba anônima restrita): a sessão vale só em memória.
-  }
-  limparCacheConfig();
+  return null;
 }
 
 /**
- * Header de autorização para chamadas à API do REPASS AI.
- * @returns {object} vazio quando não há sessão
+ * @deprecated Cookies HttpOnly viajam sozinhos. Mantido para callers legados.
+ * @returns {object}
  */
 export function cabecalhoAuth() {
-  const sessao = obterSessao();
-  return sessao?.access_token ? { Authorization: `Bearer ${sessao.access_token}` } : {};
+  return {};
 }
 
 /** True se o modo multiusuário está ligado no servidor. */
@@ -93,68 +76,40 @@ export async function usuarioAtual() {
   return cfg.usuario || null;
 }
 
-async function chamarSupabaseAuth(caminho, corpo) {
-  const cfg = await obterConfig();
-  if (!cfg.auth_ativo) {
-    throw new Error('Modo multiusuário não está ativo no servidor.');
-  }
-
-  const res = await fetch(`${cfg.supabase_url}/auth/v1/${caminho}`, {
+async function postAuth(caminho, corpo) {
+  const res = await fetch(apiUrl(caminho), {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: cfg.supabase_anon_key,
-    },
-    body: JSON.stringify(corpo),
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(corpo || {}),
   });
-
   const dados = await res.json().catch(() => ({}));
-
-  if (!res.ok) {
-    // O Supabase devolve a mensagem em campos diferentes por endpoint.
-    const msg = dados.error_description || dados.msg || dados.message || `HTTP ${res.status}`;
-    throw new Error(traduzirErro(msg));
+  if (!res.ok || dados.sucesso === false) {
+    throw new Error(dados.erro || dados.mensagem || `HTTP ${res.status}`);
   }
   return dados;
 }
 
-/** Traduz as mensagens mais comuns do Supabase para português. */
-function traduzirErro(msg) {
-  const m = String(msg).toLowerCase();
-  if (m.includes('invalid login credentials')) return 'E-mail ou senha incorretos.';
-  if (m.includes('email not confirmed')) return 'Confirme seu e-mail antes de entrar.';
-  if (m.includes('user already registered')) return 'Este e-mail já tem cadastro.';
-  if (m.includes('password should be at least')) return 'A senha precisa ter ao menos 6 caracteres.';
-  if (m.includes('unable to validate email')) return 'E-mail inválido.';
-  if (m.includes('email rate limit exceeded')) return 'Muitas solicitações de e‑mail – aguarde alguns minutos antes de tentar novamente.';
-  if (m.includes('too many requests')) return 'Muitas solicitações - tente novamente em alguns minutos.';
-  return msg;
-}
-
 /**
- * Entra com e-mail e senha.
+ * Entra com e-mail e senha. Sessão fica só em cookie HttpOnly.
  * @returns {Promise<object>} usuário autenticado
  */
 export async function entrar(email, senha) {
-  const dados = await chamarSupabaseAuth('token?grant_type=password', {
-    email: email.trim(),
+  limparSessaoLegada();
+  const dados = await postAuth('/api/auth/login', {
+    email: String(email || '').trim(),
     password: senha,
   });
-
-  salvarSessao({
-    access_token: dados.access_token,
-    refresh_token: dados.refresh_token,
-    expires_at: dados.expires_at,
-    user: dados.user,
-  });
-
-  return dados.user;
+  limparCacheConfig();
+  return dados.usuario || null;
 }
 
 /**
- * Captura tokens vindos no hash da URL (quando o usuário clica no link de confirmação do e-mail).
+ * Captura tokens do hash (link de confirmação de e-mail) e troca por cookie.
+ * Os tokens passam só na memória desta chamada — nunca no localStorage.
+ * @returns {Promise<object|null>}
  */
-export function capturarSessaoUrlHash() {
+export async function capturarSessaoUrlHash() {
   if (typeof window === 'undefined') return null;
   const hash = window.location.hash;
   if (!hash || !hash.includes('access_token=')) return null;
@@ -162,95 +117,88 @@ export function capturarSessaoUrlHash() {
   try {
     const params = new URLSearchParams(hash.replace(/^#/, ''));
     const access_token = params.get('access_token');
-    const refresh_token = params.get('refresh_token');
+    const refresh_token = params.get('refresh_token') || '';
     const expires_in = params.get('expires_in');
 
-    if (access_token) {
-      const sessao = {
-        access_token,
-        refresh_token: refresh_token || '',
-        expires_at: Math.floor(Date.now() / 1000) + (parseInt(expires_in, 10) || 3600),
-        user: null
-      };
-      salvarSessao(sessao);
-      // Limpa a hash da URL sem dar reload
-      window.history.replaceState(null, '', window.location.pathname);
-      return sessao;
-    }
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+
+    if (!access_token) return null;
+
+    const dados = await postAuth('/api/auth/session', {
+      access_token,
+      refresh_token,
+      expires_in: parseInt(expires_in, 10) || 3600,
+    });
+    limparCacheConfig();
+    limparSessaoLegada();
+    return dados.usuario || { ok: true };
   } catch {
-    // ignora erro de parse
+    return null;
   }
-  return null;
 }
 
 /**
- * Cria conta. Passa o emailRedirectTo dinâmico (window.location.origin) para
- * que o link de confirmação do e-mail nunca redirecione pro localhost incorreto.
- *
+ * Cria conta via BFF.
  * @returns {Promise<{precisaConfirmar: boolean}>}
  */
 export async function cadastrar(email, senha) {
-  const redirectUrl = typeof window !== 'undefined' ? window.location.origin : 'https://repassai.vercel.app';
-  
-  const dados = await chamarSupabaseAuth('signup', {
-    email: email.trim(),
+  limparSessaoLegada();
+  const redirectUrl =
+    typeof window !== 'undefined' ? window.location.origin : 'https://repassai.vercel.app';
+
+  const dados = await postAuth('/api/auth/signup', {
+    email: String(email || '').trim(),
     password: senha,
-    options: {
-      emailRedirectTo: redirectUrl
-    }
+    redirect_to: redirectUrl,
   });
-
-  // Com confirmação de e-mail ligada, o signup não devolve token.
-  if (dados.access_token) {
-    salvarSessao({
-      access_token: dados.access_token,
-      refresh_token: dados.refresh_token,
-      expires_at: dados.expires_at,
-      user: dados.user,
-    });
-    return { precisaConfirmar: false };
-  }
-
-  return { precisaConfirmar: true };
+  limparCacheConfig();
+  return { precisaConfirmar: Boolean(dados.precisaConfirmar) };
 }
 
 /**
- * Solicita redefinição de senha por e-mail no Supabase.
+ * Solicita redefinição de senha por e-mail.
  * @param {string} email
  * @returns {Promise<void>}
  */
 export async function recuperarSenha(email) {
-  const redirectUrl = typeof window !== 'undefined' ? window.location.origin : 'https://repassai.vercel.app';
-  await chamarSupabaseAuth('recover', {
-    email: email.trim(),
-    options: {
-      emailRedirectTo: redirectUrl
-    }
+  const redirectUrl =
+    typeof window !== 'undefined' ? window.location.origin : 'https://repassai.vercel.app';
+  await postAuth('/api/auth/recover', {
+    email: String(email || '').trim(),
+    redirect_to: redirectUrl,
   });
 }
 
-/** Encerra a sessão local. */
-export function sair() {
+/** Encerra a sessão (apaga cookies no servidor). */
+export async function sair() {
   try {
-    localStorage.removeItem(CHAVE_SESSAO);
+    await postAuth('/api/auth/logout', {});
   } catch {
-    // ignora
+    // Mesmo se a rede falhar, limpa cache local.
   }
+  limparSessaoLegada();
   limparCacheConfig();
+}
+
+/** Remove JWT legado do localStorage (migração one-shot). */
+export function limparSessaoLegada() {
+  try {
+    localStorage.removeItem(CHAVE_SESSAO_LEGADA);
+  } catch {
+    // storage bloqueado
+  }
 }
 
 /**
  * `fetch` autenticado para a API do REPASS AI.
- *
- * Anexa o header de sessão quando existe. Use no lugar do fetch direto em
- * qualquer rota que dependa de usuário.
+ * Cookie HttpOnly é enviado pelo browser via credentials:include.
  */
 export async function fetchAutenticado(caminho, opcoes = {}) {
   return fetch(apiUrl(caminho), {
     ...opcoes,
+    credentials: 'include',
     headers: {
       ...(opcoes.headers || {}),
-      ...cabecalhoAuth(),
     },
   });
 }

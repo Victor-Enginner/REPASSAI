@@ -133,8 +133,8 @@ export async function executeAgenticLoop(leadData, userPrompt = '') {
   const promptSeguro = userPrompt.trim()
     || `Crie uma apresentação comercial para ${leadData.nome}, do nicho ${leadData.categoria}, em ${leadData.cidade}.`;
   const llmResult = await executePromptWithFallback(
-    promptSeguro,
-    `Você cria textos para Landing Pages B2B do REPASS AI. Use apenas os dados fornecidos. Não invente avaliações, números, certificações, contatos ou promessas. O cliente é '${leadData.nome}' do nicho '${leadData.categoria}' em ${leadData.cidade}.`,
+    `${promptSeguro}\n\nCliente: ${leadData.nome} | Nicho: ${leadData.categoria} | Cidade: ${leadData.cidade}`,
+    'copy_comercial',
     null,
     { temperature: 0 }
   );

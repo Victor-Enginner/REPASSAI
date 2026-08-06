@@ -1,8 +1,31 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark" data-theme="dark">
+<!--
+  data-theme parte em "light", o padrão da marca, e theme-init.js troca
+  para o tema salvo antes do primeiro pixel. Estava fixo em "dark" aqui:
+  se o script falhasse, a página inteira ficava escura contra a
+  identidade — e o valor divergia do padrão do React.
+-->
+<html lang="pt-BR" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      CSP. Duas correções em relação à versão anterior:
+
+      1. `frame-src 'self'` bloqueava o preview da Loja de Templates. O
+         preview é um <iframe> apontando para /api/templates/preview no
+         BACKEND, que é outra origem — os cartões vinham em branco.
+
+      2. `connect-src` listava http://localhost:8000 literal. Isso vale na
+         máquina do dev e derruba a API inteira em produção, onde o
+         backend tem outro domínio.
+
+      %VITE_API_BASE% é substituído pelo Vite no build a partir do
+      ambiente (mesma variável que o app já usa em config.js), então dev e
+      produção passam a apontar para o backend certo sem editar este
+      arquivo.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' %VITE_API_BASE% ws://localhost:3000 ws://127.0.0.1:3000; frame-src 'self' %VITE_API_BASE% blob:; upgrade-insecure-requests" />
     <title>REPASS AI — Plataforma OSINT & Motor Agêntico de Sites 3D</title>
     <meta name="description" content="REPASS AI é a plataforma agêntica líder para varredura OSINT de leads locais, enriquecimento via Places API e geração autônoma de sites 3D." />
     
@@ -16,23 +39,25 @@
     <meta property="og:type" content="website" />
     
     <!-- Script Anti-Flash de Tema (Sem FOTU / Sem piscar tela) -->
-    <script>
-      (function() {
-        try {
-          var t = localStorage.getItem('repass_theme') || 'dark';
-          document.documentElement.setAttribute('data-theme', t);
-          if (t === 'dark') document.documentElement.classList.add('dark');
-          else document.documentElement.classList.remove('dark');
-        } catch(e) {}
-      })();
-    </script>
+    <script src="/theme-init.js"></script>
 
-    <!-- Google Fonts: Inter Tight, JetBrains Mono, Inter -->
+    <!--
+      Tipografia da marca: Geist (headline + corpo) e Geist Mono (rótulos).
+      Inter Tight / Inter / JetBrains Mono ficam como fallback declarado nas
+      variáveis de fonte — se o Google Fonts falhar, o layout não colapsa
+      para a serifada do sistema.
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter+Tight:wght@500;700&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
   </head>
-  <body style="background-color: #05070f; color: #ffffff; margin: 0;">
+  <!--
+    Sem style inline aqui, de propósito: o atributo `style` vence qualquer
+    regra da folha por especificidade e travaria o fundo num tema só.
+    A cor de partida é pintada no <html> por theme-init.js, conforme o
+    tema salvo, e o CSS assume assim que carrega.
+  -->
+  <body style="margin: 0;">
     
     <!-- Filtro SVG Glassmorphism Distortion (#glass-distortion) extraído da UseLeadSite -->
     <svg style="display: none;" aria-hidden="true">

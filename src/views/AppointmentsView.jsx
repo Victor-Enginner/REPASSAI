@@ -19,7 +19,7 @@ export default function AppointmentsView({ leads }) {
           </p>
         </div>
 
-        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px' }}>
+        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', padding: '10px 18px' }}>
           <span className="mono-label" style={{ color: 'var(--estado-alerta)' }}>{agendados.length} DEMOS AGENDADAS</span>
         </div>
       </div>
@@ -37,7 +37,7 @@ export default function AppointmentsView({ leads }) {
               alignItems: 'center',
               gap: '20px',
               background: 'var(--bg-surface)',
-              border: '0.5px solid rgba(255, 255, 255, 0.12)'
+              border: '0.5px solid var(--sobre-12)'
             }}
           >
             <div>

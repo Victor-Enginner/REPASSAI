@@ -54,7 +54,7 @@ export default class ViewErrorBoundary extends React.Component {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
             <AlertTriangle size={20} color="#f87171" />
-            <h2 className="font-headline" style={{ fontSize: '20px', color: 'var(--estado-erro-suave)', margin: 0 }}>
+            <h2 className="font-headline" style={{ fontSize: '20px', color: 'var(--estado-erro)', margin: 0 }}>
               ESTA ABA FALHOU
             </h2>
           </div>
@@ -67,7 +67,7 @@ export default class ViewErrorBoundary extends React.Component {
 
           <pre style={{
             background: 'var(--bg-deep)',
-            border: '0.5px solid rgba(255,255,255,0.12)',
+            border: '0.5px solid var(--sobre-12)',
             padding: '12px',
             fontSize: '11.5px',
             color: 'var(--estado-erro)',

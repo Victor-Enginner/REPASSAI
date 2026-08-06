@@ -22,11 +22,11 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
 
   // Memoização estrita do fundo matriz para nunca re-renderizar nem piscar ao digitar
   const backgroundFaulty = useMemo(() => (
-    <div aria-hidden="true" style={{ position: 'fixed', inset: 0, opacity: 0.85, pointerEvents: 'none', zIndex: 0 }}>
+    <div aria-hidden="true" style={{ position: 'fixed', inset: 0, opacity: 0.15, pointerEvents: 'none', zIndex: 0 }}>
       <FaultyTerminal
         scale={1.5} gridMul={[2, 1]} digitSize={1.2} timeScale={0.5}
-        scanlineIntensity={0.8} glitchAmount={1} flickerAmount={1} noiseAmp={1}
-        curvature={0.1} tint="#A7EF9E" mouseReact={false} brightness={1.0}
+        scanlineIntensity={0.3} glitchAmount={0.5} flickerAmount={0.5} noiseAmp={0.5}
+        curvature={0.1} tint="#7c3aed" mouseReact={false} brightness={1.0}
         pageLoadAnimation={false}
       />
     </div>
@@ -80,25 +80,26 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
   const campo = {
     width: '100%',
     padding: '12px 14px',
-    background: 'var(--bg-surface)',
-    border: '0.5px solid rgba(255,255,255,0.16)',
-    borderRadius: '4px',
+    background: 'var(--bg-card)',
+    border: '0.5px solid var(--hairline-color)',
+    borderRadius: '6px',
     color: 'var(--fg-white)',
     fontSize: '13px',
     fontFamily: 'inherit',
+    boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)',
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 5vw, 40px)', background: 'var(--bg-deep)' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 5vw, 40px)', background: 'var(--bg-black)' }}>
 
-      {/* TRAVA VISUAL DE IDENTIDADE MEMOIZADA: Fundo Matrix de Alta Visibilidade (ZERO PISCADA AO DIGITAR) */}
+      {/* TRAVA VISUAL DE IDENTIDADE MEMOIZADA: Fundo WebGL com tom iridescente suave */}
       {backgroundFaulty}
 
       <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '410px' }}>
 
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>MODULE // AUTH_00</span>
-          <h1 className="font-headline" style={{ fontSize: 'clamp(26px, 6vw, 34px)', color: 'var(--fg-white)', marginTop: '10px', letterSpacing: '-0.03em' }}>
+          <h1 className="font-headline" style={{ fontSize: 'clamp(28px, 6vw, 36px)', color: 'var(--fg-bright)', marginTop: '10px', letterSpacing: '-0.03em' }}>
             REPASS AI
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--fg-muted)', marginTop: '8px' }}>
@@ -112,20 +113,21 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
 
         <form
           onSubmit={enviar}
-          style={{ background: 'rgba(10,14,26,0.92)', border: '0.5px solid rgba(255,255,255,0.14)', borderRadius: '6px', padding: 'clamp(20px, 5vw, 28px)', backdropFilter: 'blur(8px)' }}
+          style={{ background: 'var(--bg-card)', border: '0.5px solid var(--hairline-color)', borderRadius: '12px', padding: 'clamp(20px, 5vw, 28px)', boxShadow: '0 10px 30px rgba(15, 23, 42, 0.06)' }}
         >
-          <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-deep)', padding: '3px', borderRadius: '4px', marginBottom: '22px' }}>
+          <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-surface)', padding: '4px', borderRadius: '8px', marginBottom: '22px' }}>
             {[['entrar', 'ENTRAR'], ['cadastrar', 'CRIAR CONTA'], ['recuperar', 'RECUPERAR']].map(([id, rotulo]) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => { setModo(id); setErro(null); setAviso(null); }}
                 style={{
-                  flex: 1, border: 'none', cursor: 'pointer', padding: '9px', borderRadius: '3px',
+                  flex: 1, border: 'none', cursor: 'pointer', padding: '9px', borderRadius: '6px',
                   fontSize: '10.5px', fontWeight: 800, letterSpacing: '0.06em',
                   fontFamily: 'var(--font-mono, monospace)',
-                  background: modo === id ? 'rgba(255,255,255,0.1)' : 'transparent',
-                  color: modo === id ? '#fff' : '#64748b',
+                  background: modo === id ? 'var(--bg-card)' : 'transparent',
+                  color: modo === id ? 'var(--accent-indigo)' : 'var(--fg-muted)',
+                  boxShadow: modo === id ? '0 2px 6px rgba(15, 23, 42, 0.06)' : 'none',
                 }}
               >
                 {rotulo}
@@ -164,22 +166,22 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
           )}
 
           {erro && (
-            <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', background: 'rgba(239,68,68,0.08)', border: '0.5px solid rgba(239,68,68,0.35)', borderRadius: '4px', padding: '11px 13px', marginBottom: '16px' }}>
-              <AlertCircle size={15} color="#f87171" style={{ flexShrink: 0, marginTop: '1px' }} />
-              <span style={{ fontSize: '12px', color: 'var(--estado-erro-suave)', lineHeight: 1.55 }}>{erro}</span>
+            <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', background: 'var(--estado-erro-suave)', border: '0.5px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '11px 13px', marginBottom: '16px' }}>
+              <AlertCircle size={15} color="var(--estado-erro)" style={{ flexShrink: 0, marginTop: '1px' }} />
+              <span style={{ fontSize: '12px', color: 'var(--estado-erro)', lineHeight: 1.55 }}>{erro}</span>
             </div>
           )}
 
           {aviso && (
-            <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', background: 'rgba(34,197,94,0.08)', border: '0.5px solid rgba(34,197,94,0.35)', borderRadius: '4px', padding: '11px 13px', marginBottom: '16px' }}>
-              <MailCheck size={15} color="#22c55e" style={{ flexShrink: 0, marginTop: '1px' }} />
-              <span style={{ fontSize: '12px', color: 'var(--estado-sucesso-claro)', lineHeight: 1.55 }}>{aviso}</span>
+            <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', background: 'var(--estado-sucesso-suave)', border: '0.5px solid rgba(22,163,74,0.3)', borderRadius: '6px', padding: '11px 13px', marginBottom: '16px' }}>
+              <MailCheck size={15} color="var(--estado-sucesso)" style={{ flexShrink: 0, marginTop: '1px' }} />
+              <span style={{ fontSize: '12px', color: 'var(--estado-sucesso)', lineHeight: 1.55 }}>{aviso}</span>
             </div>
           )}
 
           <button
             type="submit" disabled={carregando} className="btn-primary"
-            style={{ width: '100%', justifyContent: 'center', padding: '13px', fontSize: '12.5px', opacity: carregando ? 0.6 : 1 }}
+            style={{ width: '100%', justifyContent: 'center', padding: '13px', fontSize: '12.5px', borderRadius: '6px', opacity: carregando ? 0.6 : 1 }}
           >
             {carregando
               ? <RefreshCw size={15} className="animate-spin" />
@@ -188,8 +190,8 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
           </button>
         </form>
 
-        <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', marginTop: '18px', padding: '13px', background: 'rgba(10,14,26,0.8)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}>
-          <ShieldCheck size={14} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
+        <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', marginTop: '18px', padding: '13px', background: 'var(--bg-card)', border: '0.5px solid var(--hairline-color)', borderRadius: '8px', boxShadow: '0 2px 8px rgba(15,23,42,0.03)' }}>
+          <ShieldCheck size={14} color="var(--estado-sucesso)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <span style={{ fontSize: '11px', color: 'var(--fg-subtle)', lineHeight: 1.6 }}>
             Cada operador enxerga apenas os próprios leads. O isolamento é feito
             no servidor, por usuário.
@@ -220,3 +222,4 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
     </div>
   );
 }
+

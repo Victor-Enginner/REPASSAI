@@ -1,59 +1,12 @@
-:root {
-  --bg-black: #050711;
-  --bg-surface: #0a0e1a;
-  --bg-card: #111726;
-  --bg-card-hover: #182033;
-  
-  --fg-white: #ffffff;
-  --fg-muted: #94a3b8;
-  --fg-subtle: #64748b;
-  
-  --accent-indigo: #6366f1;
-  --accent-blue: #0070f3;
-  --accent-cyan: #38bdf8;
+/* ============================================================
+   REPASS AI — FOLHA GLOBAL
+   ============================================================
+   As variáveis de tema vivem em theme/themes.css e SÓ lá.
+   Este arquivo consome via var() e nunca redeclara — foi o que
+   causava divergência entre claro e escuro na versão anterior.
+   ============================================================ */
 
-  /* Tons acrescentados na migração do design system (27/07/2026).
-     Saíram das cores mais repetidas no JSX — cada uma aparecia entre 10 e 57
-     vezes escrita à mão. Nome semântico (o que significa), não descritivo
-     (que cor é), para que trocar a paleta não exija renomear nada. */
-  --bg-deep: #05070f;
-  --bg-slate: #0f172a;
-  --fg-soft: #cbd5e1;
-  --fg-bright: #e2e8f0;
-  --fg-lightest: #f1f5f9;
-  --fg-black: #000000;
-
-  --estado-sucesso: #22c55e;
-  --estado-alerta: #f59e0b;
-  --estado-erro: #f87171;
-
-  --accent-indigo-suave: #a5b4fc;
-  --accent-indigo-claro: #818cf8;
-  --accent-rosa: #ec4899;
-  --accent-violeta: #5227ff;
-  --accent-esmeralda: #10b981;
-
-  /* Variações de estado usadas em texto sobre fundo escuro/claro. */
-  --estado-erro-forte: #ef4444;
-  --estado-erro-suave: #fca5a5;
-  --estado-sucesso-suave: #4ade80;
-  --estado-alerta-suave: #fde047;
-
-  --bg-sidebar: #070a14;
-  --fg-fraco: #475569;
-  --fg-quase-branco: #f8fafc;
-  --fg-sobre-verde: #04140a;
-  --bg-poco: #05070c;
-  --accent-indigo-forte: #4f46e5;
-  --estado-sucesso-claro: #86efac;
-
-  --hairline-color: rgba(255, 255, 255, 0.12);
-  --hairline-hover: rgba(99, 102, 241, 0.4);
-  
-  --font-headline: 'Inter Tight', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-body: 'Inter', sans-serif;
-}
+@import './theme/themes.css';
 
 * {
   box-sizing: border-box;
@@ -64,206 +17,442 @@
 
 body {
   font-family: var(--font-body);
-  background-color: var(--bg-black);
-  color: var(--fg-white);
+  background-color: var(--papel);
+  color: var(--tinta);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-grayscale: grayscale;
   position: relative;
+  transition: background-color var(--dur-flow) var(--ease-suave),
+              color var(--dur-flow) var(--ease-suave);
 }
 
-/* Accessibility: Universal Focus Visible Outline */
+/* Acessibilidade: anel de foco universal. */
 :focus-visible {
-  outline: 2px solid var(--accent-indigo);
-  outline-offset: 2px;
+  outline: 2px solid var(--iris-violeta) !important;
+  outline-offset: 2px !important;
+  border-radius: var(--raio-sm);
 }
 
-/* Universal Button Click Feedback 90ms (Sprint 3.5) */
-button, a.btn-primary, a.btn-secondary {
-  transition: transform 90ms ease, background 150ms ease, border-color 150ms ease;
-}
-button:active, a.btn-primary:active, a.btn-secondary:active {
-  transform: scale(0.97);
+/* ============================================================
+   ATMOSFERA — a onda iridescente de fundo
+   ============================================================
+   Duas camadas fixas atrás de todo o conteúdo:
+     ::before → dois halos de luz difusa (a onda do logo, desfocada
+                a ponto de virar ambiente e não desenho)
+     ::after  → grão de filme, que impede o gradiente de "faixar"
+                em telas de 8 bits e dá o acabamento de papel.
+   ============================================================ */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20vmax;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(38vmax 30vmax at 12% 8%,  rgba(124, 92, 255, 0.16), transparent 62%),
+    radial-gradient(34vmax 28vmax at 88% 22%, rgba(86, 216, 230, 0.14), transparent 60%),
+    radial-gradient(40vmax 30vmax at 72% 92%, rgba(255, 178, 122, 0.12), transparent 62%),
+    radial-gradient(30vmax 24vmax at 25% 78%, rgba(91, 140, 255, 0.12), transparent 60%);
+  filter: blur(28px);
+  opacity: 1;
+  transition: opacity var(--dur-flow) var(--ease-suave);
 }
 
-/* Global 5% Noise Texture Overlay */
+:root[data-theme="dark"] body::before {
+  opacity: 0.55;
+}
+
 body::after {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  inset: 0;
   pointer-events: none;
   z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
-/* Hairline Grid Border Utilities (0.5px) */
-.hairline {
-  border: 0.5px solid var(--hairline-color);
-}
-.hairline-t {
-  border-top: 0.5px solid var(--hairline-color);
-}
-.hairline-b {
-  border-bottom: 0.5px solid var(--hairline-color);
-}
-.hairline-l {
-  border-left: 0.5px solid var(--hairline-color);
-}
-.hairline-r {
-  border-right: 0.5px solid var(--hairline-color);
+/* Todo conteúdo real fica acima da atmosfera. */
+#root {
+  position: relative;
+  z-index: 1;
 }
 
-/* Typography Classes */
+/* ============================================================
+   HAIRLINE — o traço de 0.5px da marca
+   ============================================================ */
+
+.hairline   { border: var(--aro) solid var(--aro-cor); }
+.hairline-t { border-top: var(--aro) solid var(--aro-cor); }
+.hairline-b { border-bottom: var(--aro) solid var(--aro-cor); }
+.hairline-l { border-left: var(--aro) solid var(--aro-cor); }
+.hairline-r { border-right: var(--aro) solid var(--aro-cor); }
+
+/* ============================================================
+   TIPOGRAFIA
+   ============================================================ */
+
 .font-headline {
   font-family: var(--font-headline);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: var(--tracking-headline);
+  line-height: 1.04;
 }
 
 .font-mono {
   font-family: var(--font-mono);
   font-weight: 500;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--tracking-rotulo);
 }
 
+/* Rótulo mono: o "AI OPERATING SYSTEM" das peças. */
 .mono-label {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.25em;
-  color: var(--accent-indigo);
+  font-weight: 500;
+  letter-spacing: var(--tracking-rotulo);
+  color: var(--tinta-fraca);
   text-transform: uppercase;
 }
 
-/* Cards & Glass Panels Dark High-Contrast */
+/* Wordmark: tracking largo, como no logo. */
+.marca-wordmark {
+  font-family: var(--font-headline);
+  font-weight: 500;
+  letter-spacing: var(--tracking-marca);
+  text-transform: uppercase;
+  color: var(--tinta);
+}
+
+/*
+  Texto iridescente. Reservado a UMA palavra por tela — o efeito
+  vive de ser raro. Fundo recortado no texto, como em
+  "PROSPECÇÃO INTELIGENTE".
+*/
+.texto-iris {
+  background: var(--iris-spectrum);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================
+   ACRÍLICO / VIDRO — o material da marca
+   ============================================================
+   Três ingredientes, nesta ordem, e nenhum é opcional:
+     1. fundo translúcido        → deixa a atmosfera passar
+     2. backdrop-filter saturado → o desfoque que dá a espessura;
+                                   `saturate(1.6)` é o que faz o
+                                   iridescente atrás "acender"
+     3. aro de luz interno       → a borda superior brilhante que
+                                   o olho lê como quina de acrílico
+   Sem o item 3, vira caixa fosca. É o detalhe que separa vidro
+   de retângulo semitransparente.
+   ============================================================ */
+
+.acrilico {
+  background: var(--vidro-fundo);
+  -webkit-backdrop-filter: var(--vidro-blur);
+  backdrop-filter: var(--vidro-blur);
+  box-shadow: var(--vidro-brilho), var(--sombra-md);
+  border: none;
+  border-radius: var(--raio-lg);
+  transition: background var(--dur-quick) var(--ease-marca),
+              box-shadow var(--dur-quick) var(--ease-marca),
+              transform var(--dur-quick) var(--ease-marca);
+}
+
+/*
+  Fallback: sem suporte a backdrop-filter (Firefox antigo, WebView),
+  translucidez sem desfoque vira texto ilegível sobre gradiente.
+  Nesses casos o material fica sólido.
+*/
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .acrilico,
+  .glass-panel,
+  .btn-vidro {
+    background: var(--papel-cartao);
+  }
+}
+
+/* Painel/cartão. Mantém o nome .glass-panel: é o que o JSX já usa. */
 .glass-panel {
-  background-color: var(--bg-card);
-  border: 0.5px solid var(--hairline-color);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  transition: all 250ms ease;
+  background: var(--vidro-fundo);
+  -webkit-backdrop-filter: var(--vidro-blur);
+  backdrop-filter: var(--vidro-blur);
+  box-shadow: var(--vidro-brilho), var(--sombra-md);
+  border-radius: var(--raio-lg);
+  position: relative;
+  isolation: isolate;
+  transition: background var(--dur-quick) var(--ease-marca),
+              box-shadow var(--dur-quick) var(--ease-marca),
+              transform var(--dur-quick) var(--ease-marca);
 }
 
 .glass-panel:hover {
-  background-color: var(--bg-card-hover);
-  border-color: var(--hairline-hover);
+  background: var(--vidro-fundo-hover);
+  box-shadow: var(--vidro-brilho), var(--sombra-md), var(--halo-iris);
+  transform: translateY(-2px);
 }
 
-/* Buttons High Contrast */
-.btn-primary {
-  background-color: var(--accent-indigo);
-  color: #ffffff;
+/*
+  Fio iridescente na borda superior do painel, revelado no hover.
+  É a onda do logo aparecendo na quina — assinatura discreta.
+*/
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--iris-spectrum);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--dur-quick) var(--ease-marca);
+  pointer-events: none;
+}
+
+.glass-panel:hover::before {
+  opacity: 0.85;
+}
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+
+/*
+  O halo roxo embaixo do botão no hover.
+
+  Implementado como pseudo-elemento desfocado atrás do botão, não
+  como box-shadow: assim ele pode ter o gradiente iridescente
+  inteiro e crescer, o que box-shadow não faz. `z-index: -1` com
+  `isolation: isolate` no pai o mantém atrás do botão e à frente
+  do fundo.
+*/
+.btn-primary,
+.btn-secondary,
+.btn-pill,
+.btn-vidro {
+  position: relative;
+  isolation: isolate;
   font-family: var(--font-mono);
-  font-weight: 700;
   font-size: 11px;
-  letter-spacing: 0.15em;
+  font-weight: 500;
+  letter-spacing: var(--tracking-rotulo);
   text-transform: uppercase;
-  border: none;
-  padding: 10px 20px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 200ms ease;
+  padding: 11px 22px;
+  border: none;
+  transition: background var(--dur-quick) var(--ease-marca),
+              color var(--dur-quick) var(--ease-marca),
+              box-shadow var(--dur-quick) var(--ease-marca),
+              transform var(--dur-instant) var(--ease-marca);
+}
+
+.btn-primary::after,
+.btn-pill::after,
+.btn-vidro::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 8%;
+  right: 8%;
+  bottom: -6px;
+  height: 70%;
+  border-radius: var(--raio-pill);
+  background: var(--iris-spectrum);
+  filter: blur(16px);
+  opacity: 0;
+  transform: translateY(4px) scale(0.9);
+  transition: opacity var(--dur-quick) var(--ease-marca),
+              transform var(--dur-quick) var(--ease-marca);
+  pointer-events: none;
+}
+
+.btn-primary:hover::after,
+.btn-pill:hover::after,
+.btn-vidro:hover::after {
+  opacity: 0.7;
+  transform: translateY(8px) scale(1.05);
+}
+
+/* Ação principal: tinta sólida sobre papel. Alto contraste,
+   sem gradiente — o iridescente entra só como halo no hover. */
+.btn-primary {
+  background: var(--acao-fundo);
+  color: var(--acao-texto);
+  border-radius: var(--raio-pill);
+  box-shadow: var(--sombra-lg);
 }
 
 .btn-primary:hover {
-  background-color: #4f46e5;
   transform: translateY(-1px);
 }
 
-.btn-secondary {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
+/* Ação secundária: acrílico. */
+.btn-secondary,
+.btn-vidro {
+  background: var(--vidro-fundo);
+  -webkit-backdrop-filter: var(--vidro-blur);
+  backdrop-filter: var(--vidro-blur);
+  color: var(--tinta);
+  border-radius: var(--raio-pill);
+  box-shadow: var(--vidro-brilho), var(--sombra-sm);
+}
+
+.btn-secondary:hover,
+.btn-vidro:hover {
+  background: var(--vidro-fundo-hover);
+  box-shadow: var(--vidro-brilho), var(--sombra-md);
+  transform: translateY(-1px);
+}
+
+/* Pílula: o "VERSÃO_BETA" das peças. */
+.btn-pill {
+  background: var(--vidro-fundo);
+  -webkit-backdrop-filter: var(--vidro-blur);
+  backdrop-filter: var(--vidro-blur);
+  color: var(--tinta);
+  border-radius: var(--raio-pill) !important;
+  font-size: 10px;
+  padding: 9px 20px;
+  box-shadow: var(--vidro-brilho), var(--sombra-sm);
+}
+
+.btn-pill:hover {
+  box-shadow: var(--vidro-brilho), var(--sombra-md);
+  transform: translateY(-1px);
+}
+
+/* Fantasma: sem superfície. Para ações terciárias, onde mais uma
+   caixa na tela só somaria ruído. */
+.btn-ghost {
+  position: relative;
   font-family: var(--font-mono);
-  font-weight: 600;
   font-size: 11px;
-  letter-spacing: 0.15em;
+  font-weight: 500;
+  letter-spacing: var(--tracking-rotulo);
   text-transform: uppercase;
-  border: 0.5px solid var(--hairline-color);
-  padding: 10px 20px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 200ms ease;
-}
-
-.btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  border-color: #ffffff;
-}
-
-.btn-pill {
-  border-radius: 9999px !important;
-  border: 0.5px solid var(--hairline-color);
+  padding: 11px 16px;
+  border: none;
+  border-radius: var(--raio-pill);
   background: transparent;
-  color: #ffffff;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: all 200ms ease;
+  color: var(--tinta-media);
+  transition: color var(--dur-quick) var(--ease-marca),
+              background var(--dur-quick) var(--ease-marca);
 }
 
-.btn-pill:hover {
-  border-color: var(--accent-indigo);
-  background-color: var(--accent-indigo);
-  color: #ffffff;
+.btn-ghost:hover {
+  color: var(--tinta);
+  background: var(--papel-elevado);
 }
 
-/* Badges High-Contrast */
+/* Resposta ao toque: o elemento cede e volta. */
+button:active,
+.btn-primary:active,
+.btn-secondary:active,
+.btn-pill:active,
+a.btn-primary:active,
+a.btn-secondary:active {
+  transform: scale(0.97);
+  transition: transform var(--dur-instant) ease;
+}
+
+/* ============================================================
+   INDICADOR DE ESTADO VIVO
+   ============================================================
+   O ponto verde das peças. Pulso lento — sinal de "rodando",
+   não alerta.
+   ============================================================ */
+
+.ponto-vivo {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--raio-pill);
+  background: var(--sinal-vivo);
+  box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.6);
+  animation: pulsoVivo 2.4s var(--ease-suave) infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulsoVivo {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(0, 255, 157, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0); }
+}
+
+/* ============================================================
+   BADGES
+   ============================================================
+   Todas via variável de estado — no tema escuro elas seguem
+   junto, em vez de virar chip claro sobre fundo preto.
+   ============================================================ */
+
 .badge {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 3px 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  border-radius: var(--raio-sm);
 }
 
 .badge-quente {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 0.5px solid rgba(239, 68, 68, 0.5);
+  background: var(--erro-fundo);
+  color: var(--erro);
+  border: var(--aro) solid currentColor;
 }
 
 .badge-morno {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-  border: 0.5px solid rgba(245, 158, 11, 0.5);
+  background: var(--alerta-fundo);
+  color: var(--alerta);
+  border: var(--aro) solid currentColor;
 }
 
+/* --accent-blue, não --iris-azul: o pastel puro rendia 2.93:1 como texto
+   sobre papel. O alias já é a versão calibrada para leitura. */
 .badge-frio {
-  background: rgba(56, 189, 248, 0.2);
-  color: #38bdf8;
-  border: 0.5px solid rgba(56, 189, 248, 0.5);
+  background: rgba(86, 216, 230, 0.14);
+  color: var(--accent-blue);
+  border: var(--aro) solid currentColor;
 }
 
 .badge-sem-site {
-  background: rgba(225, 29, 72, 0.2);
-  color: #fda4af;
-  border: 0.5px solid rgba(225, 29, 72, 0.5);
+  background: var(--erro-fundo);
+  color: var(--erro);
+  border: var(--aro) solid currentColor;
 }
 
 .badge-tem-site {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
-  border: 0.5px solid rgba(34, 197, 94, 0.5);
+  background: var(--sucesso-fundo);
+  color: var(--sucesso);
+  border: var(--aro) solid currentColor;
 }
 
-/* Sidebar High-Contrast Styling */
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
 .sidebar-container {
-  background-color: #050711;
-  border-right: 0.5px solid var(--hairline-color);
+  background-color: var(--bg-sidebar);
+  border-right: var(--aro) solid var(--aro-cor);
 }
 
 .sidebar-nav-item {
@@ -271,46 +460,92 @@ body::after {
   align-items: center;
   gap: 12px;
   padding: 12px 18px;
-  color: #94a3b8;
+  color: var(--tinta-fraca);
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  border-bottom: 0.5px solid var(--hairline-color);
+  border-bottom: var(--aro) solid var(--aro-cor);
   background: transparent;
   cursor: pointer;
-  transition: all 200ms ease;
+  transition: color var(--dur-quick) var(--ease-marca),
+              background var(--dur-quick) var(--ease-marca);
   width: 100%;
+  position: relative;
 }
 
 .sidebar-nav-item:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--tinta);
+  background-color: var(--papel-elevado);
 }
 
 .sidebar-nav-item.active {
-  color: #ffffff;
-  background-color: rgba(99, 102, 241, 0.2);
-  border-left: 3px solid var(--accent-indigo);
-  font-weight: 700;
+  color: var(--tinta);
+  background-color: var(--papel-elevado);
+  font-weight: 500;
 }
 
-/* Scrollbar Monochrome */
+/* Marcador do item ativo: fio iridescente, não barra roxa chapada. */
+.sidebar-nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--iris-spectrum);
+}
+
+/* ============================================================
+   FORMULÁRIOS
+   ============================================================ */
+
+.campo {
+  width: 100%;
+  background: var(--papel-cartao);
+  border: var(--aro) solid var(--aro-cor);
+  border-radius: var(--raio-md);
+  padding: 11px 14px;
+  color: var(--tinta);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color var(--dur-quick) var(--ease-marca),
+              box-shadow var(--dur-quick) var(--ease-marca);
+}
+
+.campo::placeholder {
+  color: var(--tinta-fantasma);
+}
+
+.campo:focus {
+  outline: none;
+  border-color: var(--iris-violeta);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.14);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #050711;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--tinta-fantasma);
+  border-radius: var(--raio-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-indigo);
+  background: var(--iris-violeta);
 }
 
-/* Landing Page Responsive Grid */
+/* ============================================================
+   GRID DA LANDING
+   ============================================================ */
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -333,7 +568,7 @@ body::after {
   display: flex;
   position: relative;
   overflow: hidden;
-  border-bottom: 0.5px solid var(--hairline-color);
+  border-bottom: var(--aro) solid var(--aro-cor);
 }
 
 @media (min-width: 768px) {
@@ -341,10 +576,41 @@ body::after {
     padding: 40px;
   }
   .hero-cell-1, .hero-cell-3 {
-    border-right: 0.5px solid var(--hairline-color);
+    border-right: var(--aro) solid var(--aro-cor);
   }
   .hero-cell-3, .hero-cell-4 {
     border-bottom: none;
+  }
+}
+
+/*
+  Onde a linha elástica assume, o hairline estático sai.
+
+  Sem isto ficariam DOIS traços na mesma costura: o da borda, parado, e o
+  do componente, entortando — e a linha pareceria descolar de si mesma ao
+  ser puxada.
+
+  Só a costura HORIZONTAL do meio é elástica. A vertical entre as colunas
+  segue sendo hairline estático — por isso o `border-right` das células 1
+  e 3 não é tocado aqui.
+
+  Qual borda apagar depende do layout, porque a mesma costura muda de
+  dono quando a grade colapsa:
+
+    ≥768px (2×2)  · o meio é a borda de baixo das células 1 e 2
+
+    <768px (1×4)  · empilhada, o meio passa a ser a borda de baixo da
+                    célula 2. As bordas das células 1 e 3 continuam sendo
+                    hairline de verdade e não podem sumir.
+*/
+.hero-grid.com-linha-elastica .hero-cell-2 {
+  border-bottom-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .hero-grid.com-linha-elastica .hero-cell-1,
+  .hero-grid.com-linha-elastica .hero-cell-2 {
+    border-bottom-color: transparent;
   }
 }
 
@@ -401,6 +667,18 @@ html, body {
   }
 
   /*
+    Espaço para o botão da gaveta.
+
+    Abaixo de 1024px a navegação vira gaveta e o botão de abrir passa a
+    flutuar em `position: fixed` no canto superior esquerdo (14px + 46px).
+    Sem esta folga ele pousa em cima do título da view — na captura, o
+    ícone cobria a primeira letra de "Dashboard".
+  */
+  main {
+    padding-top: 72px !important;
+  }
+
+  /*
     Contenção de vazamento: iframe e mídia nunca ultrapassam o container.
     Resolve o estouro medido em TEMPLATES_10 (+9px) e CRIAR_SITE_11 (+261px).
   */
@@ -418,6 +696,29 @@ html, body {
   table {
     overflow-x: auto;
   }
+
+}
+
+/*
+  Acrílico custa caro em GPU móvel: duas ou três camadas de
+  backdrop-filter empilhadas derrubam o scroll em aparelho médio, então
+  no celular o material vira sólido.
+
+  O gatilho é o DISPOSITIVO, não a largura. Amarrar isto ao mesmo
+  `max-width: 1024px` dos alvos de toque tirava o vidro de qualquer
+  notebook com janela de 1024px ou menos — que é a maioria. `hover:
+  none` + `pointer: coarse` descreve tela de toque de verdade.
+*/
+@media (hover: none) and (pointer: coarse) {
+  .glass-panel,
+  .acrilico,
+  .btn-secondary,
+  .btn-vidro,
+  .btn-pill {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--papel-cartao);
+  }
 }
 
 
@@ -431,19 +732,38 @@ html, body {
   spotlight (as variáveis --mouse-x/--mouse-y) continua intacta.
 */
 .card-spotlight.lead-card {
-  border-radius: 10px;
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
-  background: #0a0e1a;
+  border-radius: var(--raio-lg);
+  border: var(--aro) solid var(--aro-cor);
+  background: var(--papel-cartao);
   padding: 16px 18px;
-  transition: border-color 0.18s ease, transform 0.18s ease;
+  transition: border-color var(--dur-quick) var(--ease-marca),
+              box-shadow var(--dur-quick) var(--ease-marca),
+              transform var(--dur-quick) var(--ease-marca);
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .card-spotlight.lead-card:hover {
-  border-color: rgba(99, 102, 241, 0.45);
+  border-color: var(--aro-hover);
+  box-shadow: var(--halo-iris);
   transform: translateY(-2px);
+}
+
+/*
+  Lead quente (score ≥ 80).
+
+  Um fio verde na borda esquerda, não o card inteiro tingido: numa grade
+  de 15, colorir o cartão todo faz os quentes brigarem entre si em vez de
+  saltarem do conjunto. A marca do lado é lida na varredura periférica,
+  que é como a pessoa realmente procura na lista.
+*/
+.card-spotlight.lead-card.lead-quente {
+  box-shadow: inset 3px 0 0 0 var(--estado-sucesso);
+}
+
+.card-spotlight.lead-card.lead-quente:hover {
+  box-shadow: inset 3px 0 0 0 var(--estado-sucesso), var(--halo-iris);
 }
 
 /* O spotlight é resposta ao cursor: sem cursor, não faz sentido. */
@@ -488,44 +808,7 @@ html, body {
 
 main > div:not([hidden]),
 main > article:not([hidden]) {
-  animation: entradaDeView 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/*
-  Resposta ao clique.
-
-  É o detalhe que faz a interface parecer viva no toque: o elemento cede
-  levemente sob o dedo e volta. 90ms — rápido o bastante para parecer
-  físico, não animado.
-*/
-button:active,
-.btn-primary:active,
-.btn-secondary:active,
-a.btn-primary:active,
-a.btn-secondary:active {
-  transform: scale(0.97);
-  transition: transform 0.09s ease;
-}
-
-/* Transição de saída mais lenta que a de entrada: o retorno ao repouso
-   parece natural, o afundar parece imediato. */
-button,
-.btn-primary,
-.btn-secondary {
-  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/*
-  Foco visível.
-
-  Sem isso, navegar por teclado é caminhar no escuro. `:focus-visible`
-  mostra o anel só para quem está usando teclado — quem clica com o mouse
-  não vê nada, que é o comportamento esperado.
-*/
-:focus-visible {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
-  border-radius: 4px;
+  animation: entradaDeView var(--dur-quick) var(--ease-suave) both;
 }
 
 /*
@@ -542,6 +825,9 @@ button,
   .btn-primary:active,
   .btn-secondary:active {
     transform: none;
+  }
+  .ponto-vivo {
+    animation: none;
   }
   *,
   *::before,
@@ -565,7 +851,104 @@ button,
   }
 }
 
-/* Cursor do Sistema Operacional Nativo Restaurado 100% */
+/* Central de abordagem: superfície frontal legível + lâmina prismática. */
+.approach-card {
+  --approach-radius: 18px;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  padding: 24px;
+  border: 0;
+  border-radius: var(--approach-radius);
+  background:
+    linear-gradient(135deg, var(--sobre-25), transparent 32%),
+    color-mix(in srgb, var(--papel-cartao) 96%, transparent);
+  backdrop-filter: blur(20px) saturate(108%);
+  -webkit-backdrop-filter: blur(20px) saturate(108%);
+  box-shadow:
+    0 18px 42px rgba(17, 17, 17, 0.10),
+    0 2px 5px rgba(17, 17, 17, 0.06),
+    inset 0 1px 0 var(--sobre-50),
+    inset 1px 0 0 var(--sobre-15),
+    inset -1px -1px 0 var(--sobre-08);
+}
 
-/* Os alvos em que o cursor gruda. Classe explícita em vez de seletor
-   amplo: grudar em tudo faz o efeito perder sentido e virar ruído. */
+.approach-card::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  left: 23%;
+  right: 13%;
+  top: calc(100% - 3px);
+  bottom: -24px;
+  border-radius: 16px;
+  transform: skewX(-11deg);
+  transform-origin: center;
+  background: linear-gradient(
+    135deg,
+    var(--iris-violeta),
+    var(--iris-azul) 46%,
+    var(--iris-ciano) 76%,
+    var(--iris-pessego)
+  );
+  opacity: 0.72;
+  filter: saturate(112%);
+  box-shadow:
+    0 18px 34px rgba(91, 140, 255, 0.18),
+    0 8px 22px rgba(124, 92, 255, 0.14);
+  transition:
+    transform var(--dur-flow) var(--ease-marca),
+    opacity var(--dur-flow) var(--ease-suave);
+}
+
+.approach-card::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid var(--sobre-25);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(124, 92, 255, 0.16), transparent 28%),
+    radial-gradient(circle at 100% 92%, rgba(86, 216, 230, 0.13), transparent 30%),
+    linear-gradient(118deg, transparent 18%, var(--sobre-08) 42%, transparent 62%);
+}
+
+.approach-card:hover::before {
+  transform: skewX(-7deg) translateY(-2px);
+  opacity: 0.52;
+}
+
+.approach-card--hot {
+  /* O estado quente pertence ao selo; nunca contorna o card. */
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .approach-card {
+    --approach-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(13px) saturate(115%);
+    -webkit-backdrop-filter: blur(13px) saturate(115%);
+  }
+
+  .approach-card::before {
+    left: 28%;
+    right: 12%;
+    top: calc(100% - 3px);
+    bottom: -16px;
+    opacity: 0.42;
+    transform: skewX(-7deg);
+  }
+
+  .approach-card:hover::before {
+    transform: skewX(-7deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .approach-card::before {
+    transition: none;
+  }
+}

@@ -1,0 +1,370 @@
+/* ============================================================
+   REPASS AI — DESIGN SYSTEM // FONTE ÚNICA DA VERDADE
+   ============================================================
+
+   Este arquivo é a ÚNICA definição de variáveis de tema do sistema.
+   Nenhum outro CSS deve redeclarar as variáveis abaixo — se precisar
+   de uma cor nova, ela nasce aqui e é consumida via var().
+
+   Organização em três camadas:
+
+     1. PRIMITIVAS DA MARCA  — invariantes. O espectro iridescente do
+        logo, as fontes, os raios, as curvas de movimento. Não mudam
+        entre claro e escuro porque são a identidade, não o contexto.
+
+     2. SEMÂNTICAS           — o que a cor significa (papel, tinta,
+        superfície, aro). Trocam por tema.
+
+     3. ALIASES LEGADOS      — os nomes antigos (--bg-black, --fg-white,
+        --accent-indigo…) apontando para as semânticas novas. Existem
+        para que as ~20 telas já escritas continuem funcionando sem
+        reescrita. Camada de migração: quando o JSX for migrado para os
+        nomes novos, esta seção morre.
+   ============================================================ */
+
+
+/* ============================================================
+   1. PRIMITIVAS DA MARCA — não mudam entre temas
+   ============================================================ */
+
+:root {
+  /* ---- Espectro iridescente ----
+     Extraído do logo e das peças da marca: a onda holográfica que passa
+     de violeta → azul → ciano → pêssego → dourado. É o único lugar do
+     sistema onde existe cor saturada. Todo o resto é papel e tinta. */
+  --iris-violeta: #7c5cff;
+  --iris-lilas:   #a78bfa;
+  --iris-azul:    #5b8cff;
+  --iris-ciano:   #56d8e6;
+  --iris-menta:   #7ce7c4;
+  --iris-pessego: #ffb27a;
+  --iris-dourado: #ffcf6b;
+  --iris-rosa:    #f0a3d8;
+
+  /* Gradiente-assinatura. É a onda do logo, na mesma ordem.
+     Usado em barras de progresso, headline destacada e no aro
+     de foco/hover dos elementos acrílicos. */
+  --iris-spectrum: linear-gradient(
+    100deg,
+    var(--iris-violeta) 0%,
+    var(--iris-azul) 26%,
+    var(--iris-ciano) 48%,
+    var(--iris-menta) 62%,
+    var(--iris-dourado) 82%,
+    var(--iris-pessego) 100%
+  );
+
+  /* Versão suave, para preencher áreas grandes sem gritar. */
+  --iris-veil: linear-gradient(
+    120deg,
+    rgba(124, 92, 255, 0.18) 0%,
+    rgba(91, 140, 255, 0.14) 30%,
+    rgba(86, 216, 230, 0.12) 55%,
+    rgba(255, 207, 107, 0.14) 82%,
+    rgba(255, 178, 122, 0.16) 100%
+  );
+
+  /* Verde-sinal. Reservado a indicador de estado vivo (bolinha de
+     6–8px). Nunca como cor de fundo, texto ou botão — perde o
+     significado no instante em que vira decoração. */
+  --sinal-vivo: #00ff9d;
+
+  /* ---- Tipografia ---- */
+  --font-headline: 'Geist', 'Inter Tight', sans-serif;
+  --font-body: 'Geist', 'Inter', sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+
+  /* Tracking do wordmark: as letras de REPASS AI são bem afastadas.
+     É a assinatura tipográfica da marca — usada em rótulos mono. */
+  --tracking-marca: 0.34em;
+  --tracking-rotulo: 0.2em;
+  --tracking-headline: -0.03em;
+
+  /* ---- Raios ----
+     A marca é geométrica mas não dura: cantos vivos só em hairline. */
+  --raio-sm: 6px;
+  --raio-md: 10px;
+  --raio-lg: 14px;
+  --raio-xl: 20px;
+  --raio-pill: 9999px;
+
+  /* ---- Movimento ----
+     Três durações, uma curva. Mais que isso vira inconsistência.
+       instant → resposta ao toque (o elemento cede sob o dedo)
+       quick   → hover, cor, aro
+       flow    → entrada de elemento, expansão de painel */
+  --dur-instant: 90ms;
+  --dur-quick: 180ms;
+  --dur-flow: 320ms;
+  --ease-marca: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-suave: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Espessura do aro ----
+     0.5px é o hairline da marca: presente, nunca pesado. */
+  --aro: 0.5px;
+}
+
+
+/* ============================================================
+   2. SEMÂNTICAS + 3. ALIASES — TEMA CLARO (padrão da marca)
+   ============================================================ */
+
+:root,
+:root[data-theme="light"] {
+  /* ---- Papel e tinta ----
+     Off-white QUENTE, não cinza-azulado. É o que dá a sensação de
+     papel fotográfico das peças, e faz o iridescente parecer luz
+     refletida em vez de cor chapada. */
+  --papel: #f5f4f0;
+  --papel-elevado: #faf9f7;
+  --papel-cartao: #ffffff;
+  --papel-fundo: #eeece6;
+
+  --tinta: #111111;
+  /* Os alphas de texto são calibrados por contraste medido sobre
+     --papel, não escolhidos no olho: 0.68 e 0.55 são os menores valores
+     que ainda passam de 4.5:1 e 3:1 no papel #f5f4f0. */
+  --tinta-media: rgba(17, 17, 17, 0.68);
+  --tinta-fraca: rgba(17, 17, 17, 0.62);
+  --tinta-fantasma: rgba(17, 17, 17, 0.24);
+
+  /* ---- Aro e superfície acrílica ---- */
+  --aro-cor: rgba(17, 17, 17, 0.1);
+  --aro-cor-forte: rgba(17, 17, 17, 0.16);
+  --aro-hover: rgba(124, 92, 255, 0.42);
+
+  /* Vidro claro: quase branco, muito translúcido. O brilho superior
+     (--vidro-brilho) é o que lê como acrílico e não como caixa opaca. */
+  --vidro-fundo: rgba(255, 255, 255, 0.6);
+  --vidro-fundo-hover: rgba(255, 255, 255, 0.78);
+  --vidro-brilho: inset 0 0 0 1px rgba(255, 255, 255, 0.75),
+                  0 1px 0 0 rgba(255, 255, 255, 0.95);
+  --vidro-blur: blur(18px) saturate(1.6);
+
+  /* Botão sólido de ação: tinta sobre papel, invertido. */
+  --acao-fundo: rgba(17, 17, 17, 0.94);
+  --acao-texto: #faf9f7;
+
+  /* ---- Sombras ----
+     Duas camadas: uma difusa (profundidade) e uma curta (contato).
+     Sem a curta o elemento parece flutuar solto. */
+  --sombra-sm: 0 1px 3px rgba(17, 17, 17, 0.05);
+  --sombra-md: 0 8px 32px rgba(17, 17, 17, 0.08),
+               0 2px 8px rgba(17, 17, 17, 0.06);
+  --sombra-lg: 0 6px 20px rgba(17, 17, 17, 0.14),
+               0 1px 3px rgba(17, 17, 17, 0.08);
+
+  /* Halo roxo do hover. É o efeito que o usuário pediu: a luz que
+     acende embaixo do elemento quando o cursor chega. */
+  --halo-iris: 0 10px 34px -8px rgba(124, 92, 255, 0.45),
+               0 2px 10px -2px rgba(91, 140, 255, 0.28);
+
+  /* ---- Estados ---- */
+  --sucesso: #0a7a44;
+  --sucesso-fundo: rgba(15, 157, 88, 0.1);
+  /* Âmbar e vermelho puxados para baixo até passar de 4.5:1 sobre papel:
+     #c77700 media 3.29 e #d92d20 media 4.04 — os dois reprovavam em
+     texto pequeno, que é justamente onde estado aparece. */
+  --alerta: #a35f00;
+  --alerta-fundo: rgba(199, 119, 0, 0.1);
+  --erro: #c02418;
+  --erro-fundo: rgba(217, 45, 32, 0.09);
+
+  /* ---- Escala de sobreposição ----
+     Véus sutis usados como fundo de bloco interno, divisor e borda leve.
+     No tema escuro são branco translúcido; no claro, tinta translúcida.
+
+     Os alphas do claro são MENORES que os do escuro na mesma posição da
+     escala: sobre papel, tinta a 12% pesa muito mais do que branco a 12%
+     pesa sobre preto. Igualar os números deixaria a interface clara
+     riscada de cinza.
+
+     Substituíram ~96 ocorrências de `rgba(255,255,255,0.XX)` escritas à
+     mão no JSX — todas invisíveis assim que o fundo virou papel. */
+  --sobre-03: rgba(17, 17, 17, 0.02);
+  --sobre-04: rgba(17, 17, 17, 0.03);
+  --sobre-05: rgba(17, 17, 17, 0.03);
+  --sobre-06: rgba(17, 17, 17, 0.04);
+  --sobre-08: rgba(17, 17, 17, 0.05);
+  --sobre-10: rgba(17, 17, 17, 0.06);
+  --sobre-12: rgba(17, 17, 17, 0.07);
+  --sobre-14: rgba(17, 17, 17, 0.08);
+  --sobre-15: rgba(17, 17, 17, 0.09);
+  --sobre-16: rgba(17, 17, 17, 0.1);
+  --sobre-18: rgba(17, 17, 17, 0.11);
+  --sobre-20: rgba(17, 17, 17, 0.12);
+  --sobre-25: rgba(17, 17, 17, 0.16);
+
+  /* ------------------------------------------------------------
+     ALIASES LEGADOS — nomes antigos → semânticas novas.
+     Não adicione nomes novos aqui.
+     ------------------------------------------------------------ */
+  --bg-black: var(--papel);
+  --bg-surface: var(--papel-elevado);
+  --bg-card: var(--papel-cartao);
+  --bg-card-hover: var(--papel-elevado);
+  --bg-deep: var(--papel-fundo);
+  --bg-slate: var(--papel-elevado);
+  --bg-sidebar: var(--papel-elevado);
+  --bg-poco: var(--papel-fundo);
+
+  --fg-white: var(--tinta);
+  --fg-bright: var(--tinta);
+  --fg-lightest: var(--tinta);
+  --fg-quase-branco: var(--tinta);
+  --fg-black: var(--tinta);
+  --fg-soft: var(--tinta-media);
+  --fg-muted: var(--tinta-media);
+  --fg-subtle: var(--tinta-fraca);
+  --fg-fraco: var(--tinta-fantasma);
+  --fg-sobre-verde: #04140a;
+
+  /* ---- Acentos em TEXTO ----
+     Os tons `--iris-*` são pastéis: existem para gradiente, halo e véu,
+     onde a cor é luz. Como TEXTO sobre papel eles falham — ciano #56d8e6
+     mediu 1.5:1, ou seja, ilegível.
+
+     Estes são os mesmos matizes escurecidos até passar de 4.5:1 sobre
+     --papel. Mesma família de cor, peso diferente. No tema escuro os
+     aliases voltam a apontar direto para os pastéis, que ali funcionam. */
+  --accent-indigo: #5b3ff0;
+  --accent-indigo-suave: #6d4dff;
+  --accent-indigo-claro: #5b3ff0;
+  --accent-indigo-forte: #4a2fd0;
+  --accent-violeta: #5b3ff0;
+  --accent-blue: #1f5fd8;
+  --accent-cyan: #0e7c8c;
+  --accent-rosa: #b3358f;
+  --accent-esmeralda: var(--sucesso);
+
+  /* Os sufixos -suave / -claro significam VÉU DE FUNDO, nunca cor de
+     texto. O código usava os dois sentidos no mesmo nome — os usos como
+     texto foram migrados para o estado sólido. */
+  --estado-sucesso: var(--sucesso);
+  --estado-sucesso-suave: var(--sucesso-fundo);
+  --estado-sucesso-claro: var(--sucesso-fundo);
+  --estado-alerta: var(--alerta);
+  --estado-alerta-suave: var(--alerta-fundo);
+  --estado-erro: var(--erro);
+  --estado-erro-forte: var(--erro);
+  --estado-erro-suave: var(--erro-fundo);
+
+  --hairline-color: var(--aro-cor);
+  --hairline-hover: var(--aro-hover);
+
+  color-scheme: light;
+}
+
+
+/* ============================================================
+   TEMA ESCURO
+   ============================================================
+   Não é o tema claro invertido. O papel vira grafite frio quase
+   preto, e o iridescente sobe de saturação porque sobre escuro ele
+   perde presença. O verde-sinal continua o mesmo.
+   ============================================================ */
+
+:root[data-theme="dark"] {
+  --papel: #0b0c10;
+  --papel-elevado: #121319;
+  --papel-cartao: #16171f;
+  --papel-fundo: #07080b;
+
+  --tinta: #f5f4f0;
+  /* No escuro o texto translúcido rende mais contraste que no claro,
+     então os alphas equivalentes são um pouco menores. */
+  --tinta-media: rgba(245, 244, 240, 0.66);
+  --tinta-fraca: rgba(245, 244, 240, 0.5);
+  --tinta-fantasma: rgba(245, 244, 240, 0.26);
+
+  --aro-cor: rgba(245, 244, 240, 0.12);
+  --aro-cor-forte: rgba(245, 244, 240, 0.2);
+  --aro-hover: rgba(167, 139, 250, 0.55);
+
+  /* Vidro escuro: exatamente a receita do site da marca —
+     tinta a 72% + blur saturado + aro de luz interno. */
+  --vidro-fundo: rgba(17, 17, 17, 0.72);
+  --vidro-fundo-hover: rgba(30, 30, 38, 0.82);
+  --vidro-brilho: inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+                  0 1px 0 0 rgba(255, 255, 255, 0.22);
+  --vidro-blur: blur(18px) saturate(1.6);
+
+  --acao-fundo: rgba(245, 244, 240, 0.94);
+  --acao-texto: #0b0c10;
+
+  --sombra-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --sombra-md: 0 8px 32px rgba(0, 0, 0, 0.55),
+               0 2px 8px rgba(0, 0, 0, 0.4);
+  --sombra-lg: 0 6px 20px rgba(0, 0, 0, 0.6),
+               0 1px 3px rgba(0, 0, 0, 0.45);
+
+  --halo-iris: 0 10px 38px -8px rgba(124, 92, 255, 0.6),
+               0 2px 12px -2px rgba(86, 216, 230, 0.3);
+
+  --sucesso: #34d399;
+  --sucesso-fundo: rgba(52, 211, 153, 0.14);
+  --alerta: #fbbf24;
+  --alerta-fundo: rgba(251, 191, 36, 0.14);
+  --erro: #fb7185;
+  --erro-fundo: rgba(251, 113, 133, 0.14);
+
+  /* Escala de sobreposição — valores originais de branco translúcido. */
+  --sobre-03: rgba(255, 255, 255, 0.03);
+  --sobre-04: rgba(255, 255, 255, 0.04);
+  --sobre-05: rgba(255, 255, 255, 0.05);
+  --sobre-06: rgba(255, 255, 255, 0.06);
+  --sobre-08: rgba(255, 255, 255, 0.08);
+  --sobre-10: rgba(255, 255, 255, 0.1);
+  --sobre-12: rgba(255, 255, 255, 0.12);
+  --sobre-14: rgba(255, 255, 255, 0.14);
+  --sobre-15: rgba(255, 255, 255, 0.15);
+  --sobre-16: rgba(255, 255, 255, 0.16);
+  --sobre-18: rgba(255, 255, 255, 0.18);
+  --sobre-20: rgba(255, 255, 255, 0.2);
+  --sobre-25: rgba(255, 255, 255, 0.25);
+
+  /* Aliases legados — mesmos apontamentos, resolvidos no tema escuro. */
+  --bg-black: var(--papel);
+  --bg-surface: var(--papel-elevado);
+  --bg-card: var(--papel-cartao);
+  --bg-card-hover: #1d1f29;
+  --bg-deep: var(--papel-fundo);
+  --bg-slate: var(--papel-elevado);
+  --bg-sidebar: var(--papel-fundo);
+  --bg-poco: var(--papel-fundo);
+
+  --fg-white: var(--tinta);
+  --fg-bright: var(--tinta);
+  --fg-lightest: var(--tinta);
+  --fg-quase-branco: var(--tinta);
+  --fg-black: #000000;
+  --fg-soft: var(--tinta-media);
+  --fg-muted: var(--tinta-media);
+  --fg-subtle: var(--tinta-fraca);
+  --fg-fraco: var(--tinta-fantasma);
+  --fg-sobre-verde: #04140a;
+
+  --accent-indigo: var(--iris-lilas);
+  --accent-indigo-suave: var(--iris-lilas);
+  --accent-indigo-claro: var(--iris-lilas);
+  --accent-indigo-forte: var(--iris-violeta);
+  --accent-violeta: var(--iris-violeta);
+  --accent-blue: var(--iris-azul);
+  --accent-cyan: var(--iris-ciano);
+  --accent-rosa: var(--iris-rosa);
+  --accent-esmeralda: var(--iris-menta);
+
+  --estado-sucesso: var(--sucesso);
+  --estado-sucesso-suave: var(--sucesso-fundo);
+  --estado-sucesso-claro: var(--sucesso-fundo);
+  --estado-alerta: var(--alerta);
+  --estado-alerta-suave: var(--alerta-fundo);
+  --estado-erro: var(--erro);
+  --estado-erro-forte: var(--erro);
+  --estado-erro-suave: var(--erro-fundo);
+
+  --hairline-color: var(--aro-cor);
+  --hairline-hover: var(--aro-hover);
+
+  color-scheme: dark;
+}

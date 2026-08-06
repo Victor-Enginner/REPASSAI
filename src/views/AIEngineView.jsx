@@ -40,7 +40,7 @@ export default function AIEngineView() {
     setTestResults(null);
     const res = await executePromptWithFallback(
       testPrompt,
-      'Você é o assistente do REPASS AI. Responda em português, de forma direta.',
+      'assistente',
       null,
       { temperature: 0.7 }
     );
@@ -61,7 +61,7 @@ export default function AIEngineView() {
         padding: 'clamp(20px, 4vw, 32px)',
         color: 'var(--fg-white)',
         marginBottom: '28px',
-        border: '0.5px solid rgba(255,255,255,0.12)',
+        border: '0.5px solid var(--sobre-12)',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
           <div>
@@ -105,7 +105,7 @@ export default function AIEngineView() {
             <Cpu size={17} color="#6366f1" /> Estado da Cadeia
           </h2>
 
-          <div className="glass-panel" style={{ padding: '20px', background: 'var(--bg-surface)', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: '4px' }}>
+          <div className="glass-panel" style={{ padding: '20px', background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', borderRadius: '4px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '18px' }}>
               <div>
                 <div className="mono-label" style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}>MOTORES PRONTOS</div>
@@ -135,7 +135,7 @@ export default function AIEngineView() {
             <div className="glass-panel" style={{ padding: '18px', background: 'rgba(239,68,68,0.06)', border: '0.5px solid rgba(239,68,68,0.35)', borderRadius: '4px', display: 'flex', gap: '12px' }}>
               <KeyRound size={17} color="#f87171" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div style={{ fontSize: '12.5px', color: 'var(--fg-soft)', lineHeight: 1.6 }}>
-                <strong style={{ color: 'var(--estado-erro-suave)', display: 'block', marginBottom: '4px' }}>
+                <strong style={{ color: 'var(--estado-erro)', display: 'block', marginBottom: '4px' }}>
                   Nenhum motor configurado
                 </strong>
                 Preencha ao menos uma chave em <code style={{ color: 'var(--fg-white)' }}>backend/.env</code> e
@@ -144,7 +144,7 @@ export default function AIEngineView() {
             </div>
           )}
 
-          <div className="glass-panel" style={{ padding: '18px', background: 'var(--bg-surface)', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: '4px', display: 'flex', gap: '12px' }}>
+          <div className="glass-panel" style={{ padding: '18px', background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', borderRadius: '4px', display: 'flex', gap: '12px' }}>
             <ShieldCheck size={17} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
             <div style={{ fontSize: '12.5px', color: 'var(--fg-muted)', lineHeight: 1.6 }}>
               <strong style={{ color: 'var(--fg-white)', display: 'block', marginBottom: '4px' }}>
@@ -158,7 +158,7 @@ export default function AIEngineView() {
 
         {/* Coluna: teste ao vivo */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div className="glass-panel" style={{ padding: '20px', background: 'var(--bg-surface)', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: '4px' }}>
+          <div className="glass-panel" style={{ padding: '20px', background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', borderRadius: '4px' }}>
             <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--fg-white)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Play size={16} color="#6366f1" /> Testar o Motor
             </h2>
@@ -169,7 +169,7 @@ export default function AIEngineView() {
               placeholder="Insira um prompt de teste..."
               style={{
                 width: '100%', height: '86px', borderRadius: '4px',
-                border: '0.5px solid rgba(255,255,255,0.15)', padding: '12px',
+                border: '0.5px solid var(--sobre-15)', padding: '12px',
                 fontSize: '12.5px', resize: 'vertical', background: 'var(--bg-card)',
                 color: 'var(--fg-white)', fontFamily: 'inherit',
               }}
@@ -189,10 +189,10 @@ export default function AIEngineView() {
           {/* Console */}
           <div style={{
             background: 'var(--bg-deep)', borderRadius: '4px', padding: '20px',
-            border: '0.5px solid rgba(255,255,255,0.12)',
+            border: '0.5px solid var(--sobre-12)',
             fontFamily: 'var(--font-mono, monospace)', fontSize: '12px', minHeight: '240px',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--fg-subtle)', borderBottom: '0.5px solid rgba(255,255,255,0.1)', paddingBottom: '10px', marginBottom: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--fg-subtle)', borderBottom: '0.5px solid var(--sobre-10)', paddingBottom: '10px', marginBottom: '14px' }}>
               <Terminal size={14} /> CONSOLE
             </div>
 
@@ -214,7 +214,7 @@ export default function AIEngineView() {
             {testResults && !testResults.success && (
               <div>
                 <div style={{ color: 'var(--estado-erro)', fontWeight: 700, marginBottom: '10px' }}>✗ FALHA NA GERAÇÃO</div>
-                <div style={{ color: 'var(--estado-erro-suave)', background: 'rgba(239,68,68,0.08)', padding: '12px', borderRadius: '4px', lineHeight: 1.6 }}>
+                <div style={{ color: 'var(--estado-erro)', background: 'rgba(239,68,68,0.08)', padding: '12px', borderRadius: '4px', lineHeight: 1.6 }}>
                   {testResults.error}
                 </div>
               </div>

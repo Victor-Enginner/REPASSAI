@@ -21,39 +21,10 @@
 // Extensões explícitas: mantém o módulo executável em Node puro (testes),
 // não só via resolver do Vite.
 import { prepararGeracao, validarSchema, recuperarCandidatos } from './componentRetrieval.js';
-import { executePromptWithFallback } from './llmRouter.js';
+import { executePromptWithFallback, MODOS_IA } from './llmRouter.js';
 
 /** Tentativas de auto-correção antes de desistir e usar o fallback local. */
 export const MAX_TENTATIVAS = 3;
-
-/**
- * Instruções de sistema do gerador.
- *
- * Aplica as três travas do blueprint de engenharia de IA:
- *  - restrições negativas (proíbe texto fora do JSON)
- *  - isolamento de saída (só JSON, nada de markdown ou explicação)
- *  - ancoragem por exemplo (few-shot com o formato exato)
- */
-const SYSTEM_PROMPT = `Você é o compilador de landing pages do REPASS AI.
-
-REGRAS ABSOLUTAS:
-1. Responda EXCLUSIVAMENTE com um objeto JSON válido. Nada antes, nada depois.
-2. PROIBIDO: markdown, cercas de código, comentários, explicações, saudações.
-3. Você NÃO escreve HTML, CSS nem JSX. Você apenas escolhe componentes do
-   catálogo fornecido e define as props deles.
-4. Use SOMENTE ids que aparecem no catálogo. Inventar um id é erro fatal.
-5. Use SOMENTE props listadas para aquele componente.
-6. Não invente números sobre o negócio (avaliação, anos de mercado, número de
-   clientes). Use apenas os dados fornecidos; se não houver, omita.
-
-FORMATO EXATO DA RESPOSTA:
-{
-  "titulo": "string",
-  "subtitulo": "string",
-  "blocos": [
-    { "componenteId": "id_do_catalogo", "secao": "hero", "props": { "speed": 3 } }
-  ]
-}`;
 
 /**
  * Monta o prompt do usuário com o contexto recuperado.
@@ -215,7 +186,7 @@ export async function gerarLandingPage(promptUsuario, lead = {}, opcoes = {}) {
 
     const resposta = await executePromptWithFallback(
       montarPrompt(preparo, erros),
-      SYSTEM_PROMPT,
+      MODOS_IA.SCHEMA_SITE,
       opcoes.config || null,
       { temperature: 0 }
     );
@@ -297,7 +268,7 @@ ${catalogo}
 Devolva o schema COMPLETO já ajustado, no mesmo formato.`;
 
   const resposta = await executePromptWithFallback(
-    prompt, SYSTEM_PROMPT, opcoes.config || null, { temperature: 0 }
+    prompt, MODOS_IA.SCHEMA_SITE, opcoes.config || null, { temperature: 0 }
   );
 
   if (!resposta.success) {
