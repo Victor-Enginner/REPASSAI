@@ -197,6 +197,33 @@ def ambiente_producao():
     return valor in {"production", "prod", "producao", "produção"}
 
 
+def bypass_dev_single_user():
+    """
+    True quando o modo single-user de desenvolvimento está explicitamente ligado.
+
+    Duas condições, ambas obrigatórias: não estar em produção E a env ter sido
+    pedida na mão. `ambiente_producao()` vem primeiro de propósito — se um dia
+    a env vazar para um deploy, a checagem de ambiente anula o bypass antes de
+    ele ser considerado.
+    """
+    return (
+        not ambiente_producao()
+        and os.environ.get("REPASS_DEV_SINGLE_USER", "").strip().lower()
+        in {"1", "true", "yes", "sim"}
+    )
+
+
+# Identidade usada só quando `bypass_dev_single_user()` é verdadeiro.
+#
+# O UUID é o nulo (todos zeros): é sintaticamente válido para o Postgres, o que
+# mantém as queries funcionando, e é reconhecível de imediato em qualquer log
+# ou tabela — ninguém confunde isso com um usuário real.
+USUARIO_DEV_LOCAL = {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "email": "dev@local",
+}
+
+
 def auth_multiusuario_ativa():
     """
     Indica se as rotas protegidas devem exigir sessão.
@@ -204,12 +231,7 @@ def auth_multiusuario_ativa():
     O bypass existe somente para desenvolvimento local e precisa ser
     explicitamente solicitado. Em produção ele é sempre ignorado.
     """
-    bypass_local = (
-        not ambiente_producao()
-        and os.environ.get("REPASS_DEV_SINGLE_USER", "").strip().lower()
-        in {"1", "true", "yes", "sim"}
-    )
-    return supabase_client.auth_configurado() and not bypass_local
+    return supabase_client.auth_configurado() and not bypass_dev_single_user()
 
 
 def exigir_auth_em_producao():
@@ -445,6 +467,27 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             self.headers.get("Authorization"),
             self.headers.get("Cookie"),
         )
+
+    def _usuario_da_rota(self):
+        """
+        Quem é o dono dos dados nesta requisição — ou None se ninguém.
+
+        Existe porque o bypass de desenvolvimento estava implementado pela
+        metade. `_liberar_rota_protegida()` honrava a flag e deixava a
+        requisição passar, mas os handlers de sites, leads e funil liam
+        `usuario_autenticado` direto e devolviam 401 assim mesmo. O resultado
+        era um modo single-user que não servia para nada: o portão abria e o
+        handler fechava.
+
+        Em produção nada muda — `bypass_dev_single_user()` é sempre falso lá,
+        então este método devolve exatamente o que devolvia antes.
+        """
+        usuario = getattr(self, "usuario_autenticado", None)
+        if usuario:
+            return usuario
+        if bypass_dev_single_user():
+            return USUARIO_DEV_LOCAL
+        return None
 
     def _usuario_atual(self):
         """
@@ -786,6 +829,13 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             # service_role. Anon key também não vai mais ao browser: login é BFF.
             estado_auth = supabase_client.status()
             estado_auth["sessao_via"] = "cookie_httponly"
+            # `auth_ativo` responde "Supabase está configurado" — não "login é
+            # exigido". São coisas diferentes quando o modo single-user de
+            # desenvolvimento está ligado, e confundir as duas fez um teste de
+            # vazamento cobrar 401 de um servidor que legitimamente não pede
+            # login. Estes dois campos dizem o que está de fato valendo.
+            estado_auth["auth_exigida"] = auth_multiusuario_ativa()
+            estado_auth["dev_single_user"] = bypass_dev_single_user()
             usuario = self._usuario_atual()
             estado_auth["usuario"] = usuario
             if usuario:
@@ -1150,7 +1200,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         `anon` e `authenticated`), então o isolamento entre operadores é
         garantido aqui, não por RLS confiando no cliente.
         """
-        usuario = getattr(self, "usuario_autenticado", None)
+        usuario = self._usuario_da_rota()
         if not usuario:
             self._json(401, {"status": "error", "mensagem": "Faca login para ver seus sites."})
             return
@@ -1177,7 +1227,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         Args:
             slug: identificador do projeto usado pelo editor (`projectId`).
         """
-        usuario = getattr(self, "usuario_autenticado", None)
+        usuario = self._usuario_da_rota()
         if not usuario:
             self._json(401, {"status": "error", "mensagem": "Faca login para abrir este site."})
             return
@@ -1222,7 +1272,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         Deixar o cliente enviar a versão permitiria que duas abas abertas
         gravassem a mesma e o histórico ficasse furado.
         """
-        usuario = getattr(self, "usuario_autenticado", None)
+        usuario = self._usuario_da_rota()
         if not usuario:
             self._json(401, {"status": "error", "mensagem": "Faca login para salvar."})
             return
@@ -1503,7 +1553,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
 
     def handle_leads_listar(self):
         """Lista somente os leads pertencentes ao usuário autenticado."""
-        usuario = getattr(self, "usuario_autenticado", None)
+        usuario = self._usuario_da_rota()
         if not usuario:
             self._json(401, {"status": "error", "mensagem": "Faca login para ver seus leads."})
             return
@@ -1530,7 +1580,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         O cliente não escolhe user_id nem campos arbitrários: ownership e
         allowlist são aplicados aqui para impedir IDOR e mass assignment.
         """
-        usuario = getattr(self, "usuario_autenticado", None)
+        usuario = self._usuario_da_rota()
         if not usuario:
             self._json(401, {"status": "error", "mensagem": "Faca login para atualizar o funil."})
             return

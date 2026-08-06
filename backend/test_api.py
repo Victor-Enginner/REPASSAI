@@ -362,13 +362,23 @@ class TestRotasProtegidas(unittest.TestCase):
         Sites são dado privado do operador: listar sem token não pode devolver
         registro de ninguém. Vale para GET, não só para POST.
         """
+        # O guarda usava `auth_ativo`, que significa "Supabase configurado" e
+        # NÃO "login exigido". Com o modo single-user de desenvolvimento ligado
+        # o Supabase segue configurado, o teste não pulava, e cobrava 401 de um
+        # servidor que legitimamente não pede login — falha por diagnóstico
+        # errado, não por vazamento. `auth_exigida` responde a pergunta certa.
+        # O skipTest fica FORA do try de propósito. `unittest.SkipTest` herda de
+        # Exception, então o `except Exception: pass` que protege a chamada de
+        # rede engolia o próprio sinal de pular — o teste seguia e falhava.
+        estado = None
         try:
             with urllib.request.urlopen(f"{self.BASE}/api/auth/status", timeout=5) as res:
-                st = json.loads(res.read().decode("utf-8"))
-                if not st.get("auth_ativo"):
-                    self.skipTest("Multiusuário desligado no servidor.")
+                estado = json.loads(res.read().decode("utf-8"))
         except Exception:
-            pass
+            estado = None
+
+        if estado is not None and not estado.get("auth_exigida", estado.get("auth_ativo")):
+            self.skipTest("Servidor em modo single-user de desenvolvimento.")
         for url in (f"{self.BASE}/api/sites", f"{self.BASE}/api/sites/detail?id=qualquer"):
             try:
                 with urllib.request.urlopen(url, timeout=10) as res:

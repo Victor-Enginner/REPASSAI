@@ -394,13 +394,22 @@ function AppMain() {
               <PainelKeepAlive ativo={currentTab === 'wizard'}>
                 <CreateSiteWizardView
                   onClose={() => setCurrentTab('leads')}
+                  /*
+                    Os dois levam ao EDITOR, não à lista de projetos.
+
+                    Iam para 'projetos': o lead era guardado em
+                    `selectedLeadForEditor` e nunca usado, porque quem lê essa
+                    variável é o editor. Na prática o botão "Gerar" do wizard
+                    era decorativo — navegava para uma lista vazia e nenhuma
+                    geração acontecia. É o editor que roda o loop agêntico.
+                  */
                   onGenerateSite={(customLead) => {
                     setSelectedLeadForEditor(customLead);
-                    setCurrentTab('projetos');
+                    setCurrentTab('editor');
                   }}
                   onGenerate={(customLead) => {
                     setSelectedLeadForEditor(customLead);
-                    setCurrentTab('projetos');
+                    setCurrentTab('editor');
                   }}
                 />
               </PainelKeepAlive>
