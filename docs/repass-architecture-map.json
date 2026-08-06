@@ -3,8 +3,8 @@
   "document": {
     "id": "repass-ai-architecture",
     "title": "REPASS AI — Mapa Vivo de Arquitetura",
-    "version": "1.5.1",
-    "snapshot_at": "2026-07-27",
+    "version": "1.6.0",
+    "snapshot_at": "2026-08-06",
     "language": "pt-BR",
     "source_of_truth": "Código e documentação presentes no repositório",
     "update_policy": "Atualize este arquivo no mesmo commit de qualquer mudança arquitetural. Preserve IDs de nós e arestas para manter o histórico legível.",
@@ -45,7 +45,7 @@
       "O HTML é preservado localmente, enviado ao R2 e recebe uma URL pública quando a conexão é confirmada"
     ],
     "runtime": {
-      "frontend": "React 18 + Vite 5",
+      "frontend": "React 18 + Vite 7",
       "backend": "Python 3 + ThreadingHTTPServer",
       "database": "Supabase/PostgreSQL opcional",
       "external_services": [
@@ -103,8 +103,15 @@
       "status": "implemented",
       "path": "src/App.jsx",
       "summary": "Orquestra navegação, estado de leads, lazy loading, keep-alive seletivo, autenticação e editor.",
-      "responsibilities": ["Selecionar views", "Compartilhar leads em memória", "Proteger cada view com Error Boundary", "Controlar login opcional"],
-      "risks": ["Leads começam em mock e parte do estado ainda vive somente no navegador"]
+      "responsibilities": [
+        "Selecionar views",
+        "Compartilhar leads em memória",
+        "Proteger cada view com Error Boundary",
+        "Controlar login opcional"
+      ],
+      "risks": [
+        "Leads começam em mock e parte do estado ainda vive somente no navegador"
+      ]
     },
     {
       "id": "ui-dashboard",
@@ -112,7 +119,11 @@
       "label": "Dashboard & CRM",
       "kind": "ui",
       "status": "implemented",
-      "paths": ["src/views/DashboardView.jsx", "src/views/CRMView.jsx", "src/views/AppointmentsView.jsx"],
+      "paths": [
+        "src/views/DashboardView.jsx",
+        "src/views/CRMView.jsx",
+        "src/views/AppointmentsView.jsx"
+      ],
       "summary": "Métricas do funil, quadro comercial e agenda derivados do estado de leads."
     },
     {
@@ -123,8 +134,15 @@
       "status": "implemented",
       "path": "src/views/LeadsView.jsx",
       "summary": "Dispara a busca de leads e recebe o terminal em tempo real via SSE.",
-      "inputs": ["nicho", "cidade", "estado"],
-      "outputs": ["leads", "logs de execução"]
+      "inputs": [
+        "nicho",
+        "cidade",
+        "estado"
+      ],
+      "outputs": [
+        "leads",
+        "logs de execução"
+      ]
     },
     {
       "id": "ui-builder",
@@ -132,7 +150,12 @@
       "label": "Editor & Wizard",
       "kind": "ui",
       "status": "implemented",
-      "paths": ["src/views/SiteEditorView.jsx", "src/views/CreateSiteWizardView.jsx", "src/components/AgenticChatbotBuilder.jsx", "src/components/SchemaRenderer.jsx"],
+      "paths": [
+        "src/views/SiteEditorView.jsx",
+        "src/views/CreateSiteWizardView.jsx",
+        "src/components/AgenticChatbotBuilder.jsx",
+        "src/components/SchemaRenderer.jsx"
+      ],
       "summary": "Coleta briefing, executa geração/ajustes e renderiza schema com componentes permitidos."
     },
     {
@@ -150,9 +173,16 @@
       "label": "Abordagem WhatsApp",
       "kind": "ui",
       "status": "partial",
-      "paths": ["src/views/BulkWhatsAppView.jsx", "src/services/whatsappBulkEngine.js"],
+      "paths": [
+        "src/views/BulkWhatsAppView.jsx",
+        "src/services/whatsappBulkEngine.js"
+      ],
       "summary": "Gera mensagens com dados verificáveis e abre links wa.me; não é um disparador automatizado oficial.",
-      "invariants": ["Bloquear leads demo", "Nunca inventar telefone", "Não prometer site publicado sem deploy real"]
+      "invariants": [
+        "Bloquear leads demo",
+        "Nunca inventar telefone",
+        "Não prometer site publicado sem deploy real"
+      ]
     },
     {
       "id": "ui-business",
@@ -160,7 +190,11 @@
       "label": "Comercial & Portfólio",
       "kind": "ui",
       "status": "partial",
-      "paths": ["src/views/BillingView.jsx", "src/views/AffiliateView.jsx", "src/views/ProjectsView.jsx"],
+      "paths": [
+        "src/views/BillingView.jsx",
+        "src/views/AffiliateView.jsx",
+        "src/views/ProjectsView.jsx"
+      ],
       "summary": "Telas de faturamento, indicação e projetos; grande parte ainda é apresentação ou armazenamento local."
     },
     {
@@ -169,7 +203,10 @@
       "label": "Config & Auth Client",
       "kind": "service",
       "status": "implemented",
-      "paths": ["src/config.js", "src/services/authService.js"],
+      "paths": [
+        "src/config.js",
+        "src/services/authService.js"
+      ],
       "summary": "Centraliza URL da API, domínio de deploy e sessão JWT do Supabase no localStorage."
     },
     {
@@ -178,9 +215,18 @@
       "label": "Loop Agêntico",
       "kind": "service",
       "status": "implemented",
-      "paths": ["src/services/agenticPlanner.js", "src/services/agenticGenerator.js", "src/services/componentRetrieval.js"],
+      "paths": [
+        "src/services/agenticPlanner.js",
+        "src/services/agenticGenerator.js",
+        "src/services/componentRetrieval.js"
+      ],
       "summary": "Expande intenção, consulta apenas o gateway seguro do backend e mantém fallback local; o gerador moderno recupera candidatos, valida JSON e tenta autocorreção.",
-      "invariants": ["temperature 0", "nenhuma chave no navegador", "somente componentes do catálogo", "fallback determinístico"]
+      "invariants": [
+        "temperature 0",
+        "nenhuma chave no navegador",
+        "somente componentes do catálogo",
+        "fallback determinístico"
+      ]
     },
     {
       "id": "front-registry",
@@ -188,7 +234,11 @@
       "label": "Catálogo & Renderer",
       "kind": "registry",
       "status": "implemented",
-      "paths": ["src/data/componentIndex.js", "src/components/ui/registry.js", "src/components/SchemaRenderer.jsx"],
+      "paths": [
+        "src/data/componentIndex.js",
+        "src/components/ui/registry.js",
+        "src/components/SchemaRenderer.jsx"
+      ],
       "summary": "Índice gerado de componentes, registro executável e montagem segura do schema."
     },
     {
@@ -206,7 +256,11 @@
       "label": "Estado Local / Mock",
       "kind": "data",
       "status": "partial",
-      "paths": ["src/mock/leadsData.js", "src/mock/documentDB.js", "localStorage"],
+      "paths": [
+        "src/mock/leadsData.js",
+        "src/mock/documentDB.js",
+        "localStorage"
+      ],
       "summary": "Fallback e protótipo local para leads, projetos e sessão; não sincroniza dispositivos."
     },
     {
@@ -251,9 +305,16 @@
       "label": "OSINT Core",
       "kind": "engine",
       "status": "implemented",
-      "paths": ["backend/scraper_monster.py", "backend/places_engine.py"],
+      "paths": [
+        "backend/scraper_monster.py",
+        "backend/places_engine.py"
+      ],
       "summary": "Busca no Google Places, detalha negócios, normaliza leads, calcula KPI e enriquece mídia.",
-      "invariants": ["Não persistir lead demo", "Não fabricar contato", "Proxy de mídia protegido contra SSRF"]
+      "invariants": [
+        "Nao persistir lead demo",
+        "Nao fabricar contato",
+        "Proxy de midia com allowlist de host e revalidacao a cada redirecionamento"
+      ]
     },
     {
       "id": "engine-llm",
@@ -278,10 +339,13 @@
       "layer": "engines",
       "label": "Open Lovable Clone",
       "kind": "engine",
-      "status": "implemented",
+      "status": "partial",
       "path": "backend/app_api.py",
-      "summary": "Clona uma referência por URL e entrega preview HTML ao editor.",
-      "risks": ["Entrada por URL exige validação contínua contra SSRF e conteúdo hostil"]
+      "summary": "NAO clona. Extrai o nome do dominio da string recebida e gera um template do catalogo local 77lib; nenhuma requisicao e feita a URL. A interface apresenta como se clonasse.",
+      "risks": [
+        "Divida conhecida: a rota promete comportamento que nao executa",
+        "Sem SSRF por nao haver fetch — verificado em 06/08/2026"
+      ]
     },
     {
       "id": "engine-templates",
@@ -289,7 +353,10 @@
       "label": "Template Store",
       "kind": "engine",
       "status": "implemented",
-      "paths": ["backend/templates_store.py", "backend/data/templates_store"],
+      "paths": [
+        "backend/templates_store.py",
+        "backend/data/templates_store"
+      ],
       "summary": "Catálogo persistido em arquivos para listagem, detalhe, preview, importação e download."
     },
     {
@@ -300,7 +367,10 @@
       "status": "implemented",
       "path": "backend/r2_storage_engine.py",
       "summary": "Preserva o HTML localmente e envia ao Cloudflare R2 pela API S3-compatible quando configurado.",
-      "invariants": ["Falha remota nunca apaga a cópia local", "publicado=false e cdn_url=null enquanto não houver domínio público real"]
+      "invariants": [
+        "Falha remota nunca apaga a cópia local",
+        "publicado=false e cdn_url=null enquanto não houver domínio público real"
+      ]
     },
     {
       "id": "engine-tools",
@@ -308,7 +378,13 @@
       "label": "Ferramentas Offline",
       "kind": "tooling",
       "status": "legacy",
-      "paths": ["backend/originkit_scraper.py", "backend/originkit_engine.py", "backend/basehub_engine.py", "backend/beta_live_runner.py", "backend/modal_engine.py"],
+      "paths": [
+        "backend/originkit_scraper.py",
+        "backend/originkit_engine.py",
+        "backend/basehub_engine.py",
+        "backend/beta_live_runner.py",
+        "backend/modal_engine.py"
+      ],
       "summary": "Importadores, sintetizadores e runner manual; Modal está desconectado do servidor atual."
     },
     {
@@ -344,7 +420,12 @@
       "status": "implemented",
       "path": "supabase/schema.sql",
       "summary": "Schema idempotente para perfis, leads, sites e versões, com RLS fechado e service role no backend.",
-      "tables": ["perfis", "leads", "sites", "site_versoes"]
+      "tables": [
+        "perfis",
+        "leads",
+        "sites",
+        "site_versoes"
+      ]
     },
     {
       "id": "storage-local",
@@ -352,7 +433,12 @@
       "label": "Arquivos Locais",
       "kind": "storage",
       "status": "implemented",
-      "paths": ["backend/data/r2_bucket", "backend/data/templates_store", "backend/data/77lib_catalog", "backend/data/originkit_catalog"],
+      "paths": [
+        "backend/data/r2_bucket",
+        "backend/data/templates_store",
+        "backend/data/77lib_catalog",
+        "backend/data/originkit_catalog"
+      ],
       "summary": "Persistência local atual para HTML compilado e catálogos."
     },
     {
@@ -369,9 +455,16 @@
       "label": "Docker Compose",
       "kind": "infrastructure",
       "status": "partial",
-      "paths": ["docker-compose.yml", "Dockerfile", "backend/Dockerfile", "docker/nginx.conf"],
+      "paths": [
+        "docker-compose.yml",
+        "Dockerfile",
+        "backend/Dockerfile",
+        "docker/nginx.conf"
+      ],
       "summary": "Define frontend Nginx, backend Python, rede interna, proxy SSE/API, healthchecks, logs limitados e persistência local por bind mount.",
-      "risks": ["Definição pronta, mas o Docker Desktop ainda não está instalado nesta máquina para validar os containers em execução"]
+      "risks": [
+        "Definição pronta, mas o Docker Desktop ainda não está instalado nesta máquina para validar os containers em execução"
+      ]
     },
     {
       "id": "infra-e2e",
@@ -393,83 +486,373 @@
     }
   ],
   "edges": [
-    {"id": "e01", "from": "ui-shell", "to": "ui-dashboard", "type": "renders", "label": "navega"},
-    {"id": "e02", "from": "ui-shell", "to": "ui-scanner", "type": "renders", "label": "navega"},
-    {"id": "e03", "from": "ui-shell", "to": "ui-builder", "type": "renders", "label": "seleciona lead"},
-    {"id": "e04", "from": "ui-shell", "to": "front-config", "type": "uses", "label": "sessão/config"},
-    {"id": "e05", "from": "ui-dashboard", "to": "front-local-store", "type": "reads", "label": "estado atual"},
-    {"id": "e06", "from": "ui-scanner", "to": "api-server", "type": "http", "label": "POST scan"},
-    {"id": "e07", "from": "api-sse", "to": "ui-scanner", "type": "stream", "label": "logs SSE"},
-    {"id": "e08", "from": "api-server", "to": "api-sse", "type": "publishes", "label": "eventos"},
-    {"id": "e09", "from": "api-server", "to": "engine-osint", "type": "invokes", "label": "varredura"},
-    {"id": "e10", "from": "engine-osint", "to": "external-places", "type": "api", "label": "busca/detalhes/fotos"},
-    {"id": "e11", "from": "ui-builder", "to": "front-agentic", "type": "invokes", "label": "gerar/ajustar"},
-    {"id": "e12", "from": "front-agentic", "to": "front-registry", "type": "retrieves", "label": "candidatos/validação"},
-    {"id": "e13", "from": "front-agentic", "to": "front-llm", "type": "invokes", "label": "prompt JSON"},
-    {"id": "e14", "from": "front-llm", "to": "api-server", "type": "http", "label": "POST ai/generate"},
-    {"id": "e15", "from": "api-server", "to": "engine-llm", "type": "invokes", "label": "roteia"},
-    {"id": "e16", "from": "engine-llm", "to": "external-llms", "type": "api", "label": "fallback/rotação"},
-    {"id": "e17", "from": "front-registry", "to": "ui-builder", "type": "renders", "label": "React seguro"},
-    {"id": "e18", "from": "ui-templates", "to": "api-server", "type": "http", "label": "catálogo/import"},
-    {"id": "e19", "from": "api-server", "to": "engine-templates", "type": "invokes", "label": "templates"},
-    {"id": "e20", "from": "engine-templates", "to": "storage-local", "type": "reads-writes", "label": "JSON/HTML"},
-    {"id": "e21", "from": "ui-builder", "to": "api-server", "type": "http", "label": "generate/clone/preview"},
-    {"id": "e22", "from": "api-server", "to": "engine-lib77", "type": "invokes", "label": "compilar"},
-    {"id": "e23", "from": "api-server", "to": "engine-clone", "type": "invokes", "label": "clonar URL"},
-    {"id": "e24", "from": "engine-lib77", "to": "engine-storage", "type": "writes", "label": "HTML"},
-    {"id": "e25", "from": "engine-clone", "to": "engine-storage", "type": "writes", "label": "preview"},
-    {"id": "e26", "from": "engine-storage", "to": "storage-local", "type": "writes", "label": "atual"},
-    {"id": "e27", "from": "engine-storage", "to": "storage-r2", "type": "writes", "label": "upload real; CDN pendente"},
-    {"id": "e28", "from": "front-config", "to": "api-server", "type": "http", "label": "JWT"},
-    {"id": "e29", "from": "api-server", "to": "db-adapter", "type": "uses", "label": "auth/dados"},
-    {"id": "e30", "from": "db-adapter", "to": "db-supabase", "type": "api", "label": "service role"},
-    {"id": "e31", "from": "front-config", "to": "db-supabase", "type": "auth", "label": "login público"},
-    {"id": "e32", "from": "ui-whatsapp", "to": "ui-dashboard", "type": "updates", "label": "status comercial"},
-    {"id": "e34", "from": "ui-business", "to": "front-local-store", "type": "reads-writes", "label": "protótipo"},
-    {"id": "e35", "from": "engine-tools", "to": "storage-local", "type": "offline", "label": "popula catálogos"},
-    {"id": "e36", "from": "infra-compose", "to": "api-server", "type": "runs", "label": "container + healthcheck"},
-    {"id": "e37", "from": "infra-compose", "to": "ui-shell", "type": "runs", "label": "Nginx + SPA"},
-    {"id": "e38", "from": "infra-compose", "to": "storage-local", "type": "mounts", "label": "backend/data"},
-    {"id": "e39", "from": "infra-e2e", "to": "ui-shell", "type": "probes", "label": "HTML/bundle/mapa"},
-    {"id": "e40", "from": "infra-e2e", "to": "api-server", "type": "probes", "label": "REST/SSE/JWT"},
-    {"id": "e41", "from": "infra-e2e", "to": "db-supabase", "type": "probes", "label": "leitura PostgREST"},
-    {"id": "e42", "from": "infra-e2e", "to": "storage-r2", "type": "probes", "label": "HTML público"},
-    {"id": "e43", "from": "infra-checkpoint", "to": "infra-compose", "type": "versions", "label": "configuração reproduzível"}
+    {
+      "id": "e01",
+      "from": "ui-shell",
+      "to": "ui-dashboard",
+      "type": "renders",
+      "label": "navega"
+    },
+    {
+      "id": "e02",
+      "from": "ui-shell",
+      "to": "ui-scanner",
+      "type": "renders",
+      "label": "navega"
+    },
+    {
+      "id": "e03",
+      "from": "ui-shell",
+      "to": "ui-builder",
+      "type": "renders",
+      "label": "seleciona lead"
+    },
+    {
+      "id": "e04",
+      "from": "ui-shell",
+      "to": "front-config",
+      "type": "uses",
+      "label": "sessão/config"
+    },
+    {
+      "id": "e05",
+      "from": "ui-dashboard",
+      "to": "front-local-store",
+      "type": "reads",
+      "label": "estado atual"
+    },
+    {
+      "id": "e06",
+      "from": "ui-scanner",
+      "to": "api-server",
+      "type": "http",
+      "label": "POST scan"
+    },
+    {
+      "id": "e07",
+      "from": "api-sse",
+      "to": "ui-scanner",
+      "type": "stream",
+      "label": "logs SSE"
+    },
+    {
+      "id": "e08",
+      "from": "api-server",
+      "to": "api-sse",
+      "type": "publishes",
+      "label": "eventos"
+    },
+    {
+      "id": "e09",
+      "from": "api-server",
+      "to": "engine-osint",
+      "type": "invokes",
+      "label": "varredura"
+    },
+    {
+      "id": "e10",
+      "from": "engine-osint",
+      "to": "external-places",
+      "type": "api",
+      "label": "busca/detalhes/fotos"
+    },
+    {
+      "id": "e11",
+      "from": "ui-builder",
+      "to": "front-agentic",
+      "type": "invokes",
+      "label": "gerar/ajustar"
+    },
+    {
+      "id": "e12",
+      "from": "front-agentic",
+      "to": "front-registry",
+      "type": "retrieves",
+      "label": "candidatos/validação"
+    },
+    {
+      "id": "e13",
+      "from": "front-agentic",
+      "to": "front-llm",
+      "type": "invokes",
+      "label": "prompt JSON"
+    },
+    {
+      "id": "e14",
+      "from": "front-llm",
+      "to": "api-server",
+      "type": "http",
+      "label": "POST ai/generate"
+    },
+    {
+      "id": "e15",
+      "from": "api-server",
+      "to": "engine-llm",
+      "type": "invokes",
+      "label": "roteia"
+    },
+    {
+      "id": "e16",
+      "from": "engine-llm",
+      "to": "external-llms",
+      "type": "api",
+      "label": "fallback/rotação"
+    },
+    {
+      "id": "e17",
+      "from": "front-registry",
+      "to": "ui-builder",
+      "type": "renders",
+      "label": "React seguro"
+    },
+    {
+      "id": "e18",
+      "from": "ui-templates",
+      "to": "api-server",
+      "type": "http",
+      "label": "catálogo/import"
+    },
+    {
+      "id": "e19",
+      "from": "api-server",
+      "to": "engine-templates",
+      "type": "invokes",
+      "label": "templates"
+    },
+    {
+      "id": "e20",
+      "from": "engine-templates",
+      "to": "storage-local",
+      "type": "reads-writes",
+      "label": "JSON/HTML"
+    },
+    {
+      "id": "e21",
+      "from": "ui-builder",
+      "to": "api-server",
+      "type": "http",
+      "label": "generate/clone/preview"
+    },
+    {
+      "id": "e22",
+      "from": "api-server",
+      "to": "engine-lib77",
+      "type": "invokes",
+      "label": "compilar"
+    },
+    {
+      "id": "e23",
+      "from": "api-server",
+      "to": "engine-clone",
+      "type": "invokes",
+      "label": "clonar URL"
+    },
+    {
+      "id": "e24",
+      "from": "engine-lib77",
+      "to": "engine-storage",
+      "type": "writes",
+      "label": "HTML"
+    },
+    {
+      "id": "e25",
+      "from": "engine-clone",
+      "to": "engine-storage",
+      "type": "writes",
+      "label": "preview"
+    },
+    {
+      "id": "e26",
+      "from": "engine-storage",
+      "to": "storage-local",
+      "type": "writes",
+      "label": "atual"
+    },
+    {
+      "id": "e27",
+      "from": "engine-storage",
+      "to": "storage-r2",
+      "type": "writes",
+      "label": "upload real; CDN pendente"
+    },
+    {
+      "id": "e28",
+      "from": "front-config",
+      "to": "api-server",
+      "type": "http",
+      "label": "JWT"
+    },
+    {
+      "id": "e29",
+      "from": "api-server",
+      "to": "db-adapter",
+      "type": "uses",
+      "label": "auth/dados"
+    },
+    {
+      "id": "e30",
+      "from": "db-adapter",
+      "to": "db-supabase",
+      "type": "api",
+      "label": "service role"
+    },
+    {
+      "id": "e31",
+      "from": "front-config",
+      "to": "db-supabase",
+      "type": "auth",
+      "label": "login público"
+    },
+    {
+      "id": "e32",
+      "from": "ui-whatsapp",
+      "to": "ui-dashboard",
+      "type": "updates",
+      "label": "status comercial"
+    },
+    {
+      "id": "e34",
+      "from": "ui-business",
+      "to": "front-local-store",
+      "type": "reads-writes",
+      "label": "protótipo"
+    },
+    {
+      "id": "e35",
+      "from": "engine-tools",
+      "to": "storage-local",
+      "type": "offline",
+      "label": "popula catálogos"
+    },
+    {
+      "id": "e36",
+      "from": "infra-compose",
+      "to": "api-server",
+      "type": "runs",
+      "label": "container + healthcheck"
+    },
+    {
+      "id": "e37",
+      "from": "infra-compose",
+      "to": "ui-shell",
+      "type": "runs",
+      "label": "Nginx + SPA"
+    },
+    {
+      "id": "e38",
+      "from": "infra-compose",
+      "to": "storage-local",
+      "type": "mounts",
+      "label": "backend/data"
+    },
+    {
+      "id": "e39",
+      "from": "infra-e2e",
+      "to": "ui-shell",
+      "type": "probes",
+      "label": "HTML/bundle/mapa"
+    },
+    {
+      "id": "e40",
+      "from": "infra-e2e",
+      "to": "api-server",
+      "type": "probes",
+      "label": "REST/SSE/JWT"
+    },
+    {
+      "id": "e41",
+      "from": "infra-e2e",
+      "to": "db-supabase",
+      "type": "probes",
+      "label": "leitura PostgREST"
+    },
+    {
+      "id": "e42",
+      "from": "infra-e2e",
+      "to": "storage-r2",
+      "type": "probes",
+      "label": "HTML público"
+    },
+    {
+      "id": "e43",
+      "from": "infra-checkpoint",
+      "to": "infra-compose",
+      "type": "versions",
+      "label": "configuração reproduzível"
+    }
   ],
   "flows": [
     {
       "id": "flow-osint",
       "label": "Aquisição de leads",
       "status": "implemented",
-      "node_ids": ["ui-scanner", "api-server", "api-sse", "engine-osint", "external-places", "db-adapter", "db-supabase"],
+      "node_ids": [
+        "ui-scanner",
+        "api-server",
+        "api-sse",
+        "engine-osint",
+        "external-places",
+        "db-adapter",
+        "db-supabase"
+      ],
       "success_condition": "Lead real retorna ao painel com contato verificável e score; demo nunca é persistido."
     },
     {
       "id": "flow-generation",
       "label": "Geração agêntica",
       "status": "implemented",
-      "node_ids": ["ui-builder", "front-agentic", "front-registry", "front-llm", "api-server", "engine-llm", "external-llms"],
+      "node_ids": [
+        "ui-builder",
+        "front-agentic",
+        "front-registry",
+        "front-llm",
+        "api-server",
+        "engine-llm",
+        "external-llms"
+      ],
       "success_condition": "Schema JSON passa pela validação e é renderizado somente com componentes registrados."
     },
     {
       "id": "flow-publish",
       "label": "Compilação e publicação",
       "status": "implemented",
-      "node_ids": ["ui-builder", "api-server", "engine-lib77", "engine-storage", "storage-local", "storage-r2"],
+      "node_ids": [
+        "ui-builder",
+        "api-server",
+        "engine-lib77",
+        "engine-storage",
+        "storage-local",
+        "storage-r2"
+      ],
       "success_condition": "HTML local preservado, upload R2 concluído e URL pública respondendo com conteúdo HTML."
     },
     {
       "id": "flow-auth",
       "label": "Autenticação multiusuário",
       "status": "partial",
-      "node_ids": ["ui-shell", "front-config", "api-server", "db-adapter", "db-supabase"],
+      "node_ids": [
+        "ui-shell",
+        "front-config",
+        "api-server",
+        "db-adapter",
+        "db-supabase"
+      ],
       "success_condition": "Login e scanner usam JWT e isolamento por user_id; ainda falta aplicar o mesmo contrato às demais rotas mutáveis."
     },
     {
       "id": "flow-operations",
       "label": "Execução e recuperação",
       "status": "partial",
-      "node_ids": ["infra-checkpoint", "infra-compose", "infra-e2e", "ui-shell", "api-server", "storage-local", "db-supabase", "storage-r2"],
+      "node_ids": [
+        "infra-checkpoint",
+        "infra-compose",
+        "infra-e2e",
+        "ui-shell",
+        "api-server",
+        "storage-local",
+        "db-supabase",
+        "storage-r2"
+      ],
       "success_condition": "Código versionado, containers saudáveis, teste E2E verde e backups externos restauráveis; runtime Docker e backups externos ainda precisam ser ativados."
     }
   ],
@@ -486,37 +869,79 @@
       "priority": "P0",
       "title": "Consolidar persistência",
       "detail": "Parte do produto ainda usa mock/localStorage enquanto o schema Supabase já existe.",
-      "affected_nodes": ["front-local-store", "db-adapter", "db-supabase"]
+      "affected_nodes": [
+        "front-local-store",
+        "db-adapter",
+        "db-supabase"
+      ]
     },
     {
       "priority": "P1",
       "title": "Ativar runtime Docker",
       "detail": "Os containers e healthchecks estão definidos, mas Docker Desktop ainda precisa ser instalado para build e validação desta máquina.",
-      "affected_nodes": ["infra-compose", "infra-e2e"]
+      "affected_nodes": [
+        "infra-compose",
+        "infra-e2e"
+      ]
     },
     {
       "priority": "P1",
       "title": "Domínio de publicação",
       "detail": "A URL r2.dev funciona para desenvolvimento, mas produção deve usar domínio próprio e política de cache controlada.",
-      "affected_nodes": ["engine-storage", "storage-r2", "front-config"]
+      "affected_nodes": [
+        "engine-storage",
+        "storage-r2",
+        "front-config"
+      ]
     },
     {
       "priority": "P1",
       "title": "Unificar contratos de geração",
       "detail": "Schema React validado, compilador 77lib e clone HTML são caminhos distintos e precisam de fronteiras explícitas.",
-      "affected_nodes": ["front-agentic", "front-registry", "engine-lib77", "engine-clone"]
-    },
-    {
-      "priority": "P1",
-      "title": "Proteção consistente de rotas",
-      "detail": "Login e scanner exigem JWT, porém geração de site, IA, clone e importação de templates ainda precisam de autorização e cota por usuário.",
-      "affected_nodes": ["front-config", "api-server", "db-adapter", "db-supabase"]
+      "affected_nodes": [
+        "front-agentic",
+        "front-registry",
+        "engine-lib77",
+        "engine-clone"
+      ]
     },
     {
       "priority": "P2",
       "title": "Backups externos verificáveis",
       "detail": "Git e cópia local estão protegidos; falta programar e testar restauração do Supabase e versionamento/backup do R2.",
-      "affected_nodes": ["infra-checkpoint", "db-supabase", "storage-r2"]
+      "affected_nodes": [
+        "infra-checkpoint",
+        "db-supabase",
+        "storage-r2"
+      ]
+    },
+    {
+      "priority": "P1",
+      "title": "CDN externo sem SRI nos templates entregues",
+      "detail": "16 templates carregam 39 scripts de CDN externo, 0 com integrity. CDN comprometido executa JS arbitrario no site de todo cliente ja entregue. Medido em 06/08/2026.",
+      "affected_nodes": [
+        "engine-lib77",
+        "engine-templates",
+        "storage-local"
+      ]
+    },
+    {
+      "priority": "P1",
+      "title": "Rotas de geracao sem teto mensal",
+      "detail": "/api/ai/generate, /api/site/generate e /api/site/clone custam dinheiro por chamada e exigem token, mas nao debitam cota. Limite de taxa segura rajada, nao uso sustentado. Risco aceito enquanto a base e beta — ver SEGURANCA.md 3.5.",
+      "affected_nodes": [
+        "api-server",
+        "engine-llm",
+        "db-adapter"
+      ]
+    },
+    {
+      "priority": "P2",
+      "title": "requirements.txt sem lockfile",
+      "detail": "O npm tem package-lock e o Dockerfile usa npm ci. O Python usa faixas (>=x,<y) sem lock: dois builds em dias diferentes podem gerar imagens diferentes. Imagens base tambem vem por tag, nao por digest.",
+      "affected_nodes": [
+        "infra-compose"
+      ]
     }
   ],
   "agent_handoff": {
@@ -536,7 +961,9 @@
     ],
     "change_template": {
       "feature": "<nome>",
-      "affected_nodes": ["<node-id>"],
+      "affected_nodes": [
+        "<node-id>"
+      ],
       "added_nodes": [],
       "added_edges": [],
       "contracts_changed": [],

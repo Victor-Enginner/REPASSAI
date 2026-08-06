@@ -24,6 +24,10 @@ documento está errado e deve ser corrigido.
 | [SEGURANCA.md](SEGURANCA.md) | arquitetura de segurança, criptografia, vetores de ataque e plano de hardening |
 | [repass-ai.drawio](repass-ai.drawio) | mapa do sistema em 4 páginas para abrir no draw.io: arquitetura, pipeline, auditoria de segurança e plano de execução |
 | [PROMPT_ENGINE_FABLE5.md](PROMPT_ENGINE_FABLE5.md) | prompt de produção da Fase 1 (cota atômica, IP confiável, anti-SSRF, login neutro) com o impacto de cada alteração |
+| [repass-architecture-map.json](repass-architecture-map.json) | o mapa como **dado estruturado**: nós, arestas, fluxos, invariantes e lacunas. É o que um agente lê antes de mexer na arquitetura |
+| [repass-architecture-map.html](repass-architecture-map.html) | o mesmo mapa renderizado como sistema vivo |
+| [PROMPT_IDENTIDADE_VISUAL.md](PROMPT_IDENTIDADE_VISUAL.md) | prompt da identidade visual — paleta, material acrílico e regras do design system |
+| [HANDOFF.md](HANDOFF.md) | passagem de contexto entre sessões de agentes |
 | [linear/](linear/) | backlog em CSV e o gerador dele |
 
 O backlog operacional vive no **Linear** (time REPASS AI). Os CSVs aqui são a
@@ -56,21 +60,34 @@ abandonado costuma valer mais que o resultado final.
 
 ## Números, para não circularem errados
 
-Medidos no repositório em 27/07/2026, não estimados:
+Medidos por comando em 06/08/2026, não estimados:
 
 | | |
 |---|---|
-| Código escrito | **23.819 linhas** — `.py`, `.jsx`, `.js`, `.mjs`, `.css` |
-| Repositório inteiro | 135.768 linhas |
-| Arquivos novos não versionados | +108.702 linhas |
+| Código escrito | **28.763 linhas** em 128 arquivos — `.py`, `.jsx`, `.js`, `.mjs`, `.css` |
+| Testes de backend | **42 passando / 10 pulados** |
+| Rotas na API | 27 |
+| Telas | 14 |
 
-A diferença entre o primeiro e os outros dois é **arquivo gerado**: o
-`package-lock.json`, o índice dos 1.140 componentes minerados, os planos de
-tradução em JSON e os templates preparados.
+O número de código exclui o que é **gerado**: `componentIndex.js` (10.047
+linhas produzidas por `build-component-index.mjs`), `package-lock.json` e tudo
+sob `backend/data/`. Só o que sobra descreve trabalho de engenharia.
 
-Só o primeiro número descreve trabalho de engenharia. Apresentar os outros
-como "linhas de código do projeto" é a primeira coisa que um revisor confere,
-e a primeira que derruba a credibilidade do resto do documento.
+Comando que produz o primeiro número:
+
+```bash
+git ls-files '*.py' '*.jsx' '*.js' '*.mjs' '*.css' \
+  | grep -vE "componentIndex\.js|package-lock|/data/|\.min\." | xargs wc -l | tail -1
+```
+
+Apresentar o total do repositório como "linhas de código do projeto" é a
+primeira coisa que um revisor confere, e a primeira que derruba a
+credibilidade do resto do documento.
+
+**Divergência corrigida em 06/08/2026:** este arquivo dizia 23.819 linhas e o
+`arquitetura-visual.html` dizia 24.264 — dois documentos de referência com
+números diferentes para a mesma coisa. Ambos estavam desatualizados. Quando
+dois documentos discordam, os dois perdem autoridade.
 
 ---
 

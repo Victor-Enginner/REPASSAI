@@ -124,26 +124,88 @@ débito ANTES da chamada ao LLM — com estorno em caso de falha, exatamente
 como foi feito em 3.2. O trabalho é mecânico; o que falta é decidir o número
 de cada plano.
 
-### 3.5 Segredos e Armazenamento no Cliente
+### 3.6 Segredos e Armazenamento no Cliente
 * **Regra:** Nenhum segredo ou chave privada (API Key do Gemini/Groq, `SUPABASE_SECRET_KEY`, `R2_SECRET_ACCESS_KEY`) pode ser prefixado com `VITE_` ou exposto no front-end.
 * **Cookies:** Utilizar sempre cookies `HttpOnly`, `Secure` e `SameSite=Lax` para armazenar a sessão, em vez de `localStorage` (evitando riscos de XSS).
+
+### 3.7 O repositório é PÚBLICO — ⚠️ FATO OPERACIONAL
+
+Verificado em 06/08/2026 por consulta anônima à API do GitHub:
+`visibility: public`, aberto desde 25/07/2026. Um clone sem autenticação
+traz os 45 commits.
+
+Isso não é vulnerabilidade, é **contexto que muda o peso de todo o resto**:
+qualquer segredo que entre num commit é público no instante do push, e não
+existe "remover depois" — o histórico do git é permanente.
+
+**Auditoria do histórico (06/08/2026):** varredura de todos os objetos do
+repositório não encontrou nenhuma chave viva. As duas ocorrências de `AIza`
+são o placeholder `"AIzaSy...Sua_Chave_Aqui..."` do `.env.example`. O
+`backend/.env` que entrou em `f62e7fa` tinha os valores vazios.
+
+O comando que produz essa prova — varre objeto, não diff de commit, que é
+onde um diagnóstico apressado erra:
+
+```bash
+git rev-list --objects --all | awk '{print $1}' \
+  | git cat-file --batch-check='%(objectname) %(objecttype)' \
+  | awk '$2=="blob"{print $1}' | git cat-file --batch \
+  | grep -aoE "AIza[0-9A-Za-z_-]{30,}" | sort -u
+```
+
+**Risco real hoje:** segredos fora do padrão `.env`. `docs/ELASTIC DOC/api-key.txt`
+guardava uma chave viva da Elastic em `.txt` — fora das regras que o
+`.gitignore` cobria. Nunca chegou a ser commitado; hoje está ignorado.
 
 ---
 
 ## 🚀 4. Plano de Ação de Blindagem (Security Hardening Roadmap)
 
-### 📋 Checklist de Implementações Pendentes:
+> **Este checklist ficou desalinhado da seção 3 e foi reconciliado em
+> 06/08/2026.** Ele marcava como pendentes três itens que a seção 3, no mesmo
+> arquivo, já declarava fechados — quem lesse de baixo para cima refazia
+> trabalho pronto. Cada linha abaixo foi conferida contra o código, não contra
+> o texto da seção 3.
 
-- [ ] **1. Sanitização de IP por Borda (`app_api.py`)**
-  - Implementar prioridade para `CF-Connecting-IP` ao capturar a identidade anônima do cliente.
-- [ ] **2. Dedução Atômica de Cotas (`Supabase RPC`)**
-  - Criar função PostgreSQL com `FOR UPDATE` para impedir *race conditions* de cota.
-- [ ] **3. Filtro Anti-SSRF no Scraper OSINT (`scraper_monster.py`)**
-  - Adicionar validação de DNS e IP de destino antes de realizar requisições HTTP para domínios externos.
-- [ ] **4. Configuração de Proteção de Borda (Cloudflare WAF)**
-  - Configurar Rate Limiting de borda:
-    - Rotas `/api/auth/*`: 10 req/min por IP.
-    - Rotas de API geral: 60 req/min por IP.
-  - Ativar desafio Turnstile/JS para mitigação de botnets anônimas.
-- [ ] **5. Sanitização de Templates de Terceiros (`77lib`)**
-  - Remover dependências de CDNs públicos externos nos templates HTML para evitar vulnerabilidade de supply chain.
+- [x] **1. Sanitização de IP por Borda (`app_api.py`)** — ver 3.1
+  - `_ip_de_origem()` só lê cabeçalho quando `PROXY_HEADER_IP` declara qual
+    confiar; sem a env, vale o IP do socket.
+  - Verificado: função existe em `backend/app_api.py` e é quem `_identidade()`
+    chama. Teste `IdentidadeDoLimitador`.
+- [x] **2. Dedução Atômica de Cotas (`Supabase RPC`)** — ver 3.2
+  - O diagnóstico original estava errado: as RPCs já eram atômicas. O furo era
+    a ORDEM (débito depois do trabalho caro, retorno descartado).
+  - Verificado: `consumir_site_atomico` e `devolver_site_atomico` em
+    `backend/supabase_client.py`. Teste `CotaSobConcorrencia`.
+  - ⚠️ **Deploy pendente:** rodar `supabase/migrations/20260804_estorno_de_cota.sql`
+    no SQL Editor. Sem isso o estorno falha (débito e bloqueio funcionam).
+- [x] **3. Filtro Anti-SSRF** — ver 3.3, **com ressalva de escopo**
+  - O item pedia filtro em `scraper_monster.py`. Esse caminho **não existe**:
+    o módulo não busca URL vinda do usuário.
+  - O furo real era outro: `urlopen` seguia redirecionamento e a allowlist só
+    valia na primeira URL. Fechado com `RedirecionamentoRestrito`, que
+    revalida a cada salto. Teste `RedirecionamentoDoProxyDeMidia`.
+- [ ] **4. Configuração de Proteção de Borda (Cloudflare WAF)** — PENDENTE
+  - Rate limiting de borda: `/api/auth/*` 10 req/min por IP; API geral 60/min.
+  - Turnstile/JS challenge contra botnet anônima.
+  - Fora do código: depende de configuração no painel da Cloudflare.
+- [ ] **5. Sanitização de Templates de Terceiros (`77lib`)** — PENDENTE
+  - Medido em 06/08/2026: **16 templates** carregam **39 scripts** de CDN
+    externo, **0 deles com `integrity` (SRI)**.
+  - Consequência concreta: se um desses CDNs for comprometido, JavaScript
+    arbitrário roda no site de todo cliente já entregue — e nos visitantes
+    dele. Sem SRI, o navegador aceita o que vier.
+  - É o item aberto de maior alcance, porque atinge quem já pagou.
+
+### Itens que entraram depois
+
+- [x] **6. Injeção de comando no importador OriginKit** — fechado em 06/08/2026
+  - `subprocess.run(f'npx ... "{registry_url}"', shell=True)` executava comando
+    arbitrário se a URL colada contivesse aspa e `&&`. Agora é lista de
+    argumentos sem shell, com `shutil.which("npx")` para o Windows.
+  - Prova: mesma URL hostil criava arquivo do atacante com `shell=True` e não
+    cria com lista.
+- [x] **7. Scan de segurança no CI** — fechado em 06/08/2026
+  - O workflow escutava `push: main`, branch que não existe aqui. Rodava só em
+    pull request. Agora dispara em `master` e `codex/**`.
+  - Estado do gate: **exit 0**, 19s num checkout limpo.
