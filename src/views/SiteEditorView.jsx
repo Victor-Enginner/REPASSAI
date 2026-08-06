@@ -59,10 +59,19 @@ export default function SiteEditorView({ lead, onBack }) {
   }, [projectId]);
 
   const initAgenticPipeline = async () => {
-    const schema = await executeAgenticLoop(targetLead);
+    const schemaBase = await executeAgenticLoop(targetLead);
 
     // Garante que o arquivo HTML5 físico do site seja compilado pelo backend.
     // Usa fetchAutenticado: /api/site/generate passou a exigir token.
+    //
+    // A fusão cria um objeto NOVO em vez de mutar `schemaBase`. O loop agêntico
+    // devolve um schema com propriedades somente-leitura (`projectId` entre
+    // elas), então `Object.assign(schemaBase, ...)` lançava
+    // "Cannot assign to read only property 'projectId'" — e o catch abaixo
+    // rotulava a falha como "compilador offline". O backend respondia 200: o
+    // erro era do cliente, depois da resposta, e a mensagem mandava investigar
+    // o lugar errado. Por isso agora rede e fusão têm tratamentos separados.
+    let schema = schemaBase;
     try {
       const res = await fetchAutenticado('/api/site/generate', {
         method: 'POST',
@@ -72,11 +81,13 @@ export default function SiteEditorView({ lead, onBack }) {
       if (res.ok) {
         const data = await res.json();
         if (data.schema) {
-          Object.assign(schema, data.schema);
+          schema = { ...schemaBase, ...data.schema };
         }
+      } else {
+        console.warn(`/api/site/generate respondeu ${res.status}; seguindo com o schema local.`);
       }
     } catch (err) {
-      console.warn("Compilador /api/site/generate offline no init.", err);
+      console.warn('Nao foi possivel falar com /api/site/generate.', err);
     }
 
     try {

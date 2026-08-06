@@ -215,13 +215,21 @@ def bypass_dev_single_user():
 
 # Identidade usada só quando `bypass_dev_single_user()` é verdadeiro.
 #
-# O UUID é o nulo (todos zeros): é sintaticamente válido para o Postgres, o que
-# mantém as queries funcionando, e é reconhecível de imediato em qualquer log
-# ou tabela — ninguém confunde isso com um usuário real.
-USUARIO_DEV_LOCAL = {
-    "id": "00000000-0000-0000-0000-000000000000",
-    "email": "dev@local",
-}
+# O padrão é o UUID nulo: sintaticamente válido para o Postgres, então as
+# LEITURAS funcionam (devolvem vazio), e é reconhecível num log — ninguém
+# confunde isso com usuário real.
+#
+# ESCRITA é outra história. `perfis.user_id` tem chave estrangeira para
+# `auth.users`; um UUID que não existe lá faz o insert falhar com 23503, e a
+# API devolve 503. Para gravar em desenvolvimento, aponte REPASS_DEV_USER_ID
+# para o UUID de uma conta que exista de verdade no seu Supabase.
+def usuario_dev_local():
+    """Identidade local de desenvolvimento, configurável por env."""
+    return {
+        "id": os.environ.get("REPASS_DEV_USER_ID", "").strip()
+        or "00000000-0000-0000-0000-000000000000",
+        "email": os.environ.get("REPASS_DEV_USER_EMAIL", "").strip() or "dev@local",
+    }
 
 
 def auth_multiusuario_ativa():
@@ -486,7 +494,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         if usuario:
             return usuario
         if bypass_dev_single_user():
-            return USUARIO_DEV_LOCAL
+            return usuario_dev_local()
         return None
 
     def _usuario_atual(self):

@@ -116,14 +116,68 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
     { label: 'Imobiliária & Corretores', value: 'imobiliária, corretor de imóveis, vendas' }
   ];
 
+  /**
+   * As 27 unidades federativas.
+   *
+   * O dropdown listava quatro. Não era decisão de produto — o backend recebe
+   * `estado` como texto livre e nunca validou contra lista. Vinte e três
+   * estados estavam fora do produto por um array escrito à mão.
+   */
+  const UNIDADES_FEDERATIVAS = [
+    { sigla: 'AC', nome: 'Acre' },            { sigla: 'AL', nome: 'Alagoas' },
+    { sigla: 'AP', nome: 'Amapá' },           { sigla: 'AM', nome: 'Amazonas' },
+    { sigla: 'BA', nome: 'Bahia' },           { sigla: 'CE', nome: 'Ceará' },
+    { sigla: 'DF', nome: 'Distrito Federal' },{ sigla: 'ES', nome: 'Espírito Santo' },
+    { sigla: 'GO', nome: 'Goiás' },           { sigla: 'MA', nome: 'Maranhão' },
+    { sigla: 'MT', nome: 'Mato Grosso' },     { sigla: 'MS', nome: 'Mato Grosso do Sul' },
+    { sigla: 'MG', nome: 'Minas Gerais' },    { sigla: 'PA', nome: 'Pará' },
+    { sigla: 'PB', nome: 'Paraíba' },         { sigla: 'PR', nome: 'Paraná' },
+    { sigla: 'PE', nome: 'Pernambuco' },      { sigla: 'PI', nome: 'Piauí' },
+    { sigla: 'RJ', nome: 'Rio de Janeiro' },  { sigla: 'RN', nome: 'Rio Grande do Norte' },
+    { sigla: 'RS', nome: 'Rio Grande do Sul' },{ sigla: 'RO', nome: 'Rondônia' },
+    { sigla: 'RR', nome: 'Roraima' },         { sigla: 'SC', nome: 'Santa Catarina' },
+    { sigla: 'SP', nome: 'São Paulo' },       { sigla: 'SE', nome: 'Sergipe' },
+    { sigla: 'TO', nome: 'Tocantins' },
+  ];
+
+  /**
+   * Sugestões de cidade — atalho, não limite.
+   *
+   * O campo aceita qualquer texto; estas só aparecem no autocomplete e nos
+   * chips de acesso rápido. Capitais mais as praças onde já houve operação.
+   */
   const CIDADES_SUGERIDAS = [
     { nome: 'Franca', estado: 'SP' },
     { nome: 'São Paulo', estado: 'SP' },
-    { nome: 'Goiânia', estado: 'GO' },
     { nome: 'Campinas', estado: 'SP' },
     { nome: 'Ribeirão Preto', estado: 'SP' },
+    { nome: 'Goiânia', estado: 'GO' },
     { nome: 'Rio de Janeiro', estado: 'RJ' },
-    { nome: 'Belo Horizonte', estado: 'MG' }
+    { nome: 'Belo Horizonte', estado: 'MG' },
+    { nome: 'Uberlândia', estado: 'MG' },
+    { nome: 'Curitiba', estado: 'PR' },
+    { nome: 'Porto Alegre', estado: 'RS' },
+    { nome: 'Florianópolis', estado: 'SC' },
+    { nome: 'Salvador', estado: 'BA' },
+    { nome: 'Recife', estado: 'PE' },
+    { nome: 'Fortaleza', estado: 'CE' },
+    { nome: 'Brasília', estado: 'DF' },
+    { nome: 'Vitória', estado: 'ES' },
+    { nome: 'Manaus', estado: 'AM' },
+    { nome: 'Belém', estado: 'PA' },
+    { nome: 'Natal', estado: 'RN' },
+    { nome: 'João Pessoa', estado: 'PB' },
+    { nome: 'Maceió', estado: 'AL' },
+    { nome: 'Cuiabá', estado: 'MT' },
+    { nome: 'Campo Grande', estado: 'MS' },
+    { nome: 'Teresina', estado: 'PI' },
+    { nome: 'São Luís', estado: 'MA' },
+    { nome: 'Aracaju', estado: 'SE' },
+    { nome: 'Palmas', estado: 'TO' },
+    { nome: 'Porto Velho', estado: 'RO' },
+    { nome: 'Rio Branco', estado: 'AC' },
+    { nome: 'Macapá', estado: 'AP' },
+    { nome: 'Boa Vista', estado: 'RR' },
   ];
 
   const NICHOS_SUGERIDOS = [
@@ -312,29 +366,50 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
                 onChange={(e) => setSelectedEstado(e.target.value)}
                 style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
               >
-                <option value="SP">São Paulo (SP)</option>
-                <option value="GO">Goiás (GO)</option>
-                <option value="RJ">Rio de Janeiro (RJ)</option>
-                <option value="MG">Minas Gerais (MG)</option>
+                {/*
+                  As 27 unidades federativas.
+
+                  Eram quatro — SP, GO, RJ, MG — escritas à mão. O backend
+                  nunca teve essa limitação: `handle_scan` recebe `estado` como
+                  texto livre e repassa ao Google Places sem validar contra
+                  lista nenhuma. O teto estava só aqui, e cortava 23 estados
+                  do produto.
+                */}
+                {UNIDADES_FEDERATIVAS.map(uf => (
+                  <option key={uf.sigla} value={uf.sigla}>{uf.nome} ({uf.sigla})</option>
+                ))}
               </select>
             </div>
 
             <div>
               <label htmlFor="leads-cidade" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Cidade</label>
-              <select 
+              {/*
+                Campo LIVRE com sugestões, não lista fechada.
+
+                Eram sete cidades num <select>: não dava nem para digitar. Um
+                operador em Uberlândia simplesmente não conseguia usar o
+                produto. O backend sempre aceitou qualquer string — a prisão
+                era esta.
+
+                `list` + <datalist> dá o melhor dos dois: as cidades mais usadas
+                aparecem ao clicar, e qualquer outra pode ser digitada. É HTML
+                nativo, sem dependência nem componente novo.
+              */}
+              <input
                 id="leads-cidade"
-                value={selectedCidade} 
+                type="text"
+                list="leads-cidades-sugeridas"
+                value={selectedCidade}
                 onChange={(e) => setSelectedCidade(e.target.value)}
+                placeholder="Digite qualquer cidade do Brasil"
+                autoComplete="off"
                 style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
-              >
-                <option value="Franca">Franca</option>
-                <option value="São Paulo">São Paulo</option>
-                <option value="Goiânia">Goiânia</option>
-                <option value="Campinas">Campinas</option>
-                <option value="Ribeirão Preto">Ribeirão Preto</option>
-                <option value="Rio de Janeiro">Rio de Janeiro</option>
-                <option value="Belo Horizonte">Belo Horizonte</option>
-              </select>
+              />
+              <datalist id="leads-cidades-sugeridas">
+                {CIDADES_SUGERIDAS
+                  .filter(c => !selectedEstado || c.estado === selectedEstado)
+                  .map(c => <option key={`${c.nome}-${c.estado}`} value={c.nome} />)}
+              </datalist>
             </div>
 
             <div>
@@ -363,7 +438,12 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
           {/* Interactive City Chips */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
             <span className="mono-label" style={{ fontSize: '9px', color: 'var(--fg-muted)' }}>Cidades Rápidas:</span>
-            {CIDADES_SUGERIDAS.map(c => {
+            {/*
+              Só as cidades do estado escolhido. Com a lista nacional inteira,
+              31 chips numa linha viram ruído — o atalho deixaria de ser atalho.
+              Quem quiser outra cidade digita no campo, que é livre.
+            */}
+            {CIDADES_SUGERIDAS.filter(c => c.estado === selectedEstado).map(c => {
               const isSelected = selectedCidade.toLowerCase() === c.nome.toLowerCase();
               return (
                 <button
