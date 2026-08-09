@@ -427,12 +427,32 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             "default-src 'none'; "
             "script-src 'unsafe-inline' 'unsafe-eval' "
             "https://cdn.tailwindcss.com https://code.iconify.design "
-            "https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; "
+            "https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net "
+            # gstatic hospeda o decodificador Draco que o <model-viewer> baixa
+            # quando o .glb declara KHR_draco_mesh_compression — que é o caso
+            # de qualquer modelo exportado com compressão, o padrão hoje.
+            "https://www.gstatic.com; "
+            # O decodificador roda em Web Worker criado a partir de um blob.
+            # Sem esta linha, `worker-src` cai no `default-src 'none'` e o
+            # worker é barrado. O sintoma é traiçoeiro: o .glb baixa, nenhum
+            # erro aparece no console, nenhum evento `error` é emitido, e o
+            # modelo simplesmente nunca aparece.
+            "worker-src blob:; "
             "style-src 'unsafe-inline' https://fonts.googleapis.com; "
             "img-src https: data: blob:; "
             "font-src https://fonts.gstatic.com data:; "
             "media-src https: data: blob:; "
-            "connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; "
+            # `connect-src 'none'` barrava TODO modelo 3D. O <model-viewer>
+            # busca o .glb por fetch, e fetch e governado por connect-src —
+            # nao por img-src nem media-src. Medido: 0 de 16 modelos carregavam
+            # no template soda-3d-hero, com "Failed to fetch" e nenhum erro
+            # visivel no console, o que torna o sintoma dificil de atribuir.
+            #
+            # `https:` libera busca de asset por HTTPS e mantem fechado o que
+            # importa: sem `http:`, sem `data:`, sem origem local. O preview
+            # continua sem poder falar com a nossa propria API (connect-src nao
+            # inclui 'self'), que era o risco real de um HTML de terceiro.
+            "connect-src https:; object-src 'none'; base-uri 'none'; form-action 'none'; "
             f"frame-ancestors {frame_ancestors}",
         )
         self.send_header("Cache-Control", f"public, max-age={int(cache_segundos)}")

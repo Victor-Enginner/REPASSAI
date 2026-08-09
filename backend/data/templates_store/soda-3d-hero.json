@@ -1,0 +1,60 @@
+{
+  "slug": "soda-3d-hero",
+  "titulo": "Soda 3D Hero — Bebida com modelo interativo",
+  "descricao": "Hero de viewport cheia para bebida, com lata 3D em <model-viewer> que inclina seguindo o cursor, cerejas e folhas 3D com parallax e repulsão pelo ponteiro, bolhas PNG subindo e troca de sabor coreografada (fundo morfa, lata gira 720° com motion blur e troca a textura no pico). Sem build, sem framework: um único HTML autocontido.",
+  "arquivo": "soda-3d-hero.html",
+  "paleta": [
+    { "cor": "#0b8a78", "usos": 2 },
+    { "cor": "#044e3b", "usos": 2 },
+    { "cor": "#011411", "usos": 2 },
+    { "cor": "#0b4f8a", "usos": 2 },
+    { "cor": "#fbcfe8", "usos": 4 },
+    { "cor": "#011d17", "usos": 2 }
+  ],
+  "fontes": [
+    "Galada",
+    "Inter",
+    "Manrope",
+    "Outfit"
+  ],
+  "secoes": [
+    "Pure Zero — headline cursiva de viewport cheia",
+    "Lata 3D central que segue o cursor",
+    "Carrossel de sabores (Diet Classic / Zero Lime)",
+    "Refreshingly Clean — headline lateral",
+    "Selo de premiação"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "GSAP 3.12.2",
+    "Google model-viewer",
+    "WebGL / GLB",
+    "CSS Animations"
+  ],
+  "imagens": 3,
+  "modelos_3d": 4,
+  "preco_centavos": 0,
+  "comando_instalacao": "Baixe o .zip: o template é um index.html autocontido, sem build.",
+  "requisitos": [
+    "Navegador com WebGL — a lata e as cerejas são modelos GLB reais",
+    "Conexão ativa: modelos, texturas e bibliotecas vêm de CDN externo",
+    "Desktop: a interação depende de cursor (inclinação da lata e repulsão das cerejas)",
+    "Personalizar textos, preços e sabores antes de publicar"
+  ],
+  "dependencias_externas": {
+    "aviso": "Este template NÃO é autossuficiente. Se qualquer host abaixo cair ou bloquear, o site do cliente aparece quebrado — e quem responde por isso é você, não o CDN. Baixar os assets para o R2 é o passo que torna o template seguro para vender.",
+    "hosts": [
+      "api.getlayers.ai — 4 modelos GLB, 3 PNG/JPG de textura e produto",
+      "cdnjs.cloudflare.com — GSAP 3.12.2, sem SRI",
+      "unpkg.com — @google/model-viewer, sem SRI",
+      "fonts.googleapis.com / fonts.gstatic.com — Galada, Inter, Manrope, Outfit"
+    ]
+  },
+  "design_md": "# DESIGN.md — Soda 3D Hero\n\nSlug: `soda-3d-hero`\n\n## Objetivo\nHero de página inteira para bebida, construído em torno de um modelo 3D real\nque reage ao cursor. É o template mais pesado do catálogo e o único que usa\nWebGL — serve a marca que quer demonstrar produto, não a que quer vender\nserviço local.\n\n## Direção visual\n- Fundo em gradiente radial escuro que morfa entre teal (Classic) e azul\n  (Zero Lime) em 1.5s.\n- Tipografia cursiva `Galada` em escala enorme: `clamp(5rem, 10vw, 12rem)`\n  com `line-height: 0.8`. É a assinatura da página.\n- Acento rosa `#fbcfe8` em três lugares e só neles: item de nav ativo, ícone\n  de mais no CTA, borda do card selecionado.\n- Glassmorphism na navegação e nos cards: `backdrop-filter: blur(20px)`.\n\n## Movimento — o que não pode ser simplificado\nO valor deste template está no movimento. Reduzir qualquer item abaixo\ndescaracteriza a página:\n\n- Lata inclina seguindo o cursor, com suavização `lerp 0.05`.\n- Cerejas repelidas pelo ponteiro: raio 400px, força -80, `lerp 0.1`.\n- Parallax em três profundidades: frente ×60, fundo ×-30, folhas ×-15.\n- Troca de sabor: implosão ao centro (0.5s), troca do modelo, explosão para\n  posição aleatória (0.9s, `back.out(1.5)`), enquanto a lata gira 720° com\n  blur que sobe a 15px e volta a zero.\n- Bolhas nascem a cada 400ms e sobem -110vh girando 360°.\n\n## Estrutura de camadas (z-index)\nA ordem importa e é contraintuitiva: cerejas de frente ficam ACIMA do texto.\n\n- folhas: -1\n- cerejas de fundo: 0\n- lata: 1 (vira 50 durante a troca, para passar à frente das cerejas)\n- colunas de texto: 100\n- cerejas de frente: 110\n- header: 100\n\n## Regras de implementação\n- O `index.html` é a fonte de verdade: um arquivo, sem build.\n- Não trocar `<model-viewer>` por imagem: o produto girando É a página.\n- A página não rola (`overflow: hidden; height: 100vh`). Não adicionar seções\n  abaixo sem redesenhar o conceito.\n- Sem cursor não há interação — em toque a página vira estática. É limite do\n  conceito, não defeito.\n- Trocar apenas textos, preços, sabores e assets do novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, prêmio, anos de\n  mercado). O selo \"DESIGN AWARDS / PREMIUM BEVERAGE 2025\" é do exemplo:\n  remover ou substituir por prêmio real.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Soda 3D Hero\" como um único index.html autocontido, fiel ao original. Pure HTML/CSS/JS, sem build, sem framework, sem bundler. Use tags <script> de CDN para GSAP e para o web component <model-viewer> do Google. Preserve exatamente: o gradiente radial que morfa entre os dois temas, a lata 3D que inclina seguindo o cursor, o parallax em três profundidades, a repulsão das cerejas pelo ponteiro, as bolhas subindo, e a transição de sabor coreografada (fundo morfa, lata gira 720° com motion blur, textura troca no pico, cerejas implodem ao centro, trocam de modelo e explodem para posições aleatórias). Mantenha as constantes de animação como valores fixos: lerp do mouse 0.05, raio de repulsão 400px, força -80, parallax ×60/×-30/×-15, bolhas a cada 400ms. A página não rola.",
+    "customizacao": "Use o DESIGN.md para preservar o conceito e adaptar marca, copy, sabores, preços e assets 3D ao novo negócio. O movimento é o produto: não substitua os modelos 3D por imagens estáticas nem reduza as animações. Troque os GLB por modelos do produto real do cliente quando existirem. Remova o selo de premiação se o negócio não tiver prêmio — não invente número sobre o negócio (avaliação, anos de mercado, quantidade de clientes)."
+  },
+  "importado_em": "2026-08-09T00:00:00"
+}
