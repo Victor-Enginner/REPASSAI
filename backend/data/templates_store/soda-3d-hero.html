@@ -239,7 +239,11 @@ body.blue-theme {
 .hero-right {
     display: flex; flex-direction: column; justify-content: space-between;
     align-items: flex-end; text-align: right; height: 100%;
-    padding: 6rem 0; z-index: 100; width: 450px; pointer-events: none;
+    padding: 6rem 0; z-index: 100; pointer-events: none;
+    /* Era 450px fixos. Em tela larga o titulo crescia por vw e a coluna nao,
+       entao ele voltava a vazar. Agora a coluna acompanha a viewport ate um
+       teto, e o titulo cabe nas duas pontas. */
+    width: min(42vw, 620px);
 }
 
 @keyframes fadeInLeft { to { opacity: 1; transform: translateX(0); } }
@@ -290,7 +294,18 @@ body.blue-theme {
 
 .nav-arrow:hover { background: rgba(255, 255, 255, 0.1); }
 
-.side-title { align-self: flex-end; text-align: right; }
+/*
+  O titulo lateral usava a mesma escala do principal — clamp(5rem, 10vw, 12rem)
+  com white-space: nowrap. Medido em 1280px: a coluna tem 450px e "Refreshingly"
+  ocupava 629px. Ele escapava 180px para a esquerda e atravessava a lata: nem o
+  texto se lia, nem o produto se via.
+  Escala menor, dimensionada para caber na coluna em qualquer largura.
+*/
+.side-title {
+    align-self: flex-end;
+    text-align: right;
+    font-size: clamp(2.5rem, 5.5vw, 7rem);
+}
 
 @keyframes shine {
     from { transform: translateX(-100%) rotate(45deg); }
@@ -365,9 +380,16 @@ body.blue-theme {
                         <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
+                <!--
+                  Era "DESIGN AWARDS / PREMIUM BEVERAGE 2025", vindo do exemplo.
+                  Um prêmio que o negócio não tem é dado inventado — a mesma
+                  regra que a auditoria de templates aplica a telefone, nota e
+                  anos de mercado. Fica um selo neutro e verdadeiro; quem tiver
+                  prêmio de verdade troca por ele, quem não tiver apaga o bloco.
+                -->
                 <div class="award-text">
-                    <span class="award-title">DESIGN AWARDS</span>
-                    <span class="award-subtitle">PREMIUM BEVERAGE 2025</span>
+                    <span class="award-title">ZERO AÇÚCAR</span>
+                    <span class="award-subtitle">FÓRMULA ORIGINAL</span>
                 </div>
             </div>
         </div>
