@@ -28,7 +28,25 @@ const LIMIAR_QUENTE = 80;
 /** Conteúdo interno do card, sem a moldura. */
 function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSite }) {
   const ehDemo = Boolean(lead.is_demo);
-  const temSite = lead.status_site === 'tem_site';
+
+  /*
+    Quatro estados de presença digital, não dois.
+
+    O cartão tratava tudo que não fosse 'sem_site' como "Tem site". Quem só
+    tem Instagram aparecia com selo verde, igual a quem tem site próprio — e
+    era exatamente esse o lead que valia a ligação. O rótulo escondia a
+    oportunidade em vez de mostrá-la.
+
+    A classificação vem pronta do backend (places_engine.classificar_site),
+    para a varredura e a listagem do banco nunca discordarem entre si.
+  */
+  const PRESENCA = {
+    sem_site: { rotulo: 'Sem site', classe: 'badge badge-sem-site', acao: 'Criar site' },
+    so_rede_social: { rotulo: 'Só rede social', classe: 'badge badge-meio-site', acao: 'Criar site' },
+    site_inseguro: { rotulo: 'Site sem HTTPS', classe: 'badge badge-meio-site', acao: 'Ver site' },
+    tem_site: { rotulo: 'Tem site', classe: 'badge badge-tem-site', acao: 'Ver site' },
+  };
+  const presenca = PRESENCA[lead.status_site] || PRESENCA.sem_site;
 
   // Só é número se for número. `0` é válido; `null`/`undefined` não.
   const nota = typeof lead.avaliacao === 'number' ? lead.avaliacao : null;
@@ -142,10 +160,10 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
           </div>
 
           <span
-            className={temSite ? 'badge badge-tem-site' : 'badge badge-sem-site'}
+            className={presenca.classe}
             style={{ flexShrink: 0, padding: '3px 9px', borderRadius: '4px', fontWeight: 800 }}
           >
-            {temSite ? 'Tem site' : 'Sem site'}
+            {presenca.rotulo}
           </span>
         </div>
 
@@ -174,7 +192,7 @@ function Conteudo({ lead, selecionado, onAlternarSelecao, onEnviarCRM, onGerarSi
           style={{ flex: 1, justifyContent: 'center', padding: '10px 14px', fontSize: '11.5px', opacity: ehDemo ? 0.4 : 1, cursor: ehDemo ? 'not-allowed' : 'pointer' }}
           title={ehDemo ? 'Lead de demonstração' : undefined}
         >
-          <Globe size={14} /> {temSite ? 'Ver site' : 'Criar site'}
+          <Globe size={14} /> {presenca.acao}
         </button>
 
         <button

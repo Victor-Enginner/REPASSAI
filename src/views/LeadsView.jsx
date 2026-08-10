@@ -1,8 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Phone, Globe, Star, ArrowUpRight, Download, Send, Check, Sparkles, Filter, RefreshCw, Plus, X, Tag, Eye, ShieldCheck, AlertCircle } from 'lucide-react';
+// Os 5.571 municípios do IBGE, agrupados por UF. Gerado por
+// `node scripts/gerar-municipios.mjs` e versionado de propósito: consultar o
+// IBGE ao abrir a tela colocaria um serviço de terceiros no caminho crítico
+// do primeiro passo da varredura.
+import MUNICIPIOS_POR_UF from '../data/municipiosBR.json';
 import { apiUrl } from '../config';
 import { fetchAutenticado } from '../services/authService';
 import LeadCard from '../components/LeadCard';
+
+/**
+ * Ordem de prioridade comercial, da melhor oportunidade para a pior.
+ *
+ * Espelha `places_engine.FAIXA_*` no backend. A ordenação de verdade acontece
+ * lá — esta cópia serve só para a amostra de demonstração, que nunca passa
+ * pelo servidor. Se mudar a ordem lá, mude aqui: uma demonstração que ordena
+ * diferente do produto real ensina o operador a esperar a coisa errada.
+ */
+const FAIXA_DE_OPORTUNIDADE = {
+  sem_site: 0,
+  so_rede_social: 1,
+  site_inseguro: 2,
+  tem_site: 3,
+};
 
 function gerarLeadsLocalmente(cidade, estado, nichosStr, qtd = 20) {
   const nichos = (nichosStr || 'Serviços').split(',').map(n => n.trim()).filter(Boolean);
@@ -16,9 +36,23 @@ function gerarLeadsLocalmente(cidade, estado, nichosStr, qtd = 20) {
     const sufixo = sufixos[i % sufixos.length];
     const nichoCap = nicho.charAt(0).toUpperCase() + nicho.slice(1);
     const nome = `${nichoCap} ${sufixo} ${cidade}`;
-    const semSite = i % 2 === 0 || i % 3 === 0;
+
+    // Quatro presenças digitais, como na varredura real. A demonstração tinha
+    // só duas — sem site ou com site —, então a tela de exemplo não mostrava
+    // "só rede social", que é a segunda melhor oportunidade e existe de fato
+    // nos dados verdadeiros. Amostra que esconde uma categoria ensina errado.
+    const presencas = ['sem_site', 'so_rede_social', 'tem_site', 'sem_site', 'site_inseguro', 'tem_site'];
+    const presenca = presencas[i % presencas.length];
+    const dominio = nome.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const siteFalso = {
+      sem_site: null,
+      so_rede_social: `https://instagram.com/${dominio}`,
+      site_inseguro: `http://${dominio}.com.br`,
+      tem_site: `https://${dominio}.com.br`,
+    }[presenca];
+    const pontos = { sem_site: 100, so_rede_social: 70, site_inseguro: 55, tem_site: 40 }[presenca];
     const ddd = estado === 'SP' ? '16' : (estado === 'GO' ? '62' : (estado === 'RJ' ? '21' : '31'));
-    
+
     resultados.push({
       id: `scanned-${Date.now()}-${i}`,
       nome: nome,
@@ -32,9 +66,9 @@ function gerarLeadsLocalmente(cidade, estado, nichosStr, qtd = 20) {
       is_demo: true,
       telefone: null,
       whatsapp: null,
-      site: semSite ? null : `https://${nome.toLowerCase().replace(/[^a-z0-9]/g, '')}.com.br`,
-      status_site: semSite ? 'sem_site' : 'tem_site',
-      score: semSite ? 100 : Math.floor(60 + Math.random() * 30),
+      site: siteFalso,
+      status_site: presenca,
+      score: pontos,
       temperatura: 'Quente',
       avaliacao: (4.2 + Math.random() * 0.7).toFixed(1),
       reviewsCount: Math.floor(20 + Math.random() * 500),
@@ -48,6 +82,12 @@ function gerarLeadsLocalmente(cidade, estado, nichosStr, qtd = 20) {
     });
   }
   
+  // Mesma regra do backend: faixa primeiro, score dentro da faixa.
+  resultados.sort((a, b) => {
+    const faixa = FAIXA_DE_OPORTUNIDADE[a.status_site] - FAIXA_DE_OPORTUNIDADE[b.status_site];
+    return faixa !== 0 ? faixa : b.score - a.score;
+  });
+
   return resultados;
 }
 
@@ -179,6 +219,38 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
     { nome: 'Macapá', estado: 'AP' },
     { nome: 'Boa Vista', estado: 'RR' },
   ];
+
+  /**
+   * As cidades do estado escolhido, já em ordem alfabética.
+   *
+   * Acesso direto por UF, não filtro sobre os 5.571 municípios: a tela sempre
+   * pergunta o estado antes da cidade, então o agrupamento por UF é o formato
+   * natural do dado.
+   */
+  const cidadesDoEstado = MUNICIPIOS_POR_UF[selectedEstado] || [];
+
+  /**
+   * Troca o estado e reposiciona a cidade dentro dele.
+   *
+   * Sem isto, escolher Minas Gerais deixaria "Franca" (que é de SP) no
+   * estado. Um <select> controlado com valor fora das opções não mostra erro:
+   * ele exibe a primeira opção da lista enquanto o React ainda acha que o
+   * valor é o antigo — e a varredura sairia com o par cidade/estado errado,
+   * sem nada na tela denunciando.
+   *
+   * A cidade nova é a praça conhecida do estado, quando existe, senão a
+   * primeira da lista. Nunca fica vazia.
+   */
+  const handleEstadoChange = (uf) => {
+    const conhecida = CIDADES_SUGERIDAS.find(c => c.estado === uf);
+    const cidades = MUNICIPIOS_POR_UF[uf] || [];
+    const cidadeValida = conhecida && cidades.includes(conhecida.nome)
+      ? conhecida.nome
+      : (cidades[0] || '');
+
+    setSelectedEstado(uf);
+    setSelectedCidade(cidadeValida);
+  };
 
   const NICHOS_SUGERIDOS = [
     'salão de unhas',
@@ -362,8 +434,8 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
               <label htmlFor="leads-estado" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Estado</label>
               <select 
                 id="leads-estado"
-                value={selectedEstado} 
-                onChange={(e) => setSelectedEstado(e.target.value)}
+                value={selectedEstado}
+                onChange={(e) => handleEstadoChange(e.target.value)}
                 style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
               >
                 {/*
@@ -382,34 +454,33 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             </div>
 
             <div>
-              <label htmlFor="leads-cidade" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>Cidade</label>
+              <label htmlFor="leads-cidade" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>
+                Cidade <span style={{ color: 'var(--fg-muted)' }}>({cidadesDoEstado.length})</span>
+              </label>
               {/*
-                Campo LIVRE com sugestões, não lista fechada.
+                Lista fechada, alimentada pelo estado — não campo de digitação.
 
-                Eram sete cidades num <select>: não dava nem para digitar. Um
-                operador em Uberlândia simplesmente não conseguia usar o
-                produto. O backend sempre aceitou qualquer string — a prisão
-                era esta.
+                A versão anterior era um <input> livre com sugestões. Ela
+                resolvia o problema de cobertura (qualquer cidade do Brasil),
+                mas ao custo de exigir que o operador SOUBESSE e ESCREVESSE o
+                nome certo. Quem não lembra a grafia trava na primeira tela.
 
-                `list` + <datalist> dá o melhor dos dois: as cidades mais usadas
-                aparecem ao clicar, e qualquer outra pode ser digitada. É HTML
-                nativo, sem dependência nem componente novo.
+                Agora as três decisões — país, estado, cidade — são a mesma
+                operação: abrir e clicar. As 5.571 cidades vêm do IBGE, então
+                a lista é completa sem ninguém manter array à mão; e ser lista
+                fechada elimina de vez o erro de digitação chegando ao Places
+                como cidade inexistente.
               */}
-              <input
+              <select
                 id="leads-cidade"
-                type="text"
-                list="leads-cidades-sugeridas"
                 value={selectedCidade}
                 onChange={(e) => setSelectedCidade(e.target.value)}
-                placeholder="Digite qualquer cidade do Brasil"
-                autoComplete="off"
                 style={{ width: '100%', padding: '11px 12px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
-              />
-              <datalist id="leads-cidades-sugeridas">
-                {CIDADES_SUGERIDAS
-                  .filter(c => !selectedEstado || c.estado === selectedEstado)
-                  .map(c => <option key={`${c.nome}-${c.estado}`} value={c.nome} />)}
-              </datalist>
+              >
+                {cidadesDoEstado.map(nome => (
+                  <option key={nome} value={nome}>{nome}</option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -441,7 +512,9 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             {/*
               Só as cidades do estado escolhido. Com a lista nacional inteira,
               31 chips numa linha viram ruído — o atalho deixaria de ser atalho.
-              Quem quiser outra cidade digita no campo, que é livre.
+              Qualquer outra cidade do estado sai do <select> acima, que tem
+              todas; estes chips são o caminho de um clique para as praças
+              onde já houve operação.
             */}
             {CIDADES_SUGERIDAS.filter(c => c.estado === selectedEstado).map(c => {
               const isSelected = selectedCidade.toLowerCase() === c.nome.toLowerCase();
@@ -536,10 +609,23 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div style={{ fontWeight: '700', color: 'var(--fg-white)' }}>
                 {/* Contado dos dados reais. Antes era "22" fixo no código,
-                    que mentia para o operador em toda varredura. */}
+                    que mentia para o operador em toda varredura.
+
+                    Duas contas separadas, porque são duas conversas de venda
+                    diferentes: quem não tem nada, e quem tem só Instagram ou
+                    um site velho sem HTTPS. Somar os dois num "sem site" só
+                    inflava o número e escondia qual abordagem usar. */}
                 <span style={{ color: 'var(--accent-indigo)' }}>
-                  {displayLeads.filter(l => l.status_site !== 'tem_site').length} Sem site
-                </span> · {displayLeads.length} Encontrados
+                  {displayLeads.filter(l => l.status_site === 'sem_site').length} Sem site
+                </span>
+                {' · '}
+                <span
+                  style={{ color: 'var(--alerta)' }}
+                  title="Negócios com só Instagram/Facebook, ou com site antigo sem HTTPS. Têm presença, mas fraca — e por isso continuam sendo oportunidade."
+                >
+                  {displayLeads.filter(l => l.status_site === 'so_rede_social' || l.status_site === 'site_inseguro').length} Presença fraca
+                </span>
+                {' · '}{displayLeads.length} Encontrados
               </div>
             </div>
           </div>

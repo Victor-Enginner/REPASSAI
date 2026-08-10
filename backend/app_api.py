@@ -31,6 +31,7 @@ BACKEND_ENV = os.path.join(BACKEND_DIR, ".env")
 load_dotenv(BACKEND_ENV)
 
 from scraper_monster import OSINTCore
+import places_engine
 import llm_gateway
 import templates_store
 import supabase_client
@@ -1566,7 +1567,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             "endereco": registro.get("endereco"),
             "telefone": registro.get("telefone"),
             "site": registro.get("site"),
-            "status_site": "tem_site" if registro.get("site") else "sem_site",
+            "status_site": places_engine.classificar_site(registro.get("site")),
             "avaliacao": registro.get("rating"),
             "reviewsCount": registro.get("qtd_reviews"),
             "score": registro.get("score_oportunidade", 0),
@@ -1596,10 +1597,21 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             print(f"[Leads] Falha na listagem: {exc}")
             self._json(503, {"status": "error", "mensagem": "Nao foi possivel carregar seus leads."})
             return
-        self._json(200, {
-            "status": "success",
-            "leads": [self._lead_para_frontend(r) for r in registros],
-        })
+
+        leads = [self._lead_para_frontend(r) for r in registros]
+
+        # A varredura já entrega ordenado por oportunidade, mas essa ordem
+        # morria aqui: o banco devolvia por `atualizado_em`, ou seja, por
+        # ordem de mexida. Bastava recarregar a página para os negócios sem
+        # site — o motivo de existir da varredura — se espalharem no meio dos
+        # que já têm site.
+        #
+        # A ordenação é em Python, não no SQL, porque a faixa é derivada da
+        # URL do site e não existe como coluna. Com o teto de 500 registros
+        # isso é irrelevante; virando página no banco, vira coluna.
+        leads.sort(key=places_engine.chave_de_prioridade)
+
+        self._json(200, {"status": "success", "leads": leads})
 
     def handle_lead_status(self, body):
         """

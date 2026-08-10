@@ -155,6 +155,72 @@ def _eh_rede_social(url):
     return any(d in (url or "").lower() for d in dominios)
 
 
+# Faixas de oportunidade, da melhor para a pior. Menor número = aparece antes.
+#
+# A ordem não é estética: é a ordem em que o operador ganha dinheiro. Quem não
+# tem site é a venda direta; quem só tem Instagram é a venda fácil de explicar;
+# quem tem site sem HTTPS tem um site velho e um motivo concreto de conversa;
+# quem já tem site bom é o último a valer uma ligação.
+FAIXA_SEM_SITE = 0
+FAIXA_SO_REDE_SOCIAL = 1
+FAIXA_SITE_INSEGURO = 2
+FAIXA_TEM_SITE = 3
+
+
+def classificar_site(site):
+    """
+    Classifica a presença digital do negócio a partir da URL do Places.
+
+    Devolve um dos quatro rótulos usados pela tela e pela ordenação:
+    'sem_site', 'so_rede_social', 'site_inseguro' ou 'tem_site'.
+
+    Existe para que o mesmo julgamento valha na varredura e na listagem do
+    banco. Enquanto isso era um `"sem_site" if not site else "tem_site"`
+    escrito em dois lugares, "só rede social" — que é a segunda melhor
+    oportunidade comercial — aparecia na tela como se fosse um site pronto.
+    """
+    url = (site or "").strip()
+    if not url:
+        return "sem_site"
+    if _eh_rede_social(url):
+        return "so_rede_social"
+    if not url.lower().startswith("https://"):
+        return "site_inseguro"
+    return "tem_site"
+
+
+_FAIXA_POR_CLASSE = {
+    "sem_site": FAIXA_SEM_SITE,
+    "so_rede_social": FAIXA_SO_REDE_SOCIAL,
+    "site_inseguro": FAIXA_SITE_INSEGURO,
+    "tem_site": FAIXA_TEM_SITE,
+}
+
+
+def faixa_oportunidade(site):
+    """Faixa numérica para ordenar. Ver FAIXA_* acima."""
+    return _FAIXA_POR_CLASSE[classificar_site(site)]
+
+
+def chave_de_prioridade(lead):
+    """
+    Chave de ordenação de leads: faixa primeiro, score depois.
+
+    Ordenar só por score misturava as faixas. O score soma pontos por poucas
+    avaliações, então um negócio COM site e com 3 avaliações chegava a 40 e
+    passava na frente de um que só tem Instagram, que vale 30. Para quem vende
+    site, essa ordem está invertida: a ausência de site é o argumento, e o
+    número de avaliações é só o desempate.
+
+    Use com `sorted(leads, key=places_engine.chave_de_prioridade)`.
+    """
+    site = lead.get("site")
+    score = lead.get("score")
+    if score is None:
+        score = lead.get("score_oportunidade") or 0
+    return (faixa_oportunidade(site), -(score or 0))
+
+
 def score_oportunidade(place):
     """
     Calcula o score (0-100) e o motivo de abordagem a partir de dados reais.

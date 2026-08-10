@@ -296,7 +296,7 @@ class OSINTCore:
             "telefone": telefone,
             "whatsapp": whatsapp,
             "site": site,
-            "status_site": "sem_site" if not site else "tem_site",
+            "status_site": places_engine.classificar_site(site),
             "score": score,
             "osint_score": score,
             "motivo_abordagem": motivo,
@@ -408,7 +408,10 @@ class OSINTCore:
                 except Exception as e:
                     erros.append(f"place_id {pid}: {e}")
 
-        leads.sort(key=lambda x: x.get("score") or 0, reverse=True)
+        # Faixa de oportunidade primeiro, score dentro da faixa. Só por score,
+        # um negócio COM site e poucas avaliações passava na frente de um que
+        # só tem Instagram — invertendo justamente o que o operador procura.
+        leads.sort(key=places_engine.chave_de_prioridade)
         print(f"[OSINTCore] Varredura concluída: {len(leads)} leads reais.")
 
         return leads[:max_results], {
