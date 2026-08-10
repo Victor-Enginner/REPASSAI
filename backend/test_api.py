@@ -333,14 +333,36 @@ class TestRotasProtegidas(unittest.TestCase):
         except (urllib.error.URLError, OSError):
             self.skipTest("Servidor API offline, pulando teste de integração.")
 
-    def test_sem_token_nao_executa(self):
+    def _pular_se_login_nao_exigido(self, motivo):
+        """
+        Pula quando o servidor no ar legitimamente não pede login.
+
+        Estes testes cobram 401 de rotas protegidas. A pergunta certa é
+        `auth_exigida` ("login é exigido"), não `auth_ativo` ("Supabase está
+        configurado"). Com o modo single-user de desenvolvimento ligado o
+        Supabase segue configurado, então `auth_ativo` continua verdadeiro e o
+        teste cobrava 401 de um servidor que por desenho não pede — falha por
+        diagnóstico errado, não por vazamento.
+
+        O `skipTest` fica FORA do try de propósito: `unittest.SkipTest` herda
+        de Exception, e um `except Exception: pass` em volta engoliria o
+        próprio sinal de pular, deixando o teste seguir e falhar. Esse erro já
+        aconteceu neste arquivo.
+        """
+        estado = None
         try:
             with urllib.request.urlopen(f"{self.BASE}/api/auth/status", timeout=5) as res:
-                st = json.loads(res.read().decode("utf-8"))
-                if not st.get("auth_ativo"):
-                    self.skipTest("Multiusuário desligado no servidor; rotas são single-user por desenho.")
+                estado = json.loads(res.read().decode("utf-8"))
         except Exception:
-            pass
+            estado = None
+
+        if estado is not None and not estado.get("auth_exigida", estado.get("auth_ativo")):
+            self.skipTest(motivo)
+
+    def test_sem_token_nao_executa(self):
+        self._pular_se_login_nao_exigido(
+            "Servidor em modo single-user de desenvolvimento; rotas não pedem login por desenho."
+        )
         for rota in self.ROTAS:
             self.assertIn(
                 self._postar(rota), (400, 401, 429),
@@ -348,13 +370,9 @@ class TestRotasProtegidas(unittest.TestCase):
             )
 
     def test_token_invalido_nao_executa(self):
-        try:
-            with urllib.request.urlopen(f"{self.BASE}/api/auth/status", timeout=5) as res:
-                st = json.loads(res.read().decode("utf-8"))
-                if not st.get("auth_ativo"):
-                    self.skipTest("Multiusuário desligado no servidor.")
-        except Exception:
-            pass
+        self._pular_se_login_nao_exigido(
+            "Servidor em modo single-user de desenvolvimento."
+        )
         self.assertIn(self._postar("/api/leads/scan", token="token_falso_123"), (401, 429))
 
     def test_sites_nao_vazam_sem_token(self):
