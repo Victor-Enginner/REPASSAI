@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MessageSquare, Phone, MapPin, Sparkles, ArrowLeft, Send, CheckCircle2, Calendar, Zap, Filter, Flame } from 'lucide-react';
 import { generateSingleScript } from '../services/whatsappBulkEngine';
+import FiltroDeVidro from '../components/ui/FiltroDeVidro';
 
 export default function BulkWhatsAppView({ leads = [], onUpdateLeadStatus, onBack }) {
   const [filtro, setFiltro] = useState('todos');
@@ -79,6 +80,11 @@ export default function BulkWhatsAppView({ leads = [], onUpdateLeadStatus, onBac
 
   return (
     <div style={{ position: 'relative', padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', minHeight: '100vh', animation: 'fadeIn 0.3s ease' }}>
+
+      {/* Definição do filtro de refração consumido por .approach-card.
+          Não desenha nada; precisa existir no documento para o
+          `backdrop-filter: url(#repass-vidro-liquido)` ter o que referenciar. */}
+      <FiltroDeVidro />
 
       {/*
         O fundo saiu daqui.

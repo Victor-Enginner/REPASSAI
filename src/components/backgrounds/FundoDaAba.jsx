@@ -68,8 +68,14 @@ const REGISTRO = {
   crm:   { efeito: 'pixel-blast', opacidade: 0.34 },
 
   // --- Abordagem: já tinha o campo de fluxo embutido na view;
-  //     agora vem daqui, e a view voltou a ser só conteúdo. ---
-  bulk_whatsapp: { efeito: 'campo-de-fluxo', opacidade: 0.28 },
+  //     agora vem daqui, e a view voltou a ser só conteúdo.
+  //
+  //     0.28 -> 0.52. Aqui a opacidade do fundo não é gosto: os cartões
+  //     desta aba são de VIDRO, e vidro só aparece quando existe algo atrás
+  //     para refratar. Com o fundo fraco, a refração não tinha o que
+  //     entortar e o cartão lia como retângulo cinza. O fundo é o que faz
+  //     o material existir. ---
+  bulk_whatsapp: { efeito: 'campo-de-fluxo', opacidade: 0.52 },
 
   // --- Neutro (atmosfera da marca) ---
   dashboard:     NEUTRO,
