@@ -15,7 +15,7 @@ export default function AffiliateView() {
     <div style={{ padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', animation: 'fadeIn 0.3s ease' }}>
       
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
         <div>
           <span className="mono-label">MODULE // AFFILIATE_NETWORK_10</span>
           <h1 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '4px' }}>
@@ -35,14 +35,18 @@ export default function AffiliateView() {
       <div className="glass-panel" style={{ padding: '24px', marginBottom: '32px', background: 'var(--bg-surface)' }}>
         <span className="mono-label" style={{ marginBottom: '8px', display: 'block' }}>SEU LINK EXCLUSIVO DE AFILIADO</span>
         
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <input 
             type="text" 
             readOnly 
             aria-label="Seu link de afiliado"
             value={affiliateLink} 
             className="font-mono"
-            style={{ flex: 1, padding: '12px 16px', background: 'var(--bg-card)', border: '0.5px solid var(--sobre-15)', color: 'var(--fg-white)', fontSize: '13px' }}
+            /* `minWidth: 0` porque `flex: 1` sozinho não vence o `min-width:
+               auto` de um <input>, cuja largura mínima vem do atributo `size`
+               (20 caracteres por padrão) e não do espaço disponível. A 360px
+               isso empurrava 14px para fora da caixa. */
+            style={{ flex: '1 1 180px', minWidth: 0, padding: '12px 16px', background: 'var(--bg-card)', border: '0.5px solid var(--sobre-15)', color: 'var(--fg-white)', fontSize: '13px' }}
           />
           <button onClick={copyLink} className="btn-primary">
             {copied ? <Check size={14} color="#22c55e" /> : <Copy size={14} />}
@@ -52,7 +56,7 @@ export default function AffiliateView() {
       </div>
 
       {/* Metrics Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '24px' }}>
         <div className="glass-panel" style={{ padding: '24px', background: 'var(--bg-surface)' }}>
           <span className="mono-label">INDICAÇÕES ATIVAS</span>
           <div className="font-headline" style={{ fontSize: '36px', color: 'var(--fg-white)', marginTop: '8px' }}>14</div>

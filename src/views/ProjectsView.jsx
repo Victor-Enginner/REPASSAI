@@ -143,6 +143,8 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '12px',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease'
                     }}
@@ -155,7 +157,7 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
                       e.currentTarget.style.borderColor = '#e2e8f0';
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
                       <div style={{
                         width: '36px',
                         height: '36px',

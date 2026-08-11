@@ -92,6 +92,115 @@ test.describe('Responsividade e acessibilidade', () => {
     });
   }
 
+  /*
+    Todas as abas, em toda largura — não só a de Leads.
+
+    O bloco acima cobria uma tela só. Isso deixou passar quebra de layout em
+    Funil, Faturamento, Indicações, Meus Sites, Criar Site e na própria
+    Landing, achadas medindo à mão. Um teste que olha uma tela dá a sensação
+    de cobertura sem a cobertura.
+
+    A medida é `scrollWidth > clientWidth` no ELEMENTO, não só no documento:
+    o documento pode estar certo enquanto um cartão corta o nome do lead por
+    dentro. Foi assim que a Landing passava em "sem vazamento" com a faixa
+    do topo cortando 53px.
+
+    Dois casos ficam de fora, porque são corte INTENCIONAL e não vazamento:
+
+      · campo de formulário — input rola o próprio conteúdo por natureza;
+      · qualquer caixa com `overflow` diferente de `visible` — quem escreveu
+        `hidden`, `auto` ou `scroll` decidiu cortar ali. É o caso das
+        miniaturas da Loja de Templates, que renderizam o site em tamanho
+        real (927px) e reduzem por escala dentro de uma moldura pequena.
+
+    Sobra o que interessa: conteúdo transbordando de uma caixa que deveria
+    tê-lo contido.
+  */
+  /*
+    Larguras de APARELHO REAL, não números redondos.
+
+      360  Android mais estreito ainda em uso (Galaxy S8 e similares)
+      375  iPhone SE / 13 mini
+      494  janela de navegador arrastada até quase o mínimo — o caso que o
+           dono reportou, e que não corresponde a aparelho nenhum
+      768  tablet em retrato
+      1024 tablet em paisagem / notebook pequeno
+      1440 notebook e desktop
+
+    320px foi testado e NÃO entra: nenhum aparelho em uso hoje tem essa
+    largura, e as quebras que restam lá custariam mais do que valem. Está
+    registrado aqui para ninguém achar que passou despercebido.
+  */
+  const LARGURAS_DE_USO = [360, 375, 494, 768, 1024, 1440];
+
+  const ABAS = [
+    'Painel', 'Scanner de Leads', 'Funil de Vendas', 'Abordagem',
+    'Motor Neural', 'Agenda', 'Meus Sites', 'Faturamento',
+    'Indicações', 'Loja de Templates', 'Criar Site',
+  ];
+
+  async function medirCortes(page) {
+    return page.evaluate(() => {
+      const cortados = [];
+      document.querySelectorAll('body *').forEach((el) => {
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName)) return;
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return;
+        if (cs.overflowX !== 'visible' || cs.overflowY !== 'visible') return;
+        const caixa = el.getBoundingClientRect();
+        if (caixa.width < 8 || caixa.height < 8) return;
+        const excesso = el.scrollWidth - el.clientWidth;
+        if (excesso > 4) {
+          cortados.push(`${excesso}px em <${el.tagName.toLowerCase()}> "${(el.textContent || '').trim().slice(0, 30)}"`);
+        }
+      });
+      return {
+        documento: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+        cortados,
+      };
+    });
+  }
+
+  for (const largura of LARGURAS_DE_USO) {
+    test(`${largura}px — nenhuma aba corta conteúdo`, async ({ page }) => {
+      await page.setViewportSize({ width: largura, height: 900 });
+      await page.route('**/api/logs/stream', (route) => route.abort());
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+      // A Landing entra na conta: foi lá que o defeito apareceu primeiro.
+      const landing = await medirCortes(page);
+      expect(landing.documento, `Landing vaza na horizontal a ${largura}px`)
+        .toBeLessThanOrEqual(landing.viewport);
+      expect(landing.cortados, `Landing corta conteúdo a ${largura}px`).toEqual([]);
+
+      await page.getByRole('button', { name: 'ACESSAR PAINEL', exact: true }).click();
+      await page.getByRole('button', { name: 'Entrar Modo Demo →', exact: true }).click();
+
+      for (const aba of ABAS) {
+        // Em tela estreita a barra lateral é uma GAVETA fechada: os botões
+        // das abas existem no DOM mas não são clicáveis até abrir. Sem este
+        // passo o teste falhava por tempo esgotado no clique — o que parecia
+        // defeito de layout e era só navegação.
+        const abrirMenu = page.getByRole('button', { name: 'Abrir menu de navegação' });
+        if (await abrirMenu.isVisible().catch(() => false)) {
+          await abrirMenu.click();
+          await page.waitForTimeout(350);
+        }
+
+        const botao = page.locator('button', { hasText: aba }).first();
+        if (!(await botao.isVisible().catch(() => false))) continue;
+        await botao.click({ timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(400);
+
+        const m = await medirCortes(page);
+        expect(m.documento, `${aba} vaza na horizontal a ${largura}px`)
+          .toBeLessThanOrEqual(m.viewport);
+        expect(m.cortados, `${aba} corta conteúdo a ${largura}px`).toEqual([]);
+      }
+    });
+  }
+
   test('teclado, foco visível e auditoria Axe no painel', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await abrirLeads(page);

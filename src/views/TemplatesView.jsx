@@ -400,7 +400,7 @@ export default function TemplatesView({ onSelectTemplate }) {
                     )}
                   </div>
                 ) : (
-                  <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+                  <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))' }}>
                     <div>
                       <div className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-subtle)', marginBottom: '10px' }}>TECNOLOGIAS</div>
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
@@ -474,7 +474,7 @@ export default function TemplatesView({ onSelectTemplate }) {
       </div>
 
       {/* Busca + importação */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px', marginBottom: '22px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '12px', marginBottom: '22px' }}>
         <div style={{ position: 'relative' }}>
           <Search size={14} color="#64748b" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
@@ -558,7 +558,7 @@ export default function TemplatesView({ onSelectTemplate }) {
           )}
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '18px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))', gap: '18px' }}>
           {filtrados.map((t) => (
             <CartaoTemplate key={t.slug} template={t} onAbrir={setSlugAberto} />
           ))}

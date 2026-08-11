@@ -63,7 +63,7 @@ export default function DashboardView({ leads, onNavigateLeads, onNavigateCRM })
           </div>
 
           {/* Trapezoids Visual Funnel Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))', gap: '12px', marginBottom: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(96px, 100%), 1fr))', gap: '12px', marginBottom: '28px' }}>
             
             {/* Total */}
             <div style={{ background: 'linear-gradient(180deg, var(--sobre-12) 0%, var(--sobre-03) 100%)', padding: '20px 14px', textAlign: 'center', border: '0.5px solid var(--sobre-12)' }}>
@@ -129,7 +129,7 @@ export default function DashboardView({ leads, onNavigateLeads, onNavigateCRM })
         </div>
 
         {/* 2. Bottom Grid (2 Columns) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
           
           {/* Column 1: Funil de Leads & Leads Recentes */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
@@ -226,7 +226,7 @@ export default function DashboardView({ leads, onNavigateLeads, onNavigateCRM })
                 <span className="mono-label" style={{ color: 'var(--estado-sucesso)' }}>Plano: Gratuito</span>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px', fontSize: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(140px, 100%), 1fr))', gap: '10px', marginBottom: '16px', fontSize: '12px' }}>
                 <div style={{ background: 'var(--bg-card)', padding: '10px', border: '0.5px solid var(--sobre-08)' }}>
                   <div style={{ color: 'var(--fg-muted)', fontSize: '10px' }}>Leads este mês</div>
                   <div style={{ fontWeight: '700', color: 'var(--fg-white)', marginTop: '2px' }}>40 / 40</div>

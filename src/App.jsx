@@ -321,8 +321,13 @@ function AppMain() {
       de tudo, que anulava o tema claro e deixava texto tinta sobre preto
       (1.07 de contraste). O fundo agora é o do <body>, que segue o tema,
       e a atmosfera iridescente aparece por trás.
+      A largura é `100%`, não `100vw`. `100vw` é a largura da JANELA, barra
+      de rolagem inclusa: como a página rola na vertical, a barra ocupa ~6px
+      e o casco ficava 6px mais largo que o espaço disponível — em todas as
+      abas, medido a 768px. Pequeno, mas suficiente para a página tremer na
+      horizontal. `100%` respeita o espaço real do pai.
     */
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', overflowX: 'hidden', position: 'relative', background: 'transparent' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', overflowX: 'hidden', position: 'relative', background: 'transparent' }}>
 
       {/*
         Fundo da aba atual.

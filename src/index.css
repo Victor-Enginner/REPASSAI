@@ -21,6 +21,12 @@ body {
   color: var(--tinta);
   min-height: 100vh;
   overflow-x: hidden;
+
+  /* Rede de segurança contra vazamento horizontal.
+     Nome de negócio, URL e e-mail chegam do banco e podem ser longos e sem
+     espaço ("padariaedoceriadobairronovo.com.br"). Sem isto, UM lead com
+     nome comprido alarga a coluna inteira e empurra a tela para o lado. */
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-grayscale: grayscale;
   position: relative;
@@ -115,6 +121,13 @@ body::after {
   letter-spacing: var(--tracking-rotulo);
   color: var(--tinta-fraca);
   text-transform: uppercase;
+
+  /* Estes rótulos são tokens colados por sublinhado — "SEM_CARTÃO_DE_CRÉDITO",
+     "TURMA_BETA_LIMITADA". Para o navegador, cada um é UMA palavra só, e
+     palavra não quebra: a 375px o texto media 168px dentro de uma caixa de
+     130px e vazava. `anywhere` autoriza a quebra e, de quebra, ensina o
+     grid a calcular o tamanho mínimo real desta coluna. */
+  overflow-wrap: anywhere;
 }
 
 /* Wordmark: tracking largo, como no logo. */

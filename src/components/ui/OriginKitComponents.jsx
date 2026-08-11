@@ -16,7 +16,7 @@ export function OriginKitBentoGrid({ items = [] }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
       gap: '20px',
       margin: '32px 0'
     }}>
@@ -77,7 +77,7 @@ export function GallerySection({ images = [], backupPrompt = "Ambiente Real" }) 
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', maxWidth: '1200px', margin: '0 auto' }}>
         {displayImages.map((src, index) => (
           <div 
             key={index} 

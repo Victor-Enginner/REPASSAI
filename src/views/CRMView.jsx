@@ -45,7 +45,9 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
       <div style={{
         position: 'fixed',
         inset: 0,
-        width: '100vw',
+        /* 100% e não 100vw: `vw` conta a barra de rolagem e sobra sempre a
+           largura dela. Ver App.jsx. */
+        width: '100%',
         height: '100vh',
         opacity: 0.2,
         pointerEvents: 'none',
@@ -53,7 +55,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
         background: 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.25) 0%, transparent 70%)'
       }} />
       {/* Header Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
           <span className="mono-label">PIPELINE // SALES_CRM_03</span>
           <h1 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '4px' }}>
@@ -72,7 +74,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
       </div>
 
       {/* Kanban Board Columns - Enquadramento Fixo com GradualBlur */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', alignItems: 'stretch' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px', alignItems: 'stretch' }}>
         {columns.map(col => {
           const colLeads = leads.filter(l => l.status_crm === col.id);
 
@@ -147,7 +149,16 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                       >
                         {/* Top Row: Title & Temperature */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                          <div>
+                          {/*
+                            `minWidth: 0` não é detalhe: filho de flex nasce com
+                            `min-width: auto`, o que o proíbe de encolher abaixo
+                            da própria palavra mais longa. Numa coluna de funil
+                            de 126px, "RESTAURANTE BARÃO" empurrava 52px para
+                            fora do cartão — medido a 320px. Com o mínimo em
+                            zero, o nome quebra em duas linhas e a coluna
+                            respeita a largura que tem.
+                          */}
+                          <div style={{ minWidth: 0 }}>
                             <h3 className="font-headline" style={{ fontSize: '15px', color: 'var(--fg-white)', lineHeight: 1.2 }}>
                               {lead.nome}
                             </h3>
@@ -162,17 +173,34 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
                         </div>
 
                         {/* Phone & Status */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'var(--fg-muted)' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Phone size={12} /> {lead.telefone}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap', fontSize: '11px', color: 'var(--fg-muted)' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px', minWidth: 0 }}>
+                            <Phone size={12} style={{ flexShrink: 0 }} /> {lead.telefone || 'Sem telefone'}
                           </span>
-                          <span className={lead.status_site === 'tem_site' ? 'badge badge-tem-site' : 'badge badge-sem-site'}>
-                            {lead.status_site === 'tem_site' ? 'Tem site' : 'Sem site'}
+                          {/*
+                            As mesmas quatro classes de presença do Scanner.
+                            Este cartão ainda perguntava "tem site: sim ou não",
+                            então um lead que só tem Instagram aparecia aqui
+                            como "Tem site" — verde — enquanto no Scanner
+                            aparecia como oportunidade. Duas telas discordando
+                            sobre o mesmo lead corroem a confiança nas duas.
+                          */}
+                          <span className={
+                            lead.status_site === 'tem_site' ? 'badge badge-tem-site'
+                            : lead.status_site === 'sem_site' ? 'badge badge-sem-site'
+                            : 'badge badge-meio-site'
+                          }>
+                            {{
+                              sem_site: 'Sem site',
+                              so_rede_social: 'Só rede social',
+                              site_inseguro: 'Site sem HTTPS',
+                              tem_site: 'Tem site',
+                            }[lead.status_site] || 'Sem site'}
                           </span>
                         </div>
 
                         {/* Quick Action Buttons */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))', gap: '8px', marginTop: '4px' }}>
                           {waLink ? (
                             <a
                               href={waLink}
@@ -273,7 +301,7 @@ export default function CRMView({ leads, setLeads, onGenerateSite }) {
             width: '100%',
             boxShadow: '0 20px 40px rgba(15, 23, 42, 0.12)'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
               <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>NEURAL SCRIPT // {selectedLeadForScript.nome}</span>
               <button onClick={() => setSelectedLeadForScript(null)} style={{ background: 'none', border: 'none', color: 'var(--fg-bright)', cursor: 'pointer', fontSize: '18px' }}>✕</button>
             </div>

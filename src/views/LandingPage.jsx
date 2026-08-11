@@ -85,16 +85,32 @@ export default function LandingPage({ onOpenApp }) {
       <ScrollJourneyLine strokeColor="var(--accent-indigo)" glowColor="var(--accent-rosa)" />
 
       {/* 1. Architectural Navigation Bar Português BR */}
+      {/*
+        Cabeçalho que encolhe com a janela.
+
+        Era `height: 72px` e `padding: 0 40px` fixos. A 494px isso deixava
+        449px úteis para 502px de conteúdo — medido — e a marca, o selo de
+        beta e o botão eram cortados na borda direita.
+
+        Três mudanças, nenhuma delas uma faixa de tamanho fixa:
+          · `minHeight` no lugar de `height`, para o conteúdo poder ocupar
+            duas linhas em vez de vazar da faixa;
+          · `padding` proporcional via clamp — 40px na tela grande, 16px na
+            pequena, e todos os valores intermediários enquanto se arrasta;
+          · `flexWrap`, para o botão descer em vez de ser espremido.
+      */}
       <nav style={{
-        height: '72px',
+        minHeight: '72px',
         width: '100%',
         background: 'rgba(255, 255, 255, 0.92)',
         backdropFilter: 'blur(20px)',
         borderBottom: '0.5px solid var(--hairline-color)',
-        padding: '0 40px',
+        padding: '10px clamp(16px, 4vw, 40px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px',
         position: 'sticky',
         top: 0,
         zIndex: 50,
@@ -209,11 +225,27 @@ export default function LandingPage({ onOpenApp }) {
       </section>
 
       {/* 3. Command Bar Português BR (Horizontal 4-Column Strip) */}
+      {/*
+        Quatro colunas que VIRAM duas e depois uma, conforme a janela.
+
+        Era `2fr 1fr 1fr 1fr` com altura travada em 72px: as proporções se
+        mantinham em qualquer largura, então a 494px as quatro colunas
+        viravam faixas de ~70px e o conteúdo era cortado dentro da própria
+        caixa — medido: caixa de 449px para 502px de conteúdo.
+
+        `auto-fit` + `minmax` resolve sem faixa de tamanho fixa: cada coluna
+        se recusa a ficar menor que 150px, e quando não cabem todas na
+        linha, sobra uma a menos. Isso acontece a cada pixel que o operador
+        arrasta a borda da janela, não em três larguras pré-combinadas.
+
+        `height` virou `minHeight` porque, empilhado, 72px não comportam
+        duas linhas — o texto vazava para fora da faixa.
+      */}
       <section style={{
-        height: '72px',
+        minHeight: '72px',
         width: '100%',
         display: 'grid',
-        gridTemplateColumns: '2fr 1fr 1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
         borderTop: '0.5px solid var(--hairline-color)',
         borderBottom: '0.5px solid var(--hairline-color)',
         background: 'var(--bg-card)'
@@ -286,7 +318,7 @@ export default function LandingPage({ onOpenApp }) {
         </div>
 
         {/* 4 Cards de Estatísticas em Tempo Real */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', borderTop: '0.5px solid var(--hairline-color)', paddingTop: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', borderTop: '0.5px solid var(--hairline-color)', paddingTop: '32px' }}>
           <div style={{ background: 'var(--bg-card)', padding: '20px', border: '0.5px solid var(--hairline-color)', borderRadius: '10px', boxShadow: '0 4px 16px rgba(15,23,42,0.03)' }}>
             <div className="font-headline" style={{ fontSize: '28px', color: 'var(--accent-indigo)' }}>12.000+</div>
             <div style={{ fontSize: '12px', color: 'var(--fg-muted)', marginTop: '4px' }}>negócios analisados</div>
@@ -320,7 +352,7 @@ export default function LandingPage({ onOpenApp }) {
           Seis passos, na ordem exata em que você faz no painel. Siga cada um e feche seu primeiro cliente hoje.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '24px' }}>
           {[
             {
               n: '1',
@@ -380,7 +412,8 @@ export default function LandingPage({ onOpenApp }) {
           Você não vende só um site, vende tranquilidade. Cobre pela hospedagem, atualizações e manutenção enquanto o LeadSite faz o trabalho pesado.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
+        {/* Duas colunas enquanto couberem 280px em cada; abaixo disso, uma. */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '40px', alignItems: 'center' }}>
           
           {/* Sliders de Ajuste */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -477,7 +510,11 @@ export default function LandingPage({ onOpenApp }) {
           </h2>
 
           {/* Toggle Mensal / Anual */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--bg-surface)', padding: '4px', borderRadius: '30px', border: '0.5px solid var(--hairline-color)' }}>
+          {/* `inline-flex` sem `flexWrap` mantinha os dois botões lado a lado a
+              qualquer custo: a 320px o par media 211px numa caixa de 166px e
+              vazava. Com quebra permitida, "Anual" desce em vez de estourar.
+              `maxWidth` impede o pill de ficar mais largo que a coluna. */}
+          <div style={{ display: 'inline-flex', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%', alignItems: 'center', gap: '8px', background: 'var(--bg-surface)', padding: '4px', borderRadius: '30px', border: '0.5px solid var(--hairline-color)' }}>
             <button 
               onClick={() => setBillingCycle('mensal')}
               style={{ padding: '8px 20px', borderRadius: '20px', border: 'none', background: billingCycle === 'mensal' ? 'var(--accent-indigo)' : 'transparent', color: billingCycle === 'mensal' ? 'var(--bg-card)' : 'var(--fg-muted)', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
@@ -493,7 +530,7 @@ export default function LandingPage({ onOpenApp }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(270px, 100%), 1fr))', gap: '20px' }}>
           
           {/* Gratuito */}
           <div className="glass-panel" style={{ padding: '28px', background: 'var(--bg-card)', borderRadius: '10px', border: '0.5px solid var(--hairline-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

@@ -536,7 +536,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         {/* Filter Bar with Responsive Grid */}
         <div data-testid="leads-controls" className="glass-panel" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-surface)', borderRadius: '8px' }}>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', alignItems: 'flex-end', marginBottom: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: '16px', alignItems: 'flex-end', marginBottom: '16px' }}>
             
             <div>
               <label htmlFor="leads-pais" className="mono-label" style={{ display: 'block', marginBottom: '6px', fontSize: '9px' }}>País</label>
@@ -798,7 +798,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         </div>
 
         {/* Lead Cards Grid - Redesenhado no estilo fiel da UseLeadSite */}
-        <div data-testid="leads-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div data-testid="leads-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           {displayLeads.map((lead) => (
             <LeadCard
               key={lead.id}
@@ -843,7 +843,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
               Relatório de Oportunidade OSINT
             </h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(160px, 100%), 1fr))', gap: '12px', marginBottom: '20px' }}>
               <div style={{ background: 'var(--bg-card)', padding: '14px', border: '0.5px solid var(--hairline-color)', borderRadius: '4px' }}>
                 <div style={{ fontSize: '10px', color: 'var(--fg-muted)' }}>STATUS DO DOMÍNIO</div>
                 <div style={{ fontSize: '14px', fontWeight: '700', color: activeLeadForModal.status_site === 'tem_site' ? 'var(--estado-sucesso)' : 'var(--estado-erro)', marginTop: '4px' }}>

@@ -139,7 +139,7 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
         {/* Abas Superiores das Opções */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))',
           gap: '4px',
           background: 'var(--papel-elevado)',
           padding: '4px',
@@ -355,10 +355,14 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
         </div>
 
         {/* Rodapé do Card: Seletor de Modelo Pop-up & Botão Gerar */}
+        {/* Seletor de modelo à esquerda, "Gerar" à direita. Sem quebra, a
+            360px o par pedia 7px a mais do que o cartão tinha. */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
           paddingTop: '16px',
           borderTop: '1px solid #f1f5f9',
           position: 'relative'

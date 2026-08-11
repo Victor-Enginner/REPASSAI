@@ -97,7 +97,7 @@ export default function AIEngineView() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '24px', alignItems: 'start' }}>
 
         {/* Coluna: estado da cadeia */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -106,7 +106,7 @@ export default function AIEngineView() {
           </h2>
 
           <div className="glass-panel" style={{ padding: '20px', background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', borderRadius: '4px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '18px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))', gap: '18px' }}>
               <div>
                 <div className="mono-label" style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}>MOTORES PRONTOS</div>
                 <div style={{ fontSize: '26px', fontWeight: 900, color: 'var(--fg-white)', marginTop: '4px' }}>

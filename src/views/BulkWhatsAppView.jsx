@@ -185,7 +185,7 @@ export default function BulkWhatsAppView({ leads = [], onUpdateLeadStatus, onBac
         ) : (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))',
             columnGap: '20px',
             rowGap: '36px'
           }}>
@@ -259,7 +259,7 @@ export default function BulkWhatsAppView({ leads = [], onUpdateLeadStatus, onBac
                   </div>
 
                   {/* Botões de Ação Principal: WhatsApp & Script IA */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))', gap: '10px' }}>
                     {linkWhatsApp ? (
                       <a
                         href={linkWhatsApp}
@@ -294,7 +294,7 @@ export default function BulkWhatsAppView({ leads = [], onUpdateLeadStatus, onBac
                     <div style={{ fontSize: '10px', color: 'var(--fg-subtle)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
                       Mover Estágio no Funil:
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(96px, 100%), 1fr))', gap: '6px' }}>
                       <button
                         onClick={() => handleAtualizarStatus(lead.id, 'Em Negociação')}
                         disabled={leadSalvando === lead.id}
