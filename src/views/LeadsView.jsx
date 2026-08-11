@@ -143,18 +143,87 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
     if (estaNoFim) caixa.scrollTop = caixa.scrollHeight;
   }, [logStream]);
 
-  const OPCOES_NICHOS_DROPDOWN = [
-    { label: 'Todos os Nichos (Varredura Ampla)', value: 'salão de unhas, barbearia, hamburgueria, academia, estética facial, pet shop, odontologia, oficina mecânica' },
-    { label: 'Salão de Unhas & Estética Facial', value: 'salão de unhas, estética facial, manicure, spa' },
-    { label: 'Barbearia & Estilo VIP', value: 'barbearia, corte masculino, barba' },
-    { label: 'Hamburgueria & Gastronomia', value: 'hamburgueria, restaurante, lanchonete, marmita' },
-    { label: 'Pet Shop & Cuidados Animais', value: 'pet shop, banho e tosa, clínica veterinária' },
-    { label: 'Academias & Fitness', value: 'academia, crossfit, pilates' },
-    { label: 'Odontologia & Saúde', value: 'odontologia, dentista, consultório médico' },
-    { label: 'Oficina Mecânica & Auto', value: 'oficina mecânica, auto center, funilaria' },
-    { label: 'Pizzarias & Delivery', value: 'pizzaria, delivery, restaurante' },
-    { label: 'Imobiliária & Corretores', value: 'imobiliária, corretor de imóveis, vendas' }
+  /**
+   * Nichos agrupados PELO MOTIVO de o site converter, não por ordem
+   * alfabética — o agrupamento é a explicação.
+   *
+   * A pergunta que o operador precisa responder antes de ligar não é "que
+   * tipo de negócio é este", e sim "por que este negócio perde dinheiro sem
+   * site". São quatro respostas possíveis, e elas mudam o argumento de venda:
+   *
+   *  1. DECISÃO CARA — o cliente pesquisa antes de gastar. Sem site, ele
+   *     compara você com quem tem, e perde. É o grupo de maior ticket.
+   *  2. VENDE MOSTRANDO — a decisão é visual. Instagram até mostra, mas não
+   *     organiza: ninguém acha o trabalho de dois anos atrás numa timeline.
+   *  3. AGENDAMENTO E CARDÁPIO — o site tira trabalho do dono. Deixa de
+   *     responder "qual o preço" e "que horas abre" vinte vezes por dia.
+   *  4. URGÊNCIA — o cliente busca no celular e liga no primeiro. Aqui o
+   *     site ajuda MENOS: o perfil do Google com avaliação é que decide.
+   *     Estão no fim da lista de propósito.
+   *
+   * Cada preset tem no máximo LIMITE_NICHOS_POR_VARREDURA itens, porque é o
+   * que o backend aceita por varredura. Preset maior seria cortado calado.
+   */
+  const GRUPOS_DE_NICHOS = [
+    {
+      grupo: '1 · Decisão cara — o cliente pesquisa antes',
+      opcoes: [
+        { label: 'Odontologia & Implantes', value: 'odontologia, dentista, implante dentário, ortodontia, clínica odontológica, aparelho dentário' },
+        { label: 'Clínicas & Terapias', value: 'fisioterapia, psicologia, nutricionista, quiropraxia, fonoaudiologia, terapia ocupacional' },
+        { label: 'Estética Avançada', value: 'clínica de estética, harmonização facial, micropigmentação, depilação a laser, massoterapia, spa' },
+        { label: 'Advocacia & Contabilidade', value: 'advocacia, escritório de advocacia, contabilidade, escritório contábil, despachante, consultoria' },
+        { label: 'Imobiliária & Arquitetura', value: 'imobiliária, corretor de imóveis, arquitetura, design de interiores, engenharia, paisagismo' },
+        { label: 'Educação & Cursos', value: 'autoescola, escola de idiomas, curso profissionalizante, escola infantil, reforço escolar, escola de música' },
+        { label: 'Energia Solar & Automação', value: 'energia solar, automação residencial, ar condicionado, elétrica predial, câmeras de segurança, alarmes' },
+      ],
+    },
+    {
+      grupo: '2 · Vende mostrando — precisa de portfólio',
+      opcoes: [
+        { label: 'Fotografia & Filmagem', value: 'fotografia, fotógrafo, filmagem, estúdio fotográfico, filmmaker, ensaio fotográfico' },
+        { label: 'Eventos & Buffet', value: 'buffet, chácara para eventos, salão de festas, espaço de eventos, decoração de festas, cerimonial' },
+        { label: 'Marcenaria & Planejados', value: 'móveis planejados, marcenaria, serralheria, marmoraria, vidraçaria, gesso e drywall' },
+        { label: 'Tatuagem & Body Art', value: 'tatuagem, estúdio de tatuagem, piercing, tatuador, body art, micropigmentação' },
+        { label: 'Moda & Noivas', value: 'loja de noivas, aluguel de trajes, moda feminina, loja de roupas, brechó, loja de calçados' },
+      ],
+    },
+    {
+      grupo: '3 · Agendamento e cardápio — tira trabalho do dono',
+      opcoes: [
+        { label: 'Todos os Nichos (Varredura Ampla)', value: 'salão de unhas, barbearia, hamburgueria, academia, estética facial, pet shop' },
+        { label: 'Barbearia & Estilo VIP', value: 'barbearia, corte masculino, barba, salão masculino, barber shop, barbearia infantil' },
+        { label: 'Salão, Unhas & Sobrancelhas', value: 'salão de unhas, manicure, design de sobrancelhas, alongamento de unhas, cabeleireiro, lash designer' },
+        { label: 'Academias & Fitness', value: 'academia, crossfit, pilates, personal trainer, muay thai, studio de treino' },
+        { label: 'Restaurantes & Delivery', value: 'restaurante, pizzaria, hamburgueria, lanchonete, marmitaria, self service' },
+        { label: 'Padaria, Doces & Café', value: 'padaria, confeitaria, cafeteria, doceria, casa de bolos, salgaderia' },
+        { label: 'Açaí, Sorvete & Lanches', value: 'açaí, sorveteria, espetinho, pastelaria, food truck, creperia' },
+        { label: 'Hospedagem & Turismo', value: 'pousada, hotel, chácara, camping, pesqueiro, casa de campo' },
+        { label: 'Pet Shop & Veterinária', value: 'pet shop, banho e tosa, clínica veterinária, veterinário, hotel para pets, adestrador' },
+        { label: 'Joalheria, Ótica & Presentes', value: 'joalheria, ótica, relojoaria, perfumaria, loja de presentes, semijoias' },
+      ],
+    },
+    {
+      grupo: '4 · Urgência — aqui o site pesa menos',
+      opcoes: [
+        { label: 'Automotivo', value: 'oficina mecânica, auto center, funilaria, autopeças, lava rápido, borracharia' },
+        { label: 'Construção & Reforma', value: 'construtora, reforma, pintura predial, eletricista, encanador, pedreiro' },
+        { label: 'Casa & Manutenção', value: 'dedetizadora, chaveiro, piscinas, desentupidora, jardinagem, limpeza pós-obra' },
+      ],
+    },
   ];
+
+  /**
+   * Teto de nichos por varredura, espelhando NicheFilter.MAX_NICHOS no
+   * backend (backend/scraper_monster.py).
+   *
+   * O backend SEMPRE cortou em 6, mas em silêncio: o preset "Varredura Ampla"
+   * tinha 8 nichos, o rodapé anunciava 8, e dois eram descartados sem nada na
+   * tela. O operador acreditava ter varrido nichos que nunca foram buscados.
+   *
+   * O teto existe por dinheiro, não por capricho: cada nicho é uma busca a
+   * mais no Places, e cada lead custa duas chamadas (~US$ 17 / 1.000).
+   */
+  const LIMITE_NICHOS_POR_VARREDURA = 6;
 
   /**
    * As 27 unidades federativas.
@@ -252,17 +321,27 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
     setSelectedCidade(cidadeValida);
   };
 
+  /**
+   * Atalhos de um clique. Não é a lista de nichos possíveis — o campo aceita
+   * qualquer termo, e os presets acima cobrem 25 combinações.
+   *
+   * A escolha aqui é por TICKET e frequência: os que mais costumam fechar
+   * primeiro. Odontologia e advocacia entram porque são o maior valor por
+   * venda; barbearia e salão porque são os mais numerosos em qualquer cidade.
+   */
   const NICHOS_SUGERIDOS = [
-    'salão de unhas',
-    'barbearia',
-    'hamburgueria',
-    'estética facial',
-    'pet shop',
-    'academia',
     'odontologia',
+    'clínica de estética',
+    'advocacia',
+    'imobiliária',
+    'energia solar',
+    'barbearia',
+    'salão de unhas',
+    'academia',
+    'pet shop',
+    'restaurante',
+    'padaria',
     'oficina mecânica',
-    'pizzaria',
-    'imobiliária'
   ];
 
   const handleNichoDropdownChange = (e) => {
@@ -334,7 +413,13 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
     }
   };
 
-  const nichosListActive = selectedNicho.split(',').map(n => n.trim().toLowerCase()).filter(Boolean);
+  const nichosEscolhidos = selectedNicho.split(',').map(n => n.trim().toLowerCase()).filter(Boolean);
+
+  // O backend corta em LIMITE_NICHOS_POR_VARREDURA e devolve só o que coube.
+  // Repetir o corte aqui é o que mantém o rodapé honesto: contar o escolhido
+  // em vez do varrido faria a tela anunciar buscas que nunca aconteceram.
+  const nichosListActive = nichosEscolhidos.slice(0, LIMITE_NICHOS_POR_VARREDURA);
+  const nichosIgnorados = nichosEscolhidos.slice(LIMITE_NICHOS_POR_VARREDURA);
 
   /**
    * Leads exibidos.
@@ -491,10 +576,20 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
                 onChange={handleNichoDropdownChange}
                 style={{ width: '100%', padding: '11px 14px', border: '0.5px solid var(--sobre-20)', fontSize: '13px', background: 'var(--bg-card)', color: 'var(--fg-white)', fontWeight: '500', borderRadius: '4px' }}
               >
-                {OPCOES_NICHOS_DROPDOWN.map(opt => (
-                  <option key={opt.label} value={opt.value}>
-                    {opt.label}
-                  </option>
+                {/*
+                  <optgroup> em vez de lista corrida: o título do grupo diz
+                  POR QUE aquele conjunto de negócios paga por um site. Numa
+                  lista plana de 25 opções, essa informação não caberia em
+                  lugar nenhum — e é ela que define o argumento da ligação.
+                */}
+                {GRUPOS_DE_NICHOS.map(({ grupo, opcoes }) => (
+                  <optgroup key={grupo} label={grupo}>
+                    {opcoes.map(opt => (
+                      <option key={opt.label} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
               </select>
             </div>
@@ -603,6 +698,17 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
               <Search size={14} color="var(--accent-indigo)" />
               <span>
                 Configurado para <strong style={{ color: 'var(--fg-white)' }}>{nichosListActive.length} nichos ativos</strong> em {selectedCidade}, {selectedEstado}.
+                {nichosIgnorados.length > 0 && (
+                  <>
+                    {' '}
+                    <strong
+                      style={{ color: 'var(--alerta)' }}
+                      title={`O limite é ${LIMITE_NICHOS_POR_VARREDURA} nichos por varredura, para conter o custo por chamada no Google Places. Rode uma segunda varredura para cobrir o resto.`}
+                    >
+                      {nichosIgnorados.length} fora do limite ({nichosIgnorados.join(', ')})
+                    </strong>
+                  </>
+                )}
               </span>
             </div>
 

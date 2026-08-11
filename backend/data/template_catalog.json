@@ -11,7 +11,10 @@
         "barber",
         "corte masculino",
         "cabeleireiro masculino",
-        "barbeiro"
+        "barbeiro",
+        "barbearia infantil",
+        "salao masculino",
+        "barber shop"
       ],
       "tom": "escuro, dourado, sofisticado",
       "ativo": true
@@ -29,7 +32,17 @@
         "sobrancelha",
         "cilios",
         "depilacao",
-        "spa"
+        "spa",
+        "salao de cabeleireiro",
+        "clinica de estetica",
+        "harmonizacao facial",
+        "micropigmentacao",
+        "design de sobrancelhas",
+        "alongamento de unhas",
+        "massoterapia",
+        "podologia",
+        "studio de beleza",
+        "lash designer"
       ],
       "tom": "claro, bege, elegante",
       "ativo": true
@@ -51,7 +64,18 @@
         "marmita",
         "comida",
         "sushi",
-        "japones"
+        "japones",
+        "acai",
+        "acaiteria",
+        "espetinho",
+        "pastelaria",
+        "food truck",
+        "self service",
+        "temakeria",
+        "adega",
+        "distribuidora de bebidas",
+        "creperia",
+        "restaurante japones"
       ],
       "tom": "quente, artesanal, vermelho",
       "ativo": true
@@ -67,7 +91,13 @@
         "confeitaria",
         "doceria",
         "bistro",
-        "brunch"
+        "brunch",
+        "sorveteria",
+        "casa de bolos",
+        "chocolateria",
+        "bomboniere",
+        "salgaderia",
+        "casa de paes"
       ],
       "tom": "claro, editorial, minimalista",
       "ativo": true
@@ -84,7 +114,17 @@
         "óptica",
         "boutique",
         "semijoias",
-        "acessorios"
+        "acessorios",
+        "loja de roupas",
+        "moda feminina",
+        "moda masculina",
+        "loja de noivas",
+        "aluguel de trajes",
+        "loja de calcados",
+        "perfumaria",
+        "brecho",
+        "loja de presentes",
+        "papelaria"
       ],
       "tom": "dourado, minimalista, alto padrão",
       "ativo": true
@@ -102,7 +142,23 @@
         "serralheria",
         "oficina mecanica",
         "eletricista",
-        "encanador"
+        "encanador",
+        "vidracaria",
+        "gesso e drywall",
+        "pintura predial",
+        "dedetizadora",
+        "ar condicionado",
+        "energia solar",
+        "moveis planejados",
+        "marmoraria",
+        "auto center",
+        "funilaria",
+        "autopecas",
+        "lava rapido",
+        "borracharia",
+        "chaveiro",
+        "piscinas",
+        "automacao residencial"
       ],
       "tom": "industrial, âmbar, robusto",
       "ativo": true
@@ -118,7 +174,14 @@
         "hospedagem",
         "turismo",
         "eventos",
-        "sitio"
+        "sitio",
+        "chacara para eventos",
+        "buffet",
+        "espaco de eventos",
+        "salao de festas",
+        "camping",
+        "pesqueiro",
+        "casa de campo"
       ],
       "tom": "natural, verde e ocre, acolhedor",
       "ativo": true
