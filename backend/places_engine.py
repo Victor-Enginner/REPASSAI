@@ -67,6 +67,49 @@ def negocio_encerrado(status):
     return status in ("CLOSED_PERMANENTLY", "CLOSED_TEMPORARILY")
 
 
+# O que cada status do Places significa em português, e o que fazer.
+#
+# A API SEMPRE manda um `error_message` explicando a recusa — e o código
+# antigo lia só o `status`, jogando fora a única informação útil. O log
+# dizia "retornou: REQUEST_DENIED" seis vezes seguidas, sem dizer que a
+# causa era cobrança desativada no Google Cloud. Foi preciso chamar a API
+# à mão para descobrir. Status sem motivo manda investigar o lugar errado.
+_ACAO_POR_STATUS = {
+    "REQUEST_DENIED": (
+        "O Google recusou a chave. Quase sempre é cobrança desativada no "
+        "projeto do Google Cloud, Places API não habilitada, ou restrição "
+        "de IP/API na chave."
+    ),
+    "OVER_QUERY_LIMIT": (
+        "Cota do Google estourada ou teto de gasto atingido. A varredura "
+        "volta a funcionar sozinha quando a cota renovar."
+    ),
+    "INVALID_REQUEST": "A requisição saiu malformada — é defeito nosso, não do Google.",
+    "NOT_FOUND": "O place_id não existe mais no Google.",
+    "UNKNOWN_ERROR": "Falha temporária no lado do Google. Tentar de novo costuma resolver.",
+}
+
+
+def _motivo_da_recusa(origem, data):
+    """
+    Monta uma mensagem que diz o que aconteceu E o que fazer a respeito.
+
+    Junta as três coisas que o operador precisa: qual chamada falhou, o que
+    o Google respondeu com as palavras dele (`error_message`), e a tradução
+    do status para uma ação concreta.
+    """
+    status = data.get("status") or "SEM_STATUS"
+    detalhe = (data.get("error_message") or "").strip()
+    acao = _ACAO_POR_STATUS.get(status, "")
+
+    partes = [f"Places API ({origem}) retornou: {status}"]
+    if detalhe:
+        partes.append(f"Google diz: {detalhe}")
+    if acao:
+        partes.append(acao)
+    return " | ".join(partes)
+
+
 def buscar_nicho(nicho, cidade, max_resultados=20):
     """
     Busca lugares por texto livre (ex.: "barbearia em Franca, SP").
@@ -89,9 +132,7 @@ def buscar_nicho(nicho, cidade, max_resultados=20):
         status = data.get("status")
 
         if status not in ("OK", "ZERO_RESULTS"):
-            raise PlacesIndisponivel(
-                f"Places API (textsearch) retornou: {status}"
-            )
+            raise PlacesIndisponivel(_motivo_da_recusa("textsearch", data))
 
         for r in data.get("results", []):
             resultados.append({"place_id": r.get("place_id")})
@@ -114,9 +155,7 @@ def detalhes_do_lugar(place_id):
     )
     data = _get_json(url)
     if data.get("status") != "OK":
-        raise PlacesIndisponivel(
-            f"Places API (details) retornou: {data.get('status')}"
-        )
+        raise PlacesIndisponivel(_motivo_da_recusa("details", data))
     resultado = data.get("result", {})
     resultado["place_id"] = place_id
     return resultado

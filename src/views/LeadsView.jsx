@@ -383,6 +383,8 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         })
       });
 
+      let diagnostico = null;
+
       if (res.ok) {
         const data = await res.json();
         if (data.leads && data.leads.length > 0) {
@@ -390,16 +392,27 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
           setLogStream(prev => [...prev.slice(-49), `[OSINT SUCCESS] Varredura concluída! ${data.leads.length} leads encontrados em ${selectedCidade}, ${selectedEstado}.`]);
           return;
         }
+        // Respondeu 200 e veio vazio: o motivo está em `meta.erros`, uma
+        // entrada por nicho que falhou. Todas costumam ter a MESMA causa
+        // (chave, cota, cobrança), então mostrar a primeira basta.
+        diagnostico = (data?.meta?.erros || [])[0] || null;
       }
 
       // A varredura falhou. Dizer o motivo real importa: antes o app
       // apresentava exemplos como se fossem o resultado da busca, e o
       // operador não tinha como saber que aqueles negócios não existem.
+      //
+      // E o motivo precisa ser o motivo. Este trecho anunciava "a busca real
+      // nao respondeu (HTTP 200)" — uma frase que se contradiz e manda
+      // procurar rede quando o problema estava na conta do Google. O
+      // diagnóstico do backend, quando existe, vem antes do código HTTP.
       const motivo = res.status === 429
         ? 'muitas varreduras seguidas — aguarde um minuto'
         : res.status === 401
           ? 'sessao expirada, faca login novamente'
-          : `a busca real nao respondeu (HTTP ${res.status})`;
+          : diagnostico
+            ? diagnostico
+            : `a busca real nao respondeu (HTTP ${res.status})`;
       const localLeads = gerarLeadsLocalmente(selectedCidade, selectedEstado, selectedNicho, quantidade);
       onLeadsScanned(localLeads);
       setLogStream(prev => [...prev.slice(-49), `[OSINT AVISO] Varredura real indisponivel: ${motivo}. Exibindo ${localLeads.length} exemplos de layout — NAO sao negocios reais.`]);
