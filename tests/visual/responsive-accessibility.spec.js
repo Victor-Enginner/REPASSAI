@@ -147,6 +147,20 @@ test.describe('Responsividade e acessibilidade', () => {
         const cs = getComputedStyle(el);
         if (cs.display === 'none' || cs.visibility === 'hidden') return;
         if (cs.overflowX !== 'visible' || cs.overflowY !== 'visible') return;
+
+        // ...e nem a caixa cujo corte JÁ é feito por um ancestral.
+        //
+        // Um elemento que transborda dentro de um pai com `overflow: hidden`
+        // não vaza para o layout: o pai o corta. É o caso da grade de prisma
+        // do Painel, que se estende de propósito além da tela para cobri-la
+        // inteira e é contida pelo contêiner do fundo. Sem esta checagem, um
+        // efeito decorativo bem contido reprovava a suíte.
+        let pai = el.parentElement;
+        while (pai && pai !== document.body) {
+          const cp = getComputedStyle(pai);
+          if (cp.overflowX !== 'visible' || cp.overflowY !== 'visible') return;
+          pai = pai.parentElement;
+        }
         const caixa = el.getBoundingClientRect();
         if (caixa.width < 8 || caixa.height < 8) return;
         const excesso = el.scrollWidth - el.clientWidth;

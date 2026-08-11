@@ -77,8 +77,18 @@ const REGISTRO = {
   //     o material existir. ---
   bulk_whatsapp: { efeito: 'campo-de-fluxo', opacidade: 0.52 },
 
+  // --- Painel: grade de prisma reagindo ao cursor ---
+  //     `interativo` liga os eventos de ponteiro NESTA camada. Sem isso o
+  //     efeito existe e nunca acende: o contêiner de fundo é
+  //     `pointer-events: none` por padrão, e o componente acende a célula
+  //     ouvindo `pointermove` no próprio elemento.
+  //
+  //     Ligar aqui não rouba clique do conteúdo: a grade fica em z-index 0,
+  //     abaixo de tudo. Ela só recebe ponteiro onde não há cartão em cima —
+  //     que é exatamente onde a grade aparece.
+  dashboard: { efeito: 'grade-de-prisma', opacidade: 0.38, interativo: true },
+
   // --- Neutro (atmosfera da marca) ---
-  dashboard:     NEUTRO,
   wizard:        NEUTRO,   // pedido explícito: Criar Site fica neutro
   agendamentos:  NEUTRO,
   projetos:      NEUTRO,
@@ -155,8 +165,43 @@ function montarEfeito(nome, tema) {
     case 'veu-escuro':
       return <VeuEscuro />;
 
+    /*
+      Grade de prisma (OriginKit), remapeada para a identidade.
+
+      O padrão do componente é fundo PRETO com células brancas, rosa-chiclete
+      e mostarda — uma placa preta no meio do papel quente, e três cores que
+      não pertencem à marca.
+
+      Duas mudanças, nenhuma na lógica do efeito:
+
+        · `backgroundColor: 'transparent'` — a grade deixa de pintar fundo e
+          passa a desenhar SOBRE o papel. É o que faz ela parecer parte da
+          folha, e não um retângulo colado por cima.
+        · a paleta vira a família iridescente da marca. No tema claro os
+          tons são os pastéis; no escuro, os mesmos matizes um pouco mais
+          vivos, porque sobre grafite o pastel some.
+
+      `borderColor` usa token: aqui é DOM, não shader, então `var(--)`
+      resolve — e a linha da grade acompanha o tema sozinha.
+    */
     case 'grade-de-prisma':
-      return <GradeDePrisma />;
+      return (
+        <GradeDePrisma
+          backgroundColor="transparent"
+          boxSize={48}
+          borderWidth={1}
+          borderColor="var(--sobre-08)"
+          colors={{
+            paletteCount: 6,
+            color1: escuro ? '#a78bfa' : '#7c5cff',
+            color2: escuro ? '#56d8e6' : '#56d8e6',
+            color3: escuro ? '#c4b5fd' : '#b8a5ff',
+            color4: escuro ? '#7c5cff' : '#ffb27a',
+            color5: escuro ? '#8ee7f2' : '#9fe8f0',
+            color6: escuro ? '#a5b4fc' : '#5b8cff',
+          }}
+        />
+      );
 
     case 'ondas-ascii':
       return <OndasASCII />;
@@ -196,7 +241,10 @@ export default function FundoDaAba({ aba }) {
         position: 'fixed',
         inset: 0,
         zIndex: 0,
-        pointerEvents: 'none',
+        // Fundo decorativo não intercepta ponteiro. A exceção é o efeito que
+        // REAGE ao cursor: sem receber `pointermove` ele nunca acende, e o
+        // operador veria uma grade morta achando que quebrou.
+        pointerEvents: config.interativo ? 'auto' : 'none',
         overflow: 'hidden',
         opacity: config.opacidade ?? 0.3,
         // A troca de aba não deve piscar: o fundo entra por transição.
