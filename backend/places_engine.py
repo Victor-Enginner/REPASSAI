@@ -267,6 +267,15 @@ def score_oportunidade(place):
     Retorna: (score:int, motivo:str)
     """
     website = place.get("website") or ""
+
+    # `None` e `0` NÃO são a mesma coisa aqui.
+    #
+    # 0 significa "medimos e este negócio não tem avaliação" — sinal real de
+    # oportunidade, vale pontos. `None` significa "esta fonte não coleta
+    # avaliação", que é o caso do OpenStreetMap, um mapa e não uma rede de
+    # opinião. Tratar os dois igual daria +25 a TODO lead do OSM, achatando
+    # a pontuação e afogando o sinal que importa: a ausência de site.
+    tem_dados_de_reputacao = place.get("user_ratings_total") is not None
     rating = place.get("rating") or 0
     total_reviews = place.get("user_ratings_total") or 0
 
@@ -283,17 +292,18 @@ def score_oportunidade(place):
         score += 20
         motivo = "so_rede_social"
 
-    if total_reviews < 15:
-        score += 25
-        if motivo == "geral":
-            motivo = "poucas_reviews"
-    elif total_reviews < 50:
-        score += 10
+    if tem_dados_de_reputacao:
+        if total_reviews < 15:
+            score += 25
+            if motivo == "geral":
+                motivo = "poucas_reviews"
+        elif total_reviews < 50:
+            score += 10
 
-    if rating >= 4.5 and total_reviews < 30:
-        score += 15
-        if motivo == "geral":
-            motivo = "poucas_reviews"
+        if rating >= 4.5 and total_reviews < 30:
+            score += 15
+            if motivo == "geral":
+                motivo = "poucas_reviews"
 
     return min(score, 100), motivo
 

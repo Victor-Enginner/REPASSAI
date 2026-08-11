@@ -26,6 +26,7 @@ import urllib.parse
 import urllib.request
 
 import places_engine
+import osm_engine
 from places_engine import PlacesIndisponivel
 
 # Força codificação UTF-8 no Windows
@@ -265,6 +266,75 @@ class OSINTCore:
         self.niche_filter = NicheFilter()
         self.media_enricher = GooglePlacesMediaEnricher()
 
+    def _montar_lead_osm(self, achado, cidade, estado, bairro, idx):
+        """
+        Monta um lead a partir de um registro do OpenStreetMap.
+
+        Mesmo formato do lead vindo do Places, para a tela e o banco não
+        precisarem saber a origem — só o campo `fonte` distingue.
+
+        `place_id` recebe o identificador do OSM ("node/123"). A coluna já
+        era a chave de deduplicação por usuário, e um id do OSM cumpre esse
+        papel igual. Prefixo diferente ("node/", "way/") torna a origem
+        legível direto no banco, sem coluna nova.
+
+        O QUE NÃO VEM DAQUI, e por que fica vazio em vez de preenchido:
+        telefone (só ~6% dos registros têm) e avaliação (o OSM é mapa, não
+        rede de opinião). Campo vazio é honesto; campo inventado manda o
+        operador falar com um estranho.
+        """
+        site = achado.get("site")
+        telefone = achado.get("telefone")
+
+        score, motivo = places_engine.score_oportunidade({
+            "website": site,
+            # None, não 0. Zero significaria "medimos e não há avaliações",
+            # o que valeria pontos de oportunidade. Aqui a informação
+            # simplesmente não existe, e não pode virar sinal.
+            "user_ratings_total": None,
+            "rating": None,
+        })
+
+        return {
+            "id": achado["osm_id"],
+            "lead_id": achado["osm_id"],
+            "place_id": achado["osm_id"],
+            "is_demo": False,
+            "fonte": "openstreetmap",
+            "nome": achado["nome"],
+            "categoria": achado.get("categoria") or "Negocio local",
+            "cidade": cidade,
+            "estado": estado,
+            "bairro": bairro or "",
+            "endereco": achado.get("endereco"),
+            "telefone": telefone,
+            "whatsapp": LeadParser.gerar_link_whatsapp(telefone) if telefone else None,
+            "site": site,
+            "status_site": places_engine.classificar_site(site),
+            "score": score,
+            "osint_score": score,
+            "motivo_abordagem": motivo,
+            "avaliacao": None,
+            "reviewsCount": None,
+            "temperatura": "Quente" if score >= 70 else "Morno",
+            "status_crm": "Base",
+            "status_pipeline": "NOVO",
+            "orientacao": places_engine.OPORTUNIDADE.get(motivo, ""),
+            "mensagem_sugerida": places_engine.gerar_mensagem(
+                {"name": achado["nome"]}, motivo, cidade,
+                achado.get("categoria") or "negocios locais",
+            ),
+            # `geo`, não `lat`/`lon` soltos: é o contrato que a persistência
+            # já lê (app_api grava de `l["geo"]["lat"]`). Fora dele, a
+            # coordenada chegaria ao banco como NULL sem erro nenhum.
+            "geo": {
+                "pais": "BR", "estado": estado, "cidade": cidade,
+                "bairro": bairro or "",
+                "lat": achado.get("lat"), "lon": achado.get("lon"),
+            },
+            "indice": idx,
+        }
+
     def _montar_lead(self, detalhes, nicho, cidade, estado, bairro, idx):
         """Constrói o objeto de lead a partir de detalhes REAIS do Places."""
         score, motivo = places_engine.score_oportunidade(detalhes)
@@ -363,6 +433,53 @@ class OSINTCore:
         """
         nichos_ativos = self.niche_filter.processar_nichos(nichos) or ['barbearia']
         local = f"{bairro}, {cidade}, {estado}" if bairro else f"{cidade}, {estado}"
+
+        # ------------------------------------------------------------------
+        # DESCOBERTA PELO OPENSTREETMAP — a etapa gratuita.
+        #
+        # A Google Places cobra ~US$ 17 / 1.000 chamadas e exige cartão até
+        # para a cota gratuita. Uma varredura de 40 leads gastava ~US$ 1,40
+        # só para DESCOBRIR quem existe — antes de o operador decidir se
+        # aborda alguém.
+        #
+        # O OSM responde essa pergunta de graça. O Places passa a ser
+        # chamado só depois, num lead por vez, para confirmar o telefone de
+        # quem o operador escolheu abordar (enriquecer_lead). De ~240
+        # chamadas por varredura para as poucas que viram conversa.
+        #
+        # A troca, medida em Franca/SP: o OSM acha MAIS negócios sem site e
+        # quase nenhum com telefone. Por isso ele descobre e o Places
+        # confirma — nenhum dos dois sozinho entrega o produto.
+        # ------------------------------------------------------------------
+        achados, erro_osm = [], None
+        try:
+            achados = osm_engine.buscar_nichos(nichos_ativos, cidade, estado, max_results)
+            print(f"[OSINTCore] OpenStreetMap: {len(achados)} negocios em '{local}'.")
+        except osm_engine.OSMIndisponivel as e:
+            erro_osm = str(e)
+            print(f"[OSINTCore] OpenStreetMap indisponivel: {e}")
+
+        if achados:
+            leads = [
+                self._montar_lead_osm(a, cidade, estado, bairro, i)
+                for i, a in enumerate(achados, start=1)
+            ]
+            leads.sort(key=places_engine.chave_de_prioridade)
+            return leads[:max_results], {
+                "modo": "real",
+                "fonte": "openstreetmap",
+                "dados_reais": True,
+                "erros": [],
+                "nichos_varridos": nichos_ativos,
+                "custo": "gratuito",
+            }
+
+        if erro_osm is None:
+            erro_osm = (
+                "O OpenStreetMap nao tem estes nichos mapeados nesta cidade. "
+                "A cobertura de mapa aberto e desigual: cidade grande costuma "
+                "estar bem mapeada, distrito pequeno quase nao."
+            )
 
         if not places_engine.places_configurado():
             print("[OSINTCore] Sem GOOGLE_PLACES_API_KEY. Entrando em MODO DEMO.")

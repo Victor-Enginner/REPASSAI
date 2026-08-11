@@ -72,16 +72,23 @@ class TestIntegridadeDeDados(unittest.TestCase):
 
     def test_modo_demo_nunca_inventa_contato(self):
         """
-        Sem GOOGLE_PLACES_API_KEY, os leads são exemplos de layout e
-        precisam vir sem telefone, sem WhatsApp e sem nota. Preencher
-        esses campos faria o operador abordar um terceiro qualquer.
-        """
-        import places_engine
-        if places_engine.places_configurado():
-            self.skipTest("Chave configurada: modo real, este teste não se aplica.")
+        Lead de demonstração vem sem telefone, sem WhatsApp e sem nota.
+        Preencher esses campos faria o operador abordar um terceiro qualquer.
 
+        O gatilho do modo demo mudou. Antes bastava não haver
+        GOOGLE_PLACES_API_KEY; agora a descoberta tenta primeiro o
+        OpenStreetMap, que é gratuito, e só cai em demo quando NENHUMA fonte
+        real entrega dado. O teste passou a forçar essa condição por um nicho
+        que o OSM não mapeia — assim ele não depende de chave, nem de rede,
+        nem de qual fonte está ligada hoje.
+
+        Nicho desconhecido faz `seletores_do_nicho` devolver lista vazia, e
+        `buscar_nichos` retorna sem sequer abrir conexão. É de propósito: o
+        teste anterior levava três minutos porque consultava a Overpass de
+        verdade, e suíte lenta é suíte que ninguém roda.
+        """
         leads, meta = self.core.executar_varredura(
-            "SP", "Franca", nichos="barbearia", max_results=5
+            "SP", "Franca", nichos="zzz nicho inexistente para teste", max_results=5
         )
         self.assertEqual(meta["modo"], "demo")
         self.assertFalse(meta["dados_reais"])

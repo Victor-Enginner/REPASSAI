@@ -389,7 +389,24 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         const data = await res.json();
         if (data.leads && data.leads.length > 0) {
           onLeadsScanned(data.leads);
-          setLogStream(prev => [...prev.slice(-49), `[OSINT SUCCESS] Varredura concluída! ${data.leads.length} leads encontrados em ${selectedCidade}, ${selectedEstado}.`]);
+
+          // Dizer a ORIGEM e o CUSTO, não só a contagem.
+          //
+          // A descoberta passou a vir do OpenStreetMap, que é gratuito, e o
+          // operador precisa saber disso por dois motivos opostos: para não
+          // temer cobrança a cada varredura, e para entender por que a
+          // maioria dos leads vem sem telefone — o mapa aberto raramente
+          // registra contato. Sem essa linha, "sem telefone" pareceria
+          // defeito da ferramenta.
+          const semTelefone = data.leads.filter(l => !l.telefone).length;
+          const origem = data.meta?.fonte === 'openstreetmap'
+            ? ' Fonte: OpenStreetMap (gratuito, sem cobrança).'
+            : '';
+          const aviso = semTelefone > 0
+            ? ` ${semTelefone} sem telefone registrado no mapa.`
+            : '';
+
+          setLogStream(prev => [...prev.slice(-49), `[OSINT SUCCESS] Varredura concluída! ${data.leads.length} leads em ${selectedCidade}, ${selectedEstado}.${origem}${aviso}`]);
           return;
         }
         // Respondeu 200 e veio vazio: o motivo está em `meta.erros`, uma

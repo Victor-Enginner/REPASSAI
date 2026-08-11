@@ -1504,13 +1504,24 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         #
         # Lead de demonstração nunca vira registro comercial: sem telefone
         # verificado, não entra no banco.
+        # QUEM PAGA e QUEM É DONO são perguntas diferentes.
+        #
+        # A cota acima usa `usuario_autenticado` de propósito: não faz sentido
+        # debitar plano contra um perfil local de desenvolvimento. A gravação
+        # herdou essa variável sem querer, e o efeito era que, em modo
+        # single-user, TODA varredura sumia ao recarregar a página — o
+        # operador varria, via os leads e os perdia, sem nada explicando.
+        #
+        # `_usuario_da_rota()` responde a pergunta certa: de quem é este lead.
+        dono = self._usuario_da_rota()
+
         salvos = 0
-        if usuario and meta.get("dados_reais"):
+        if dono and meta.get("dados_reais"):
             reais = [l for l in leads if not l.get("is_demo") and l.get("place_id")]
             if reais:
                 try:
                     registros = [{
-                        "user_id": usuario["id"],
+                        "user_id": dono["id"],
                         "place_id": l["place_id"],
                         "nicho": l.get("categoria", ""),
                         "nome": l.get("nome", ""),
