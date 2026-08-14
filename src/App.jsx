@@ -369,7 +369,26 @@ function AppMain() {
                     setCurrentTab('dashboard');
                   }}
                   onVoltarLanding={() => setCurrentTab('landing')}
-                  onBypass={() => setCurrentTab('dashboard')}
+                  /*
+                    O "Entrar Modo Demo" só existe quando o SERVIDOR diz que
+                    está em modo single-user de desenvolvimento.
+
+                    Ele era incondicional. Numa URL pública — um túnel, um
+                    deploy — qualquer pessoa clicava e entrava no painel sem
+                    senha. As rotas protegidas devolveriam 401 e os dados não
+                    vazariam, mas a pessoa veria um painel com dados de
+                    exemplo achando que era o produto, e o botão anunciava um
+                    caminho de entrada que não deveria existir ali.
+
+                    Quem decide é o backend, não o frontend: `dev_single_user`
+                    vem de /api/auth/status. Se a chamada falhar, o campo vem
+                    indefinido e o botão some — a falha é para o lado seguro.
+                  */
+                  onBypass={
+                    authConfig?.dev_single_user
+                      ? () => setCurrentTab('dashboard')
+                      : undefined
+                  }
                 />
               </PainelSimples>
             )}

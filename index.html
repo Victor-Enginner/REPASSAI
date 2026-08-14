@@ -20,10 +20,18 @@
          máquina do dev e derruba a API inteira em produção, onde o
          backend tem outro domínio.
 
-      %VITE_API_BASE% é substituído pelo Vite no build a partir do
-      ambiente (mesma variável que o app já usa em config.js), então dev e
-      produção passam a apontar para o backend certo sem editar este
-      arquivo.
+      %VITE_API_BASE% SAIU do connect-src e do frame-src.
+
+      O Vite agora encaminha `/api` para o backend (vite.config.js), do mesmo
+      jeito que o nginx faz em produção. Com isso o app fala com a API na
+      MESMA origem nos dois ambientes, e `'self'` já cobre tudo — a variável
+      virou supérflua.
+
+      E era uma armadilha: quando o valor é `/` (relativo, o padrão de
+      produção), o CSP saía como `connect-src 'self' /`, e `/` não é uma
+      fonte válida. Pior no Windows, onde o Git Bash converte o `/` do
+      argumento em `C:/Program Files/Git/` e o cabeçalho ia para o HTML com
+      um caminho de disco dentro. Aconteceu de verdade, no build de 14/08.
     -->
     <!--
       DUAS CORREÇÕES, ambas vindas de erro real no console:
@@ -44,7 +52,7 @@
          a própria página cria, sem afrouxar `script-src` para scripts —
          script de outro domínio continua bloqueado.
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' %VITE_API_BASE% ws://localhost:3000 ws://127.0.0.1:3000; frame-src 'self' %VITE_API_BASE% blob:; upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' ws://localhost:3000 ws://127.0.0.1:3000 ws://localhost:5173 wss:; frame-src 'self' blob:; upgrade-insecure-requests" />
     <title>REPASS AI — Plataforma OSINT & Motor Agêntico de Sites 3D</title>
     <meta name="description" content="REPASS AI é a plataforma agêntica líder para varredura OSINT de leads locais, enriquecimento via Places API e geração autônoma de sites 3D." />
     
