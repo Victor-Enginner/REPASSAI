@@ -15,7 +15,9 @@ documento está errado e deve ser corrigido.
 
 | Arquivo | O que tem |
 |---|---|
-| [ARQUITETURA.md](ARQUITETURA.md) | mapa do sistema, as 5 camadas do pipeline, as redes de proteção, fluxos em diagrama, decisões técnicas com o porquê |
+| [ESTADO_REAL.md](ESTADO_REAL.md) | **comece por aqui.** O que funciona, o que é parcial, o que está prometido e não entrega, e o débito por gravidade — tudo medido em 11/08/2026 |
+| [DEPLOY.md](DEPLOY.md) | como pôr no ar de graça (Oracle Always Free + Docker), com os erros esperados e o que este deploy ainda não resolve |
+| [ARQUITETURA.md](ARQUITETURA.md) | mapa do sistema, as 5 camadas do pipeline, as redes de proteção, fluxos em diagrama, decisões técnicas com o porquê. **Atenção:** descreve o motor de templates que a API não usa — ver ESTADO_REAL.md |
 | [ROADMAP.md](ROADMAP.md) | prioridades, riscos conhecidos, decisões em aberto e de quem é cada uma |
 | [arquitetura-visual.html](arquitetura-visual.html) | os mesmos fluxogramas renderizados, para abrir no navegador |
 | [GUIA_SUPABASE.md](GUIA_SUPABASE.md) | tabelas, RLS, chaves e como ligar o multiusuário |

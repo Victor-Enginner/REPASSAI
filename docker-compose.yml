@@ -9,11 +9,37 @@ services:
       - ./backend/.env
     environment:
       PORT: "8000"
+
+      # PRODUÇÃO POR PADRÃO NO COMPOSE.
+      #
+      # Sem isto o backend sobe em `development`, onde o bypass single-user
+      # pode ser ligado por env e as rotas caras deixam de exigir login. Num
+      # servidor exposto à internet isso é uma porta aberta. Em produção
+      # `ambiente_producao()` anula o bypass antes de considerá-lo, e o boot
+      # aborta se o Supabase não estiver configurado — falhar ao subir é
+      # melhor que subir sem autenticação.
+      REPASS_ENV: "${REPASS_ENV:-production}"
+
+      # Entra nos links do proxy de mídia gravados em cada lead. Se ficar
+      # como localhost, as imagens dos leads quebram para todo mundo que não
+      # seja o servidor. Defina REPASS_PUBLIC_URL antes de subir.
+      PUBLIC_BASE_URL: "${REPASS_PUBLIC_URL:-http://localhost:8000}"
+      PUBLIC_FRONTEND_URL: "${REPASS_PUBLIC_URL:-http://localhost:3000}"
+
+      # O nginx serve o frontend e faz proxy de /api na MESMA origem, então
+      # em operação normal não há requisição entre origens. A lista existe
+      # para acesso direto à API (ferramenta, teste, app futuro).
+      CORS_ORIGINS: "${REPASS_PUBLIC_URL:-http://localhost:3000}"
+
       # Dentro do container, localhost é o próprio backend. Este endereço
       # alcança o Ollama instalado na máquina do operador.
       OLLAMA_URL: "${REPASS_DOCKER_OLLAMA_URL:-http://host.docker.internal:11434/api/generate}"
-    ports:
-      - "8000:8000"
+    # Só o nginx fala com o backend, pela rede interna. Publicar a 8000 no
+    # servidor exporia a API sem o proxy à frente — e sem os cabeçalhos de
+    # segurança que o nginx acrescenta. Para depurar, use
+    # `docker compose exec backend ...` ou publique temporariamente.
+    expose:
+      - "8000"
     volumes:
       - ./backend/data:/app/backend/data
     extra_hosts:
@@ -37,8 +63,11 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    # No servidor isto vira "80:80", para o REPASS abrir no endereço da
+    # máquina sem porta. Na máquina do operador continua 3000, que é o que
+    # o `npm run dev` já usa.
     ports:
-      - "3000:80"
+      - "${REPASS_HTTP_PORT:-3000}:80"
     restart: unless-stopped
     networks:
       - repass-internal
