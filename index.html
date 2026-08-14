@@ -25,7 +25,26 @@
       produção passam a apontar para o backend certo sem editar este
       arquivo.
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' %VITE_API_BASE% ws://localhost:3000 ws://127.0.0.1:3000; frame-src 'self' %VITE_API_BASE% blob:; upgrade-insecure-requests" />
+    <!--
+      DUAS CORREÇÕES, ambas vindas de erro real no console:
+
+      1. `frame-ancestors` SAIU daqui. Ele é ignorado quando entregue por
+         <meta> — o próprio navegador avisava isso a cada carregamento, e a
+         proteção contra clickjacking NÃO estava valendo, nem em produção.
+         Diretiva que só funciona como cabeçalho HTTP passou para vercel.json,
+         onde de fato vale. Manter aqui só produzia ruído e falsa segurança.
+
+      2. `worker-src 'self' blob:` ENTROU. Sem ele o navegador bloqueava
+         "Creating a worker from 'blob:...' violates script-src 'self'":
+         bibliotecas de efeito (a `postprocessing`, por exemplo) embutem o
+         worker no próprio pacote e o instanciam por blob. Sem `worker-src`,
+         o navegador cai no `script-src` e recusa.
+
+         É a permissão MÍNIMA para isso: autoriza worker a partir de blob que
+         a própria página cria, sem afrouxar `script-src` para scripts —
+         script de outro domínio continua bloqueado.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' %VITE_API_BASE% ws://localhost:3000 ws://127.0.0.1:3000; frame-src 'self' %VITE_API_BASE% blob:; upgrade-insecure-requests" />
     <title>REPASS AI — Plataforma OSINT & Motor Agêntico de Sites 3D</title>
     <meta name="description" content="REPASS AI é a plataforma agêntica líder para varredura OSINT de leads locais, enriquecimento via Places API e geração autônoma de sites 3D." />
     
