@@ -18,11 +18,13 @@ import {
   ExternalLink,
   Tag
 } from 'lucide-react';
+import { reproduzirAudioTelAgent, pararAudioTelAgent, listarSessoesTelAgent } from '../services/telAgentService';
 
 export default function AtendimentosView() {
   const [atendimentoSelecionado, setAtendimentoSelecionado] = useState('1');
   const [mensagemTexto, setMensagemTexto] = useState('');
   const [filtroCanal, setFiltroCanal] = useState('todos');
+  const [audioTocando, setAudioTocando] = useState(false);
 
   const atendimentos = [
     {
@@ -297,6 +299,20 @@ export default function AtendimentosView() {
 
           {atual.gravacaoDisponivel && (
             <button
+              onClick={() => {
+                if (audioTocando) {
+                  pararAudioTelAgent();
+                  setAudioTocando(false);
+                } else {
+                  const textoIA = atual.mensagens.find(m => m.autor === 'ia')?.texto || 'Olá, tudo bem?';
+                  setAudioTocando(true);
+                  reproduzirAudioTelAgent(
+                    textoIA,
+                    () => setAudioTocando(true),
+                    () => setAudioTocando(false)
+                  );
+                }
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -306,13 +322,13 @@ export default function AtendimentosView() {
                 fontWeight: 600,
                 borderRadius: 'var(--raio-md)',
                 border: '1px solid var(--aro-cor)',
-                backgroundColor: 'var(--papel-fundo)',
-                color: 'var(--tinta)',
+                backgroundColor: audioTocando ? 'var(--iris-violeta)' : 'var(--papel-fundo)',
+                color: audioTocando ? 'var(--branco)' : 'var(--tinta)',
                 cursor: 'pointer'
               }}
             >
-              <Volume2 size={14} style={{ color: 'var(--iris-violeta)' }} />
-              Ouvir Áudio da Chamada IA
+              <Volume2 size={14} style={{ color: audioTocando ? 'var(--branco)' : 'var(--iris-violeta)' }} />
+              {audioTocando ? 'Pausar Áudio IA' : 'Ouvir Áudio da Chamada IA'}
             </button>
           )}
         </div>

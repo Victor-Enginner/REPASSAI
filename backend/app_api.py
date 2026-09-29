@@ -35,6 +35,7 @@ import places_engine
 import llm_gateway
 import templates_store
 import supabase_client
+import tel_agent_engine
 
 # Força codificação UTF-8 no Windows
 if hasattr(sys.stdout, 'reconfigure'):
@@ -949,6 +950,10 @@ class RepassApiHandler(BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.end_headers()
 
+        elif path == "/api/tel-agent/sessions":
+            tel = tel_agent_engine.TelAgentEngine()
+            self._json(200, {"status": "success", "sessions": tel.listar_historico()})
+
         elif path == "/api/media/proxy":
             photo_ref = query_params.get("ref", [""])[0]
             maxwidth = query_params.get("maxwidth", ["1200"])[0]
@@ -1158,6 +1163,10 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             self.handle_site_generate(body)
         elif self.path == "/api/site/clone":
             self.handle_site_clone(body)
+        elif self.path == "/api/tel-agent/call":
+            tel = tel_agent_engine.TelAgentEngine()
+            sessao = tel.iniciar_chamada(body)
+            self._json(200, {"status": "success", "session": sessao})
         else:
             self.send_response(404)
             self.end_headers()
