@@ -69,3 +69,6 @@ docs/ELASTIC DOC/
 devtunnel.zip
 scratch/
 .superdesign/
+
+# Local Netlify folder
+.netlify
