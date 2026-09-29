@@ -68,6 +68,7 @@ const ContatosView = lazy(() => import('./views/ContatosView'));
 const DisparosView = lazy(() => import('./views/DisparosView'));
 const GenericWorkspaceView = lazy(() => import('./views/GenericWorkspaceView'));
 const FormulariosView = lazy(() => import('./views/FormulariosView'));
+const AutomacoesView = lazy(() => import('./views/AutomacoesView'));
 import CommandPalette from './components/CommandPalette';
 
 /**
@@ -580,8 +581,13 @@ function AppMain() {
               </PainelSimples>
             )}
 
+            {currentTab === 'automacoes' && (
+              <PainelSimples>
+                <AutomacoesView leads={leads} setLeads={setLeads} onNavigate={setCurrentTab} />
+              </PainelSimples>
+            )}
+
             {[
-              'automacoes',
               'empresas', 'equipe', 'tags', 'pipelines', 'respostas_rapidas',
               'motivos_perda', 'campos_personalizados', 'workspaces', 'organizacao',
               'smtp', 'permissoes', 'ia_config', 'lgpd'
