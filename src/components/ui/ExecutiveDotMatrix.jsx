@@ -13,6 +13,7 @@ export default function ExecutiveDotMatrix({
   dotRadius = 1.6,
   interactionRadius = 220,
   idleWave = true,
+  theme = 'light',
   className = '',
   style = {}
 }) {
@@ -138,27 +139,34 @@ export default function ExecutiveDotMatrix({
           }
 
           // Dimensões e cores do ponto
+          const isDark = theme === 'dark';
           let r = dotRadius;
-          let fillStyle = 'rgba(17, 17, 17, 0.11)'; // Tinta neutra sobre papel
+          let fillStyle = isDark ? 'rgba(245, 244, 240, 0.13)' : 'rgba(17, 17, 17, 0.11)';
 
           if (cursorFactor > 0.02) {
             // Expansão tátil sutil sob o ponteiro
-            r = dotRadius + cursorFactor * 1.8;
+            r = dotRadius + cursorFactor * (isDark ? 2.0 : 1.8);
 
             if (cursorFactor > 0.65) {
               // Núcleo: Violeta/Íris saturado
-              fillStyle = `rgba(124, 92, 255, ${0.45 + cursorFactor * 0.5})`;
+              fillStyle = isDark
+                ? `rgba(167, 139, 250, ${0.7 + cursorFactor * 0.3})`
+                : `rgba(124, 92, 255, ${0.45 + cursorFactor * 0.5})`;
             } else if (cursorFactor > 0.35) {
               // Zona intermediária: Ciano elétrico
-              fillStyle = `rgba(86, 216, 230, ${0.35 + cursorFactor * 0.5})`;
+              fillStyle = isDark
+                ? `rgba(86, 216, 230, ${0.6 + cursorFactor * 0.35})`
+                : `rgba(86, 216, 230, ${0.35 + cursorFactor * 0.5})`;
             } else {
               // Borda da onda: Menta / Lilás suave
-              fillStyle = `rgba(124, 231, 196, ${0.25 + cursorFactor * 0.4})`;
+              fillStyle = isDark
+                ? `rgba(124, 231, 196, ${0.4 + cursorFactor * 0.4})`
+                : `rgba(124, 231, 196, ${0.25 + cursorFactor * 0.4})`;
             }
           } else if (idleFactor > 0.8) {
-            // Pulso sutil no repouso (1 a cada ~10 pontos brilha levemente)
+            // Pulso sutil no repouso
             r = dotRadius + 0.3;
-            fillStyle = 'rgba(124, 92, 255, 0.19)';
+            fillStyle = isDark ? 'rgba(167, 139, 250, 0.28)' : 'rgba(124, 92, 255, 0.19)';
           }
 
           ctx.beginPath();
@@ -173,7 +181,7 @@ export default function ExecutiveDotMatrix({
 
     animId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(animId);
-  }, [size, dotSpacing, dotRadius, interactionRadius, idleWave]);
+  }, [size, dotSpacing, dotRadius, interactionRadius, idleWave, theme]);
 
   return (
     <div

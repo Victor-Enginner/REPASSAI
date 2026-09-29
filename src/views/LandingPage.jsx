@@ -3,14 +3,17 @@ import { motion } from 'framer-motion';
 import { 
   Twitter, Linkedin, Github, Globe, ArrowUpRight, Zap, Sparkles, Check, 
   Search, Send, RefreshCw, Layers, ArrowRight, MessageSquare, PhoneCall, 
-  ChevronDown, ChevronUp, DollarSign, Award, Users, ShieldCheck, CheckCircle2
+  ChevronDown, ChevronUp, DollarSign, Award, Users, ShieldCheck, CheckCircle2,
+  Sun, Moon
 } from 'lucide-react';
+import { useTheme } from '../theme/ThemeContext';
 import ExecutiveDotMatrix from '../components/ui/ExecutiveDotMatrix';
 import ScrollJourneyLine from '../components/ui/ScrollJourneyLine';
 import LinhaElastica from '../components/ui/LinhaElastica';
 import RepassLivingLogo from '../components/ui/RepassLivingLogo';
 
 export default function LandingPage({ onOpenApp }) {
+  const { theme, toggleTheme } = useTheme();
   const [time, setTime] = useState({ hh: '12', mm: '04', ss: '19' });
   const [nicheInput, setNicheInput] = useState('');
   
@@ -70,10 +73,13 @@ export default function LandingPage({ onOpenApp }) {
     }
   ];
 
+  const isDark = theme === 'dark';
   const heroTextStyle = {
     fontSize: 'clamp(3rem, 15vw, 12rem)',
     lineHeight: 0.85,
-    background: 'linear-gradient(135deg, var(--tinta) 25%, var(--iris-violeta) 70%, var(--iris-azul) 100%)',
+    background: isDark
+      ? 'linear-gradient(135deg, #ffffff 20%, var(--iris-lilas) 65%, var(--iris-ciano) 100%)'
+      : 'linear-gradient(135deg, var(--tinta) 25%, var(--iris-violeta) 70%, var(--iris-azul) 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     margin: 0
@@ -103,9 +109,10 @@ export default function LandingPage({ onOpenApp }) {
       <nav style={{
         minHeight: '72px',
         width: '100%',
-        background: 'rgba(255, 255, 255, 0.92)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '0.5px solid var(--hairline-color)',
+        background: 'var(--vidro-fundo)',
+        backdropFilter: 'var(--vidro-blur)',
+        WebkitBackdropFilter: 'var(--vidro-blur)',
+        borderBottom: 'var(--aro) solid var(--aro-cor)',
         padding: '10px clamp(16px, 4vw, 40px)',
         display: 'flex',
         alignItems: 'center',
@@ -115,7 +122,7 @@ export default function LandingPage({ onOpenApp }) {
         position: 'sticky',
         top: 0,
         zIndex: 50,
-        boxShadow: '0 2px 10px rgba(15, 23, 42, 0.03)'
+        boxShadow: 'var(--sombra-sm)'
       }}>
         {/* Left: Brand Logo & Title */}
         <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={onOpenApp}>
@@ -127,18 +134,41 @@ export default function LandingPage({ onOpenApp }) {
           />
         </div>
 
-        {/* Right: Circular Hairline Social Icons & Pill Button */}
+        {/* Right: Circular Hairline Social Icons, Theme Switcher & Pill Button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginLeft: 'auto' }}>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '0.5px solid var(--hairline-color)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 6px rgba(15,23,42,0.03)' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: 'var(--aro) solid var(--aro-cor)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--sombra-sm)' }}>
               <Twitter size={15} color="var(--fg-muted)" />
             </div>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '0.5px solid var(--hairline-color)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 6px rgba(15,23,42,0.03)' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: 'var(--aro) solid var(--aro-cor)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--sombra-sm)' }}>
               <Linkedin size={15} color="var(--fg-muted)" />
             </div>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '0.5px solid var(--hairline-color)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 6px rgba(15,23,42,0.03)' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: 'var(--aro) solid var(--aro-cor)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--sombra-sm)' }}>
               <Github size={15} color="var(--fg-muted)" />
             </div>
+
+            {/* Alternador de Tema Claro / Escuro (Preto e Branco) */}
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+              title={theme === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro'}
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                border: 'var(--aro) solid var(--aro-cor)',
+                background: 'var(--bg-card)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: 'var(--sombra-sm)',
+                color: 'var(--tinta)',
+                transition: 'transform 0.2s ease, background 0.2s ease'
+              }}
+            >
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
           </div>
 
           <button onClick={onOpenApp} className="btn-pill">
@@ -147,7 +177,7 @@ export default function LandingPage({ onOpenApp }) {
         </div>
       </nav>
 
-      {/* 2. ICONIC REPASS AI HERO SECTION (2x2 Architectural Grid + ASCIIWaves Background) */}
+      {/* 2. ICONIC REPASS AI HERO SECTION (2x2 Architectural Grid + ExecutiveDotMatrix Background) */}
       <section style={{
         height: 'calc(100vh - 144px)',
         width: '100%',
@@ -158,6 +188,7 @@ export default function LandingPage({ onOpenApp }) {
         {/* Executive B2B Dot Matrix Background Layer (Edge-to-Edge no papel do site) */}
         <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.95 }}>
           <ExecutiveDotMatrix 
+            theme={theme}
             dotSpacing={26}
             dotRadius={1.6}
             interactionRadius={220}
