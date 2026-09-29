@@ -62,7 +62,7 @@ export const SECOES_MENU = [
   {
     titulo: 'AUTOMAÇÃO & IA',
     itens: [
-      { id: 'fluxos', nome: 'Fluxos', icon: GitBranch, badge: 'PRO' },
+      { id: 'fluxos', nome: 'Agentes & Equipe', icon: Bot, badge: 'IA' },
       { id: 'automacoes', nome: 'Automações', icon: Zap },
       { id: 'conhecimento', nome: 'Base de Conhecimento', icon: Sparkles },
       { id: 'formularios', nome: 'Formulários', icon: FileText },
