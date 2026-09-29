@@ -1436,6 +1436,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         bairro = body.get("bairro", "")
         nichos = body.get("nichos", "salão de unhas, barbearia, hamburgueria, academia")
         max_results = body.get("max_results", 40)
+        motor = body.get("motor", "scrapling")
 
         # --- Cota do plano ---
         # A autenticação já foi exigida no portão do do_POST: se chegou aqui
@@ -1471,7 +1472,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
                 # ainda recebe os leads, só não ficam salvos.
                 print(f"[Supabase] Perfil indisponível ({e}). Seguindo sem cota.")
 
-        print(f"[REPASS AI LEADS_OSINT_02] Varrendo '{nichos}' em '{cidade}, {estado}'...")
+        print(f"[REPASS AI LEADS_OSINT_02] Varrendo '{nichos}' em '{cidade}, {estado}' (motor={motor})...")
 
         try:
             leads, meta = osint_engine.executar_varredura(
@@ -1479,7 +1480,8 @@ class RepassApiHandler(BaseHTTPRequestHandler):
                 cidade=cidade,
                 bairro=bairro,
                 nichos=nichos,
-                max_results=max_results
+                max_results=max_results,
+                motor=motor
             )
         except Exception as e:
             # `str(e)` ia inteiro para o cliente e podia carregar caminho de

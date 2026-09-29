@@ -27,6 +27,7 @@ import urllib.request
 
 import places_engine
 import osm_engine
+import scrapling_maps_engine
 from places_engine import PlacesIndisponivel
 
 # Força codificação UTF-8 no Windows
@@ -424,32 +425,43 @@ class OSINTCore:
         }
 
     def executar_varredura(self, estado="SP", cidade="Franca", bairro="",
-                           nichos="barbearia, hamburgueria", max_results=40):
+                           nichos="barbearia, hamburgueria", max_results=40, motor="scrapling"):
         """
         Executa a varredura e devolve (leads, meta).
 
-        `meta` informa se o resultado é real ou demo e por quê, para a UI
-        poder deixar isso explícito ao operador.
+        Suporta motores:
+        - "scrapling": Extração direta do Google Maps sem Google Cloud / sem custos (Scrapling Core).
+        - "osm": Descoberta cartográfica via OpenStreetMap / Overpass.
+        - "google_places": Google Places API Oficial (quando chave configurada).
         """
         nichos_ativos = self.niche_filter.processar_nichos(nichos) or ['barbearia']
         local = f"{bairro}, {cidade}, {estado}" if bairro else f"{cidade}, {estado}"
 
         # ------------------------------------------------------------------
-        # DESCOBERTA PELO OPENSTREETMAP — a etapa gratuita.
-        #
-        # A Google Places cobra ~US$ 17 / 1.000 chamadas e exige cartão até
-        # para a cota gratuita. Uma varredura de 40 leads gastava ~US$ 1,40
-        # só para DESCOBRIR quem existe — antes de o operador decidir se
-        # aborda alguém.
-        #
-        # O OSM responde essa pergunta de graça. O Places passa a ser
-        # chamado só depois, num lead por vez, para confirmar o telefone de
-        # quem o operador escolheu abordar (enriquecer_lead). De ~240
-        # chamadas por varredura para as poucas que viram conversa.
-        #
-        # A troca, medida em Franca/SP: o OSM acha MAIS negócios sem site e
-        # quase nenhum com telefone. Por isso ele descobre e o Places
-        # confirma — nenhum dos dois sozinho entrega o produto.
+        # MOTOR 1: SCRAPLING MAPS ENGINE (Google Maps Free / Sem Chave / Sem Cartão)
+        # ------------------------------------------------------------------
+        if motor == "scrapling" or (motor not in ("osm", "google_places") and not places_engine.places_configurado()):
+            print(f"[OSINTCore] Ativando Motor Scrapling Maps para '{local}' | nichos: {nichos_ativos}")
+            collector = scrapling_maps_engine.ScraplingMapsCollector()
+            todos_leads = []
+            por_nicho = max(1, max_results // len(nichos_ativos))
+            for nicho in nichos_ativos:
+                sub_leads = collector.extrair_leads_maps(nicho, cidade, estado=estado, limite=por_nicho)
+                todos_leads.extend(sub_leads)
+
+            if todos_leads:
+                todos_leads.sort(key=places_engine.chave_de_prioridade)
+                return todos_leads[:max_results], {
+                    "modo": "real",
+                    "fonte": "google_maps_scrapling",
+                    "dados_reais": True,
+                    "erros": [],
+                    "nichos_varridos": nichos_ativos,
+                    "custo": "gratuito",
+                }
+
+        # ------------------------------------------------------------------
+        # MOTOR 2: DESCOBERTA PELO OPENSTREETMAP
         # ------------------------------------------------------------------
         achados, erro_osm = [], None
         try:

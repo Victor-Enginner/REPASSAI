@@ -99,6 +99,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
   const [selectedNicho, setSelectedNicho] = useState('salão de unhas, barbearia, hamburgueria, academia, estética facial, pet shop');
   
   const [quantidade, setQuantidade] = useState(40);
+  const [selectedMotor, setSelectedMotor] = useState('scrapling');
   const [selectedLeadIds, setSelectedLeadIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isScanning, setIsScanning] = useState(false);
@@ -368,7 +369,10 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
 
   const handleRunScan = async () => {
     setIsScanning(true);
-    const logInicio = `[OSINT SCANNER] Iniciando varredura em ${selectedCidade}, ${selectedEstado} (${selectedNicho})...`;
+    const motorNome = selectedMotor === 'scrapling'
+      ? 'Motor Scrapling (Google Maps Free)'
+      : (selectedMotor === 'osm' ? 'OpenStreetMap (OSM)' : 'Google Places API');
+    const logInicio = `[OSINT SCANNER] Iniciando varredura via ${motorNome} em ${selectedCidade}, ${selectedEstado} (${selectedNicho})...`;
     setLogStream(prev => [...prev.slice(-49), logInicio]);
 
     try {
@@ -379,7 +383,8 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
           estado: selectedEstado,
           cidade: selectedCidade,
           nichos: selectedNicho,
-          max_results: quantidade
+          max_results: quantidade,
+          motor: selectedMotor
         })
       });
 
@@ -390,23 +395,16 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         if (data.leads && data.leads.length > 0) {
           onLeadsScanned(data.leads);
 
-          // Dizer a ORIGEM e o CUSTO, não só a contagem.
-          //
-          // A descoberta passou a vir do OpenStreetMap, que é gratuito, e o
-          // operador precisa saber disso por dois motivos opostos: para não
-          // temer cobrança a cada varredura, e para entender por que a
-          // maioria dos leads vem sem telefone — o mapa aberto raramente
-          // registra contato. Sem essa linha, "sem telefone" pareceria
-          // defeito da ferramenta.
           const semTelefone = data.leads.filter(l => !l.telefone).length;
-          const origem = data.meta?.fonte === 'openstreetmap'
-            ? ' Fonte: OpenStreetMap (gratuito, sem cobrança).'
-            : '';
-          const aviso = semTelefone > 0
-            ? ` ${semTelefone} sem telefone registrado no mapa.`
-            : '';
+          const comTelefone = data.leads.length - semTelefone;
+          const origem = data.meta?.fonte === 'google_maps_scrapling'
+            ? ' Fonte: Google Maps via Scrapling Core (100% Gratuito / Stealth).'
+            : (data.meta?.fonte === 'openstreetmap' ? ' Fonte: OpenStreetMap (gratuito, sem cobrança).' : '');
+          const detalheContato = comTelefone > 0
+            ? ` ${comTelefone} com telefone direto pronto para abordagem.`
+            : ` ${semTelefone} sem telefone registrado no mapa.`;
 
-          setLogStream(prev => [...prev.slice(-49), `[OSINT SUCCESS] Varredura concluída! ${data.leads.length} leads em ${selectedCidade}, ${selectedEstado}.${origem}${aviso}`]);
+          setLogStream(prev => [...prev.slice(-49), `[OSINT SUCCESS] Varredura concluída! ${data.leads.length} leads em ${selectedCidade}, ${selectedEstado}.${origem}${detalheContato}`]);
           return;
         }
         // Respondeu 200 e veio vazio: o motivo está em `meta.erros`, uma
@@ -536,6 +534,79 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
         {/* Filter Bar with Responsive Grid */}
         <div data-testid="leads-controls" className="glass-panel" style={{ padding: '24px', marginBottom: '24px', background: 'var(--bg-surface)', borderRadius: '8px' }}>
           
+          {/* Seletor de Motor OSINT */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap', paddingBottom: '16px', borderBottom: '1px solid var(--aro-cor)' }}>
+            <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-muted)', marginRight: '4px' }}>
+              MOTOR DE VARREDURA:
+            </span>
+            <button
+              type="button"
+              onClick={() => setSelectedMotor('scrapling')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: 'var(--raio-pill)',
+                fontSize: '11.5px',
+                fontFamily: 'var(--font-mono)',
+                cursor: 'pointer',
+                border: selectedMotor === 'scrapling' ? '1px solid var(--accent-indigo)' : '1px solid var(--sobre-20)',
+                backgroundColor: selectedMotor === 'scrapling' ? 'var(--accent-indigo)' : 'var(--bg-card)',
+                color: selectedMotor === 'scrapling' ? 'var(--branco)' : 'var(--fg-white)',
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Sparkles size={13} />
+              ⚡ Motor Scrapling Maps (Google Maps Free)
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedMotor('osm')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: 'var(--raio-pill)',
+                fontSize: '11.5px',
+                fontFamily: 'var(--font-mono)',
+                cursor: 'pointer',
+                border: selectedMotor === 'osm' ? '1px solid var(--accent-indigo)' : '1px solid var(--sobre-20)',
+                backgroundColor: selectedMotor === 'osm' ? 'var(--accent-indigo)' : 'var(--bg-card)',
+                color: selectedMotor === 'osm' ? 'var(--branco)' : 'var(--fg-white)',
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Globe size={13} />
+              🌐 OpenStreetMap (OSM Free)
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedMotor('google_places')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: 'var(--raio-pill)',
+                fontSize: '11.5px',
+                fontFamily: 'var(--font-mono)',
+                cursor: 'pointer',
+                border: selectedMotor === 'google_places' ? '1px solid var(--accent-indigo)' : '1px solid var(--sobre-20)',
+                backgroundColor: selectedMotor === 'google_places' ? 'var(--accent-indigo)' : 'var(--bg-card)',
+                color: selectedMotor === 'google_places' ? 'var(--branco)' : 'var(--fg-white)',
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <ShieldCheck size={13} />
+              🏢 Google Places API (Oficial)
+            </button>
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: '16px', alignItems: 'flex-end', marginBottom: '16px' }}>
             
             <div>
@@ -651,7 +722,7 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
                     padding: '4px 10px',
                     border: isSelected ? '0.5px solid var(--accent-indigo)' : '0.5px solid var(--hairline-color)',
                     background: isSelected ? 'var(--accent-indigo)' : 'var(--bg-card)',
-                    color: isSelected ? '#ffffff' : 'var(--fg-white)',
+                    color: isSelected ? 'var(--branco)' : 'var(--fg-white)',
                     fontSize: '11px',
                     fontFamily: 'var(--font-mono)',
                     cursor: 'pointer',
