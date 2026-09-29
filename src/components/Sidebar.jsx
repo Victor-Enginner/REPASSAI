@@ -455,7 +455,7 @@ export default function Sidebar({ currentTab, setCurrentTab, onOpenCommandPalett
                 backgroundColor: 'var(--sucesso)'
               }}
             />
-            <span>API 8000 ONLINE</span>
+            <span>API ONLINE</span>
           </div>
 
           <span style={{ fontSize: '10px', color: 'var(--tinta-fantasma)' }}>

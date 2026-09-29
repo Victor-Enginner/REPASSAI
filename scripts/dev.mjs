@@ -38,11 +38,14 @@ function liberarPorta(porta) {
   } catch {}
 }
 
-console.log('🚀 Preparando ambiente REPASS AI...');
-liberarPorta(8000);
-liberarPorta(3000);
+const BACKEND_PORT = process.env.BACKEND_PORT || '8001';
+const VITE_PORT = process.env.VITE_PORT || '3001';
 
-console.log('\n✅ Iniciando Backend (Porta 8000) e Frontend (Porta 3000)...\n');
+console.log('🚀 Preparando ambiente REPASS AI...');
+liberarPorta(BACKEND_PORT);
+liberarPorta(VITE_PORT);
+
+console.log(`\n✅ Iniciando Backend (Porta ${BACKEND_PORT}) e Frontend (Porta ${VITE_PORT})...\n`);
 
 // 1. Inicia o Backend Python
 const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
@@ -50,45 +53,36 @@ const backendProc = spawn(pythonCmd, ['-u', 'backend/run_dev_single_user.py'], {
   cwd: raiz,
   stdio: 'pipe',
   shell: true,
-  // PORT precisa ser fixado aqui.
-  //
-  // `spawn` herda process.env, e `app_api.py` respeita PORT. Num ambiente
-  // que já define PORT=3000 (harness de preview, Heroku, vários PaaS), o
-  // backend subia na 3000 — a porta do Vite — e o frontend não subia. O
-  // sintoma era enganoso: a API respondia 404 em "/" e parecia que o
-  // frontend tinha quebrado.
-  //
-  // Este script existe para subir os dois lado a lado, então as portas são
-  // contrato dele, não do ambiente.
-  env: { ...process.env, PORT: '8000' },
+  env: { ...process.env, PORT: BACKEND_PORT },
 });
 
 backendProc.stdout.on('data', (data) => {
   const txt = data.toString().trim();
-  if (txt) console.log(`[API 8000] ${txt}`);
+  if (txt) console.log(`[API ${BACKEND_PORT}] ${txt}`);
 });
 
 backendProc.stderr.on('data', (data) => {
   const txt = data.toString().trim();
-  if (txt) console.error(`[API 8000 ERR] ${txt}`);
+  if (txt) console.error(`[API ${BACKEND_PORT} ERR] ${txt}`);
 });
 
 // 2. Inicia o Frontend Vite
 const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-const frontendProc = spawn(npxCmd, ['vite'], {
+const frontendProc = spawn(npxCmd, ['vite', '--port', VITE_PORT], {
   cwd: raiz,
   stdio: 'pipe',
   shell: true,
+  env: { ...process.env, VITE_PORT, BACKEND_PORT },
 });
 
 frontendProc.stdout.on('data', (data) => {
   const txt = data.toString().trim();
-  if (txt) console.log(`[VITE 3000] ${txt}`);
+  if (txt) console.log(`[VITE ${VITE_PORT}] ${txt}`);
 });
 
 frontendProc.stderr.on('data', (data) => {
   const txt = data.toString().trim();
-  if (txt) console.error(`[VITE 3000 ERR] ${txt}`);
+  if (txt) console.error(`[VITE ${VITE_PORT} ERR] ${txt}`);
 });
 
 // Encerrar ambos limpos no Ctrl+C
