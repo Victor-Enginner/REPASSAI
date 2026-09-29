@@ -197,7 +197,7 @@ export default function LandingPage({ onOpenApp }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              opacity: 0.40,
+              opacity: 0.55,
               mixBlendMode: 'multiply'
             }}
           >
