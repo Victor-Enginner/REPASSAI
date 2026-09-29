@@ -33,6 +33,7 @@ const VIEW_LOADERS = {
   leads: () => import('./views/LeadsView'),
   crm: () => import('./views/CRMView'),
   bulk_whatsapp: () => import('./views/BulkWhatsAppView'),
+  disparos: () => import('./views/DisparosView'),
   engine: () => import('./views/AIEngineView'),
   agendamentos: () => import('./views/AppointmentsView'),
   projetos: () => import('./views/ProjectsView'),
@@ -64,6 +65,7 @@ const CanaisView = lazy(() => import('./views/CanaisView'));
 const BaseConhecimentoView = lazy(() => import('./views/BaseConhecimentoView'));
 const RelatoriosView = lazy(() => import('./views/RelatoriosView'));
 const ContatosView = lazy(() => import('./views/ContatosView'));
+const DisparosView = lazy(() => import('./views/DisparosView'));
 const GenericWorkspaceView = lazy(() => import('./views/GenericWorkspaceView'));
 import CommandPalette from './components/CommandPalette';
 
@@ -565,8 +567,14 @@ function AppMain() {
               </PainelSimples>
             )}
 
+            {currentTab === 'disparos' && (
+              <PainelSimples>
+                <DisparosView leads={leads} onNavigate={setCurrentTab} />
+              </PainelSimples>
+            )}
+
             {[
-              'disparos', 'automacoes', 'formularios',
+              'automacoes', 'formularios',
               'empresas', 'equipe', 'tags', 'pipelines', 'respostas_rapidas',
               'motivos_perda', 'campos_personalizados', 'workspaces', 'organizacao',
               'smtp', 'permissoes', 'ia_config', 'lgpd'
