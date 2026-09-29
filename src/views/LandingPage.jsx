@@ -77,9 +77,7 @@ export default function LandingPage({ onOpenApp }) {
   const heroTextStyle = {
     fontSize: 'clamp(3rem, 15vw, 12rem)',
     lineHeight: 0.85,
-    background: isDark
-      ? 'linear-gradient(135deg, #ffffff 20%, var(--iris-lilas) 65%, var(--iris-ciano) 100%)'
-      : 'linear-gradient(135deg, var(--tinta) 25%, var(--iris-violeta) 70%, var(--iris-azul) 100%)',
+    background: 'var(--gradiente-azul-repass)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     margin: 0
@@ -89,7 +87,7 @@ export default function LandingPage({ onOpenApp }) {
     <div style={{ minHeight: '100vh', width: '100%', background: 'var(--papel)', color: 'var(--tinta)', position: 'relative', overflowX: 'hidden' }}>
       
       {/* SVG Scroll Journey Connector Line */}
-      <ScrollJourneyLine strokeColor="var(--accent-indigo)" glowColor="var(--accent-rosa)" />
+      <ScrollJourneyLine strokeColor={isDark ? "var(--accent-indigo)" : "var(--accent-blue)"} glowColor={isDark ? "var(--accent-rosa)" : "var(--iris-ciano)"} />
 
       {/* 1. Architectural Navigation Bar Português BR */}
       {/*
@@ -247,10 +245,18 @@ export default function LandingPage({ onOpenApp }) {
             4 linhas, o meio é a divisa entre QUADRANTE_02 e 03. É o mesmo
             corte conceitual — metade de cima contra metade de baixo.
           */}
-          <LinhaElastica orientacao="horizontal" posicao={0.5} />
+          <LinhaElastica orientacao="horizontal" posicao={0.5} corAtiva={isDark ? 'var(--iris-lilas)' : 'var(--iris-azul)'} />
           {/* Cell 1: Top-Left */}
           <div className="hero-cell hero-cell-1" style={{ alignItems: 'flex-end' }}>
-            <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px', color: 'var(--accent-indigo)' }}>QUADRANTE_01 // NÚCLEO</span>
+            <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gradiente-azul-puro)', display: 'inline-block', boxShadow: '0 0 8px var(--iris-azul)' }} />
+              <span style={{ 
+                background: 'var(--gradiente-azul-puro)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 700 
+              }}>QUADRANTE_01 // NÚCLEO</span>
+            </span>
             <h1 className="font-headline" style={heroTextStyle}>
               RE
             </h1>
@@ -258,7 +264,15 @@ export default function LandingPage({ onOpenApp }) {
 
           {/* Cell 2: Top-Right */}
           <div className="hero-cell hero-cell-2" style={{ alignItems: 'flex-end' }}>
-            <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px', color: 'var(--accent-indigo)' }}>QUADRANTE_02 // SISTEMA</span>
+            <span className="mono-label" style={{ position: 'absolute', top: '24px', left: '24px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gradiente-azul-puro)', display: 'inline-block', boxShadow: '0 0 8px var(--iris-azul)' }} />
+              <span style={{ 
+                background: 'var(--gradiente-azul-puro)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 700 
+              }}>QUADRANTE_02 // SISTEMA</span>
+            </span>
             <h1 className="font-headline" style={heroTextStyle}>
               PASS
             </h1>
@@ -266,7 +280,15 @@ export default function LandingPage({ onOpenApp }) {
 
           {/* Cell 3: Bottom-Left */}
           <div className="hero-cell hero-cell-3" style={{ alignItems: 'flex-start' }}>
-            <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px', color: 'var(--accent-indigo)' }}>QUADRANTE_03 // NEURAL</span>
+            <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gradiente-azul-puro)', display: 'inline-block', boxShadow: '0 0 8px var(--iris-azul)' }} />
+              <span style={{ 
+                background: 'var(--gradiente-azul-puro)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 700 
+              }}>QUADRANTE_03 // NEURAL</span>
+            </span>
             <h1 className="font-headline" style={heroTextStyle}>
               A
             </h1>
@@ -274,7 +296,15 @@ export default function LandingPage({ onOpenApp }) {
 
           {/* Cell 4: Bottom-Right */}
           <div className="hero-cell hero-cell-4" style={{ alignItems: 'flex-start' }}>
-            <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px', color: 'var(--accent-indigo)' }}>QUADRANTE_04 // OSINT</span>
+            <span className="mono-label" style={{ position: 'absolute', bottom: '24px', left: '24px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gradiente-azul-puro)', display: 'inline-block', boxShadow: '0 0 8px var(--iris-azul)' }} />
+              <span style={{ 
+                background: 'var(--gradiente-azul-puro)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 700 
+              }}>QUADRANTE_04 // OSINT</span>
+            </span>
             <h1 className="font-headline" style={heroTextStyle}>
               I
             </h1>

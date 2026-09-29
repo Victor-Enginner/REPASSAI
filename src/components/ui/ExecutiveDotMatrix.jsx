@@ -148,25 +148,25 @@ export default function ExecutiveDotMatrix({
             r = dotRadius + cursorFactor * (isDark ? 2.0 : 1.8);
 
             if (cursorFactor > 0.65) {
-              // Núcleo: Violeta/Íris saturado
+              // Núcleo: Azul profundo cibernético no claro / Lilás no escuro
               fillStyle = isDark
                 ? `rgba(167, 139, 250, ${0.7 + cursorFactor * 0.3})`
-                : `rgba(124, 92, 255, ${0.45 + cursorFactor * 0.5})`;
+                : `rgba(29, 78, 216, ${0.55 + cursorFactor * 0.45})`;
             } else if (cursorFactor > 0.35) {
               // Zona intermediária: Ciano elétrico
               fillStyle = isDark
                 ? `rgba(86, 216, 230, ${0.6 + cursorFactor * 0.35})`
-                : `rgba(86, 216, 230, ${0.35 + cursorFactor * 0.5})`;
+                : `rgba(6, 182, 212, ${0.45 + cursorFactor * 0.45})`;
             } else {
-              // Borda da onda: Menta / Lilás suave
+              // Borda da onda: Azul celeste / Menta
               fillStyle = isDark
                 ? `rgba(124, 231, 196, ${0.4 + cursorFactor * 0.4})`
-                : `rgba(124, 231, 196, ${0.25 + cursorFactor * 0.4})`;
+                : `rgba(59, 130, 246, ${0.35 + cursorFactor * 0.4})`;
             }
           } else if (idleFactor > 0.8) {
             // Pulso sutil no repouso
             r = dotRadius + 0.3;
-            fillStyle = isDark ? 'rgba(167, 139, 250, 0.28)' : 'rgba(124, 92, 255, 0.19)';
+            fillStyle = isDark ? 'rgba(167, 139, 250, 0.28)' : 'rgba(37, 99, 235, 0.22)';
           }
 
           ctx.beginPath();
