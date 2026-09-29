@@ -255,8 +255,35 @@ const CONFIGURACOES_INFO = {
 };
 
 export default function GenericWorkspaceView({ tabId }) {
-  const config = CONFIGURACOES_INFO[tabId] || CONFIGURACOES_INFO.contatos;
-  const Icone = config.icone || Settings;
+  const baseConfig = CONFIGURACOES_INFO[tabId] || CONFIGURACOES_INFO.contatos;
+  const Icone = baseConfig.icone || Settings;
+
+  const config = useMemo(() => {
+    if (tabId !== 'equipe') return baseConfig;
+    try {
+      const cadastrados = JSON.parse(localStorage.getItem('repass_usuarios_registrados') || '[]');
+      const linhasCadastrados = cadastrados.map(u => [
+        u.nome || u.email.split('@')[0],
+        u.email,
+        u.role || 'Operador',
+        'Fila Geral B2B',
+        u.status || 'Online'
+      ]);
+
+      // Garante que zevatron1337 esteja visivel para o Victor
+      const temZevatron = cadastrados.some(u => u.email.includes('zevatron1337'));
+      const zevatronLinha = !temZevatron
+        ? [['Zevatron (Membro)', 'zevatron1337@gmail.com', 'Operador Convidado', 'Fila Comercial', 'Cadastrado']]
+        : [];
+
+      return {
+        ...baseConfig,
+        linhas: [...linhasCadastrados, ...zevatronLinha, ...baseConfig.linhas]
+      };
+    } catch {
+      return baseConfig;
+    }
+  }, [tabId, baseConfig]);
 
   return (
     <div style={{ padding: '24px 28px', maxWidth: '1200px', margin: '0 auto' }}>

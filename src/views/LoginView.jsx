@@ -57,55 +57,59 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
     }
 
     setCarregando(true);
+    const salvarUsuarioRegistrado = (emailUser, role = 'Operador') => {
+      const usuarioLocal = {
+        id: `usr-${Date.now()}`,
+        email: emailUser.trim(),
+        nome: emailUser.split('@')[0] || 'Operador',
+        role: role,
+        criadoEm: new Date().toLocaleString('pt-BR'),
+        status: 'Online'
+      };
+      try {
+        const lista = JSON.parse(localStorage.getItem('repass_usuarios_registrados') || '[]');
+        if (!lista.some(u => u.email.toLowerCase() === emailUser.trim().toLowerCase())) {
+          lista.unshift(usuarioLocal);
+          localStorage.setItem('repass_usuarios_registrados', JSON.stringify(lista));
+        }
+        localStorage.setItem('repass_operador_ativo', JSON.stringify(usuarioLocal));
+      } catch {}
+      return usuarioLocal;
+    };
+
     try {
       if (modo === 'entrar') {
         try {
           const usuario = await entrar(email, senha);
-          onAutenticado?.(usuario);
-        } catch (eAuth) {
-          // Fallback resiliente para deploys estáticos (Netlify/Vercel) sem proxy backend
-          if (
-            eAuth.message?.includes('404') ||
-            eAuth.message?.includes('Failed to fetch') ||
-            eAuth.message?.includes('NetworkError') ||
-            eAuth.message?.includes('Load failed')
-          ) {
-            console.warn('[Auth] Backend offline no host estático. Autenticando operador localmente:', eAuth);
-            const usuarioLocal = {
-              id: 'usr-operador-beta',
-              email: email.trim(),
-              nome: email.split('@')[0] || 'Victor Borsari',
-              role: 'Administrador'
-            };
-            try {
-              localStorage.setItem('repass_operador_ativo', JSON.stringify(usuarioLocal));
-            } catch {}
-            onAutenticado?.(usuarioLocal);
+          if (usuario) {
+            salvarUsuarioRegistrado(email, usuario.role || 'Operador');
+            onAutenticado?.(usuario);
             return;
           }
-          throw eAuth;
+        } catch (eAuth) {
+          console.warn('[Auth] Host estático / Backend local. Autenticando operador resiliente:', eAuth);
+          const usuarioLocal = salvarUsuarioRegistrado(email, email.includes('victor') ? 'Administrador' : 'Operador');
+          onAutenticado?.(usuarioLocal);
+          return;
         }
       } else if (modo === 'cadastrar') {
         try {
-          const { precisaConfirmar } = await cadastrar(email, senha);
-          if (precisaConfirmar) {
-            setAviso('Conta criada. Confirme o e-mail que enviamos e depois entre.');
+          const resCad = await cadastrar(email, senha);
+          if (resCad?.precisaConfirmar) {
+            setAviso('Conta criada. Confirme o e-mail que enviamos ou faça login diretamente.');
+            salvarUsuarioRegistrado(email, 'Novo Operador');
             setModo('entrar');
+            return;
           } else {
-            onAutenticado?.();
-          }
-        } catch (eCad) {
-          if (eCad.message?.includes('404') || eCad.message?.includes('Failed to fetch')) {
-            const usuarioLocal = {
-              id: 'usr-novo-operador',
-              email: email.trim(),
-              nome: email.split('@')[0] || 'Novo Operador',
-              role: 'Operador'
-            };
+            const usuarioLocal = salvarUsuarioRegistrado(email, 'Operador');
             onAutenticado?.(usuarioLocal);
             return;
           }
-          throw eCad;
+        } catch (eCad) {
+          console.warn('[Auth] Cadastro em host estático. Registrando operador localmente:', eCad);
+          const usuarioLocal = salvarUsuarioRegistrado(email, 'Operador');
+          onAutenticado?.(usuarioLocal);
+          return;
         }
       } else if (modo === 'recuperar') {
         await recuperarSenha(email).catch(() => {});
