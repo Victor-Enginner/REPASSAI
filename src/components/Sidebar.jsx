@@ -44,7 +44,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useTheme } from '../theme/ThemeContext';
-import RepassLivingLogo from './ui/RepassLivingLogo';
+import SidebarBrand from './SidebarBrand';
 import { useEhMobile } from '../hooks/useMediaQuery';
 
 export const SECOES_MENU = [
@@ -235,31 +235,7 @@ export default function Sidebar({ currentTab, setCurrentTab, onOpenCommandPalett
             backgroundColor: 'var(--papel-cartao)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <RepassLivingLogo size={32} />
-
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span
-                style={{
-                  fontSize: '13.5px',
-                  fontWeight: 700,
-                  color: 'var(--tinta)',
-                  lineHeight: 1.2
-                }}
-              >
-                Victor Borsari
-              </span>
-              <span
-                style={{
-                  fontSize: '10.5px',
-                  color: 'var(--tinta-fraca)',
-                  fontFamily: 'var(--font-mono)'
-                }}
-              >
-                REPASS AI · PRO
-              </span>
-            </div>
-          </div>
+          <SidebarBrand />
 
           {ehMobile ? (
             <button
