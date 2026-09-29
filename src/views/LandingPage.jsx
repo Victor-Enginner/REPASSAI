@@ -5,7 +5,7 @@ import {
   Search, Send, RefreshCw, Layers, ArrowRight, MessageSquare, PhoneCall, 
   ChevronDown, ChevronUp, DollarSign, Award, Users, ShieldCheck, CheckCircle2
 } from 'lucide-react';
-import ASCIIWaves from '../components/ui/ASCIIWaves';
+import ExecutiveDotMatrix from '../components/ui/ExecutiveDotMatrix';
 import ScrollJourneyLine from '../components/ui/ScrollJourneyLine';
 import LinhaElastica from '../components/ui/LinhaElastica';
 import RepassLivingLogo from '../components/ui/RepassLivingLogo';
@@ -155,15 +155,13 @@ export default function LandingPage({ onOpenApp }) {
         overflow: 'hidden'
       }}>
         
-        {/* OriginKit Interactive ASCII Waves Canvas Background Layer (Edge-to-Edge no papel do site) */}
+        {/* Executive B2B Dot Matrix Background Layer (Edge-to-Edge no papel do site) */}
         <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.95 }}>
-          <ASCIIWaves 
-            color="rgba(124, 92, 255, 0.26)"
-            background="#f5f4f0"
-            elementSize={14}
-            speed={20}
+          <ExecutiveDotMatrix 
+            dotSpacing={26}
+            dotRadius={1.6}
             interactionRadius={220}
-            interactionIntensity={22}
+            idleWave={true}
           />
         </div>
 
