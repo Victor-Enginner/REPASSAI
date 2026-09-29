@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M50 14L84 33.5L68 43L50 32.5L32 43L16 33.5L50 14Z" fill="currentColor" fill-opacity="0.95" />
+  <path d="M16 33.5L32 43V60L16 51V33.5Z" fill="currentColor" fill-opacity="0.8" />
+  <path d="M50 48L68 58.5L84 49V68L50 87.5L34 78V60L50 69.5L66 60L50 51L34 60L34 78L50 87.5L84 68V49L68 58.5L50 48Z" fill="currentColor" fill-opacity="0.95" />
+  <path d="M50 51L68 40.5L84 49.5L66 60L50 51Z" fill="currentColor" fill-opacity="0.88" />
+  <path d="M66 60L84 70.5L72 77.5L56 67L66 60Z" fill="currentColor" fill-opacity="0.75" />
+  <path d="M56 67L72 77.5L60 85L44 74.5L56 67Z" fill="currentColor" fill-opacity="0.6" />
+</svg>

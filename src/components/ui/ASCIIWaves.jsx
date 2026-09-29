@@ -86,24 +86,32 @@ export default function ASCIIWaves(props) {
 
     useEffect(() => {
         if (!hasCursorInteraction || isStatic) return;
-        const el = containerRef.current;
-        if (!el) return;
         const onMove = (e) => {
-            const rect = el.getBoundingClientRect();
-            pointerRef.current = {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top,
-                active: true,
-            };
+            if (!containerRef.current) return;
+            const rect = containerRef.current.getBoundingClientRect();
+            if (
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom
+            ) {
+                pointerRef.current = {
+                    x: e.clientX - rect.left,
+                    y: e.clientY - rect.top,
+                    active: true,
+                };
+            } else {
+                pointerRef.current.active = false;
+            }
         };
         const onLeave = () => {
             pointerRef.current.active = false;
         };
-        el.addEventListener("pointermove", onMove);
-        el.addEventListener("pointerleave", onLeave);
+        window.addEventListener("pointermove", onMove, { passive: true });
+        window.addEventListener("blur", onLeave);
         return () => {
-            el.removeEventListener("pointermove", onMove);
-            el.removeEventListener("pointerleave", onLeave);
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("blur", onLeave);
         };
     }, [hasCursorInteraction, isStatic]);
 

@@ -14,7 +14,8 @@
     "test:visual:update": "playwright test tests/visual --update-snapshots",
     "test:leads-real": "playwright test tests/visual/leads-real-data.spec.js --project=desktop-chromium",
     "test:responsive": "playwright test tests/visual/responsive-accessibility.spec.js --project=desktop-chromium",
-    "audit:lighthouse": "node scripts/auditar-lighthouse.mjs"
+    "audit:lighthouse": "node scripts/auditar-lighthouse.mjs",
+    "test:e2e": "playwright test -c playwright.e2e.config.js"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

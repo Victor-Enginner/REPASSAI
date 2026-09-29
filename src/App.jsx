@@ -58,6 +58,12 @@ const SiteEditorView = lazy(VIEW_LOADERS.editor);
 const CreateSiteWizardView = lazy(VIEW_LOADERS.wizard);
 const LandingPage = lazy(VIEW_LOADERS.landing);
 const LoginView = lazy(() => import('./views/LoginView'));
+const AtendimentosView = lazy(() => import('./views/AtendimentosView'));
+const FluxosView = lazy(() => import('./views/FluxosView'));
+const CanaisView = lazy(() => import('./views/CanaisView'));
+const BaseConhecimentoView = lazy(() => import('./views/BaseConhecimentoView'));
+const GenericWorkspaceView = lazy(() => import('./views/GenericWorkspaceView'));
+import CommandPalette from './components/CommandPalette';
 
 /**
  * Placeholder de transição.
@@ -119,6 +125,18 @@ function AppMain() {
   });
   const [leads, setLeads] = useState(INITIAL_LEADS);
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   /**
    * Migração de segurança, executada uma vez por navegador.
@@ -340,14 +358,19 @@ function AppMain() {
 
       {/* Sidebar Transparente em TODAS as sessões do aplicativo */}
       {currentTab !== 'landing' && currentTab !== 'login' && (
-        <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        <Sidebar
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+        />
       )}
 
       <main style={{
         flex: 1,
         minWidth: 0,
         marginLeft: (currentTab !== 'landing' && currentTab !== 'login' && !ehMobile) ? '260px' : 0,
-        overflowY: 'auto',
+        overflowY: currentTab === 'atendimentos' ? 'hidden' : 'auto',
+        height: currentTab === 'atendimentos' ? '100vh' : 'auto',
         position: 'relative',
         zIndex: 10,
         transform: 'translateZ(0)',
@@ -503,10 +526,10 @@ function AppMain() {
               </PainelKeepAlive>
             )}
 
-            {montarLeve('cobrar') && (
-              <PainelKeepAlive ativo={currentTab === 'cobrar'}>
+            {(currentTab === 'cobrar' || currentTab === 'plano') && (
+              <PainelSimples>
                 <BillingView />
-              </PainelKeepAlive>
+              </PainelSimples>
             )}
 
             {montarLeve('ranking') && (
@@ -514,13 +537,55 @@ function AppMain() {
                 <AffiliateView />
               </PainelKeepAlive>
             )}
+
+            {currentTab === 'atendimentos' && (
+              <PainelSimples>
+                <AtendimentosView />
+              </PainelSimples>
+            )}
+
+            {currentTab === 'fluxos' && (
+              <PainelSimples>
+                <FluxosView />
+              </PainelSimples>
+            )}
+
+            {currentTab === 'canais' && (
+              <PainelSimples>
+                <CanaisView />
+              </PainelSimples>
+            )}
+
+            {currentTab === 'conhecimento' && (
+              <PainelSimples>
+                <BaseConhecimentoView />
+              </PainelSimples>
+            )}
+
+            {[
+              'contatos', 'relatorios', 'disparos', 'automacoes', 'formularios',
+              'empresas', 'equipe', 'tags', 'pipelines', 'respostas_rapidas',
+              'motivos_perda', 'campos_personalizados', 'workspaces', 'organizacao',
+              'smtp', 'permissoes', 'ia_config', 'lgpd'
+            ].includes(currentTab) && (
+              <PainelSimples>
+                <GenericWorkspaceView tabId={currentTab} />
+              </PainelSimples>
+            )}
         </ViewErrorBoundary>
 
-        {/* Widget Flutuante do Chatbot Agentico (Escondido em Landing e Login) */}
-        {currentTab !== 'landing' && currentTab !== 'login' && (
+        {/* Widget Flutuante do Chatbot Agentico (Escondido em Landing, Login e Atendimentos) */}
+        {currentTab !== 'landing' && currentTab !== 'login' && currentTab !== 'atendimentos' && (
           <AgenticChatbotWidget />
         )}
       </main>
+
+      {/* Modal Command Palette (Cmd+K / Ctrl+K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectTab={(tab) => setCurrentTab(tab === 'prospector' ? 'leads' : tab)}
+      />
 
       {/* Atalho para as 4 telas do fluxo principal. Só no celular. */}
       <DockMobile currentTab={currentTab} setCurrentTab={setCurrentTab} />

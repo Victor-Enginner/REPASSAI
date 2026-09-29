@@ -19,7 +19,7 @@
 import React, { useState } from 'react';
 import { LogIn, UserPlus, RefreshCw, AlertCircle, MailCheck, ShieldCheck, KeyRound, Radar, Zap, Globe } from 'lucide-react';
 import { entrar, cadastrar, recuperarSenha } from '../services/authService';
-import DotMatrix from '../components/ui/DotMatrix';
+import GlyphWall from '../components/ui/GlyphWall';
 
 /** Provas curtas do produto. Números medidos, não promessa de marketing. */
 const DESTAQUES = [
@@ -104,7 +104,7 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
     <div className="login-tela">
       {/* ---------- Painel de identidade ---------- */}
       <aside className="login-painel">
-        <DotMatrix />
+        <GlyphWall />
         <div className="login-painel-veu" />
 
         <div className="login-painel-conteudo">

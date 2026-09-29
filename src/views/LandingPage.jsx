@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { 
   Twitter, Linkedin, Github, Globe, ArrowUpRight, Zap, Sparkles, Check, 
   Search, Send, RefreshCw, Layers, ArrowRight, MessageSquare, PhoneCall, 
@@ -7,7 +8,7 @@ import {
 import ASCIIWaves from '../components/ui/ASCIIWaves';
 import ScrollJourneyLine from '../components/ui/ScrollJourneyLine';
 import LinhaElastica from '../components/ui/LinhaElastica';
-import logoOrb from '../assets/repass_logo_orb.jpg';
+import RepassLivingLogo from '../components/ui/RepassLivingLogo';
 
 export default function LandingPage({ onOpenApp }) {
   const [time, setTime] = useState({ hh: '12', mm: '04', ss: '19' });
@@ -72,7 +73,7 @@ export default function LandingPage({ onOpenApp }) {
   const heroTextStyle = {
     fontSize: 'clamp(3rem, 15vw, 12rem)',
     lineHeight: 0.85,
-    background: 'linear-gradient(135deg, #020617 10%, #4f46e5 50%, #7c3aed 80%, #06b6d4 100%)',
+    background: 'linear-gradient(135deg, #ffffff 15%, #a5b4fc 45%, #7c5cff 75%, #56d8e6 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     margin: 0
@@ -117,19 +118,13 @@ export default function LandingPage({ onOpenApp }) {
         boxShadow: '0 2px 10px rgba(15, 23, 42, 0.03)'
       }}>
         {/* Left: Brand Logo & Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={onOpenApp}>
-          <img 
-            src={logoOrb} 
-            alt="REPASS AI" 
-            style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover' }} 
+        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={onOpenApp}>
+          <RepassLivingLogo 
+            size={32} 
+            showWordmark={true} 
+            wordmarkSize={24} 
+            subtitle="VERSÃO_BETA" 
           />
-          <span className="font-headline" style={{ fontSize: '24px', letterSpacing: '-0.06em', color: 'var(--fg-bright)' }}>
-            REPASS
-          </span>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-indigo)', display: 'inline-block' }} />
-          <span className="mono-label" style={{ color: 'var(--accent-indigo)' }}>
-            VERSÃO_BETA
-          </span>
         </div>
 
         {/* Right: Circular Hairline Social Icons & Pill Button */}
@@ -161,13 +156,14 @@ export default function LandingPage({ onOpenApp }) {
       }}>
         
         {/* OriginKit Interactive ASCII Waves Canvas Background Layer (Edge-to-Edge) */}
-        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.25 }}>
+        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.88 }}>
           <ASCIIWaves 
-            color="#4f46e5"
-            background="#f4f6fb"
+            color="#6366f1"
+            background="#060814"
             elementSize={14}
             speed={25}
-            interactionRadius={180}
+            interactionRadius={240}
+            interactionIntensity={25}
           />
         </div>
 
@@ -242,16 +238,21 @@ export default function LandingPage({ onOpenApp }) {
         duas linhas — o texto vazava para fora da faixa.
       */}
       <section style={{
-        minHeight: '72px',
+        minHeight: '76px',
         width: '100%',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '16px',
+        padding: '12px clamp(16px, 4vw, 40px)',
         borderTop: '0.5px solid var(--hairline-color)',
         borderBottom: '0.5px solid var(--hairline-color)',
-        background: 'var(--bg-card)'
+        background: 'var(--bg-card)',
+        position: 'relative'
       }}>
-        {/* Cell 1: Email / Niche Input */}
-        <div className="hairline-r" style={{ padding: '0 24px', display: 'flex', alignItems: 'center' }}>
+        {/* Left: Email / Niche Input */}
+        <div style={{ flex: '1 1 240px', display: 'flex', alignItems: 'center' }}>
           <input 
             type="text"
             value={nicheInput}
@@ -261,40 +262,107 @@ export default function LandingPage({ onOpenApp }) {
             className="font-mono"
             style={{
               width: '100%',
+              maxWidth: '320px',
               background: 'transparent',
               border: 'none',
               outline: 'none',
               color: 'var(--fg-bright)',
               fontSize: '11px',
-              letterSpacing: '0.25em'
+              letterSpacing: '0.22em'
             }}
           />
         </div>
 
-        {/* Cell 2: JOIN BETA Button */}
-        <div className="hairline-r">
-          <button onClick={onOpenApp} className="btn-primary" style={{ width: '100%', height: '100%', borderRadius: 0, justifyContent: 'center' }}>
-            ENTRAR NA BETA
-          </button>
+        {/* Center: Apple iOS / macOS Liquid Glass Button */}
+        <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+          <motion.button
+            onClick={onOpenApp}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              padding: '13px 36px',
+              borderRadius: 'var(--raio-pill)',
+              background: 'var(--vidro-fundo)',
+              backdropFilter: 'var(--vidro-blur)',
+              WebkitBackdropFilter: 'var(--vidro-blur)',
+              border: '1px solid var(--aro-hover)',
+              boxShadow: 'var(--vidro-brilho), 0 8px 30px -4px rgba(124, 92, 255, 0.42), 0 2px 8px rgba(0, 0, 0, 0.08)',
+              color: 'var(--tinta)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11.5px',
+              fontWeight: 700,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              overflow: 'hidden',
+              transition: 'box-shadow 0.25s ease, background 0.25s ease'
+            }}
+          >
+            {/* Liquid specular ray / highlight on the top half */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '48%',
+                background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                borderRadius: 'var(--raio-pill) var(--raio-pill) 0 0',
+                pointerEvents: 'none'
+              }}
+            />
+
+            {/* Glowing animated orb / sparkle */}
+            <Sparkles size={14} style={{ color: 'var(--iris-violeta)', zIndex: 1 }} />
+            <span style={{ position: 'relative', zIndex: 1 }}>ENTRAR NA BETA</span>
+            <ArrowRight size={14} style={{ color: 'var(--iris-azul)', zIndex: 1 }} />
+
+            {/* Ambient liquid glow behind */}
+            <motion.div
+              animate={{
+                opacity: [0.35, 0.7, 0.35],
+                scale: [0.95, 1.05, 0.95]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+              style={{
+                position: 'absolute',
+                inset: '-10px',
+                background: 'var(--iris-veil)',
+                filter: 'blur(12px)',
+                zIndex: 0,
+                pointerEvents: 'none'
+              }}
+            />
+          </motion.button>
         </div>
 
-        {/* Cell 3: Real-Time Status Countdown Timer */}
-        <div className="hairline-r" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 20px' }}>
-          <div className="font-mono" style={{ fontSize: '20px', letterSpacing: '0.15em', color: 'var(--fg-bright)' }}>
+        {/* Right: Real-Time Countdown Clock & System Labels */}
+        <div style={{ flex: '1 1 240px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '24px' }}>
+          <div className="font-mono" style={{ fontSize: '18px', letterSpacing: '0.15em', color: 'var(--fg-bright)' }}>
             {time.hh} <span style={{ opacity: 0.3 }}>:</span> {time.mm} <span style={{ opacity: 0.3 }}>:</span> {time.ss}
           </div>
-        </div>
 
-        {/* Cell 4: System Labels Stack Português BR */}
-        <div style={{ padding: '12px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2px' }}>
-          <span className="mono-label" style={{ fontSize: '8px', letterSpacing: '0.4em' }}>ACESSO_GRATUITO</span>
-          <span className="mono-label" style={{ fontSize: '8px', letterSpacing: '0.4em' }}>TURMA_BETA_LIMITADA</span>
-          <span className="mono-label" style={{ fontSize: '8px', letterSpacing: '0.4em' }}>SEM_CARTÃO_DE_CRÉDITO</span>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2px', textAlign: 'right' }}>
+            <span className="mono-label" style={{ fontSize: '8px', letterSpacing: '0.35em' }}>ACESSO_GRATUITO</span>
+            <span className="mono-label" style={{ fontSize: '8px', letterSpacing: '0.35em' }}>TURMA_BETA_LIMITADA</span>
+            <span className="mono-label" style={{ fontSize: '8px', letterSpacing: '0.35em' }}>SEM_CARTÃO_DE_CRÉDITO</span>
+          </div>
         </div>
       </section>
 
-      {/* 4. Section Guia Oficial & Copy */}
-      <section style={{ padding: '80px 40px 60px 80px', maxWidth: '1400px', margin: '0 auto' }}>
+      {/* ZONA DE CONTEÚDO EDITORIAL COM TEXTURA DE PAPEL AMASSADO VINTAGE */}
+      <div className="textura-papel-amassado">
+        {/* 4. Section Guia Oficial & Copy */}
+        <section style={{ padding: '80px 40px 60px 80px', maxWidth: '1400px', margin: '0 auto' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(79, 70, 229, 0.08)', color: 'var(--accent-indigo)', padding: '6px 16px', borderRadius: '20px', fontSize: '12px', fontFamily: 'var(--font-mono)', border: '0.5px solid rgba(79, 70, 229, 0.2)', marginBottom: '24px', fontWeight: 600 }}>
           <Sparkles size={14} color="var(--accent-indigo)" /> FEITO PARA O BRASIL · TUDO DENTRO DO PAINEL · SEM INSTALAR NADA
         </div>
@@ -674,11 +742,12 @@ export default function LandingPage({ onOpenApp }) {
           ))}
         </div>
       </section>
+      </div>
 
       {/* Footer Final */}
       <footer style={{ padding: '32px 40px 32px 80px', borderTop: '0.5px solid var(--hairline-color)', background: 'var(--bg-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src={logoOrb} alt="REPASS AI" style={{ width: '24px', height: '24px', borderRadius: '50%' }} />
+          <RepassLivingLogo size={24} />
           <span className="mono-label" style={{ fontSize: '10px', color: 'var(--fg-subtle)' }}>© REPASS AI ENGINE // TODOS OS DIREITOS RESERVADOS</span>
         </div>
         <button onClick={onOpenApp} className="btn-primary" style={{ padding: '12px 28px', fontSize: '12px', borderRadius: '6px' }}>

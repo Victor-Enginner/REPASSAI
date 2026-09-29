@@ -22,8 +22,15 @@ function envVar(nome, padrao = '') {
   return padrao;
 }
 
-/** URL base do backend REPASS AI, sem barra no final. */
-export const API_BASE = envVar('VITE_API_BASE', 'http://localhost:8000').replace(/\/$/, '');
+/**
+ * URL base do backend REPASS AI, sem barra no final.
+ *
+ * O padrão é vazio (caminho relativo, mesma origem): em dev o Vite
+ * encaminha `/api` para o backend e em produção o nginx faz o mesmo. A CSP
+ * do index.html só libera `connect-src 'self'`, então um padrão absoluto
+ * como `http://localhost:8000` era bloqueado pelo navegador.
+ */
+export const API_BASE = envVar('VITE_API_BASE', '').replace(/\/$/, '');
 
 /**
  * Monta uma URL de endpoint da API.
