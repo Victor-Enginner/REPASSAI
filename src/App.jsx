@@ -553,7 +553,7 @@ function AppMain() {
 
             {currentTab === 'conhecimento' && (
               <PainelSimples>
-                <BaseConhecimentoView />
+                <BaseConhecimentoView onNavigate={setCurrentTab} />
               </PainelSimples>
             )}
 
