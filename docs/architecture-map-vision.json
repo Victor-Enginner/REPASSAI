@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "project": {
+    "name": "REPASS AI",
+    "version": "0.0.1-beta",
+    "codename": "Systemista AI Core",
+    "founder": "Victor Borsari",
+    "organization": "REPASS Digital Soluções",
+    "release_date": "2026-09-29",
+    "live_production_url": "https://repass-ai-beta.netlify.app",
+    "repositories": {
+      "clean_public": "https://github.com/Victor-Enginner/Repass-Ai.git",
+      "core_engine": "https://github.com/Victor-Enginner/REPASSAI.git"
+    }
+  },
+  "vision_statement": {
+    "mission": "Empoderar agências e operadores comerciais com uma infraestrutura unificada de prospecção autônoma no Google Maps, geração instantânea de sites em 14ms, agentes especialistas com vozes neurais humanas ultrarrealistas, fluxos n8n visuais e CRM automatizado com base de conhecimento RAG.",
+    "core_differentiators": [
+      "Zero robô de lata: Síntese de áudio telefônico neural com frequências binaurais (440Hz/480Hz) e Barge-in acústico",
+      "Compilador de páginas em 14 milissegundos sem dependências pesadas",
+      "Agentes com personas e almas (.md) documentadas e ferramentas executáveis no chat",
+      "Estúdio de automação visual nativo compatível com a especificação n8n",
+      "Design System estrito com zero cores hex literais e suporte a tema claro editorial e escuro acrílico"
+    ]
+  },
+  "architecture_layers": {
+    "presentation_layer": {
+      "framework": "React 19 + Vite 7",
+      "design_system": "Editorial Tactile Paper (Light) & Dark Veil Acrylic (Dark)",
+      "token_enforcement": "scripts/verificar-tokens.mjs (100% tokens CSS semânticos em var(--...))",
+      "specialized_visuals": [
+        "FaultyTerminal (Shader WebGL Matrix/Glitch)",
+        "FluidGlitchCursor (Canvas interativo em tempo real)",
+        "LetterGlitch (Arte ASCII procedural)",
+        "PrismGrid (Grid holográfico)",
+        "Cubes (Visualização isométrica de nós)"
+      ]
+    },
+    "voice_and_audio_engine": {
+      "core_service": "src/services/voiceAudioEngine.js",
+      "technology": "Web Audio API + SpeechSynthesis Neural PT-BR",
+      "features": {
+        "telephony_simulation": "Osciladores duplos binaurais oficiais (440Hz + 480Hz) gerando pulsos de discagem",
+        "audio_pipeline": "GainNodes dinâmicos, ruído de linha suave e bip de atendimento",
+        "barge_in": "Interrupção instantânea em full-duplex sem travamento do buffer",
+        "voice_personas": {
+          "apolo": "Microsoft Antonio Neural / Daniel / voz masculina assertiva",
+          "sofia": "Microsoft Francisca Neural / Maria / voz feminina acolhedora"
+        }
+      }
+    },
+    "agentic_intelligence_foundry": {
+      "directory": "AGENT_FOUNDRY_GEN01",
+      "active_agents": [
+        {
+          "id": "leo",
+          "name": "Leo",
+          "role": "Operador de Sistemas & Automações",
+          "focus": "Disparos de WhatsApp, conciliação de pedidos e CRM",
+          "tools": ["WhatsApp API", "CRM Pipelines", "E-mail Transacional", "Spintax"]
+        },
+        {
+          "id": "atlas",
+          "name": "Atlas",
+          "role": "Analista de Mercado & Inteligência Estratégica",
+          "focus": "Varredura do Google Maps com Scrapling, análise de avaliações e enriquecimento de dados",
+          "tools": ["Google Maps Scrapling", "Cruzamento de Dados", "Cálculo de Presença Web"]
+        },
+        {
+          "id": "apolo",
+          "name": "Apolo",
+          "role": "Tel-Agent de Voz IA",
+          "focus": "Ligações ativas, quebra de objeções ao vivo e agendamentos",
+          "tools": ["SIP Trunking", "Whisper STT", "Neural Voice Engine", "Detecção de Barge-in"]
+        },
+        {
+          "id": "maia",
+          "name": "Maia",
+          "role": "Head de Conteúdo & Copywriting",
+          "focus": "Roteiros persuasivos, copywriting B2B e variações anti-bloqueio",
+          "tools": ["Spintax Generator", "Copywriting Comercial", "Carrosséis Educativos"]
+        },
+        {
+          "id": "alva",
+          "name": "Alva",
+          "role": "Assistente Executiva & Pessoal",
+          "focus": "Triagem de mensagens, priorização de tarefas e sincronização de agenda",
+          "tools": ["Agenda & Calendário", "Priorização de Tarefas", "Triagem Inbound"]
+        },
+        {
+          "id": "nova",
+          "name": "Nova",
+          "role": "Estrategista de Negócios & Resolução de Gargalos",
+          "focus": "Diagnóstico de funil, benchmark de preços e modelagem de soluções",
+          "tools": ["Diagnóstico de Funil", "Benchmark de Preços", "Modelagem de Solução"]
+        }
+      ]
+    },
+    "automation_and_workflow_orchestrator": {
+      "view": "src/views/AutomacoesView.jsx",
+      "engine_compatibility": "n8n Open Source Workflow Specification",
+      "modes": [
+        "Estúdio de Fluxos Visual com nós conectáveis e latência em milissegundos",
+        "n8n Webview Integrado (conexão local ou cloud sem trocar de aba)",
+        "Lista de Regras Sequenciais com gatilhos Manuais, Webhooks e Eventos"
+      ]
+    },
+    "forms_and_capture_engine": {
+      "view": "src/views/FormulariosView.jsx",
+      "reference_inspiration": "crm.aramise.codes/forms",
+      "capabilities": [
+        "Editor de 2 colunas com configurações e campos reordenáveis",
+        "12 tipos de campos (Nome, Texto curto/longo, Valor R$, E-mail, Telefone, Sim/Não...)",
+        "Mapeamento dinâmico direto nas colunas do CRM",
+        "Preview interativo e teste em tempo real com criação automática de leads",
+        "Geração de código Embed (Iframe) pronto para incorporação em landing pages"
+      ]
+    },
+    "knowledge_base_rag": {
+      "view": "src/views/BaseConhecimentoView.jsx",
+      "reference_inspiration": "crm.promise.codes/knowledge",
+      "capabilities": [
+        "Indexação de fontes (Texto, Documento PDF/TXT, Website URL, FAQ)",
+        "Busca semântica vetorial com cálculo de score de similaridade percentual",
+        "Sintetizador de respostas do Copiloto IA sem alucinação",
+        "Navegação integrada com abas de topo: Fluxos | Automações | Base de Conhecimento"
+      ]
+    },
+    "crm_and_prospecting_core": {
+      "crm_view": "src/views/CRMView.jsx",
+      "prospector_view": "src/views/LeadsView.jsx",
+      "contacts_view": "src/views/ContatosView.jsx",
+      "pipeline_flow": [
+        "Leads em Aberto",
+        "Contatado",
+        "Site Demonstrativo Gerado",
+        "Proposta Enviada",
+        "Negociação",
+        "Fechado (Ganho)",
+        "Perdido"
+      ]
+    }
+  },
+  "security_and_deployment": {
+    "hosting": "Netlify Edge CDN",
+    "auth_pattern": "BFF (Backend-for-Frontend) com Cookies HttpOnly + Resilient Fallback",
+    "database": "Supabase PostgreSQL com Row Level Security (RLS)",
+    "local_persistence": "LocalStorage estruturado com schema versionado",
+    "ci_cd": "Git Push Trigger via netlify-cli com verificação prévia de tokens CSS"
+  }
+}
