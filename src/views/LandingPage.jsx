@@ -73,14 +73,14 @@ export default function LandingPage({ onOpenApp }) {
   const heroTextStyle = {
     fontSize: 'clamp(3rem, 15vw, 12rem)',
     lineHeight: 0.85,
-    background: 'linear-gradient(135deg, #ffffff 15%, #a5b4fc 45%, #7c5cff 75%, #56d8e6 100%)',
+    background: 'linear-gradient(135deg, var(--tinta) 25%, var(--iris-violeta) 70%, var(--iris-azul) 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     margin: 0
   };
 
   return (
-    <div style={{ minHeight: '100vh', width: '100%', background: 'var(--bg-black)', color: 'var(--fg-white)', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', width: '100%', background: 'var(--papel)', color: 'var(--tinta)', position: 'relative', overflowX: 'hidden' }}>
       
       {/* SVG Scroll Journey Connector Line */}
       <ScrollJourneyLine strokeColor="var(--accent-indigo)" glowColor="var(--accent-rosa)" />
@@ -155,15 +155,15 @@ export default function LandingPage({ onOpenApp }) {
         overflow: 'hidden'
       }}>
         
-        {/* OriginKit Interactive ASCII Waves Canvas Background Layer (Edge-to-Edge) */}
-        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.88 }}>
+        {/* OriginKit Interactive ASCII Waves Canvas Background Layer (Edge-to-Edge no papel do site) */}
+        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.95 }}>
           <ASCIIWaves 
-            color="#6366f1"
-            background="#060814"
+            color="rgba(124, 92, 255, 0.26)"
+            background="#f5f4f0"
             elementSize={14}
-            speed={25}
-            interactionRadius={240}
-            interactionIntensity={25}
+            speed={20}
+            interactionRadius={220}
+            interactionIntensity={22}
           />
         </div>
 
