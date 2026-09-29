@@ -373,6 +373,12 @@ def cachear_midia(chave, dados, content_type):
 
 class RepassApiHandler(BaseHTTPRequestHandler):
 
+    def handle(self):
+        try:
+            super().handle()
+        except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError):
+            pass
+
     def _responder_erro_amigavel(self, mensagem, detalhe_tecnico="", status=422):
         """
         Devolve uma falha legível para o dono do negócio, sem stack trace.

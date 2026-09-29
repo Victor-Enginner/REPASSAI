@@ -185,8 +185,42 @@ export default function LandingPage({ onOpenApp }) {
         overflow: 'hidden'
       }}>
         
+        {/* Vídeo em Loop Cinematográfico EXCLUSIVO do Modo Branco (Light / White) */}
+        {!isDark && (
+          <div 
+            style={{ 
+              position: 'absolute', 
+              inset: 0, 
+              width: '100%', 
+              height: '100%', 
+              zIndex: 0, 
+              overflow: 'hidden',
+              pointerEvents: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: 0.40,
+              mixBlendMode: 'multiply'
+            }}
+          >
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              src="/videos/hero_eye_loop.mp4"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                filter: 'contrast(1.08) brightness(1.02)'
+              }}
+            />
+          </div>
+        )}
+
         {/* Executive B2B Dot Matrix Background Layer (Edge-to-Edge no papel do site) */}
-        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.95 }}>
+        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1, opacity: 0.95 }}>
           <ExecutiveDotMatrix 
             theme={theme}
             dotSpacing={26}
