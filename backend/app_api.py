@@ -373,6 +373,10 @@ def cachear_midia(chave, dados, content_type):
             MEDIA_CACHE.pop(antiga, None)
 
 class RepassApiHandler(BaseHTTPRequestHandler):
+    def log_request(self, code="-", size="-"):
+        self.log_message("%s %s %s", self.command,
+                         urllib.parse.urlsplit(self.path).path.replace("\n", "").replace("\r", ""), code)
+
 
     def handle(self):
         try:
@@ -553,6 +557,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             supabase_client.invalidar_cache_token(token)
 
         secure, samesite = self._cookie_flags()
+        self._token_renovado = dados.get("access_token", "")
         self._cookies_pendentes = supabase_client.montar_set_cookies(
             dados.get("access_token", ""),
             dados.get("refresh_token") or refresh,
@@ -659,8 +664,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(corpo)))
         # Dado de usuário autenticado não deve ir para CDN compartilhada.
-        if status in (401, 403) or dados.get("usuario") is not None:
-            self.send_header("Cache-Control", "private, no-store")
+        self.send_header("Cache-Control", "private, no-store")
         self._send_cors_headers()
         pendentes = cookies if cookies is not None else getattr(self, "_cookies_pendentes", None)
         if pendentes:
@@ -733,9 +737,27 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         self._json(200, {"sucesso": True})
 
     def handle_auth_logout(self):
-        """Apaga cookies de sessão."""
-        token = self._token_atual()
-        supabase_client.invalidar_cache_token(token)
+        """Revoga sessão atual antes de limpar cookies; falhas explícitas."""
+        try:
+            usuario = self._usuario_atual()
+            token = self._token_atual()
+            if usuario:
+                token = getattr(self, "_token_renovado", None) or token
+                supabase_client.encerrar_sessao(token)
+            elif supabase_client.extrair_refresh_cookie(self.headers.get("Cookie")):
+                try:
+                    dados = supabase_client.renovar_sessao(
+                        supabase_client.extrair_refresh_cookie(self.headers.get("Cookie")))
+                except supabase_client.AuthErro as exc:
+                    if exc.status != 401:
+                        raise
+                    dados = None
+                if dados:
+                    supabase_client.encerrar_sessao(dados["access_token"])
+        except (supabase_client.AuthErro, supabase_client.SupabaseIndisponivel):
+            self._json(503, {"sucesso": False, "erro": "Não foi possível confirmar a saída. Tente novamente."})
+            return
+        supabase_client.invalidar_cache_token(self._token_atual())
         secure, samesite = self._cookie_flags()
         self._json(200, {"sucesso": True}, cookies=supabase_client.montar_clear_cookies(
             secure=secure, samesite=samesite

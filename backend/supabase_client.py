@@ -306,6 +306,20 @@ def renovar_sessao(refresh_token):
     return dados
 
 
+def encerrar_sessao(token):
+    """Revoga refresh tokens somente da sessão atual."""
+    if not token:
+        return
+    try:
+        _requisicao("POST", "/auth/v1/logout?scope=local",
+                    headers={"apikey": anon_key(), "Authorization": f"Bearer {token}"},
+                    timeout=15)
+    except SupabaseIndisponivel as exc:
+        raise AuthErro("Não foi possível confirmar o encerramento da sessão. Tente novamente.", 503) from exc
+    finally:
+        invalidar_cache_token(token)
+
+
 def montar_set_cookies(access_token, refresh_token, expires_in=3600, secure=False, samesite="Lax"):
     """
     Lista de strings Set-Cookie para a sessão.
