@@ -163,6 +163,58 @@ class R2StorageEngine:
             CacheControl="public, max-age=300",
         )
 
+    def upload_objeto(self, key, conteudo, content_type="application/octet-stream"):
+        """
+        Envia um objeto arbitrário ao bucket R2.
+
+        Diferente de `salvar_site_compilado`, este método não grava cópia local
+        nem assume HTML: serve para qualquer artefato (código de componente,
+        índice JSON, imagem). O chamador é responsável pela cópia local.
+
+        Args:
+            key: caminho da chave no bucket (ex.: "assets/magicui/marquee/marquee.tsx").
+            conteudo: str ou bytes com o conteúdo do objeto.
+            content_type: MIME type gravado no objeto.
+
+        Returns:
+            dict com `enviado` (bool), `key` (str), `cdn_url` (str|None) e
+            `erro` (str|None). `cdn_url` só é preenchido quando há upload real
+            e uma base URL pública configurada.
+
+        Raises:
+            RuntimeError: se o cliente S3 não estiver disponível.
+        """
+        if not self.configurado():
+            return {"enviado": False, "key": key, "cdn_url": None, "erro": "r2_nao_configurado"}
+
+        corpo = conteudo.encode("utf-8") if isinstance(conteudo, str) else conteudo
+        try:
+            self._cliente_s3().put_object(
+                Bucket=self.bucket_name,
+                Key=key,
+                Body=corpo,
+                ContentType=content_type,
+                CacheControl="public, max-age=86400",
+            )
+        except Exception as exc:
+            return {
+                "enviado": False,
+                "key": key,
+                "cdn_url": None,
+                "erro": f"{type(exc).__name__}: {exc}",
+            }
+
+        return {
+            "enviado": True,
+            "key": key,
+            "cdn_url": (
+                f"{self.public_base_url}/{urllib.parse.quote(key)}"
+                if self.public_base_url
+                else None
+            ),
+            "erro": None,
+        }
+
     def salvar_site_compilado(self, client_slug, html_content):
         """
         Grava o site compilado.

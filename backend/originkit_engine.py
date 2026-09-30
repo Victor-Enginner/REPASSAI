@@ -11,6 +11,7 @@ import os
 import sys
 import json
 import subprocess
+import shutil
 import re
 import urllib.request
 
@@ -51,14 +52,37 @@ class OriginKitEngine:
         print(f"[OriginKitEngine] Baixando componente de {registry_url}...")
 
         # 1. Tenta baixar via Shadcn CLI
-        cmd = f'npx -y shadcn@latest add "{registry_url}" --yes'
-        try:
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=BASE_DIR)
-            if res.returncode == 0:
-                print(f"[OriginKitEngine] Componente instalado via Shadcn CLI com sucesso!")
-                return {"status": "success", "method": "shadcn_cli", "url": registry_url}
-        except Exception as e:
-            print(f"[OriginKitEngine] Aviso no Shadcn CLI: {e}")
+        #
+        # Antes isto era `subprocess.run(f'npx ... "{registry_url}" ...',
+        # shell=True)`. A URL entrava por interpolação numa string entregue ao
+        # shell: bastava ela conter uma aspa e um `&&` para executar comando
+        # arbitrário nesta máquina. E as URLs de registry chegam COLADAS À MÃO,
+        # de fora — é o caminho que o atacante controla.
+        #
+        # Lista de argumentos, sem shell: o sistema operacional recebe cada
+        # item como um argumento só, e metacaractere nenhum é interpretado.
+        #
+        # `shutil.which` existe porque sem shell o Windows não resolve `npx`
+        # sozinho — o executável real chama-se `npx.cmd`. Se não achar, cai no
+        # fallback HTTP abaixo, que já existia.
+        npx = shutil.which("npx")
+        if not npx:
+            print("[OriginKitEngine] npx não encontrado; indo direto ao registry HTTP.")
+        elif not registry_url.startswith(("http://", "https://")):
+            # Defesa em profundidade: a lista já neutraliza o shell, mas uma
+            # URL `file://` ou `--flag` disfarçada não tem por que chegar aqui.
+            print(f"[OriginKitEngine] URL recusada (esquema inesperado): {registry_url}")
+        else:
+            try:
+                res = subprocess.run(
+                    [npx, "-y", "shadcn@latest", "add", registry_url, "--yes"],
+                    capture_output=True, text=True, cwd=BASE_DIR,
+                )
+                if res.returncode == 0:
+                    print(f"[OriginKitEngine] Componente instalado via Shadcn CLI com sucesso!")
+                    return {"status": "success", "method": "shadcn_cli", "url": registry_url}
+            except Exception as e:
+                print(f"[OriginKitEngine] Aviso no Shadcn CLI: {e}")
 
         # 2. Fallback via HTTP Direct JSON Registry
         try:

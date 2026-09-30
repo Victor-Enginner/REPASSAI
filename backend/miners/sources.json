@@ -1,0 +1,77 @@
+{
+  "_doc": "Fontes de mineracao. Adicionar uma fonte nova = adicionar um objeto em 'sources'. Nenhum codigo precisa mudar. 'index_candidates' sao os caminhos testados em ordem ate um responder JSON valido; 'item_template' usa {slug} e e resolvido contra base_url.",
+  "_licenca": "Somente fontes com licenca permissiva (MIT/Apache/CC0) e registry publico. Fontes pagas ou com paywall NAO entram aqui.",
+  "sources": [
+    {
+      "id": "shadcn",
+      "nome": "shadcn/ui",
+      "base_url": "https://ui.shadcn.com",
+      "index_candidates": ["/r/index.json", "/registry.json"],
+      "item_template": "/r/styles/new-york/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "shadcn — https://ui.shadcn.com",
+      "ativo": true
+    },
+    {
+      "id": "magicui",
+      "nome": "Magic UI",
+      "base_url": "https://magicui.design",
+      "index_candidates": ["/r/index.json", "/registry.json"],
+      "item_template": "/r/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "Magic UI — https://magicui.design",
+      "ativo": true
+    },
+    {
+      "id": "reactbits",
+      "nome": "React Bits",
+      "base_url": "https://reactbits.dev",
+      "index_candidates": ["/r/index.json", "/registry.json", "/r/registry.json"],
+      "item_template": "/r/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "React Bits — https://reactbits.dev",
+      "ativo": true
+    },
+    {
+      "id": "smoothui",
+      "nome": "SmoothUI",
+      "base_url": "https://smoothui.dev",
+      "index_candidates": ["/r/registry.json", "/r/index.json", "/registry.json"],
+      "item_template": "/r/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "SmoothUI — https://smoothui.dev",
+      "ativo": true
+    },
+    {
+      "id": "inspira",
+      "nome": "Inspira UI",
+      "base_url": "https://inspira-ui.com",
+      "index_candidates": ["/r/index.json", "/registry.json"],
+      "item_template": "/r/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "Inspira UI — https://inspira-ui.com",
+      "ativo": false,
+      "nota": "Testado em 2026-07-27 (inspira-ui.com e v2.inspira-ui.com, /r/index.json e /registry.json): nenhum respondeu JSON. Sem registry publico. Idem 21st.dev, uiverse.io, svelte-bits e framer motion — nao incluidos por nao expor registry."
+    },
+    {
+      "id": "tweakcn",
+      "nome": "tweakcn (temas)",
+      "base_url": "https://tweakcn.com",
+      "index_candidates": ["/r/registry.json", "/r/index.json", "/registry.json"],
+      "item_template": "/r/themes/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "tweakcn — https://tweakcn.com",
+      "ativo": true
+    },
+    {
+      "id": "vuebits",
+      "nome": "Vue Bits",
+      "base_url": "https://vue-bits.dev",
+      "index_candidates": ["/r/registry.json", "/r/index.json"],
+      "item_template": "/r/{slug}.json",
+      "licenca": "MIT",
+      "atribuicao": "Vue Bits — https://vue-bits.dev",
+      "ativo": true
+    }
+  ]
+}

@@ -67,6 +67,49 @@ def negocio_encerrado(status):
     return status in ("CLOSED_PERMANENTLY", "CLOSED_TEMPORARILY")
 
 
+# O que cada status do Places significa em português, e o que fazer.
+#
+# A API SEMPRE manda um `error_message` explicando a recusa — e o código
+# antigo lia só o `status`, jogando fora a única informação útil. O log
+# dizia "retornou: REQUEST_DENIED" seis vezes seguidas, sem dizer que a
+# causa era cobrança desativada no Google Cloud. Foi preciso chamar a API
+# à mão para descobrir. Status sem motivo manda investigar o lugar errado.
+_ACAO_POR_STATUS = {
+    "REQUEST_DENIED": (
+        "O Google recusou a chave. Quase sempre é cobrança desativada no "
+        "projeto do Google Cloud, Places API não habilitada, ou restrição "
+        "de IP/API na chave."
+    ),
+    "OVER_QUERY_LIMIT": (
+        "Cota do Google estourada ou teto de gasto atingido. A varredura "
+        "volta a funcionar sozinha quando a cota renovar."
+    ),
+    "INVALID_REQUEST": "A requisição saiu malformada — é defeito nosso, não do Google.",
+    "NOT_FOUND": "O place_id não existe mais no Google.",
+    "UNKNOWN_ERROR": "Falha temporária no lado do Google. Tentar de novo costuma resolver.",
+}
+
+
+def _motivo_da_recusa(origem, data):
+    """
+    Monta uma mensagem que diz o que aconteceu E o que fazer a respeito.
+
+    Junta as três coisas que o operador precisa: qual chamada falhou, o que
+    o Google respondeu com as palavras dele (`error_message`), e a tradução
+    do status para uma ação concreta.
+    """
+    status = data.get("status") or "SEM_STATUS"
+    detalhe = (data.get("error_message") or "").strip()
+    acao = _ACAO_POR_STATUS.get(status, "")
+
+    partes = [f"Places API ({origem}) retornou: {status}"]
+    if detalhe:
+        partes.append(f"Google diz: {detalhe}")
+    if acao:
+        partes.append(acao)
+    return " | ".join(partes)
+
+
 def buscar_nicho(nicho, cidade, max_resultados=20):
     """
     Busca lugares por texto livre (ex.: "barbearia em Franca, SP").
@@ -89,9 +132,7 @@ def buscar_nicho(nicho, cidade, max_resultados=20):
         status = data.get("status")
 
         if status not in ("OK", "ZERO_RESULTS"):
-            raise PlacesIndisponivel(
-                f"Places API (textsearch) retornou: {status}"
-            )
+            raise PlacesIndisponivel(_motivo_da_recusa("textsearch", data))
 
         for r in data.get("results", []):
             resultados.append({"place_id": r.get("place_id")})
@@ -114,9 +155,7 @@ def detalhes_do_lugar(place_id):
     )
     data = _get_json(url)
     if data.get("status") != "OK":
-        raise PlacesIndisponivel(
-            f"Places API (details) retornou: {data.get('status')}"
-        )
+        raise PlacesIndisponivel(_motivo_da_recusa("details", data))
     resultado = data.get("result", {})
     resultado["place_id"] = place_id
     return resultado
@@ -155,6 +194,72 @@ def _eh_rede_social(url):
     return any(d in (url or "").lower() for d in dominios)
 
 
+# Faixas de oportunidade, da melhor para a pior. Menor número = aparece antes.
+#
+# A ordem não é estética: é a ordem em que o operador ganha dinheiro. Quem não
+# tem site é a venda direta; quem só tem Instagram é a venda fácil de explicar;
+# quem tem site sem HTTPS tem um site velho e um motivo concreto de conversa;
+# quem já tem site bom é o último a valer uma ligação.
+FAIXA_SEM_SITE = 0
+FAIXA_SO_REDE_SOCIAL = 1
+FAIXA_SITE_INSEGURO = 2
+FAIXA_TEM_SITE = 3
+
+
+def classificar_site(site):
+    """
+    Classifica a presença digital do negócio a partir da URL do Places.
+
+    Devolve um dos quatro rótulos usados pela tela e pela ordenação:
+    'sem_site', 'so_rede_social', 'site_inseguro' ou 'tem_site'.
+
+    Existe para que o mesmo julgamento valha na varredura e na listagem do
+    banco. Enquanto isso era um `"sem_site" if not site else "tem_site"`
+    escrito em dois lugares, "só rede social" — que é a segunda melhor
+    oportunidade comercial — aparecia na tela como se fosse um site pronto.
+    """
+    url = (site or "").strip()
+    if not url:
+        return "sem_site"
+    if _eh_rede_social(url):
+        return "so_rede_social"
+    if not url.lower().startswith("https://"):
+        return "site_inseguro"
+    return "tem_site"
+
+
+_FAIXA_POR_CLASSE = {
+    "sem_site": FAIXA_SEM_SITE,
+    "so_rede_social": FAIXA_SO_REDE_SOCIAL,
+    "site_inseguro": FAIXA_SITE_INSEGURO,
+    "tem_site": FAIXA_TEM_SITE,
+}
+
+
+def faixa_oportunidade(site):
+    """Faixa numérica para ordenar. Ver FAIXA_* acima."""
+    return _FAIXA_POR_CLASSE[classificar_site(site)]
+
+
+def chave_de_prioridade(lead):
+    """
+    Chave de ordenação de leads: faixa primeiro, score depois.
+
+    Ordenar só por score misturava as faixas. O score soma pontos por poucas
+    avaliações, então um negócio COM site e com 3 avaliações chegava a 40 e
+    passava na frente de um que só tem Instagram, que vale 30. Para quem vende
+    site, essa ordem está invertida: a ausência de site é o argumento, e o
+    número de avaliações é só o desempate.
+
+    Use com `sorted(leads, key=places_engine.chave_de_prioridade)`.
+    """
+    site = lead.get("site")
+    score = lead.get("score")
+    if score is None:
+        score = lead.get("score_oportunidade") or 0
+    return (faixa_oportunidade(site), -(score or 0))
+
+
 def score_oportunidade(place):
     """
     Calcula o score (0-100) e o motivo de abordagem a partir de dados reais.
@@ -162,6 +267,15 @@ def score_oportunidade(place):
     Retorna: (score:int, motivo:str)
     """
     website = place.get("website") or ""
+
+    # `None` e `0` NÃO são a mesma coisa aqui.
+    #
+    # 0 significa "medimos e este negócio não tem avaliação" — sinal real de
+    # oportunidade, vale pontos. `None` significa "esta fonte não coleta
+    # avaliação", que é o caso do OpenStreetMap, um mapa e não uma rede de
+    # opinião. Tratar os dois igual daria +25 a TODO lead do OSM, achatando
+    # a pontuação e afogando o sinal que importa: a ausência de site.
+    tem_dados_de_reputacao = place.get("user_ratings_total") is not None
     rating = place.get("rating") or 0
     total_reviews = place.get("user_ratings_total") or 0
 
@@ -178,17 +292,18 @@ def score_oportunidade(place):
         score += 20
         motivo = "so_rede_social"
 
-    if total_reviews < 15:
-        score += 25
-        if motivo == "geral":
-            motivo = "poucas_reviews"
-    elif total_reviews < 50:
-        score += 10
+    if tem_dados_de_reputacao:
+        if total_reviews < 15:
+            score += 25
+            if motivo == "geral":
+                motivo = "poucas_reviews"
+        elif total_reviews < 50:
+            score += 10
 
-    if rating >= 4.5 and total_reviews < 30:
-        score += 15
-        if motivo == "geral":
-            motivo = "poucas_reviews"
+        if rating >= 4.5 and total_reviews < 30:
+            score += 15
+            if motivo == "geral":
+                motivo = "poucas_reviews"
 
     return min(score, 100), motivo
 

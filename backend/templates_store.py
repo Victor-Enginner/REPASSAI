@@ -32,7 +32,10 @@ os.makedirs(CATALOG_DIR, exist_ok=True)
 URL_REGISTRY = "https://77lib.dev/r"
 
 # Preço padrão de venda, em centavos, para não trabalhar com float.
-PRECO_PADRAO_CENTAVOS = 1990
+# Zero = sem preço definido. A loja esconde o selo quando é 0, em vez de
+# anunciar um valor que ninguém decidiu. O preço de cada template é escolhido
+# depois, um a um, editando `preco_centavos` na ficha.
+PRECO_PADRAO_CENTAVOS = 0
 
 
 def token():
@@ -231,12 +234,32 @@ def analisar(slug, dados_registry):
 
 # --- Persistência ---------------------------------------------------------
 
+def _slug_seguro(slug):
+    """
+    Reduz o slug ao que pode virar nome de arquivo sem escapar do catálogo.
+
+    `extrair_slug` aceita texto solto: quem chama `/api/templates/import` ou
+    `/api/templates/detail` controla o valor. Sem esta trava, um slug como
+    `../../.env` faz `os.path.join` sair de CATALOG_DIR — leitura e escrita
+    de arquivo em qualquer lugar do disco. `basename` derruba `../` e
+    `C:\\...`; a allowlist derruba o que sobrar.
+
+    Raises:
+        ValueError: slug vazio ou sem nenhum caractere aproveitável.
+    """
+    base = os.path.basename(str(slug or "").replace("\\", "/").strip())
+    limpo = re.sub(r"[^a-zA-Z0-9._-]", "", base).strip("._-")
+    if not limpo:
+        raise ValueError(f"slug de template invalido: {slug!r}")
+    return limpo
+
+
 def caminho_html(slug):
-    return os.path.join(CATALOG_DIR, f"{slug}.html")
+    return os.path.join(CATALOG_DIR, f"{_slug_seguro(slug)}.html")
 
 
 def caminho_ficha(slug):
-    return os.path.join(CATALOG_DIR, f"{slug}.json")
+    return os.path.join(CATALOG_DIR, f"{_slug_seguro(slug)}.json")
 
 
 def importar(entrada, forcar=False):
@@ -256,6 +279,15 @@ def importar(entrada, forcar=False):
     slug = extrair_slug(entrada)
     if not slug:
         raise RuntimeError("Slug do template não identificado na entrada.")
+
+    # `_slug_seguro` rejeita o que não pode virar nome de arquivo (`../..`,
+    # só pontuação). Sem converter aqui, o ValueError subiria cru pela rota
+    # de import e viraria HTTP 500 — erro de servidor para o que é, na
+    # verdade, entrada inválida do cliente.
+    try:
+        _slug_seguro(slug)
+    except ValueError as e:
+        raise RuntimeError(str(e)) from e
 
     if not forcar and os.path.isfile(caminho_ficha(slug)):
         with open(caminho_ficha(slug), encoding="utf-8") as f:
@@ -350,7 +382,12 @@ def listar():
 
 def obter(slug):
     """Ficha completa de um template, com DESIGN.md e prompts."""
-    caminho = caminho_ficha(extrair_slug(slug))
+    try:
+        caminho = caminho_ficha(extrair_slug(slug))
+    except ValueError:
+        # Slug impossível de virar arquivo é ausência, não erro do servidor:
+        # a rota já traduz None em 404.
+        return None
     if not os.path.isfile(caminho):
         return None
     with open(caminho, encoding="utf-8") as f:
@@ -359,11 +396,57 @@ def obter(slug):
 
 def html_do_template(slug):
     """HTML bruto do template, para o iframe de preview."""
-    caminho = caminho_html(extrair_slug(slug))
+    try:
+        caminho = caminho_html(extrair_slug(slug))
+    except ValueError:
+        return None
     if not os.path.isfile(caminho):
         return None
     with open(caminho, encoding="utf-8") as f:
         return f.read()
+
+
+def html_para_preview(slug, leve=False):
+    """
+    Prepara o HTML para exibição segura e fluida na loja.
+
+    No modo leve (miniaturas da grade), congelamos animações pesadas e vídeos
+    em segundo plano para garantir 60fps sem lag, enquanto forçamos visibilidade
+    e opacidade total (100%) em todos os elementos para que o layout apareça
+    nítido e completo sem depender de execuções JS diferidas.
+    O detalhe (modal) roda 100% "live" e interativo.
+    """
+    html = html_do_template(slug)
+    if html is None:
+        return None
+
+    html = re.sub(
+        r"<!--\s*aura-ga4-start\s*-->.*?<!--\s*aura-ga4-end\s*-->",
+        "",
+        html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not leve:
+        return html
+
+    congelar = """
+<style id="repass-thumbnail-mode">
+  *, *::before, *::after {
+    animation-play-state: paused !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  video, audio { display: none !important; }
+  canvas { opacity: 0.9 !important; visibility: visible !important; }
+</style>
+"""
+    if "</head>" in html:
+        return html.replace("</head>", f"{congelar}</head>", 1)
+    elif "<head>" in html:
+        return html.replace("<head>", f"<head>{congelar}", 1)
+    return f"{congelar}{html}"
 
 
 def montar_zip(slug):
