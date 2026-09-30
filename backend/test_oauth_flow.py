@@ -1,5 +1,8 @@
 import os
 import unittest
+import io
+import json
+from contextlib import redirect_stdout
 from unittest.mock import patch
 from urllib.parse import parse_qs, urlsplit
 
@@ -7,6 +10,27 @@ import oauth_flow
 
 
 class OAuthFlowTests(unittest.TestCase):
+    def test_diagnostic_logs_only_booleans(self):
+        captured = io.StringIO()
+        with redirect_stdout(captured):
+            oauth_flow.log_configuration()
+        output = captured.getvalue()
+        self.assertNotIn(os.environ['REPASS_OAUTH_SECRET'], output)
+        self.assertNotIn(os.environ['REPASS_PUBLIC_ORIGIN'], output)
+        report = json.loads(output.split('] ', 1)[1])
+        self.assertTrue(all(type(value) is bool for value in report.values()))
+        self.assertTrue(report['google_declarado'])
+        self.assertTrue(report['algum_provedor_habilitado'])
+
+    def test_diagnostic_identifies_short_secret(self):
+        with patch.dict(os.environ, {'REPASS_OAUTH_SECRET': 'short'}):
+            captured = io.StringIO()
+            with redirect_stdout(captured):
+                oauth_flow.log_configuration()
+            report = json.loads(captured.getvalue().split('] ', 1)[1])
+            self.assertFalse(report['segredo_valido'])
+            self.assertFalse(report['algum_provedor_habilitado'])
+
     def setUp(self):
         self.env = patch.dict(os.environ, {
             'REPASS_PUBLIC_ORIGIN': 'https://repass-ai-beta.netlify.app',

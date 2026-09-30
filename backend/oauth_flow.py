@@ -33,6 +33,26 @@ def enabled():
     return sorted(PROVIDERS.intersection(os.getenv('REPASS_OAUTH_PROVIDERS', '').split(',')))
 
 
+def log_configuration():
+    """Startup-only diagnostics: fixed labels and booleans, never env values."""
+    try:
+        origin()
+        origin_ok = True
+    except ValueError:
+        origin_ok = False
+    declared = set(os.getenv('REPASS_OAUTH_PROVIDERS', '').split(','))
+    report = {
+        'supabase_configurado': bool(supabase_client.auth_configurado()),
+        'origem_valida': origin_ok,
+        'segredo_valido': len(os.getenv('REPASS_OAUTH_SECRET', '')) >= 32,
+        'google_declarado': 'google' in declared,
+        'github_declarado': 'github' in declared,
+        'microsoft_declarado': 'azure' in declared,
+        'algum_provedor_habilitado': bool(enabled()),
+    }
+    print('[REPASS OAUTH CONFIG] ' + json.dumps(report, sort_keys=True), flush=True)
+
+
 def _b64(data):
     return base64.urlsafe_b64encode(data).decode().rstrip('=')
 

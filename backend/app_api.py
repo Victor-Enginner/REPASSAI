@@ -1957,6 +1957,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
 
 def run_server(port=8000):
     exigir_auth_em_producao()
+    oauth_flow.log_configuration()
     server_address = ('', port)
     httpd = ThreadingHTTPServer(server_address, RepassApiHandler)
     modo = "production" if ambiente_producao() else "development"
