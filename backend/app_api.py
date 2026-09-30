@@ -35,6 +35,7 @@ import places_engine
 import llm_gateway
 import templates_store
 import supabase_client
+import oauth_flow
 import tel_agent_engine
 
 # Força codificação UTF-8 no Windows
@@ -771,6 +772,24 @@ class RepassApiHandler(BaseHTTPRequestHandler):
         path = parsed_url.path
         query_params = urllib.parse.parse_qs(parsed_url.query)
 
+        if path == '/api/auth/oauth/callback':
+            secure, samesite = self._cookie_flags()
+            try:
+                cookies = supabase_client.parse_cookies(self.headers.get('Cookie'))
+                session = oauth_flow.finish(cookies.get(oauth_flow.COOKIE, ''),
+                    (query_params.get('code') or [''])[0])
+                self.send_response(303)
+                self.send_header('Location', oauth_flow.origin() + '/?auth=complete')
+                for value in supabase_client.montar_set_cookies(session['access_token'], session['refresh_token'], session.get('expires_in', 3600), secure, samesite):
+                    self.send_header('Set-Cookie', value)
+                self.send_header('Set-Cookie', oauth_flow.cookie(secure=secure, clear=True))
+                self.send_header('Cache-Control', 'no-store')
+                self.send_header('Referrer-Policy', 'no-referrer')
+                self.end_headers()
+            except (ValueError, supabase_client.AuthErro):
+                self._json(400, {'sucesso': False, 'erro': 'Login social não concluído. Volte ao REPASS e tente novamente.'}, cookies=[oauth_flow.cookie(secure=secure, clear=True)])
+            return
+
         # Mesmo portão do do_POST: os sites são dados do usuário e não podem
         # ser listados sem token.
         if path in ROTAS_PROTEGIDAS:
@@ -865,6 +884,7 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             # service_role. Anon key também não vai mais ao browser: login é BFF.
             estado_auth = supabase_client.status()
             estado_auth["sessao_via"] = "cookie_httponly"
+            estado_auth['oauth_providers'] = oauth_flow.enabled()
             # `auth_ativo` responde "Supabase está configurado" — não "login é
             # exigido". São coisas diferentes quando o modo single-user de
             # desenvolvimento está ligado, e confundir as duas fez um teste de
@@ -1089,6 +1109,24 @@ class RepassApiHandler(BaseHTTPRequestHandler):
             body = json.loads(post_data) if post_data else {}
         except Exception:
             body = {}
+
+        if self.path == '/api/auth/oauth/start':
+            if not isinstance(body, dict) or not isinstance(body.get('provider'), str):
+                self._json(400, {'sucesso': False, 'erro': 'Informe um provedor de login válido.'})
+                return
+            permitido, espera = LIMITADOR.permitir(self._identidade())
+            if not permitido:
+                self._json(429, {'sucesso': False, 'erro': f'Aguarde {espera}s.'})
+                return
+            try:
+                if self.headers.get('Origin') != oauth_flow.origin():
+                    self._json(403, {'sucesso': False, 'erro': 'Origem de login inválida.'})
+                    return
+                url, cookie = oauth_flow.start(body.get('provider'), self._cookie_flags()[0])
+                self._json(200, {'sucesso': True, 'url': url}, cookies=[cookie])
+            except ValueError as exc:
+                self._json(503, {'sucesso': False, 'erro': str(exc)})
+            return
 
         if self.path == "/api/auth/login":
             # Rate limit por IP antes do login (anti brute-force).
@@ -1482,10 +1520,14 @@ class RepassApiHandler(BaseHTTPRequestHandler):
                         "leads": [], "total": 0,
                     })
                     return
-            except supabase_client.SupabaseIndisponivel as e:
-                # Banco fora do ar não pode derrubar a varredura: o operador
-                # ainda recebe os leads, só não ficam salvos.
-                print(f"[Supabase] Perfil indisponível ({e}). Seguindo sem cota.")
+            except supabase_client.SupabaseIndisponivel:
+                # Falha de banco nunca autoriza consumo sem verificar a cota.
+                self._json(503, {
+                    'status': 'error',
+                    'erro': 'Não foi possível verificar sua cota. Tente novamente mais tarde.',
+                    'leads': [], 'total': 0,
+                })
+                return
 
         print(f"[REPASS AI LEADS_OSINT_02] Varrendo '{nichos}' em '{cidade}, {estado}' (motor={motor})...")
 
