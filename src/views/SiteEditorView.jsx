@@ -14,6 +14,7 @@ import { urlPublicaDoSite, apiUrl } from '../config';
 import { resolveProjectId, classifyProjectPreview } from '../services/projectPreview';
 import SiteTextEditor from '../components/SiteTextEditor';
 import { rankTemplates } from '../services/templateSelection';
+import BusinessTemplateEditor from '../components/BusinessTemplateEditor';
 
 export default function SiteEditorView({ lead, onBack }) {
   const targetLead = lead || {
@@ -260,6 +261,13 @@ export default function SiteEditorView({ lead, onBack }) {
         
         {/* Left Side: Agentic Chatbot Builder Interactive Panel */}
         <div>
+        {docSchema && ['html','legacy'].includes(previewKind) && <BusinessTemplateEditor
+          key={`business-${projectId}`}
+          html={docSchema.htmlContent || compileDocumentToStandaloneHTML(docSchema)}
+          profile={docSchema.companyProfile || {name:targetLead.nome}}
+          disabled={salvandoVisual}
+          onApply={patch=>setDocSchema(previous=>({...previous,...patch,meta:{...previous.meta,title:patch.companyProfile.name}}))}
+        />}
         {docSchema?.requiresContentReview && <p role="status" style={{padding:'16px',background:'var(--papel-cartao)',color:'var(--tinta)'}}>Rascunho baseado em {docSchema.templateSlug}. Revise textos, imagens, contatos e direitos de uso antes de entregar. A copy original do template ainda não representa sua empresa.</p>}
         {docSchema && ['html', 'legacy'].includes(previewKind) && <SiteTextEditor
           key={projectId}

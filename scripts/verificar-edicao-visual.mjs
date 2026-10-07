@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 const browser = await chromium.launch();
 try {
  const page = await browser.newPage({viewport:{width:1360,height:768}});
- let saved = {projectId:'site_visual',meta:{title:'Visual QA'},htmlContent:'<!doctype html><html><body><h1>Título inicial</h1><p>Descrição <span>original</span><svg aria-label="Ícone preservado"><circle r="4"></circle></svg></p></body></html>'};
+ let saved = {projectId:'site_visual',meta:{title:'Visual QA'},htmlContent:'<!doctype html><html><body><h1>Título inicial</h1><p>Descrição <span>original</span><svg aria-label="Ícone preservado"><circle r="4"></circle></svg></p><a href="#contato">Contato</a></body></html>'};
  let writes=0; let failSave=false;
  await page.route('**/api/**', async route=>{
   const request=route.request(), path=new URL(request.url()).pathname;
@@ -48,5 +48,25 @@ try {
  assert.equal(await page.getByLabel('Texto do elemento').inputValue(),'');
  await page.getByRole('button',{name:'Desfazer edição',exact:true}).click();
  assert.equal(await page.getByLabel('Texto do elemento').inputValue(),'original');
+ await page.getByLabel('Nome da empresa',{exact:true}).fill('Marca <b>literal</b>');
+ await page.getByLabel('Descrição da empresa',{exact:true}).fill('Serviços reais ');
+ await page.getByLabel('Trecho para nome',{exact:true}).selectOption('0');
+ await page.getByLabel('Trecho para descrição',{exact:true}).selectOption('1');
+ await page.getByLabel('Link para WhatsApp',{exact:true}).selectOption('0');
+ await page.getByLabel('WhatsApp da empresa',{exact:true}).fill('javascript:invalid');
+ await page.getByRole('button',{name:'Aplicar marca ao preview',exact:true}).click();
+ await page.getByText('Informe WhatsApp com código do país e DDD, só números.',{exact:true}).waitFor();
+ await page.getByLabel('WhatsApp da empresa',{exact:true}).fill('5511999999999');
+ await page.getByRole('button',{name:'Aplicar marca ao preview',exact:true}).click();
+ await frame.getByRole('heading',{name:'Marca <b>literal</b>'}).waitFor();
+ assert.equal(await frame.locator('b').count(),0);
+ assert.equal(await frame.locator('a').getAttribute('href'),'https://wa.me/5511999999999');
+ assert.equal(await frame.locator('svg circle').count(),1);
+ failSave=false;
+ await page.getByRole('button',{name:'Salvar alterações',exact:true}).click();
+ await page.getByText('Alterações salvas na conta.',{exact:true}).waitFor();
+ assert.equal(saved.companyProfile.name,'Marca <b>literal</b>');
+ assert.equal(saved.meta.title,'Marca <b>literal</b>');
+ assert.equal(writes,3);
  console.log('PASS: texto literal, fonte, salvar/reabrir, falha sem perda, span/SVG preservados e apagar/desfazer; API simulada, sem IA.');
 }finally{await browser.close();}
