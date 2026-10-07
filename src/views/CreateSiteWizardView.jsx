@@ -54,9 +54,13 @@ export default function CreateSiteWizardView({ leads = [], onGenerateSite, onBac
     target = { ...target, modelo: selectedModel };
 
     if (onGenerateSite) {
-      onGenerateSite(target);
+      try { onGenerateSite(target); }
+      finally { setIsGenerating(false); }
     } else if (onBack) {
-      onBack();
+      try { onBack(); }
+      finally { setIsGenerating(false); }
+    } else {
+      setIsGenerating(false);
     }
   };
 
