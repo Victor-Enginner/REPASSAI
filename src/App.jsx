@@ -501,7 +501,7 @@ function AppMain() {
               <PainelSimples>
                 <TemplatesView
                   onSelectTemplate={(tpl) => {
-                    setSelectedLeadForEditor({ id: tpl.id, nome: tpl.title, categoria: tpl.nicho, cidade: 'Goiânia' });
+                    setSelectedLeadForEditor({ id: crypto.randomUUID(), templateSlug: tpl.id, nome: tpl.title, categoria: tpl.nicho, cidade: '' });
                     setCurrentTab('editor');
                   }}
                 />

@@ -58,6 +58,17 @@ export default function SiteEditorView({ lead, onBack }) {
           return;
         }
         if (lead?.existingProject) throw new Error('Este projeto não foi encontrado. Volte à lista e atualize seus projetos.');
+        if (lead?.templateSlug) {
+          const slug = lead.templateSlug;
+          if (!/^[a-zA-Z0-9_-]+$/.test(slug)) throw new Error('Identificador de template inválido.');
+          const response = await fetch(`/templates/${encodeURIComponent(slug)}.html`);
+          if (!response.ok) throw new Error('Não foi possível carregar o template original.');
+          const htmlContent = await response.text();
+          if (!htmlContent.trim() || !/text\/html/i.test(response.headers.get('content-type') || '')) throw new Error('O arquivo do template não é um HTML válido.');
+          if (!ativo) return;
+          setDocSchema({projectId, htmlContent, templateSlug:slug, generationMode:'template-local', meta:{title:targetLead.nome, nicho:targetLead.categoria}});
+          return;
+        }
         await initAgenticPipeline();
       } catch (e) {
         if (!ativo) return;
