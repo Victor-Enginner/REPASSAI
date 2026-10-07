@@ -13,6 +13,7 @@ import { OriginKitBentoGrid } from '../components/ui/OriginKitComponents';
 import { urlPublicaDoSite, apiUrl } from '../config';
 import { resolveProjectId, classifyProjectPreview } from '../services/projectPreview';
 import SiteTextEditor from '../components/SiteTextEditor';
+import { rankTemplates } from '../services/templateSelection';
 
 export default function SiteEditorView({ lead, onBack }) {
   const targetLead = lead || {
@@ -58,15 +59,24 @@ export default function SiteEditorView({ lead, onBack }) {
           return;
         }
         if (lead?.existingProject) throw new Error('Este projeto não foi encontrado. Volte à lista e atualize seus projetos.');
-        if (lead?.templateSlug) {
-          const slug = lead.templateSlug;
+        let selectedTemplate = lead?.templateSlug;
+        let selectionReasons = [];
+        if (!selectedTemplate) {
+          const catalogResponse = await fetch('/templates/catalog.json');
+          if (!catalogResponse.ok) throw new Error('Não foi possível consultar os modelos locais.');
+          const catalog = await catalogResponse.json();
+          const recommendation = rankTemplates(catalog.templates || [], targetLead)[0];
+          if (recommendation?.score > 0) { selectedTemplate = recommendation.template.slug; selectionReasons = recommendation.reasons; }
+        }
+        if (selectedTemplate) {
+          const slug = selectedTemplate;
           if (!/^[a-zA-Z0-9_-]+$/.test(slug)) throw new Error('Identificador de template inválido.');
           const response = await fetch(`/templates/${encodeURIComponent(slug)}.html`);
           if (!response.ok) throw new Error('Não foi possível carregar o template original.');
           const htmlContent = await response.text();
           if (!htmlContent.trim() || !/text\/html/i.test(response.headers.get('content-type') || '')) throw new Error('O arquivo do template não é um HTML válido.');
           if (!ativo) return;
-          setDocSchema({projectId, htmlContent, templateSlug:slug, generationMode:'template-local', meta:{title:targetLead.nome, nicho:targetLead.categoria}});
+          setDocSchema({projectId, htmlContent, templateSlug:slug, generationMode:'template-local', requiresContentReview:true, selectionReasons, meta:{title:targetLead.nome, nicho:targetLead.categoria}});
           return;
         }
         await initAgenticPipeline();
@@ -250,6 +260,7 @@ export default function SiteEditorView({ lead, onBack }) {
         
         {/* Left Side: Agentic Chatbot Builder Interactive Panel */}
         <div>
+        {docSchema?.requiresContentReview && <p role="status" style={{padding:'16px',background:'var(--papel-cartao)',color:'var(--tinta)'}}>Rascunho baseado em {docSchema.templateSlug}. Revise textos, imagens, contatos e direitos de uso antes de entregar. A copy original do template ainda não representa sua empresa.</p>}
         {docSchema && ['html', 'legacy'].includes(previewKind) && <SiteTextEditor
           key={projectId}
           html={docSchema.htmlContent || compileDocumentToStandaloneHTML(docSchema)}

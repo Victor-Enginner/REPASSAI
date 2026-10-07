@@ -440,6 +440,8 @@ function AppMain() {
             {montarLeve('wizard') && (
               <PainelKeepAlive ativo={currentTab === 'wizard'}>
                 <CreateSiteWizardView
+                  leads={leads}
+                  onBack={() => setCurrentTab('projetos')}
                   onClose={() => setCurrentTab('leads')}
                   /*
                     Os dois levam ao EDITOR, não à lista de projetos.

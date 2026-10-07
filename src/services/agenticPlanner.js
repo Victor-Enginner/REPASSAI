@@ -160,8 +160,8 @@ export async function executeAgenticLoop(leadData, userPrompt = '', opcoes = {})
       ]
     },
     fallbacks: {
-      useAgnesAiIfEmpty: true,
-      nichoPrompt: `Fotos do ambiente real de ${leadData.nome} em ${leadData.cidade}`
+      useAgnesAiIfEmpty: false,
+      nichoPrompt: `Imagens ilustrativas; substituir por fotos autorizadas de ${leadData.nome}.`
     }
   };
 
@@ -223,7 +223,7 @@ export async function executeAgenticLoop(leadData, userPrompt = '', opcoes = {})
     },
     plannerLog: [
       `🧠 [Planner Mode]: Contexto expandido para '${leadData.categoria}' em ${leadData.cidade}.`,
-      `📷 [Google Places Enrichment]: Mídia capturada via Proxy Endpoint (/api/media/proxy).`,
+      `📷 [Mídia]: ${leadData.mediaEnrichment ? 'Dados de mídia fornecidos no briefing; origem e direitos precisam de revisão.' : 'Imagens ilustrativas de estoque, não fotos verificadas da empresa.'}`,
       `🤖 [Motor LLM]: ${llmResult.provider || 'fallback local'} (${llmResult.model || 'rules'})`,
       `✅ [Schema Seguro]: Estrutura local e galeria integradas sem código arbitrário.`
     ]
