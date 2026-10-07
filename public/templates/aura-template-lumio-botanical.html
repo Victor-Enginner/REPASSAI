@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumio Botanical Display</title>
+<meta name="description" content="A kinetic botanical landing page with animated flora cards, live specimen board, and adaptive plant layers.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+
+  <body class="min-h-screen overflow-x-hidden bg-[#F9EFE4] text-[#1E0C1F] antialiased selection:bg-[#F6D6FF] selection:text-[#1E0C1F]" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; background-image: linear-gradient(rgb(252, 252, 255) 0%, rgb(249, 250, 251) 100%), linear-gradient(135deg, rgba(17, 24, 39, 0.03) 1px, transparent 1px); background-size: auto, 24px 24px;">
+    <div id="reducedMotionNotice" class="sr-only" aria-live="polite">
+      Motion softens automatically when reduced motion is enabled.
+    </div>
+
+    <main class="sm:px-6 lg:px-8 w-full max-w-[96rem] z-10 mr-auto ml-auto pt-4 pr-4 pb-4 pl-4 relative">
+      <div class="pointer-events-none fixed inset-x-4 top-4 bottom-4 z-0 hidden border border-[#2B1621]/10 md:block" aria-hidden="true">
+        <span class="absolute -left-1 -top-1 h-2 w-2 border border-[#2B1621]/20 bg-[#F9EFE4]"></span>
+        <span class="absolute -right-1 -top-1 h-2 w-2 border border-[#2B1621]/20 bg-[#F9EFE4]"></span>
+        <span class="absolute -bottom-1 -left-1 h-2 w-2 border border-[#2B1621]/20 bg-[#F9EFE4]"></span>
+        <span class="absolute -bottom-1 -right-1 h-2 w-2 border border-[#2B1621]/20 bg-[#F9EFE4]"></span>
+        <span class="absolute left-[16.666%] top-0 h-full w-px bg-[#2B1621]/[0.045]"></span>
+        <span class="absolute left-1/2 top-0 h-full w-px bg-[#2B1621]/[0.045]"></span>
+        <span class="absolute right-[16.666%] top-0 h-full w-px bg-[#2B1621]/[0.045]"></span>
+      </div>
+
+      <header class="hero-top relative z-10 mb-4 border border-[#2B1621]/10 bg-[#F8EDE2]/70 px-4 py-3 shadow-sm backdrop-blur-xl sm:px-5" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+        <div class="absolute left-3 top-3 h-4 w-4 border-l border-t border-[#2B1621]/25"></div>
+        <div class="absolute right-3 top-3 h-4 w-4 border-r border-t border-[#2B1621]/25"></div>
+        <div class="absolute bottom-3 left-3 h-4 w-4 border-b border-l border-[#2B1621]/25"></div>
+        <div class="absolute bottom-3 right-3 h-4 w-4 border-b border-r border-[#2B1621]/25"></div>
+
+        <nav class="flex items-center justify-between gap-4" aria-label="Primary navigation">
+          <a href="#" class="group flex items-center gap-3" aria-label="Lumio home">
+            <span class="text-base font-medium tracking-tighter text-[#1E0C1F] sm:text-lg uppercase">
+              Lumio
+            </span>
+          </a>
+
+          <div class="hidden items-center gap-7 text-sm font-normal text-[#2B1621]/60 md:flex">
+            <a href="#overview" class="transition hover:text-[#1E0C1F]">
+              Taxonomy
+            </a>
+            <a href="#metrics" class="transition hover:text-[#1E0C1F]">
+              Health
+            </a>
+            <a href="#sequence" class="transition hover:text-[#1E0C1F]">
+              Growth Cycle
+            </a>
+            <a href="#access" class="transition hover:text-[#1E0C1F]">
+              Waitlist
+            </a>
+          </div>
+
+          <a href="#access" class="inline-flex items-center gap-2 border border-[#2B1621]/10 bg-[#F8EDE2] px-4 py-2 text-sm font-normal shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D946EF]/40 hover:shadow-md">
+            Request seeds
+            <iconify-icon icon="solar:arrow-right-up-linear" style="font-size: 1rem; stroke-width: 1.5;"></iconify-icon>
+          </a>
+        </nav>
+      </header>
+
+      <section id="overview" class="relative z-10 overflow-hidden border border-[#2B1621]/10 bg-[#F8EDE2]/70 shadow-[0_2rem_6rem_rgba(91,34,62,0.10)]" style="background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.035) 1px, transparent 1px); background-size: 24px 24px;">
+        <div class="absolute left-4 top-4 z-20 h-7 w-7 border-l border-t border-[#2B1621]/30" aria-hidden="true"></div>
+        <div class="absolute right-4 top-4 z-20 h-7 w-7 border-r border-t border-[#2B1621]/30" aria-hidden="true"></div>
+        <div class="absolute bottom-4 left-4 z-20 h-7 w-7 border-b border-l border-[#2B1621]/30" aria-hidden="true"></div>
+        <div class="absolute bottom-4 right-4 z-20 h-7 w-7 border-b border-r border-[#2B1621]/30" aria-hidden="true"></div>
+
+        <div class="p-4 sm:p-6 lg:p-8" id="heroParallax">
+          <div class="hero-top overflow-hidden sm:h-[48rem] lg:h-[37.5rem] bg-center h-[49rem] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/74320ea9-95eb-49b5-8bfc-298c6598ebfb_3840w.png?w=800&amp;q=80)] max-w-[78rem] bg-cover border-white/70 border mr-auto ml-auto relative shadow-[0_2rem_5rem_rgba(2,44,34,0.18)]" style="transform-origin: 50% 50%; position: relative; overflow: hidden; isolation: isolate; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);" data-depth="0.05">
+            <video src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/2e815afb-cac1-4c01-90e1-cf3810246e35/1782634719321-0ccd1498-d4fb-4aae-9d0e-9d6e9788bfab.mp4" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/74320ea9-95eb-49b5-8bfc-298c6598ebfb_3840w.png?w=800&q=80" data-aura-generated-video="true" data-aura-video-preset="loop-in-view" muted="" playsinline="" preload="metadata" loop="" data-aura-generated-video-bg="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:0" class=""></video>
+            <!-- WebGL Background Container -->
+            <canvas class="metric-card border border-[#2B1621]/10 bg-gradient-to-br from-[#F8EDE2] to-[#F6D6FF]/45 p-6 shadow-sm" width="57042536" height="57042536" id="glCanvas" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);"></canvas>
+            <div id="webglFallback" class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_42%_36%,rgba(255,255,255,0.88),transparent_28%),radial-gradient(circle_at_75%_65%,rgba(2,44,34,0.08),transparent_36%)]" aria-hidden="true" style="display: none;"></div>
+
+            <div class="absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-transparent via-white to-transparent" aria-hidden="true"></div>
+            <div class="absolute inset-y-0 left-[18%] z-10 hidden w-px bg-[#022C22]/[0.045] lg:block" aria-hidden="true"></div>
+            <div class="absolute inset-y-0 right-[18%] z-10 hidden w-px bg-[#022C22]/[0.045] lg:block" aria-hidden="true"></div>
+
+            <div class="z-20 hidden lg:block text-7xl font-light text-[#ffffff] absolute top-[23%] left-[11%]" data-depth="0.12" style="will-change: transform; transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);">
+              SPECIES
+            </div>
+
+            <div class="orbit-ring absolute left-1/2 top-[52%] z-10 h-[24rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3.15rem] border-[#022C22] sm:h-[29rem] sm:w-[29rem] sm:border-[4rem] lg:h-[31rem] lg:w-[31rem]" style="clip-path: polygon(0px 0px, 100% 0px, 100% 42%, 82% 42%, 82% 74%, 100% 74%, 100% 100%, 0px 100%); transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(-50%, -50%) rotate(8deg);" aria-hidden="true" data-depth="0.18"></div>
+
+            <div class="person absolute bottom-0 left-1/2 z-30 h-[37rem] w-[18rem] -translate-x-1/2 overflow-hidden sm:h-[42rem] sm:w-[23rem] lg:h-[36.5rem] lg:w-[22rem]" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(-50%, 0%);" data-depth="0.08">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ff4c0e27-1d5a-46fb-8f04-ef84cf646904_800w.webp" alt="Tall elegant indoor plant" class="h-full w-full object-cover" style="object-position: center top;">
+            </div>
+
+            <div class="stat-word absolute right-[23%] top-[13%] z-20 hidden max-w-64 lg:block" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);" data-depth="0.22">
+              <p class="leading-none text-5xl font-normal text-[#ffffff] tracking-tight">
+                128
+              </p>
+              <p class="leading-[0.95] text-4xl font-normal text-[#ffffff] tracking-tight mt-5">
+                Plants
+                <br>
+                Mapped
+              </p>
+            </div>
+
+            <article class="tile tile-4 absolute left-[47%] top-[34%] z-40 h-28 w-32 border border-white/20 bg-[#10B981] p-6 text-white shadow-[0_1rem_2.5rem_rgba(16,185,129,0.28)] sm:left-[25%] lg:left-[25%]" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate3d(0px, -4.4327px, 0px);" data-depth="0.30">
+              <p class="text-lg font-light">
+                82
+                <span class="text-[#A7F3D0]">✦</span>
+              </p>
+              <div class="mt-4 h-0.5 w-5 rounded-full bg-white/60"></div>
+            </article>
+
+            <article class="panel-water absolute bottom-[10%] right-[8%] z-40 hidden h-44 w-52 border border-white/70 bg-[#F0FDF4]/80 p-7 shadow-[0_2rem_4rem_rgba(2,44,34,0.12)] backdrop-blur-xl md:block" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate3d(0px, 7.7224px, 0px);" data-depth="0.35">
+              <div class="relative mx-auto h-28 w-28">
+                <div class="absolute inset-0 rounded-full" style="background: conic-gradient(#10B981 0deg 304deg, rgba(16,185,129,0.13) 304deg 360deg);"></div>
+                <div class="absolute inset-4 flex items-center justify-center rounded-full bg-[#F0FDF4]">
+                  <span class="text-2xl font-normal tracking-tight">34</span>
+                </div>
+                <span class="absolute right-0 top-2 flex items-center gap-1 text-xs font-light">
+                  <i data-lucide="pipette" style="width: 1rem; height: 1rem; color: #10B981; stroke-width: 1.5;"></i>
+                  PH
+                </span>
+              </div>
+            </article>
+          </div>
+
+          <div class="sink absolute -bottom-14 left-1/2 z-0 hidden w-[54rem] -translate-x-1/2 lg:block" aria-hidden="true" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(-50%, 0%);">
+            <div class="mx-auto h-7 w-24">
+              <span class="inline-block h-9 w-9 rounded-full border-2 border-[#2B1621]/25 bg-[#1E0C1F] shadow-lg"></span>
+              <span class="ml-6 inline-block h-9 w-9 rounded-full border-2 border-[#2B1621]/25 bg-[#1E0C1F] shadow-lg"></span>
+            </div>
+            <div class="mx-auto mt-9 h-20 w-[48rem] bg-[#F8EDE2] shadow-[0_2rem_4rem_rgba(91,34,62,0.16)]" style="clip-path: polygon(6% 0px, 94% 0px, 100% 100%, 0px 100%);">
+              <div class="mx-auto h-full w-72 rounded-[50%] border border-[#2B1621]/10 bg-gradient-to-br from-[#D946EF]/10 to-transparent"></div>
+            </div>
+          </div>
+
+          <div class="z-20 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-end max-w-[78rem] mt-10 mr-auto ml-auto relative gap-x-6 gap-y-6" data-depth="0.04" style="will-change: transform; transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);">
+            <div class="hero-copy border border-[#2B1621]/10 bg-[#F8EDE2]/60 p-6 shadow-sm backdrop-blur-xl sm:p-8" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+              <div class="mb-5 inline-flex items-center gap-2 border border-[#2B1621]/10 bg-[#F8EDE2] px-3 py-1.5 text-xs font-normal text-[#2B1621]/60">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
+                Living botanical board
+              </div>
+              <h1 class="max-w-3xl text-4xl font-medium leading-[0.98] tracking-tight text-[#1E0C1F] sm:text-5xl lg:text-6xl">
+                Rare flora, staged in a living management system.
+              </h1>
+            </div>
+
+            <div class="hero-copy border border-[#2B1621]/10 bg-[#1E0C1F] p-6 text-[#F8EDE2] shadow-[0_2rem_4rem_rgba(43,22,33,0.20)] sm:p-8" style="transform-origin: 50% 50%; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+              <p class="text-base font-normal leading-7 text-[#F8EDE2]/70">
+                Lumio turns soil metrics, watering cycles, light states, and
+                growth stages into a spatial interface that stays precise while
+                the garden keeps growing.
+              </p>
+              <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                <a href="#access" class="inline-flex items-center justify-center gap-2 bg-[#F8EDE2] px-5 py-3 text-sm font-medium text-[#1E0C1F] transition-all duration-300 hover:-translate-y-0.5">
+                  Request greenhouse access
+                  <iconify-icon icon="solar:arrow-right-linear" style="font-size: 1rem; stroke-width: 1.5;" class=""></iconify-icon>
+                </a>
+                <a href="#sequence" class="inline-flex items-center justify-center gap-2 border border-white/15 px-5 py-3 text-sm font-medium text-[#F8EDE2] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10">
+                  Watch growth cycle
+                  <iconify-icon icon="solar:play-circle-linear" style="font-size: 1rem; stroke-width: 1.5;"></iconify-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div id="heroParticles" class="pointer-events-none absolute inset-0 z-20 overflow-hidden" aria-hidden="true" data-depth="0.45" style="will-change: transform; transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);">
+            <span class="hero-particle absolute left-[15%] top-[25%] h-1.5 w-1.5 rounded-full bg-white/60 blur-[0.5px]"></span>
+            <span class="hero-particle absolute left-[72%] top-[18%] h-1 w-1 rounded-full bg-[#A7F3D0]/70"></span>
+            <span class="hero-particle absolute left-[40%] top-[60%] h-2 w-2 rounded-full bg-white/40 blur-[1px]"></span>
+            <span class="hero-particle absolute left-[85%] top-[55%] h-1 w-1 rounded-full bg-[#F6D6FF]/70"></span>
+            <span class="hero-particle absolute left-[28%] top-[78%] h-1.5 w-1.5 rounded-full bg-white/50 blur-[0.5px]"></span>
+            <span class="hero-particle absolute left-[58%] top-[35%] h-1 w-1 rounded-full bg-white/60"></span>
+          </div>
+        </div>
+        <script>
+          (function(){var stage=document.getElementById('heroParallax');if(!stage)return;var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;var layers=Array.prototype.slice.call(stage.querySelectorAll('[data-depth]'));if(!layers.length)return;layers.forEach(function(el){el.style.willChange='transform';el.style.transition='transform 0.18s cubic-bezier(0.22,1,0.36,1)';});var tx=0,ty=0,cx=0,cy=0,raf=null;function loop(){cx+=(tx-cx)*0.08;cy+=(ty-cy)*0.08;layers.forEach(function(el){var d=parseFloat(el.getAttribute('data-depth'))||0;var mx=cx*d*40;var my=cy*d*40;var rot=cx*d*4;var base=el.getAttribute('data-base-transform');if(base===null){base=el.style.transform||'';el.setAttribute('data-base-transform',base);}el.style.transform=base+' translate3d('+mx.toFixed(2)+'px,'+my.toFixed(2)+'px,0) rotate('+rot.toFixed(2)+'deg)';});if(Math.abs(tx-cx)>0.001||Math.abs(ty-cy)>0.001){raf=requestAnimationFrame(loop);}else{raf=null;}}function onMove(e){var r=stage.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-0.5)*2;ty=((e.clientY-r.top)/r.height-0.5)*2;if(!raf)raf=requestAnimationFrame(loop);}function onLeave(){tx=0;ty=0;if(!raf)raf=requestAnimationFrame(loop);}if(!reduce){stage.addEventListener('mousemove',onMove,{passive:true});stage.addEventListener('mouseleave',onLeave);var sty=document.createElement('style');sty.textContent='@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}@keyframes heroParticleDrift{0%,100%{transform:translateY(0) translateX(0);opacity:0.5}50%{transform:translateY(-16px) translateX(6px);opacity:1}}.hero-particle{animation:heroParticleDrift 6s ease-in-out infinite}.hero-particle:nth-child(2){animation-duration:8s;animation-delay:-2s}.hero-particle:nth-child(3){animation-duration:7s;animation-delay:-1s}.hero-particle:nth-child(4){animation-duration:9s;animation-delay:-3s}.hero-particle:nth-child(5){animation-duration:6.5s;animation-delay:-1.5s}.hero-particle:nth-child(6){animation-duration:7.5s;animation-delay:-2.5s}';document.head.appendChild(sty);}})();
+        </script>
+      </section>
+
+      <section class="relative z-10 mt-4 border border-[#2B1621]/10 bg-[#F8EDE2]/55 p-4 shadow-sm backdrop-blur-xl sm:p-6 lg:p-8" id="metrics">
+        <div class="absolute left-3 top-3 h-5 w-5 border-l border-t border-[#2B1621]/25" aria-hidden="true"></div>
+        <div class="absolute right-3 top-3 h-5 w-5 border-r border-t border-[#2B1621]/25" aria-hidden="true"></div>
+        <div class="absolute bottom-3 left-3 h-5 w-5 border-b border-l border-[#2B1621]/25" aria-hidden="true"></div>
+        <div class="absolute bottom-3 right-3 h-5 w-5 border-b border-r border-[#2B1621]/25" aria-hidden="true"></div>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <article class="metric-card border-[#2B1621]/10 border px-6 py-6 shadow-sm" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-normal text-[#2B1621]/60">
+                Light fit
+              </span>
+              <iconify-icon icon="solar:bolt-circle-linear" style="font-size: 1.35rem; stroke-width: 1.5;"></iconify-icon>
+            </div>
+            <p class="mt-6 text-4xl font-medium tracking-tight">94%</p>
+            <p class="mt-2 text-sm font-normal leading-6 text-[#2B1621]/60">
+              Growth confidence after light checks and moisture validation.
+            </p>
+          </article>
+
+          <article class="metric-card border-[#2B1621]/10 border px-6 py-6 shadow-sm" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-normal text-[#2B1621]/60">Nursery</span>
+              <iconify-icon icon="solar:map-arrow-right-linear" style="font-size: 1.35rem; stroke-width: 1.5;"></iconify-icon>
+            </div>
+            <p class="mt-6 text-4xl font-medium tracking-tight">8.7k</p>
+            <p class="mt-2 text-sm font-normal leading-6 text-[#2B1621]/60">
+              Healthy plant cuttings surfaced this quarter across greenhouses.
+            </p>
+          </article>
+
+          <article class="metric-card border-[#2B1621]/10 border px-6 py-6 shadow-sm" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-normal text-[#2B1621]/60">
+                Water cycle
+              </span>
+              <iconify-icon icon="solar:stopwatch-linear" style="font-size: 1.35rem; stroke-width: 1.5;"></iconify-icon>
+            </div>
+            <p class="mt-6 text-4xl font-medium tracking-tight">4.2d</p>
+            <p class="mt-2 text-sm font-normal leading-6 text-[#2B1621]/60">
+              Average watering interval across all tracked indoor plants.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section aria-label="Identity asset carousel" class="relative z-10 mt-4 flex w-full items-center justify-center" id="identity-carousel">
+        <div class="relative w-full overflow-hidden border border-[#2B1621]/10 bg-[#F8EDE2]/60 shadow-[0_2rem_4rem_rgba(91,34,62,0.1)] backdrop-blur-xl h-[35rem] sm:h-[40rem] lg:h-[45rem]" style="background-image: linear-gradient(135deg, rgba(43,22,33,.035) 1px, transparent 1px); background-size: 5.5rem 5.5rem">
+          <div class="pointer-events-none absolute inset-0 z-30 border border-[#2B1621]/5"></div>
+
+          <div class="pointer-events-none absolute left-0 top-0 z-40 h-8 w-8 border-l border-t border-[#2B1621]/30"></div>
+          <div class="pointer-events-none absolute right-0 top-0 z-40 h-8 w-8 border-r border-t border-[#2B1621]/30"></div>
+          <div class="pointer-events-none absolute bottom-0 left-0 z-40 h-8 w-8 border-b border-l border-[#2B1621]/30"></div>
+          <div class="pointer-events-none absolute bottom-0 right-0 z-40 h-8 w-8 border-b border-r border-[#2B1621]/30"></div>
+
+          <div class="pointer-events-none absolute left-[6.5%] top-0 z-40 h-full w-px bg-[#2B1621]/10">
+            <span class="absolute -left-1 top-[7%] h-2 w-2 border border-[#2B1621]/20 bg-[#F8EDE2]"></span>
+            <span class="absolute -left-1 bottom-[7%] h-2 w-2 border border-[#2B1621]/20 bg-[#F8EDE2]"></span>
+          </div>
+          <div class="pointer-events-none absolute right-[6.5%] top-0 z-40 h-full w-px bg-[#2B1621]/10">
+            <span class="absolute -left-1 top-[7%] h-2 w-2 border border-[#2B1621]/20 bg-[#F8EDE2]"></span>
+            <span class="absolute -left-1 bottom-[7%] h-2 w-2 border border-[#2B1621]/20 bg-[#F8EDE2]"></span>
+          </div>
+
+          <div class="relative z-10 flex h-full w-full overflow-hidden" id="carousel">
+            <article class="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-[#2B1621]/10" data-index="0" data-active="true" aria-label="Brand Motion panel" style="width: 52%;">
+              <div class="absolute inset-0 bg-gradient-to-br from-[#D946EF]/10 via-[#F6D6FF]/30 to-[#F8EDE2]/60"></div>
+              <div class="absolute inset-0 opacity-50" style="background-image: linear-gradient(135deg, rgba(43,22,33,.03) 1px, transparent 1px); background-size: 4.75rem 4.75rem"></div>
+
+              <div class="ring-field pointer-events-none absolute left-[12%] top-[13%] h-[58%] w-[70%] opacity-70" aria-hidden="true" style="transform: rotate(47.3616deg);">
+                <div class="wire-ring absolute left-[7%] top-[10%] h-[78%] w-[78%] rounded-full border border-[#2B1621]/20" style="transform: rotate(12deg) scaleX(1.32);"></div>
+                <div class="wire-ring absolute left-[15%] top-[18%] h-[58%] w-[66%] rounded-full border border-[#2B1621]/15" style="transform: rotate(-18deg) scaleX(1.55);"></div>
+              </div>
+
+              <header class="absolute right-[7%] top-[6%] z-20 text-right uppercase tracking-[0.24rem] text-[#1E0C1F]">
+                <div class="text-2xl font-semibold leading-none sm:text-3xl">
+                  FL
+                </div>
+                <p class="mt-2 text-[0.62rem] font-semibold tracking-[0.22rem] text-[#2B1621]/70 sm:text-xs">
+                  FLORA
+                </p>
+              </header>
+
+              <div class="title-wrap absolute left-[6.5%] top-[18%] z-10 max-w-[62%]" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.34rem] text-[#2B1621]/60">
+                  Stage 01
+                </p>
+                <h2 class="tracking-tighter text-5xl font-semibold uppercase leading-[0.86] text-[#1E0C1F] sm:text-7xl md:text-8xl lg:text-9xl">
+                  SEEDLING
+                  <br>
+                  EMERGENCE
+                </h2>
+              </div>
+
+              <div class="product z-20 shadow-[#5B223E]/5 w-[38%] h-[65%] rounded-3xl px-px py-px absolute bottom-[13%] left-[35%] shadow-xl" aria-hidden="true" style="translate: none; rotate: none; scale: none; transform: translate(-10.2649px, -0.4167px);">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ff4c0e27-1d5a-46fb-8f04-ef84cf646904_800w.webp" class="h-full w-full object-cover rounded-[1.4rem]" alt="Seedling">
+              </div>
+
+              <button class="play-btn absolute left-[55%] top-[47%] z-30 flex h-16 w-16 items-center justify-center rounded-full bg-[#1E0C1F] text-[#F8EDE2] shadow-lg shadow-[#1E0C1F]/20 transition-transform duration-300 hover:scale-110 focus:outline-none sm:h-20 sm:w-20" aria-label="Play Seedling preview" style="box-shadow: rgba(2, 1, 2, 0.004) 0px 0px 0px 0.7647px; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+                <iconify-icon icon="solar:play-bold" style="font-size: 1.875rem;" aria-hidden="true" class=""></iconify-icon>
+              </button>
+
+              <nav aria-label="Brand Motion categories" class="absolute bottom-[6%] left-[6.5%] right-[6.5%] z-20 grid grid-cols-2 gap-3 border-t border-[#2B1621]/10 pt-4 text-[#1E0C1F]">
+                <a href="#" class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18rem] text-[#1E0C1F]/90">
+                  <iconify-icon icon="solar:leaf-linear" style="font-size: 1.375rem;" aria-hidden="true"></iconify-icon>
+                  <span class="">
+                    <span class="block text-[#1E0C1F]/50">Root</span>
+                    Systems
+                  </span>
+                </a>
+                <a href="#" class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18rem] text-[#1E0C1F]/90">
+                  <iconify-icon icon="solar:sun-linear" style="font-size: 1.375rem;" aria-hidden="true"></iconify-icon>
+                  <span class="">
+                    <span class="block text-[#1E0C1F]/50">Light</span>
+                    Needs
+                  </span>
+                </a>
+              </nav>
+            </article>
+
+            <article class="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-[#2B1621]/10" data-index="1" aria-label="Component Library panel" style="width: 24%;" data-active="false">
+              <div class="absolute inset-0 bg-gradient-to-br from-[#A78BFA]/10 via-[#DDD6FE]/30 to-[#F8EDE2]/60"></div>
+              <div class="absolute inset-0 opacity-45" style="background-image: linear-gradient(135deg, rgba(43,22,33,.03) 1px, transparent 1px); background-size: 4.75rem 4.75rem;"></div>
+
+              <div class="ring-field pointer-events-none absolute left-[16%] top-[17%] h-[58%] w-[72%] opacity-75" aria-hidden="true" style="transform: rotate(-47.3616deg);">
+                <div class="wire-ring absolute left-[2%] top-[5%] h-[88%] w-[88%] rounded-full border border-[#2B1621]/20" style="transform: rotate(-12deg) scaleX(1.4);"></div>
+              </div>
+
+              <header class="absolute right-[7%] top-[6%] z-20 text-right uppercase tracking-[0.24rem] text-[#1E0C1F]">
+                <div class="text-3xl font-semibold leading-none">GR</div>
+                <p class="mt-2 text-[0.62rem] font-semibold tracking-[0.22rem] text-[#2B1621]/70 sm:text-xs">
+                  GROWTH
+                </p>
+              </header>
+
+              <div class="title-wrap absolute left-[6.5%] top-[18%] z-10 max-w-[64%]" style="translate: none; rotate: none; scale: none; opacity: 0.82; transform: translate(-4%, 0%);">
+                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.34rem] text-[#2B1621]/60">
+                  Stage 02
+                </p>
+                <h2 class="tracking-tighter text-5xl font-semibold uppercase leading-[0.86] text-[#1E0C1F] sm:text-7xl md:text-8xl lg:text-9xl">
+                  FOLIAGE
+                  <br>
+                  EXPANSION
+                </h2>
+              </div>
+
+              <div class="product z-20 shadow-[#5B223E]/5 w-[38%] h-[45%] rounded-[2.5rem] px-px py-px absolute bottom-[22%] left-[38%] shadow-xl" aria-hidden="true" style="translate: none; rotate: none; scale: none; transform: translate(9%, 2%) translate(-3.5927px, -0.1458px) scale(0.92, 0.92);">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e51fd3e4-46df-4fc8-9bdd-e2ef6dd582d0_320w.png" class="h-full w-full object-cover rounded-[2.4rem]" alt="Foliage">
+              </div>
+
+              <div class="product absolute bottom-[16%] left-[16%] z-20 h-[16%] w-[16%] rounded-2xl p-px bg-gradient-to-br from-[#A78BFA]/50 to-white/40 shadow-lg shadow-[#5B223E]/5" aria-hidden="true" style="translate: none; rotate: none; scale: none; transform: translate(9%, 2%) translate(-3.5927px, -0.1458px) scale(0.92, 0.92);">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bb75be66-f0ef-466a-81bf-fa8d994fb05e_800w.webp" class="h-full w-full object-cover rounded-[0.9rem]" alt="Leaf detail">
+              </div>
+
+              <button class="play-btn absolute left-[69%] top-[43%] z-30 flex h-16 w-16 items-center justify-center rounded-full bg-[#1E0C1F] text-[#F8EDE2] shadow-lg shadow-[#1E0C1F]/20 transition-transform duration-300 hover:scale-110 focus:outline-none sm:h-20 sm:w-20" aria-label="Play Foliage preview" style="box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(30, 12, 31, 0.2) 0px 10px 15px -3px, rgba(30, 12, 31, 0.2) 0px 4px 6px -4px; translate: none; rotate: none; scale: none; opacity: 0.76; transform: scale(0.86, 0.86);">
+                <iconify-icon icon="solar:play-bold" style="font-size: 1.875rem;" aria-hidden="true" class=""></iconify-icon>
+              </button>
+
+              <nav aria-label="Component Library categories" class="absolute bottom-[6%] left-[6.5%] right-[6.5%] z-20 grid grid-cols-3 gap-2 border-t border-[#2B1621]/10 pt-4 text-[#1E0C1F]">
+                <a href="#" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13rem] text-[#1E0C1F]/90">
+                  <iconify-icon icon="solar:drop-linear" style="font-size: 1.375rem;" aria-hidden="true"></iconify-icon>
+                  <span>
+                    <span class="block text-[#1E0C1F]/50">Leaf</span>
+                    Nodes
+                  </span>
+                </a>
+              </nav>
+            </article>
+
+            <article class="panel group relative h-full min-w-0 flex-none overflow-hidden" data-index="2" aria-label="Spatial System panel" style="width: 24%;" data-active="false">
+              <div class="absolute inset-0 bg-gradient-to-br from-[#D9F99D]/20 via-[#F8EDE2]/60 to-[#F6D6FF]/20"></div>
+              <div class="absolute inset-0 opacity-45" style="background-image: linear-gradient(135deg, rgba(43,22,33,.03) 1px, transparent 1px); background-size: 4.75rem 4.75rem"></div>
+
+              <div class="ring-field pointer-events-none absolute left-[14%] top-[15%] h-[64%] w-[72%] opacity-55" aria-hidden="true" style="transform: rotate(47.3616deg);">
+                <div class="wire-ring absolute left-[2%] top-[4%] h-[88%] w-[88%] rounded-full border border-[#2B1621]/20" style="transform: rotate(12deg) scaleX(1.32);"></div>
+              </div>
+
+              <header class="absolute right-[7%] top-[6%] z-20 text-right uppercase tracking-[0.24rem] text-[#1E0C1F]">
+                <div class="text-3xl font-semibold leading-none">BL</div>
+                <p class="mt-2 text-[0.62rem] font-semibold tracking-[0.22rem] text-[#2B1621]/70 sm:text-xs">
+                  BLOOM
+                </p>
+              </header>
+
+              <div class="title-wrap absolute left-[6.5%] top-[18%] z-10 max-w-[64%]" style="translate: none; rotate: none; scale: none; opacity: 0.82; transform: translate(-4%, 0%);">
+                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.34rem] text-[#2B1621]/60">
+                  Stage 03
+                </p>
+                <h2 class="tracking-tighter text-5xl font-semibold uppercase leading-[0.86] text-[#1E0C1F] sm:text-7xl md:text-8xl lg:text-9xl">
+                  CANOPY
+                  <br>
+                  DEVELOPMENT
+                </h2>
+              </div>
+
+              <div class="product z-20 shadow-[#5B223E]/5 w-[42%] h-[43%] rounded-full px-px py-px absolute bottom-[22%] left-[35%] shadow-xl" aria-hidden="true" style="translate: none; rotate: none; scale: none; transform: translate(9%, 2%) translate(-3.5927px, -0.1458px) scale(0.92, 0.92);">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/498faa0b-8a25-4d61-8217-1903f384b247_320w.webp" class="h-full w-full object-cover rounded-full" alt="Canopy">
+              </div>
+
+              <button class="play-btn absolute left-[69%] top-[30%] z-30 flex h-16 w-16 items-center justify-center rounded-full bg-[#1E0C1F] text-[#F8EDE2] shadow-lg shadow-[#1E0C1F]/20 transition-transform duration-300 hover:scale-110 focus:outline-none sm:h-20 sm:w-20" aria-label="Play Canopy preview" style="box-shadow: rgba(2, 1, 2, 0.004) 0px 0px 0px 0.7547px; translate: none; rotate: none; scale: none; opacity: 0.76; transform: scale(0.86, 0.86);">
+                <iconify-icon icon="solar:play-bold" style="font-size: 1.875rem;" aria-hidden="true"></iconify-icon>
+              </button>
+
+              <nav aria-label="Spatial System categories" class="absolute bottom-[6%] left-[6.5%] right-[6.5%] z-20 grid grid-cols-3 gap-2 border-t border-[#2B1621]/10 pt-4 text-[#1E0C1F]">
+                <a href="#" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13rem] text-[#1E0C1F]/90">
+                  <iconify-icon icon="solar:tree-linear" style="font-size: 1.375rem;" aria-hidden="true"></iconify-icon>
+                  <span>
+                    <span class="block text-[#1E0C1F]/50">Branch</span>
+                    Suite
+                  </span>
+                </a>
+              </nav>
+            </article>
+          </div>
+
+          <div class="pointer-events-none absolute left-5 top-5 z-40 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24rem] text-[#2B1621]/60">
+            <span class="h-2 w-2 bg-emerald-600"></span>
+            <span>Growth Stages</span>
+          </div>
+
+          <div class="absolute bottom-5 right-5 z-40 flex items-center gap-2" aria-label="Carousel progress">
+            <button class="dot h-1.5 w-8 bg-[#1E0C1F]" data-dot="0" aria-label="Show Seedling Stage" style="width: 48px; opacity: 1;"></button>
+            <button class="dot h-1.5 w-8 bg-[#1E0C1F] opacity-40" data-dot="1" aria-label="Show Foliage Stage" style="width: 32px; opacity: 0.4;"></button>
+            <button class="dot h-1.5 w-8 bg-[#1E0C1F] opacity-40" data-dot="2" aria-label="Show Canopy Stage" style="width: 32px; opacity: 0.4;"></button>
+          </div>
+        </div>
+      </section>
+      <section class="z-10 grid gap-4 lg:grid-cols-[0.85fr_1.15fr] mt-4 relative gap-x-4 gap-y-4" id="sequence">
+        <div class="border border-[#2B1621]/10 bg-[#1E0C1F] p-7 text-[#F8EDE2] shadow-[0_2rem_4rem_rgba(43,22,33,0.20)] sm:p-9">
+          <p class="text-sm font-normal text-[#F8EDE2]/50">
+            Growth choreography
+          </p>
+          <h2 class="mt-4 text-3xl font-medium leading-tight tracking-tight sm:text-4xl">
+            A calibrated six-month blooming cycle.
+          </h2>
+          <p class="mt-5 text-sm font-normal leading-7 text-[#F8EDE2]/70">
+            The cycle begins with seed germination, introduces early leaves,
+            establishes root systems, then settles into a steady growth loop.
+          </p>
+        </div>
+
+        <div class="border border-[#2B1621]/10 bg-[#F8EDE2]/60 p-5 shadow-sm backdrop-blur-xl sm:p-6">
+          <div class="grid gap-3 sm:grid-cols-3">
+            <div class="beat border border-[#2B1621]/10 bg-[#F8EDE2] p-5" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+              <span class="text-xs font-normal text-[#2B1621]/50">00–01s</span>
+              <p class="mt-3 text-lg font-medium tracking-tight">Sprout</p>
+              <p class="mt-2 text-sm font-normal leading-6 text-[#2B1621]/60">
+                Seed casing opens, primary root descends, first shoots resolve.
+              </p>
+            </div>
+            <div class="beat border border-[#2B1621]/10 bg-[#F8EDE2] p-5" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+              <span class="text-xs font-normal text-[#2B1621]/50">01–04s</span>
+              <p class="mt-3 text-lg font-medium tracking-tight">Vegetate</p>
+              <p class="mt-2 text-sm font-normal leading-6 text-[#2B1621]/60">
+                Leaves stagger upward with sun-seeking rotation and exact
+                spacing.
+              </p>
+            </div>
+            <div class="beat border border-[#2B1621]/10 bg-[#F8EDE2] p-5" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+              <span class="text-xs font-normal text-[#2B1621]/50">04–06s</span>
+              <p class="mt-3 text-lg font-medium tracking-tight">Mature</p>
+              <p class="mt-2 text-sm font-normal leading-6 text-[#2B1621]/60">
+                Stems lock, flowers pulse once, the plant continues respiring.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex flex-col sm:flex-row gap-1.5 h-[600px] sm:h-[464px] rounded pt-4 pr-0 pb-1.5 pl-0 w-full relative z-10">
+        <div class="group flex flex-1 cursor-pointer overflow-hidden hover:flex-[4] sm:hover:flex-[4] bg-[#1E0C1F] rounded-sm relative items-center justify-center">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/38c6d728-ca1d-49d5-8298-8a689c0e55b7_800w.png" alt="Sprout Phase" class="h-full w-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100">
+          <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#1E0C1F] via-[#1E0C1F]/60 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <p class="mb-2 text-xs font-medium uppercase tracking-[0.24rem] text-[#F8EDE2]/70">
+              00–01s
+            </p>
+            <h3 class="mb-1 text-2xl font-normal tracking-tight text-[#F8EDE2]">
+              Sprout
+            </h3>
+            <p class="text-sm font-light leading-relaxed text-[#F8EDE2]/80">
+              Seed casing opens, primary root descends, first shoots resolve.
+            </p>
+          </div>
+        </div>
+
+        <div class="group flex flex-1 cursor-pointer overflow-hidden hover:flex-[4] sm:hover:flex-[4] bg-[#1E0C1F] rounded-sm relative items-center justify-center">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6de82496-7a2d-4abd-b372-427405d8c615_800w.png" alt="Vegetate Phase" class="h-full w-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100">
+          <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#1E0C1F] via-[#1E0C1F]/60 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <p class="mb-2 text-xs font-medium uppercase tracking-[0.24rem] text-[#F8EDE2]/70">
+              01–04s
+            </p>
+            <h3 class="mb-1 text-2xl font-normal tracking-tight text-[#F8EDE2]">
+              Vegetate
+            </h3>
+            <p class="text-sm font-light leading-relaxed text-[#F8EDE2]/80">
+              Leaves stagger upward with sun-seeking rotation and exact spacing.
+            </p>
+          </div>
+        </div>
+
+        <div class="group flex flex-1 cursor-pointer overflow-hidden hover:flex-[4] sm:hover:flex-[4] bg-[#1E0C1F] rounded-sm relative items-center justify-center">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0454d910-d65a-463c-a9b9-e8764572a8dd_320w.png" alt="Mature Phase" class="h-full w-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100">
+          <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#1E0C1F] via-[#1E0C1F]/60 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <p class="mb-2 text-xs font-medium uppercase tracking-[0.24rem] text-[#F8EDE2]/70">
+              04–06s
+            </p>
+            <h3 class="mb-1 text-2xl font-normal tracking-tight text-[#F8EDE2]">
+              Mature
+            </h3>
+            <p class="text-sm font-light leading-relaxed text-[#F8EDE2]/80">
+              Stems lock, flowers pulse once, the plant continues respiring.
+            </p>
+          </div>
+        </div>
+
+        <div class="group flex flex-1 cursor-pointer overflow-hidden hover:flex-[4] sm:hover:flex-[4] bg-[#1E0C1F] rounded-sm relative items-center justify-center">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1e614edd-7098-4747-aae3-212a4147e50f_800w.png" alt="Soil Sync Phase" class="h-full w-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100">
+          <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#1E0C1F] via-[#1E0C1F]/60 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <p class="mb-2 text-xs font-medium uppercase tracking-[0.24rem] text-[#F8EDE2]/70">
+              Ecosystem
+            </p>
+            <h3 class="mb-1 text-2xl font-normal tracking-tight text-[#F8EDE2]">
+              Soil Sync
+            </h3>
+            <p class="text-sm font-light leading-relaxed text-[#F8EDE2]/80">
+              Integrate the botanical board directly into your moisture meters.
+            </p>
+          </div>
+        </div>
+
+        <div class="group flex flex-1 cursor-pointer overflow-hidden hover:flex-[4] sm:hover:flex-[4] bg-[#1E0C1F] rounded-sm relative items-center justify-center">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5066d2cd-0449-40ed-9699-8c40a647f90c_1600w.png" alt="Light Tokens Phase" class="h-full w-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100">
+          <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#1E0C1F] via-[#1E0C1F]/60 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <p class="mb-2 text-xs font-medium uppercase tracking-[0.24rem] text-[#F8EDE2]/70">
+              Ecosystem
+            </p>
+            <h3 class="mb-1 text-2xl font-normal tracking-tight text-[#F8EDE2]">
+              Light Tokens
+            </h3>
+            <p class="text-sm font-light leading-relaxed text-[#F8EDE2]/80">
+              A calibrated six-month blooming cycle with smart light
+              integration.
+            </p>
+          </div>
+        </div>
+      </div>
+      <section id="resources" class="relative z-10 mt-4 border border-[#2B1621]/10 bg-[#F8EDE2]/55 p-6 shadow-sm backdrop-blur-xl sm:p-8 lg:p-10">
+        <div class="grid gap-8 lg:grid-cols-2 lg:items-center">
+          <div class="">
+            <p class="text-sm font-normal text-[#2B1621]/50">Ecosystem</p>
+            <h2 class="mt-4 text-3xl font-medium leading-tight tracking-tight sm:text-4xl">
+              Connect your sensors.
+            </h2>
+            <p class="mt-4 text-sm font-normal leading-7 text-[#2B1621]/70">
+              Integrate the botanical board directly into your moisture meters,
+              smart lights, and watering pipelines. Keep every plant thriving.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="border border-[#2B1621]/10 bg-[#F8EDE2] p-5 shadow-sm">
+              <iconify-icon icon="solar:earth-linear" style="font-size: 1.5rem; stroke-width: 1.5; color: #1E0C1F;"></iconify-icon>
+              <p class="mt-3 text-base font-medium tracking-tight text-[#1E0C1F]">
+                Soil Sync
+              </p>
+            </div>
+            <div class="border border-[#2B1621]/10 bg-[#F8EDE2] p-5 shadow-sm">
+              <iconify-icon icon="solar:sun-linear" style="font-size: 1.5rem; stroke-width: 1.5; color: #1E0C1F;"></iconify-icon>
+              <p class="mt-3 text-base font-medium tracking-tight text-[#1E0C1F]">
+                Light Tokens
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="relative z-10 mt-4 flex flex-col items-center justify-between gap-4 border border-[#2B1621]/10 bg-[#F8EDE2]/70 px-4 py-6 shadow-sm backdrop-blur-xl sm:flex-row sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
+          <span class="text-base font-medium uppercase tracking-tighter text-[#1E0C1F]">
+            Lumio
+          </span>
+          <span class="hidden h-1 w-1 rounded-full bg-[#2B1621]/20 sm:block"></span>
+          <span class="text-sm font-normal text-[#2B1621]/50">
+            © 2024 All rights reserved.
+          </span>
+        </div>
+        <div class="flex items-center gap-6 text-sm font-normal text-[#2B1621]/60">
+          <a href="#" class="transition hover:text-[#1E0C1F]">Privacy</a>
+          <a href="#" class="transition hover:text-[#1E0C1F]">Terms</a>
+          <a href="#" class="transition hover:text-[#1E0C1F]">Twitter</a>
+        </div>
+      </footer>
+    </main>
+
+    <script class="">
+      (function () {
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const hasGSAP = typeof window.gsap !== 'undefined';
+        const canvas = document.getElementById('glCanvas');
+        const fallback = document.getElementById('webglFallback');
+
+        function startWebGL() {
+          if (!canvas || reduceMotion) {
+            if (canvas) canvas.style.display = 'none';
+            if (fallback) fallback.style.display = 'block';
+            return;
+          }
+
+          const gl = canvas.getContext('webgl', { alpha: true, antialias: false, powerPreference: 'high-performance' });
+          if (!gl) {
+            canvas.style.display = 'none';
+            if (fallback) fallback.style.display = 'block';
+            return;
+          }
+
+          if (fallback) fallback.style.display = 'none';
+
+          const vertexSource = `
+            attribute vec2 position;
+            void main() {
+              gl_Position = vec4(position, 0.0, 1.0);
+            }
+          `;
+
+          const fragmentSource = `
+            precision mediump float;
+            uniform vec2 u_resolution;
+            uniform float u_time;
+
+            float blob(vec2 uv, vec2 p, float r) {
+              return r / length(uv - p);
+            }
+
+            void main() {
+              vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+              uv.x *= u_resolution.x / u_resolution.y;
+
+              vec2 p1 = vec2(0.28 + sin(u_time * 0.31) * 0.04, 0.72 + cos(u_time * 0.27) * 0.03);
+              vec2 p2 = vec2(0.86 + cos(u_time * 0.24) * 0.06, 0.66 + sin(u_time * 0.33) * 0.04);
+              vec2 p3 = vec2(0.58 + sin(u_time * 0.21) * 0.04, 0.20 + cos(u_time * 0.29) * 0.04);
+
+              float m = blob(uv, p1, 0.025) + blob(uv, p2, 0.022) + blob(uv, p3, 0.019);
+              float field = smoothstep(0.13, 0.52, m);
+
+              vec3 orchid = vec3(0.85, 0.27, 0.94);
+              vec3 lilac = vec3(0.65, 0.55, 0.98);
+              vec3 mint = vec3(0.85, 0.98, 0.62);
+              vec3 color = mix(orchid, lilac, uv.x);
+              color = mix(color, mint, smoothstep(0.15, 0.65, uv.y) * 0.28);
+
+              float vignette = smoothstep(1.05, 0.15, distance(uv, vec2(0.72, 0.54)));
+              gl_FragColor = vec4(color, field * vignette * 0.24);
+            }
+          `;
+
+          function compile(type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+              gl.deleteShader(shader);
+              return null;
+            }
+            return shader;
+          }
+
+          const vertexShader = compile(gl.VERTEX_SHADER, vertexSource);
+          const fragmentShader = compile(gl.FRAGMENT_SHADER, fragmentSource);
+
+          if (!vertexShader || !fragmentShader) {
+            canvas.style.display = 'none';
+            if (fallback) fallback.style.display = 'block';
+            return;
+          }
+
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            canvas.style.display = 'none';
+            if (fallback) fallback.style.display = 'block';
+            return;
+          }
+
+          const buffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+
+          const position = gl.getAttribLocation(program, 'position');
+          const resolution = gl.getUniformLocation(program, 'u_resolution');
+          const time = gl.getUniformLocation(program, 'u_time');
+
+          function resize() {
+            const ratio = Math.min(window.devicePixelRatio || 1, 2);
+            const width = Math.floor(canvas.clientWidth * ratio);
+            const height = Math.floor(canvas.clientHeight * ratio);
+            if (canvas.width !== width || canvas.height !== height) {
+              canvas.width = width;
+              canvas.height = height;
+              gl.viewport(0, 0, width, height);
+            }
+          }
+
+          const start = performance.now();
+          function render(now) {
+            resize();
+            gl.clearColor(0, 0, 0, 0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.useProgram(program);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.enableVertexAttribArray(position);
+            gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+            gl.uniform2f(resolution, canvas.width, canvas.height);
+            gl.uniform1f(time, (now - start) * 0.001);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            requestAnimationFrame(render);
+          }
+
+          requestAnimationFrame(render);
+          window.addEventListener('resize', resize, { passive: true });
+        }
+
+        function startMotion() {
+          if (!hasGSAP) return;
+
+          gsap.registerPlugin(ScrollTrigger);
+
+          if (reduceMotion) {
+            gsap.set(['.hero-top', '.tile', '.panel-left', '.panel-right', '.panel-water', '.pager', '.hero-copy', '.metric-card', '.beat', '.person', '.orbit-ring', '.stat-word'], { clearProps: 'all', opacity: 1 });
+            return;
+          }
+
+          const easeOut = 'power3.out';
+          const tl = gsap.timeline({ defaults: { ease: easeOut } });
+
+          tl.set(['.hero-top', '.tile', '.panel-left', '.panel-right', '.panel-water', '.pager', '.hero-copy', '.person', '.orbit-ring', '.stat-word', '.sink'], { transformOrigin: '50% 50%' })
+            .from('.hero-top', { y: -14, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.1)
+            .from('.orbit-ring', { scale: 0.78, rotate: -38, opacity: 0, duration: 1.35, ease: 'expo.out' }, 0.28)
+            .from('.person', { y: 80, scale: 1.035, opacity: 0, duration: 1.45, ease: 'expo.out' }, 0.55)
+            .from('.stat-word', { x: 34, opacity: 0, duration: 0.9 }, 1.2)
+            .from('.tile', { y: 34, x: -16, rotate: -4, scale: 0.86, opacity: 0, duration: 0.82, stagger: 0.11, ease: 'back.out(1.3)' }, 1.55)
+            .from('.bars .bar', { scaleY: 0, duration: 0.55, stagger: 0.08, ease: 'power2.out' }, 2.05)
+            .from('.panel-right', { x: 72, y: -22, rotate: 3, scale: 0.9, opacity: 0, duration: 0.92, ease: 'back.out(1.1)' }, 2.45)
+            .from('.panel-left', { x: -72, y: 24, rotate: -3, scale: 0.9, opacity: 0, duration: 0.92, ease: 'back.out(1.1)' }, 2.7)
+            .from('.panel-water', { x: 56, y: 42, scale: 0.9, opacity: 0, duration: 0.86, ease: 'back.out(1.1)' }, 3.05)
+            .from('.pager', { y: 32, scale: 0.9, opacity: 0, duration: 0.76, ease: 'back.out(1.25)' }, 3.35)
+            .from('.sink', { y: 60, opacity: 0, duration: 1.05 }, 3.65)
+            .from('.hero-copy', { y: 34, opacity: 0, duration: 0.9, stagger: 0.12 }, 4.4)
+            .to('.signal-dot', { y: -8, duration: 0.32, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 5.35)
+            .to('.signal-rail', { x: 16, duration: 0.55, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 5.35)
+            .to('.orbit-ring', { rotate: 8, duration: 1.7, ease: 'sine.inOut' }, 5.8);
+
+          gsap.to('.tile-1', { y: -8, duration: 2.8, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 6.6 });
+          gsap.to('.tile-2', { y: 7, duration: 3.2, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 6.6 });
+          gsap.to('.tile-3', { y: 9, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 6.6 });
+          gsap.to('.tile-4', { y: -7, duration: 2.9, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 6.6 });
+          gsap.to('.panel-right', { y: -9, duration: 3.8, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 6.6 });
+          gsap.to('.panel-water', { y: 8, duration: 4.2, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 6.6 });
+
+          gsap.from('.metric-card', {
+            scrollTrigger: { trigger: '#metrics', start: 'top 78%' },
+            y: 28,
+            opacity: 0,
+            duration: 0.75,
+            stagger: 0.12,
+            ease: 'power3.out'
+          });
+
+          gsap.from('.beat', {
+            scrollTrigger: { trigger: '#sequence', start: 'top 76%' },
+            y: 26,
+            opacity: 0,
+            duration: 0.72,
+            stagger: 0.12,
+            ease: 'power3.out'
+          });
+        }
+
+        startWebGL();
+        startMotion();
+      })();
+    </script>
+
+    <script class="">
+      (function() {
+        const initCarousel = () => {
+          const panels = Array.from(document.querySelectorAll('.panel'));
+          const dots = Array.from(document.querySelectorAll('.dot'));
+          const products = Array.from(document.querySelectorAll('.product'));
+          const ringFields = Array.from(document.querySelectorAll('.ring-field'));
+          if (!panels.length) return;
+          let activeIndex = 0;
+          let timer;
+
+          function setActive(index) {
+            activeIndex = index;
+            panels.forEach((panel, i) => {
+              panel.dataset.active = i === index ? 'true' : 'false';
+              gsap.to(panel, {
+                width: i === index ? '52%' : '24%',
+                duration: 0.9,
+                ease: 'cubic-bezier(0.22, 1, 0.36, 1)'
+              });
+              const titleWrap = panel.querySelector('.title-wrap');
+              if (titleWrap) {
+                gsap.to(titleWrap, {
+                  xPercent: i === index ? 0 : -4,
+                  opacity: i === index ? 1 : 0.82,
+                  duration: 0.9,
+                  ease: 'power3.out'
+                });
+              }
+              const prods = panel.querySelectorAll('.product');
+              if (prods.length) {
+                gsap.to(prods, {
+                  xPercent: i === index ? 0 : 9,
+                  yPercent: i === index ? 0 : 2,
+                  scale: i === index ? 1 : 0.92,
+                  duration: 0.9,
+                  ease: 'power3.out',
+                  stagger: 0.03
+                });
+              }
+              const playBtn = panel.querySelector('.play-btn');
+              if (playBtn) {
+                gsap.to(playBtn, {
+                  scale: i === index ? 1 : 0.86,
+                  opacity: i === index ? 1 : 0.76,
+                  duration: 0.9,
+                  ease: 'power3.out'
+                });
+              }
+            });
+            dots.forEach((dot, i) => {
+              gsap.to(dot, {
+                opacity: i === index ? 1 : 0.4,
+                width: i === index ? 48 : 32,
+                duration: 0.35,
+                ease: 'power2.out'
+              });
+            });
+          }
+
+          function startAuto() {
+            clearInterval(timer);
+            timer = setInterval(() => setActive((activeIndex + 1) % panels.length), 3500);
+          }
+
+          panels.forEach((panel, index) => {
+            panel.addEventListener('mouseenter', () => {
+              setActive(index);
+              startAuto();
+            });
+          });
+
+          dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+              setActive(index);
+              startAuto();
+            });
+          });
+
+          document.addEventListener('mousemove', (event) => {
+            const x = (event.clientX / window.innerWidth - 0.5) * 2;
+            const y = (event.clientY / window.innerHeight - 0.5) * 2;
+            products.forEach((product) => {
+              const panel = product.closest('.panel');
+              const intensity = panel && panel.dataset.active === 'true' ? 1 : 0.35;
+              gsap.to(product, {
+                x: x * 14 * intensity,
+                y: y * 10 * intensity,
+                duration: 0.7,
+                ease: 'power3.out'
+              });
+            });
+          });
+
+          gsap.to('.play-btn', {
+            boxShadow: '0 0 0 14px rgba(30,12,31,0.05)',
+            duration: 1.2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            stagger: 0.18
+          });
+
+          gsap.ticker.add(() => {
+            const t = performance.now() * 0.00004;
+            ringFields.forEach((field, i) => {
+              field.style.transform = 'rotate(' + ((t * 360 * (i % 2 ? -1 : 1)) % 360) + 'deg)';
+            });
+          });
+
+          setActive(0);
+          startAuto();
+        };
+
+        if (typeof gsap !== 'undefined') {
+          initCarousel();
+        } else {
+          window.addEventListener('load', initCarousel);
+        }
+      })();
+    </script>
+
+    <script data-aura-video-controller="true">
+      (function () {
+        function playVideo(video) {
+          var promise = video.play();
+          if (promise && typeof promise.catch === "function") {
+            promise.catch(function () {});
+          }
+        }
+
+        function setupVideo(video) {
+          if (video.__auraVideoReady === true) return;
+          video.__auraVideoReady = true;
+          video.removeAttribute("data-aura-video-ready");
+          video.removeAttribute("data-aura-video-played");
+          video.muted = true;
+          video.playsInline = true;
+
+          var preset = video.dataset.auraVideoPreset || "loop-in-view";
+          if (preset === "hover") {
+            video.addEventListener("mouseenter", function () {
+              playVideo(video);
+            });
+            video.addEventListener("mouseleave", function () {
+              video.pause();
+              video.currentTime = 0;
+            });
+            return;
+          }
+
+          if (!("IntersectionObserver" in window)) {
+            playVideo(video);
+            return;
+          }
+
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                if (preset === "play-once" && video.__auraVideoPlayed === true) {
+                  return;
+                }
+                playVideo(video);
+              } else {
+                video.pause();
+              }
+            });
+          }, { threshold: 0.35 });
+
+          if (preset === "play-once") {
+            video.addEventListener("ended", function () {
+              video.__auraVideoPlayed = true;
+            }, { once: true });
+          }
+
+          observer.observe(video);
+        }
+
+        function setupVideos() {
+          document
+            .querySelectorAll("video[data-aura-video-preset]")
+            .forEach(setupVideo);
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", setupVideos);
+        } else {
+          setupVideos();
+        }
+      })();
+    </script>
+  
+</body></html>

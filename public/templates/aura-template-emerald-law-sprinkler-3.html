@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="scroll-smooth">
+  <head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emerald Lawn Sprinklers | Smart Irrigation &amp; Lighting</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+body {
+font-family: 'Inter', sans-serif;
+}
+::-webkit-scrollbar {
+width: 0px;
+background: transparent;
+}
+/* Form Autofill Styling Fix for Dark Mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+-webkit-text-fill-color: white;
+-webkit-box-shadow: 0 0 0px 1000px #1a1a1a inset;
+transition: background-color 5000s ease-in-out 0s;
+}
+/* Custom Checkbox Animation */
+.check-container input:checked ~ .check-box {
+background-color: #149116;
+border-color: #149116;
+}
+.check-container input:checked ~ .check-box iconify-icon {
+opacity: 1;
+transform: scale(1);
+}
+.check-box iconify-icon {
+opacity: 0;
+transform: scale(0.5);
+transition: all 0.2s ease-in-out;
+}
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body
+    class="bg-[#0f0f0f] text-white antialiased selection:bg-[#149116] selection:text-white overflow-x-hidden"
+  >
+    <!-- Header -->
+    <header
+      class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12 transition-all duration-300 backdrop-blur-md bg-[#0f0f0f]/80 border-b border-white/5"
+    >
+      <button
+        class="group flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400 hover:text-white transition-colors"
+      >
+        <span
+          class="block w-6 h-[1.5px] bg-neutral-400 group-hover:bg-white transition-colors"
+        ></span>
+        Menu
+      </button>
+
+      <a
+        href="#"
+        class="absolute left-1/2 -translate-x-1/2 flex items-center justify-center p-2 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
+      >
+        <img
+          src="https://emeraldlawnsprinklers.com/wp-content/uploads/2011/03/logo.png"
+          alt="Emerald Lawn Sprinklers"
+          class="h-8 md:h-10 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+        />
+      </a>
+
+      <a
+        href="#estimate"
+        class="bg-[#149116] hover:bg-[#117a12] text-white text-xs font-medium px-5 py-2.5 rounded-full uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(20,145,22,0.3)] hover:shadow-[0_0_30px_rgba(20,145,22,0.5)]"
+      >
+        Free Estimate
+      </a>
+    </header>
+
+    <!-- Hero Section -->
+    <section
+      class="relative h-screen w-full overflow-hidden flex flex-col justify-end pb-12 md:pb-24"
+    >
+      <div class="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1558904541-efa843a96f0f?q=80&amp;w=2000&amp;auto=format&amp;fit=crop"
+          alt="Pristine Lawn Irrigation"
+          class="w-full h-full object-cover brightness-[0.4] saturate-[1.2]"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/60 to-transparent"
+        ></div>
+      </div>
+
+      <div
+        class="relative z-10 px-6 md:px-12 w-full max-w-screen-2xl mx-auto flex flex-col md:flex-row items-end justify-between gap-8"
+      >
+        <div class="max-w-4xl">
+          <span
+            class="text-[#deb40f] text-xs font-medium tracking-widest uppercase mb-4 block flex items-center gap-2"
+          >
+            <iconify-icon
+              icon="solar:leaf-linear"
+              class="text-sm"
+            ></iconify-icon>
+            Premium Landscape Solutions
+          </span>
+          <h1
+            class="text-5xl md:text-7xl lg:text-8xl font-medium uppercase leading-[0.9] tracking-tight text-white mb-6"
+          >
+            Smarter Water,
+            <br />
+            Greener Lawns
+            <span class="text-[#149116]">.</span>
+          </h1>
+          <p
+            class="text-neutral-400 text-sm md:text-base max-w-md font-light leading-relaxed"
+          >
+            Elevate your property with cutting-edge irrigation systems and
+            elegant landscape lighting, managed directly from your smart
+            devices.
+          </p>
+        </div>
+
+        <a
+          href="#features"
+          class="group relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 backdrop-blur-md rounded-full transition-all hover:bg-[#149116] hover:border-[#149116]"
+        >
+          <iconify-icon
+            icon="solar:arrow-down-linear"
+            class="text-2xl text-white group-hover:translate-y-1 transition-transform"
+          ></iconify-icon>
+        </a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section
+      id="features"
+      class="bg-white text-neutral-900 py-24 md:py-32 px-6 md:px-12 border-t border-neutral-200"
+    >
+      <div class="max-w-screen-2xl mx-auto">
+        <div
+          class="mb-16 md:mb-24 flex flex-col md:flex-row justify-between items-start md:items-end gap-8"
+        >
+          <div>
+            <span
+              class="text-[#149116] text-xs font-medium tracking-widest uppercase mb-4 block"
+            >
+              Technology &amp; Services
+            </span>
+            <h2
+              class="text-3xl md:text-5xl font-medium uppercase tracking-tight max-w-2xl text-neutral-900"
+            >
+              Intelligent Systems For Modern Landscapes
+            </h2>
+          </div>
+          <p class="text-sm text-neutral-600 max-w-sm leading-relaxed">
+            We utilize the latest in water conservation and smart-home
+            technology to ensure your lawn stays lush while reducing waste and
+            lowering bills.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 mb-24">
+          <!-- Feature 1: Rain Sensors -->
+          <div
+            class="group bg-neutral-50 border border-neutral-200 p-8 md:p-12 rounded-2xl hover:border-neutral-300 transition-colors relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-64 h-64 bg-[#149116]/10 blur-[80px] rounded-full group-hover:bg-[#149116]/20 transition-colors"
+            ></div>
+            <div class="relative z-10">
+              <div
+                class="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-8 text-[#149116] border border-neutral-200 shadow-sm"
+              >
+                <iconify-icon
+                  icon="solar:cloud-water-linear"
+                  class="text-2xl"
+                ></iconify-icon>
+              </div>
+              <h3
+                class="text-2xl md:text-3xl font-medium tracking-tight mb-6 text-neutral-900"
+              >
+                Rain Sensors
+              </h3>
+              <ul class="space-y-4">
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:check-circle-linear"
+                    class="text-[#149116] text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>
+                    Saves water by 30-35% over basic irrigation controllers.
+                  </span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:check-circle-linear"
+                    class="text-[#149116] text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>
+                    Prevents over watering during or after sufficient rainfall.
+                  </span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:check-circle-linear"
+                    class="text-[#149116] text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>Convenient bypass features included.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Feature 2: WiFi Clocks -->
+          <div
+            class="group bg-neutral-50 border border-neutral-200 p-8 md:p-12 rounded-2xl hover:border-neutral-300 transition-colors relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-64 h-64 bg-[#deb40f]/10 blur-[80px] rounded-full group-hover:bg-[#deb40f]/20 transition-colors"
+            ></div>
+            <div class="relative z-10">
+              <div
+                class="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-8 text-[#deb40f] border border-neutral-200 shadow-sm"
+              >
+                <iconify-icon
+                  icon="solar:router-2-linear"
+                  class="text-2xl"
+                ></iconify-icon>
+              </div>
+              <h3
+                class="text-2xl md:text-3xl font-medium tracking-tight mb-6 text-neutral-900"
+              >
+                WiFi Clocks
+              </h3>
+              <ul class="space-y-4">
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:smartphone-update-linear"
+                    class="text-neutral-500 text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>Control your system from anywhere in the world.</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:cloud-sun-linear"
+                    class="text-neutral-500 text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>
+                    Controller receives data from local weather stations and
+                    automatically adjusts to current conditions.
+                  </span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:bell-bing-linear"
+                    class="text-neutral-500 text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>
+                    Sends alerts if the system is not functioning properly, or
+                    monitor broken lines (flow sensor required).
+                  </span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-neutral-600">
+                  <iconify-icon
+                    icon="solar:buildings-linear"
+                    class="text-neutral-500 text-lg mt-0.5 shrink-0"
+                  ></iconify-icon>
+                  <span>
+                    Have ELS manage your system remotely from our office.
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-8">
+          <!-- Feature 3: Backflow -->
+          <div
+            class="flex flex-col border border-neutral-200 rounded-2xl overflow-hidden bg-neutral-50"
+          >
+            <div class="aspect-video w-full bg-black relative">
+              <iframe
+                src="https://player.vimeo.com/video/500260525?h=61807167d1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                class="absolute top-0 left-0 w-full h-full"
+                title="Backflow Testing"
+              ></iframe>
+            </div>
+            <div class="p-8 md:p-10 flex-1 flex flex-col justify-between">
+              <div>
+                <span
+                  class="text-[#149116] text-xs font-medium uppercase tracking-widest block mb-3"
+                >
+                  Compliance &amp; Safety
+                </span>
+                <h3
+                  class="text-xl md:text-2xl font-medium tracking-tight mb-4 text-neutral-900"
+                >
+                  Backflow Testing
+                </h3>
+                <p class="text-sm text-neutral-600 leading-relaxed mb-6">
+                  Recommended highly by the DEP every year on the opening of
+                  your irrigation system. Done to protect any back siphonage
+                  from chemicals, toxins or pesticides into your drinking water.
+                  <strong class="text-neutral-900 font-medium">
+                    SHOULD BE DONE EVERY YEAR.
+                  </strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature 4: Lighting -->
+          <div
+            class="flex flex-col border border-neutral-200 rounded-2xl overflow-hidden bg-neutral-50"
+          >
+            <div class="aspect-video w-full bg-black relative">
+              <iframe
+                src="https://player.vimeo.com/video/500260549?h=eaa98999c2&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                class="absolute top-0 left-0 w-full h-full"
+                title="Landscape Lighting"
+              ></iframe>
+            </div>
+            <div class="p-8 md:p-10 flex-1 flex flex-col justify-between">
+              <div>
+                <span
+                  class="text-[#deb40f] text-xs font-medium uppercase tracking-widest block mb-3"
+                >
+                  Aesthetic Enhancement
+                </span>
+                <h3
+                  class="text-xl md:text-2xl font-medium tracking-tight mb-4 text-neutral-900"
+                >
+                  Landscape Lighting
+                </h3>
+                <p class="text-sm text-neutral-600 leading-relaxed mb-8">
+                  A touch of elegant lighting that makes your house the
+                  centerpiece of the neighborhood. Enhance security, usability,
+                  and visual appeal after dark.
+                </p>
+              </div>
+              <a
+                href="#"
+                class="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-900 hover:text-[#deb40f] transition-colors w-fit group border-b border-neutral-300 pb-1 hover:border-[#deb40f]"
+              >
+                Explore Lighting Options
+                <iconify-icon
+                  icon="solar:arrow-right-linear"
+                  class="group-hover:translate-x-1 transition-transform"
+                ></iconify-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section
+      class="bg-neutral-50 text-neutral-900 py-24 md:py-32 px-6 md:px-12 border-t border-neutral-200"
+    >
+      <div class="max-w-screen-2xl mx-auto">
+        <div class="text-center mb-16 md:mb-24">
+          <span
+            class="text-[#149116] text-xs font-medium tracking-widest uppercase mb-4 block"
+          >
+            Client Success
+          </span>
+          <h2
+            class="text-3xl md:text-5xl font-medium uppercase tracking-tight text-neutral-900"
+          >
+            Trusted By Homeowners
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Testimonial 1 -->
+          <div
+            class="bg-white border border-neutral-200 p-8 rounded-2xl flex flex-col shadow-sm"
+          >
+            <div class="flex gap-1 mb-6 text-[#deb40f]">
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+            </div>
+            <p class="text-sm text-neutral-600 leading-relaxed flex-1 mb-8">
+              "Emerald Lawn Sprinklers transformed our property. The new WiFi
+              clock they installed lets me adjust watering from my phone, saving
+              us so much hassle and water."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 font-medium text-xs"
+              >
+                MR
+              </div>
+              <div>
+                <p class="text-xs font-medium text-neutral-900">Michael R.</p>
+                <p
+                  class="text-[10px] text-neutral-500 uppercase tracking-wider"
+                >
+                  Residential Client
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div
+            class="bg-white border border-neutral-200 p-8 rounded-2xl flex flex-col shadow-sm"
+          >
+            <div class="flex gap-1 mb-6 text-[#deb40f]">
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+            </div>
+            <p class="text-sm text-neutral-600 leading-relaxed flex-1 mb-8">
+              "The backflow testing was handled professionally and quickly.
+              Their team is knowledgeable and genuinely cares about the quality
+              of your home's water supply."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 font-medium text-xs"
+              >
+                SD
+              </div>
+              <div>
+                <p class="text-xs font-medium text-neutral-900">Sarah D.</p>
+                <p
+                  class="text-[10px] text-neutral-500 uppercase tracking-wider"
+                >
+                  Homeowner
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div
+            class="bg-white border border-neutral-200 p-8 rounded-2xl flex flex-col shadow-sm"
+          >
+            <div class="flex gap-1 mb-6 text-[#deb40f]">
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:star-bold"
+                class="text-lg"
+              ></iconify-icon>
+            </div>
+            <p class="text-sm text-neutral-600 leading-relaxed flex-1 mb-8">
+              "We hired them for landscape lighting, and the result is stunning.
+              Our house looks incredible at night, perfectly highlighting the
+              architectural details."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 font-medium text-xs"
+              >
+                JL
+              </div>
+              <div>
+                <p class="text-xs font-medium text-neutral-900">James L.</p>
+                <p
+                  class="text-[10px] text-neutral-500 uppercase tracking-wider"
+                >
+                  Commercial Client
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTAs Section -->
+    <section class="bg-[#0f0f0f] py-16 px-6 md:px-12 border-t border-white/5">
+      <div
+        class="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6"
+      >
+        <!-- CTA 1: Review -->
+        <div
+          class="bg-gradient-to-br from-[#141414] to-[#0f0f0f] border border-white/5 p-8 md:p-10 rounded-2xl flex flex-col items-start group hover:border-[#149116]/40 transition-colors"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-[#149116]/10 flex items-center justify-center mb-6 text-[#149116]"
+          >
+            <iconify-icon
+              icon="solar:tag-price-linear"
+              class="text-2xl"
+            ></iconify-icon>
+          </div>
+          <h3
+            class="text-xl md:text-2xl font-medium tracking-tight mb-2 text-white"
+          >
+            $10 Off Your Next Service Call
+          </h3>
+          <p class="text-xs text-neutral-500 mb-8 flex-1">
+            Share your experience with us.
+          </p>
+          <button
+            class="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-[#149116] group-hover:text-white transition-colors"
+            onclick="alert('Review popup modal would open here.')"
+          >
+            Click Here to Leave A Review
+            <iconify-icon
+              icon="solar:arrow-right-up-linear"
+              class="text-sm"
+            ></iconify-icon>
+          </button>
+        </div>
+
+        <!-- CTA 2: Warranty -->
+        <div
+          class="bg-gradient-to-br from-[#141414] to-[#0f0f0f] border border-white/5 p-8 md:p-10 rounded-2xl flex flex-col items-start group hover:border-[#deb40f]/40 transition-colors"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-[#deb40f]/10 flex items-center justify-center mb-6 text-[#deb40f]"
+          >
+            <iconify-icon
+              icon="solar:shield-check-linear"
+              class="text-2xl"
+            ></iconify-icon>
+          </div>
+          <h3
+            class="text-xl md:text-2xl font-medium tracking-tight mb-2 text-white"
+          >
+            Warranty
+          </h3>
+          <p class="text-xs text-neutral-500 mb-8 flex-1">
+            We now offer a 5 YEAR WARRANTY!
+          </p>
+          <a
+            href="#"
+            class="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-[#deb40f] group-hover:text-white transition-colors"
+          >
+            See About Us
+            <iconify-icon
+              icon="solar:arrow-right-linear"
+              class="text-sm"
+            ></iconify-icon>
+          </a>
+        </div>
+
+        <!-- CTA 3: Contact -->
+        <div
+          class="bg-gradient-to-br from-[#141414] to-[#0f0f0f] border border-white/5 p-8 md:p-10 rounded-2xl flex flex-col items-start group hover:border-white/30 transition-colors"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 text-white"
+          >
+            <iconify-icon
+              icon="solar:phone-calling-linear"
+              class="text-2xl"
+            ></iconify-icon>
+          </div>
+          <h3
+            class="text-xl md:text-2xl font-medium tracking-tight mb-2 text-white"
+          >
+            Contact Numbers
+          </h3>
+          <p
+            class="text-xs text-neutral-500 mb-8 flex-1 font-mono tracking-wider"
+          >
+            (732) 388-2248
+            <br />
+            (973) 376-7753
+          </p>
+          <a
+            href="#estimate"
+            class="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-white group-hover:text-neutral-300 transition-colors"
+          >
+            or Contact Us
+            <iconify-icon
+              icon="solar:arrow-down-linear"
+              class="text-sm"
+            ></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estimate Form Section -->
+    <section
+      id="estimate"
+      class="bg-[#141414] py-24 md:py-32 px-6 md:px-12 relative overflow-hidden border-t border-white/5"
+    >
+      <!-- Abstract Tech Background Elements -->
+      <div
+        class="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-[#149116]/5 to-transparent rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/3"
+      ></div>
+
+      <div
+        class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24 relative z-10"
+      >
+        <!-- Left: Info -->
+        <div class="lg:w-1/3 flex flex-col">
+          <span
+            class="text-[#149116] text-xs font-medium tracking-widest uppercase mb-4 block flex items-center gap-2"
+          >
+            <iconify-icon
+              icon="solar:settings-minimalistic-linear"
+              class="text-sm"
+            ></iconify-icon>
+            System Architecture
+          </span>
+          <h2
+            class="text-4xl md:text-5xl lg:text-6xl font-medium uppercase tracking-tight text-white mb-6"
+          >
+            Request A
+            <br />
+            Free Estimate
+          </h2>
+          <p class="text-neutral-400 text-sm leading-relaxed mb-12">
+            Initialize your project parameters. Provide your details below, and
+            our engineering team will evaluate your landscape requirements and
+            propose an optimized irrigation or lighting solution.
+          </p>
+
+          <div
+            class="p-6 bg-[#0f0f0f] border border-white/5 rounded-xl space-y-4 shadow-2xl"
+          >
+            <div class="flex items-center gap-4 text-sm text-neutral-300">
+              <iconify-icon
+                icon="solar:map-point-linear"
+                class="text-[#149116] text-xl shrink-0"
+              ></iconify-icon>
+              <span>Servicing premium properties across the state.</span>
+            </div>
+            <div class="w-full h-px bg-white/5"></div>
+            <div class="flex items-center gap-4 text-sm text-neutral-300">
+              <iconify-icon
+                icon="solar:clock-circle-linear"
+                class="text-[#149116] text-xl shrink-0"
+              ></iconify-icon>
+              <span>Response protocol: Within 24-48 business hours.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Futuristic Form -->
+        <div
+          class="lg:w-2/3 bg-[#0f0f0f] p-8 md:p-12 border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+        >
+          <!-- Decorative scanline -->
+          <div
+            class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#149116]/50 to-transparent opacity-50"
+          ></div>
+
+          <form onsubmit="handleForm(event)" class="space-y-8">
+            <!-- Grid Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2 relative group">
+                <label
+                  class="text-[10px] uppercase tracking-widest text-neutral-500 font-medium ml-1"
+                >
+                  First Name *
+                </label>
+                <input
+                  type="text"
+                  required=""
+                  class="w-full bg-[#141414] border-b border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#149116] transition-colors placeholder:text-neutral-700 rounded-t-lg"
+                  placeholder="Enter first name"
+                />
+              </div>
+              <div class="space-y-2 relative group">
+                <label
+                  class="text-[10px] uppercase tracking-widest text-neutral-500 font-medium ml-1"
+                >
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  required=""
+                  class="w-full bg-[#141414] border-b border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#149116] transition-colors placeholder:text-neutral-700 rounded-t-lg"
+                  placeholder="Enter last name"
+                />
+              </div>
+              <div class="space-y-2 relative group">
+                <label
+                  class="text-[10px] uppercase tracking-widest text-neutral-500 font-medium ml-1"
+                >
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  required=""
+                  class="w-full bg-[#141414] border-b border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#149116] transition-colors placeholder:text-neutral-700 rounded-t-lg"
+                  placeholder="data@example.com"
+                />
+              </div>
+              <div class="space-y-2 relative group">
+                <label
+                  class="text-[10px] uppercase tracking-widest text-neutral-500 font-medium ml-1"
+                >
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  required=""
+                  class="w-full bg-[#141414] border-b border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#149116] transition-colors placeholder:text-neutral-700 rounded-t-lg"
+                  placeholder="(000) 000-0000"
+                />
+              </div>
+              <div class="space-y-2 md:col-span-2 relative group">
+                <label
+                  class="text-[10px] uppercase tracking-widest text-neutral-500 font-medium ml-1"
+                >
+                  Address *
+                </label>
+                <input
+                  type="text"
+                  required=""
+                  class="w-full bg-[#141414] border-b border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#149116] transition-colors placeholder:text-neutral-700 rounded-t-lg"
+                  placeholder="Full property address"
+                />
+              </div>
+            </div>
+
+            <!-- Services Checkboxes -->
+            <div class="space-y-4 pt-4 border-t border-white/5">
+              <label
+                class="text-[10px] uppercase tracking-widest text-neutral-400 font-medium ml-1 block mb-4 text-[#149116]"
+              >
+                I would like to know about:
+              </label>
+
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-4 gap-x-6"
+              >
+                <!-- JS will generate these to keep HTML clean, or list manually. Listing manually per strict rules -->
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Residential irrigation
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Repairs
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Back flow prevention
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Commercial irrigation
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Adding onto...
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Back flow testing
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Start up
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Drip irrigation
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Service contact
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Winterization
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Landscape
+                  </span>
+                </label>
+                <label
+                  class="check-container flex items-center gap-3 cursor-pointer group"
+                >
+                  <input type="checkbox" class="sr-only" />
+                  <div
+                    class="check-box w-4 h-4 border border-white/20 rounded bg-[#0f0f0f] flex items-center justify-center transition-colors group-hover:border-[#149116]/50"
+                  >
+                    <iconify-icon
+                      icon="solar:check-read-linear"
+                      class="text-white text-xs"
+                    ></iconify-icon>
+                  </div>
+                  <span
+                    class="text-xs text-neutral-400 group-hover:text-white transition-colors"
+                  >
+                    Lighting
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Comments -->
+            <div class="space-y-2 pt-4 border-t border-white/5 relative group">
+              <label
+                class="text-[10px] uppercase tracking-widest text-neutral-500 font-medium ml-1"
+              >
+                Comments/Suggestions
+              </label>
+              <textarea
+                rows="3"
+                class="w-full bg-[#141414] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#149116] transition-all placeholder:text-neutral-700 resize-none"
+                placeholder="Provide additional project parameters..."
+              ></textarea>
+            </div>
+
+            <!-- Recaptcha Placeholder & Submit -->
+            <div
+              class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4"
+            >
+              <div
+                class="w-full sm:w-auto bg-[#141414] border border-white/10 rounded-lg p-3 flex items-center gap-4 shadow-inner"
+              >
+                <div
+                  class="w-6 h-6 border-2 border-white/20 rounded flex items-center justify-center cursor-pointer hover:border-[#149116] transition-colors"
+                >
+                  <iconify-icon
+                    icon="solar:check-read-linear"
+                    class="text-transparent"
+                  ></iconify-icon>
+                </div>
+                <span class="text-xs text-neutral-400">I am not a robot</span>
+                <iconify-icon
+                  icon="solar:shield-keyhole-minimalistic-linear"
+                  class="text-neutral-600 text-xl ml-4"
+                ></iconify-icon>
+              </div>
+
+              <button
+                type="submit"
+                id="submitBtn"
+                class="w-full sm:w-auto bg-[#149116] hover:bg-[#117a12] text-white font-medium px-8 py-4 rounded-lg uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-3 group shadow-[0_0_15px_rgba(20,145,22,0.3)] hover:shadow-[0_0_25px_rgba(20,145,22,0.5)]"
+              >
+                <span>Submit Request</span>
+                <iconify-icon
+                  icon="solar:plain-3-linear"
+                  class="text-base group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                ></iconify-icon>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="bg-[#0f0f0f] border-t border-white/5 pt-16 pb-8 px-6 md:px-12 text-white"
+    >
+      <div
+        class="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-12"
+      >
+        <div class="max-w-sm">
+          <img
+            src="https://emeraldlawnsprinklers.com/wp-content/uploads/2011/03/logo.png"
+            alt="Emerald Lawn Sprinklers"
+            class="h-10 mb-6 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] opacity-80 hover:opacity-100 transition-opacity"
+          />
+          <h3
+            class="text-xl font-medium uppercase text-neutral-500 leading-tight"
+          >
+            Intelligent
+            <br />
+            <span class="text-white">Landscape Systems</span>
+          </h3>
+        </div>
+
+        <div
+          class="flex flex-wrap gap-8 text-[10px] font-medium uppercase tracking-widest text-neutral-500"
+        >
+          <a href="#" class="hover:text-[#149116] transition-colors">
+            Services
+          </a>
+          <a href="#" class="hover:text-[#149116] transition-colors">
+            About Us
+          </a>
+          <a href="#" class="hover:text-[#149116] transition-colors">Contact</a>
+          <a href="#" class="hover:text-[#149116] transition-colors">
+            Privacy Policy
+          </a>
+        </div>
+
+        <div class="flex gap-4">
+          <a
+            href="#"
+            class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#149116] hover:border-[#149116] transition-all group"
+          >
+            <iconify-icon
+              icon="solar:camera-minimalistic-linear"
+              class="text-neutral-400 group-hover:text-white text-lg"
+            ></iconify-icon>
+          </a>
+          <a
+            href="#"
+            class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#149116] hover:border-[#149116] transition-all group"
+          >
+            <iconify-icon
+              icon="solar:letter-linear"
+              class="text-neutral-400 group-hover:text-white text-lg"
+            ></iconify-icon>
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="max-w-screen-2xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4"
+      >
+        <p class="text-[10px] text-neutral-600 uppercase tracking-widest">
+          © 2023 Emerald Lawn Sprinklers. All Rights Reserved.
+        </p>
+        <p
+          class="text-[10px] text-neutral-600 uppercase tracking-widest flex items-center gap-2"
+        >
+          System Status:
+          <span
+            class="w-2 h-2 rounded-full bg-[#149116] shadow-[0_0_5px_#149116] animate-pulse"
+          ></span>
+          Optimal
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      function handleForm(e) {
+          e.preventDefault();
+          const btn = document.getElementById('submitBtn');
+          const originalContent = btn.innerHTML;
+
+          // Loading State
+          btn.innerHTML = '<span class="animate-pulse">Processing...</span>';
+          btn.classList.add('opacity-75', 'cursor-wait');
+
+          // Simulate System Processing
+          setTimeout(() => {
+              // Success State
+              btn.innerHTML = `
+                  <span>Request Initialized</span>
+                  <iconify-icon icon="solar:check-circle-linear" class="text-base"></iconify-icon>
+              `;
+              btn.classList.remove('bg-[#149116]', 'hover:bg-[#117a12]', 'opacity-75', 'cursor-wait', 'shadow-[0_0_15px_rgba(20,145,22,0.3)]');
+              btn.classList.add('bg-white', 'text-[#0f0f0f]', 'shadow-[0_0_20px_rgba(255,255,255,0.4)]');
+
+              e.target.reset();
+
+              // Reset Button
+              setTimeout(() => {
+                  btn.innerHTML = originalContent;
+                  btn.classList.remove('bg-white', 'text-[#0f0f0f]', 'shadow-[0_0_20px_rgba(255,255,255,0.4)]');
+                  btn.classList.add('bg-[#149116]', 'hover:bg-[#117a12]', 'shadow-[0_0_15px_rgba(20,145,22,0.3)]');
+              }, 3500);
+          }, 1500);
+      }
+    </script>
+  </body>
+</html>

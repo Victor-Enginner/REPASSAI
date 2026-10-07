@@ -1,0 +1,786 @@
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="scroll-smooth"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soluna | Premium Yoga Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body { font-family: 'Inter', sans-serif; }
+/* Hide scrollbar for clean horizontal scrolls */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+<body class="bg-[#f5f4f0] text-[#1a1a1a] antialiased selection:bg-[#5d674f] selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#f5f4f0]/80 backdrop-blur-md border-b border-transparent" id="navbar">
+        <div class="max-w-screen-2xl mx-auto px-6 md:px-12 h-24 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 z-50">
+                <div class="relative w-8 h-8">
+                    <!-- Custom SVG Logo matching image -->
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-[#1a1a1a]">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+                        <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-base font-medium tracking-widest uppercase leading-none">Soluna</span>
+                    <span class="text-[10px] tracking-widest text-[#5c5c5a] uppercase mt-1">Yoga Studio</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-10">
+                <a href="#studio" class="text-base text-[#1a1a1a] hover:text-[#5d674f] transition-colors font-normal">Studio</a>
+                <a href="#classes" class="text-base text-[#1a1a1a] hover:text-[#5d674f] transition-colors font-normal">Classes</a>
+                <a href="#teachers" class="text-base text-[#1a1a1a] hover:text-[#5d674f] transition-colors font-normal">Teachers</a>
+                <a href="#membership" class="text-base text-[#1a1a1a] hover:text-[#5d674f] transition-colors font-normal">Membership</a>
+                <a href="#journal" class="text-base text-[#1a1a1a] hover:text-[#5d674f] transition-colors font-normal">Journal</a>
+                <a href="#contact" class="text-base text-[#1a1a1a] hover:text-[#5d674f] transition-colors font-normal">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="lg:hidden z-50 p-2" id="mobile-menu-btn" aria-label="Toggle Menu">
+                <i data-lucide="menu" class="w-6 h-6 stroke-[1.5]"></i>
+            </button>
+        </div>
+
+        <!-- Top Right Pill CTA (Fixed to viewport) -->
+        <a href="#book" class="hidden md:flex fixed top-0 right-0 bg-[#1a1a1a] text-white px-10 py-6 rounded-bl-[40px] items-center gap-3 z-50 hover:bg-[#333] transition-colors group">
+            <span class="text-base font-normal tracking-wide">Book Your Class</span>
+            <i data-lucide="arrow-right" class="w-5 h-5 stroke-[1.5] group-hover:translate-x-1 transition-transform"></i>
+        </a>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-[#f5f4f0] z-40 flex flex-col justify-center items-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300">
+            <a href="#studio" class="text-3xl font-medium tracking-tight text-[#1a1a1a] mobile-link">Studio</a>
+            <a href="#classes" class="text-3xl font-medium tracking-tight text-[#1a1a1a] mobile-link">Classes</a>
+            <a href="#teachers" class="text-3xl font-medium tracking-tight text-[#1a1a1a] mobile-link">Teachers</a>
+            <a href="#membership" class="text-3xl font-medium tracking-tight text-[#1a1a1a] mobile-link">Membership</a>
+            <a href="#contact" class="text-3xl font-medium tracking-tight text-[#1a1a1a] mobile-link">Contact</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Section 1: Hero Replica -->
+        <section class="relative min-h-screen pt-32 lg:pt-40 pb-0 overflow-hidden flex flex-col justify-between">
+            <div class="max-w-screen-2xl mx-auto px-6 md:px-12 w-full grid lg:grid-cols-12 gap-12 lg:gap-0 relative z-10 flex-grow">
+                
+                <!-- Left Column (Content) -->
+                <div class="lg:col-span-5 flex flex-col justify-center relative z-20 pb-24 lg:pb-32 mt-12 lg:mt-0">
+                    <h1 class="text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.05] tracking-tighter font-medium text-[#1a1a1a] mb-8">
+                        Move.<br>Breathe.<br>Become You.
+                    </h1>
+                    
+                    <div class="pl-6 border-l-[1.5px] border-[#dcdacd] mb-12">
+                        <p class="text-lg md:text-xl text-[#5c5c5a] font-normal leading-relaxed max-w-md">
+                            A serene space to flow, grow and reconnect. Your practice, elevated.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <a href="#classes" class="inline-flex bg-[#5d674f] text-white px-8 py-5 rounded-full items-center gap-3 hover:bg-[#4a523f] transition-colors group">
+                            <span class="text-base font-normal tracking-wide">Explore Classes</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5 stroke-[1.5] group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column (Images & Badges) -->
+                <div class="lg:col-span-7 relative min-h-[500px] lg:min-h-full w-full lg:h-[85vh]">
+                    
+                    <!-- Main Circular Image Container -->
+                    <!-- Sized perfectly to overflow the edge and create the massive arch effect -->
+                    <div class="absolute top-[-5%] lg:top-[-10%] right-[-10%] lg:right-[-15%] w-[120%] lg:w-[110%] aspect-square rounded-full overflow-hidden z-0">
+                        <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&amp;w=2070&amp;auto=format&amp;fit=crop" alt="Woman doing yoga" class="w-full h-full object-cover object-[60%_30%]">
+                        <!-- Subtle overlay to match image tone -->
+                        <div class="absolute inset-0 bg-black/5 mix-blend-overlay"></div>
+                    </div>
+
+                    <!-- Floating Badges -->
+                    
+                    <!-- Premium Badge (Top Center/Left) -->
+                    <div class="absolute top-0 lg:top-[15%] left-[20%] lg:left-[10%] bg-[#f2ece5] rounded-full w-36 h-36 flex flex-col items-center justify-center p-6 text-center shadow-sm z-20">
+                        <i data-lucide="asterisk" class="w-5 h-5 stroke-[1] mb-2 text-[#5d674f]"></i>
+                        <span class="text-[9px] tracking-[0.2em] font-medium uppercase text-[#1a1a1a] leading-tight">Premium<br>Yoga Studio<br>For Every Body</span>
+                    </div>
+
+                    <!-- Rotating Stamp Badge (Olive Green, Center Left Overlap) -->
+                    <div class="absolute top-[40%] lg:top-[50%] left-[-5%] lg:left-[-10%] bg-[#5d674f] rounded-full w-48 h-48 lg:w-56 lg:h-56 flex items-center justify-center z-20 shadow-md">
+                        <!-- Simulated circular text with SVG -->
+                        <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full animate-[spin_25s_linear_infinite] p-2">
+                            <path id="curve" d="M 50, 50 m -42, 0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0" fill="transparent"></path>
+                            <text class="text-[7.5px] fill-white/80 font-medium tracking-[0.25em] uppercase">
+                                <textPath href="#curve" startOffset="0">Awaken Your Spirit • Elevate Your Practice • Find Your Center •</textPath>
+                            </text>
+                        </svg>
+                        <!-- Center Icon -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-1 border-b-[1.5px] border-white/80 mb-2"></div>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8 text-white">
+                                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                                <path d="M16 12a4 4 0 1 1-8 0"></path>
+                                <path d="M4 22h16"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- New Here Badge (Bottom Right) -->
+                    <div class="hidden lg:flex absolute bottom-[15%] right-[5%] bg-gradient-to-br from-[#f2ece5] to-[#f5f4f0] rounded-t-full rounded-bl-full rounded-br-sm w-40 h-40 flex-col items-center justify-center text-center p-6 shadow-sm z-20">
+                        <span class="text-sm font-medium text-[#1a1a1a] mb-2">New Here?</span>
+                        <p class="text-xs text-[#5c5c5a] mb-3">Get your 7-day intro pass</p>
+                        <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5] text-[#1a1a1a]"></i>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Stats Bar (Bottom Left Wavy Shape Mimic) -->
+            <div class="relative w-full z-20 mt-auto">
+                <!-- Using a large container with a rounded-tr to mimic the soft organic shape -->
+                <div class="bg-[#e8eae4] w-[95%] md:w-[85%] lg:w-[65%] rounded-tr-[80px] lg:rounded-tr-[120px] pt-12 pb-10 px-6 md:px-12 pr-16 lg:pr-32">
+                    <div class="max-w-xl grid grid-cols-3 gap-6 lg:gap-12">
+                        
+                        <!-- Stat 1 -->
+                        <div class="flex flex-col">
+                            <div class="w-10 h-10 rounded-full border border-[#dcdacd] flex items-center justify-center mb-4 bg-white/50">
+                                <i data-lucide="user" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a]"></i>
+                            </div>
+                            <span class="text-3xl lg:text-4xl font-medium tracking-tight text-[#1a1a1a] mb-1">50+</span>
+                            <span class="text-[10px] tracking-widest uppercase text-[#5c5c5a]">Classes Weekly</span>
+                        </div>
+
+                        <!-- Stat 2 -->
+                        <div class="flex flex-col relative before:content-[''] before:absolute before:left-[-1.5rem] before:top-0 before:h-full before:w-[1px] before:bg-[#dcdacd]/50">
+                            <div class="w-10 h-10 rounded-full border border-[#dcdacd] flex items-center justify-center mb-4 bg-white/50">
+                                <i data-lucide="heart" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a]"></i>
+                            </div>
+                            <span class="text-3xl lg:text-4xl font-medium tracking-tight text-[#1a1a1a] mb-1">20+</span>
+                            <span class="text-[10px] tracking-widest uppercase text-[#5c5c5a]">Expert Teachers</span>
+                        </div>
+
+                        <!-- Stat 3 -->
+                        <div class="flex flex-col relative before:content-[''] before:absolute before:left-[-1.5rem] before:top-0 before:h-full before:w-[1px] before:bg-[#dcdacd]/50">
+                            <div class="w-10 h-10 rounded-full border border-[#dcdacd] flex items-center justify-center mb-4 bg-white/50">
+                                <!-- Lotus approximation with flower -->
+                                <i data-lucide="flower-2" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a]"></i>
+                            </div>
+                            <span class="text-3xl lg:text-4xl font-medium tracking-tight text-[#1a1a1a] mb-1">1</span>
+                            <span class="text-[10px] tracking-widest uppercase text-[#5c5c5a]">Peaceful You</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Philosophy/About -->
+        <section id="studio" class="py-32 bg-white relative">
+            <div class="max-w-screen-2xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&amp;w=2120&amp;auto=format&amp;fit=crop" alt="Studio interior" class="w-full aspect-[4/5] object-cover rounded-3xl" loading="lazy">
+                    <div class="absolute -bottom-8 -right-8 w-48 aspect-square bg-[#f5f4f0] rounded-full hidden md:block"></div>
+                </div>
+                <div class="flex flex-col space-y-8">
+                    <div class="inline-flex items-center gap-3">
+                        <span class="w-8 h-[1px] bg-[#5d674f]"></span>
+                        <span class="text-sm font-medium tracking-widest uppercase text-[#5d674f]">Our Philosophy</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl tracking-tight font-medium text-[#1a1a1a] leading-[1.1]">
+                        Rooted in tradition, <br>designed for modern life.
+                    </h2>
+                    <p class="text-lg text-[#5c5c5a] font-normal leading-relaxed">
+                        At Soluna, we believe that yoga is more than physical movement. It is a sanctuary from the noise of the world, a moving meditation, and a pathway back to your truest self. Our studio is purposefully designed to foster stillness, community, and growth.
+                    </p>
+                    <p class="text-lg text-[#5c5c5a] font-normal leading-relaxed">
+                        Whether you are stepping onto the mat for the first time or the thousandth, you will find a welcoming space tailored to elevate your practice and nurture your well-being.
+                    </p>
+                    <div class="pt-4">
+                        <a href="#" class="inline-flex items-center gap-2 text-[#1a1a1a] border-b border-[#1a1a1a] pb-1 hover:text-[#5d674f] hover:border-[#5d674f] transition-colors group">
+                            <span class="text-base font-medium">Read our story</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5] group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Class Styles (Horizontal Scroll Cards) -->
+        <section id="classes" class="py-32 bg-[#f5f4f0] overflow-hidden">
+            <div class="max-w-screen-2xl mx-auto px-6 md:px-12 mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div>
+                    <h2 class="text-4xl md:text-5xl tracking-tight font-medium text-[#1a1a1a] mb-4">Discover your flow</h2>
+                    <p class="text-lg text-[#5c5c5a] max-w-xl">Curated practices designed to meet you exactly where you are today.</p>
+                </div>
+                <div class="flex gap-4">
+                    <button class="w-12 h-12 rounded-full border border-[#dcdacd] flex items-center justify-center hover:bg-white transition-colors" aria-label="Previous class">
+                        <i data-lucide="arrow-left" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a]"></i>
+                    </button>
+                    <button class="w-12 h-12 rounded-full border border-[#dcdacd] flex items-center justify-center hover:bg-white transition-colors" aria-label="Next class">
+                        <i data-lucide="arrow-right" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scrollable Container -->
+            <div class="flex gap-6 px-6 md:px-12 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-12">
+                
+                <!-- Card 1 -->
+                <div class="min-w-[320px] md:min-w-[400px] bg-white rounded-[2rem] p-4 snap-start group cursor-pointer hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Vinyasa Flow" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest text-[#1a1a1a]">Dynamic</div>
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl tracking-tight font-medium text-[#1a1a1a] mb-2">Vinyasa Flow</h3>
+                        <p class="text-base text-[#5c5c5a] mb-6 line-clamp-2">A dynamic, fluid practice connecting breath with movement. Build strength, flexibility, and heat.</p>
+                        <div class="flex items-center text-[#5d674f] font-medium text-sm group-hover:gap-2 transition-all">
+                            Explore Class <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5] ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="min-w-[320px] md:min-w-[400px] bg-white rounded-[2rem] p-4 snap-start group cursor-pointer hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6">
+                        <img src="https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?q=80&amp;w=2070&amp;auto=format&amp;fit=crop" alt="Yin Yoga" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest text-[#1a1a1a]">Restorative</div>
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl tracking-tight font-medium text-[#1a1a1a] mb-2">Yin &amp; Restore</h3>
+                        <p class="text-base text-[#5c5c5a] mb-6 line-clamp-2">Slow-paced style with postures held for longer periods. Targets deep connective tissues.</p>
+                        <div class="flex items-center text-[#5d674f] font-medium text-sm group-hover:gap-2 transition-all">
+                            Explore Class <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5] ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="min-w-[320px] md:min-w-[400px] bg-white rounded-[2rem] p-4 snap-start group cursor-pointer hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&amp;w=2099&amp;auto=format&amp;fit=crop" alt="Meditation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest text-[#1a1a1a]">Mindful</div>
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl tracking-tight font-medium text-[#1a1a1a] mb-2">Meditation &amp; Breath</h3>
+                        <p class="text-base text-[#5c5c5a] mb-6 line-clamp-2">Guided mindfulness techniques and pranayama to calm the nervous system and center the mind.</p>
+                        <div class="flex items-center text-[#5d674f] font-medium text-sm group-hover:gap-2 transition-all">
+                            Explore Class <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5] ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="min-w-[320px] md:min-w-[400px] bg-white rounded-[2rem] p-4 snap-start group cursor-pointer hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6">
+                        <img src="https://images.unsplash.com/photo-1593164842264-854604db2260?q=80&amp;w=2069&amp;auto=format&amp;fit=crop" alt="Hatha Yoga" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest text-[#1a1a1a]">Foundational</div>
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl tracking-tight font-medium text-[#1a1a1a] mb-2">Hatha Alignment</h3>
+                        <p class="text-base text-[#5c5c5a] mb-6 line-clamp-2">Focus on physical alignment and breathing techniques. Perfect for beginners and seasoned yogis.</p>
+                        <div class="flex items-center text-[#5d674f] font-medium text-sm group-hover:gap-2 transition-all">
+                            Explore Class <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5] ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 4: Schedule (Tabular Data) -->
+        <section class="py-32 bg-white border-t border-[#dcdacd]">
+            <div class="max-w-screen-xl mx-auto px-6 md:px-12">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-6">
+                    <h2 class="text-4xl md:text-5xl tracking-tight font-medium text-[#1a1a1a]">Upcoming Schedule</h2>
+                    
+                    <!-- Custom Tabs/Filters -->
+                    <div class="inline-flex bg-[#f5f4f0] p-1 rounded-full">
+                        <button class="px-6 py-2 rounded-full bg-white text-[#1a1a1a] font-medium text-sm shadow-sm">Today</button>
+                        <button class="px-6 py-2 rounded-full text-[#5c5c5a] font-medium text-sm hover:text-[#1a1a1a] transition-colors">Tomorrow</button>
+                        <button class="px-6 py-2 rounded-full text-[#5c5c5a] font-medium text-sm hover:text-[#1a1a1a] transition-colors">Full Week</button>
+                    </div>
+                </div>
+
+                <!-- Schedule List -->
+                <div class="flex flex-col">
+                    <!-- Row 1 -->
+                    <div class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-[#dcdacd] hover:bg-[#f5f4f0]/50 transition-colors px-4 -mx-4 rounded-xl cursor-pointer">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-16 lg:w-1/2">
+                            <span class="text-xl font-medium text-[#1a1a1a] w-24">07:00 AM</span>
+                            <div>
+                                <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">Sunrise Vinyasa</h4>
+                                <span class="text-sm text-[#5c5c5a]">60 min • All Levels</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 md:mt-0 lg:w-1/2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&amp;w=150&amp;auto=format&amp;fit=crop" alt="Sarah" class="w-10 h-10 rounded-full object-cover grayscale" loading="lazy">
+                                <span class="text-base text-[#1a1a1a] font-medium">Sarah J.</span>
+                            </div>
+                            <button class="border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2 rounded-full text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors">Book</button>
+                        </div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-[#dcdacd] hover:bg-[#f5f4f0]/50 transition-colors px-4 -mx-4 rounded-xl cursor-pointer">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-16 lg:w-1/2">
+                            <span class="text-xl font-medium text-[#1a1a1a] w-24">09:30 AM</span>
+                            <div>
+                                <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">Hatha Alignment</h4>
+                                <span class="text-sm text-[#5c5c5a]">75 min • Intermediate</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 md:mt-0 lg:w-1/2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&amp;w=150&amp;auto=format&amp;fit=crop" alt="David" class="w-10 h-10 rounded-full object-cover grayscale" loading="lazy">
+                                <span class="text-base text-[#1a1a1a] font-medium">David L.</span>
+                            </div>
+                            <button class="border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2 rounded-full text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors">Book</button>
+                        </div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-[#dcdacd] hover:bg-[#f5f4f0]/50 transition-colors px-4 -mx-4 rounded-xl cursor-pointer">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-16 lg:w-1/2">
+                            <span class="text-xl font-medium text-[#1a1a1a] w-24">12:00 PM</span>
+                            <div>
+                                <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">Express Core Flow</h4>
+                                <span class="text-sm text-[#5c5c5a]">45 min • All Levels</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 md:mt-0 lg:w-1/2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&amp;w=150&amp;auto=format&amp;fit=crop" alt="Maya" class="w-10 h-10 rounded-full object-cover grayscale" loading="lazy">
+                                <span class="text-base text-[#1a1a1a] font-medium">Maya T.</span>
+                            </div>
+                            <button class="border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2 rounded-full text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors">Book</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Row 4 -->
+                    <div class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-[#dcdacd] hover:bg-[#f5f4f0]/50 transition-colors px-4 -mx-4 rounded-xl cursor-pointer">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-16 lg:w-1/2">
+                            <span class="text-xl font-medium text-[#1a1a1a] w-24">06:30 PM</span>
+                            <div>
+                                <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">Yin &amp; Restore</h4>
+                                <span class="text-sm text-[#5c5c5a]">75 min • Beginner Friendly</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 md:mt-0 lg:w-1/2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-[#e8eae4] flex items-center justify-center text-[#5d674f] font-medium text-xs">SJ</div>
+                                <span class="text-base text-[#1a1a1a] font-medium">Sarah J.</span>
+                            </div>
+                            <button class="border border-[#dcdacd] text-[#a0a09e] px-6 py-2 rounded-full text-sm font-medium cursor-not-allowed">Waitlist</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center">
+                    <a href="#" class="inline-flex items-center gap-2 text-base font-medium text-[#1a1a1a] hover:text-[#5d674f] transition-colors">
+                        View Full Timetable <i data-lucide="arrow-right" class="w-4 h-4 stroke-[1.5]"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Features/Benefits (Icon Grid) -->
+        <section class="py-24 bg-[#5d674f] text-white">
+            <div class="max-w-screen-xl mx-auto px-6 md:px-12 grid md:grid-cols-3 gap-12 lg:gap-20">
+                <div class="flex flex-col items-center text-center">
+                    <i data-lucide="sun" class="w-8 h-8 stroke-[1.5] mb-6 text-[#e8eae4]"></i>
+                    <h3 class="text-2xl tracking-tight font-medium mb-3">Natural Light</h3>
+                    <p class="text-base text-white/80 font-normal">Our studio features floor-to-ceiling windows, allowing your practice to sync with the natural rhythms of the day.</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <i data-lucide="droplets" class="w-8 h-8 stroke-[1.5] mb-6 text-[#e8eae4]"></i>
+                    <h3 class="text-2xl tracking-tight font-medium mb-3">Premium Amenities</h3>
+                    <p class="text-base text-white/80 font-normal">Complimentary Manduka mats, luxury organic body products, and rainfall showers for your comfort.</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <i data-lucide="users" class="w-8 h-8 stroke-[1.5] mb-6 text-[#e8eae4]"></i>
+                    <h3 class="text-2xl tracking-tight font-medium mb-3">Intimate Classes</h3>
+                    <p class="text-base text-white/80 font-normal">We cap our classes at 15 students to ensure personalized attention and guidance from our expert teachers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Teachers -->
+        <section id="teachers" class="py-32 bg-[#f5f4f0]">
+            <div class="max-w-screen-2xl mx-auto px-6 md:px-12">
+                <div class="text-center mb-20">
+                    <h2 class="text-4xl md:text-5xl tracking-tight font-medium text-[#1a1a1a] mb-4">Meet your guides</h2>
+                    <p class="text-lg text-[#5c5c5a] max-w-xl mx-auto">Experienced, compassionate instructors dedicated to supporting your journey.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
+                    <!-- Teacher 1 -->
+                    <div class="flex flex-col items-center group cursor-pointer">
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 border border-transparent group-hover:border-[#5d674f] transition-colors mb-4">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&amp;w=400&amp;auto=format&amp;fit=crop" alt="Teacher" class="w-full h-full object-cover rounded-full filter grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy">
+                        </div>
+                        <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">Sarah Jenkins</h4>
+                        <span class="text-sm text-[#5c5c5a] uppercase tracking-widest mt-1">Vinyasa • Yin</span>
+                    </div>
+                    <!-- Teacher 2 -->
+                    <div class="flex flex-col items-center group cursor-pointer">
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 border border-transparent group-hover:border-[#5d674f] transition-colors mb-4">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&amp;w=400&amp;auto=format&amp;fit=crop" alt="Teacher" class="w-full h-full object-cover rounded-full filter grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy">
+                        </div>
+                        <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">David Lin</h4>
+                        <span class="text-sm text-[#5c5c5a] uppercase tracking-widest mt-1">Hatha • Alignment</span>
+                    </div>
+                    <!-- Teacher 3 -->
+                    <div class="flex flex-col items-center group cursor-pointer">
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 border border-transparent group-hover:border-[#5d674f] transition-colors mb-4">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&amp;w=400&amp;auto=format&amp;fit=crop" alt="Teacher" class="w-full h-full object-cover rounded-full filter grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy">
+                        </div>
+                        <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">Maya Torres</h4>
+                        <span class="text-sm text-[#5c5c5a] uppercase tracking-widest mt-1">Core • Pilates</span>
+                    </div>
+                    <!-- Teacher 4 -->
+                    <div class="flex flex-col items-center group cursor-pointer">
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 border border-transparent group-hover:border-[#5d674f] transition-colors mb-4">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&amp;w=400&amp;auto=format&amp;fit=crop" alt="Teacher" class="w-full h-full object-cover rounded-full filter grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy">
+                        </div>
+                        <h4 class="text-xl tracking-tight font-medium text-[#1a1a1a]">James Wu</h4>
+                        <span class="text-sm text-[#5c5c5a] uppercase tracking-widest mt-1">Meditation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Membership/Pricing -->
+        <section id="membership" class="py-32 bg-white">
+            <div class="max-w-screen-xl mx-auto px-6 md:px-12">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl tracking-tight font-medium text-[#1a1a1a] mb-4">Simple, transparent pricing</h2>
+                    <p class="text-lg text-[#5c5c5a]">Choose the plan that fits your practice.</p>
+                    
+                    <!-- Custom Toggle -->
+                    <div class="mt-8 inline-flex items-center gap-3">
+                        <span class="text-sm font-medium text-[#1a1a1a]">Monthly</span>
+                        <div class="w-12 h-6 bg-[#e8eae4] rounded-full relative cursor-pointer" onclick="this.classList.toggle('bg-[#5d674f]'); this.children[0].classList.toggle('translate-x-6'); this.children[0].classList.toggle('bg-white')">
+                            <div class="w-5 h-5 bg-[#5d674f] rounded-full absolute top-0.5 left-0.5 transition-all duration-300"></div>
+                        </div>
+                        <span class="text-sm font-medium text-[#5c5c5a]">Annually <span class="text-xs text-[#5d674f] ml-1">(Save 20%)</span></span>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 items-center">
+                    <!-- Plan 1 -->
+                    <div class="border border-[#dcdacd] rounded-[2rem] p-8 flex flex-col h-full hover:border-[#1a1a1a] transition-colors">
+                        <h3 class="text-xl font-medium text-[#1a1a1a] mb-2">Drop-in</h3>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-4xl tracking-tight font-medium text-[#1a1a1a]">$25</span>
+                            <span class="text-sm text-[#5c5c5a]">/class</span>
+                        </div>
+                        <ul class="space-y-4 mb-8 flex-grow">
+                            <li class="flex items-start gap-3 text-base text-[#5c5c5a]">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a] shrink-0"></i> Single class access
+                            </li>
+                            <li class="flex items-start gap-3 text-base text-[#5c5c5a]">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a] shrink-0"></i> Mat rental included
+                            </li>
+                        </ul>
+                        <button class="w-full border border-[#1a1a1a] text-[#1a1a1a] py-3 rounded-full font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors">Buy Pass</button>
+                    </div>
+
+                    <!-- Plan 2 (Highlighted) -->
+                    <div class="bg-[#1a1a1a] text-white rounded-[2rem] p-8 flex flex-col h-full transform md:-translate-y-4 shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-[#5d674f] text-[10px] tracking-widest uppercase font-medium px-4 py-1 rounded-bl-xl">Most Popular</div>
+                        <h3 class="text-xl font-medium mb-2 text-white/90">Unlimited Monthly</h3>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-5xl tracking-tight font-medium">$150</span>
+                            <span class="text-sm text-white/60">/mo</span>
+                        </div>
+                        <ul class="space-y-4 mb-8 flex-grow">
+                            <li class="flex items-start gap-3 text-base text-white/80">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#e8eae4] shrink-0"></i> Unlimited classes
+                            </li>
+                            <li class="flex items-start gap-3 text-base text-white/80">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#e8eae4] shrink-0"></i> 2 guest passes/mo
+                            </li>
+                            <li class="flex items-start gap-3 text-base text-white/80">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#e8eae4] shrink-0"></i> 10% off retail &amp; workshops
+                            </li>
+                            <li class="flex items-start gap-3 text-base text-white/80">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#e8eae4] shrink-0"></i> Free premium mat storage
+                            </li>
+                        </ul>
+                        <button class="w-full bg-white text-[#1a1a1a] py-3 rounded-full font-medium hover:bg-[#f5f4f0] transition-colors">Subscribe Now</button>
+                    </div>
+
+                    <!-- Plan 3 -->
+                    <div class="border border-[#dcdacd] rounded-[2rem] p-8 flex flex-col h-full hover:border-[#1a1a1a] transition-colors">
+                        <h3 class="text-xl font-medium text-[#1a1a1a] mb-2">10-Class Pack</h3>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-4xl tracking-tight font-medium text-[#1a1a1a]">$200</span>
+                        </div>
+                        <ul class="space-y-4 mb-8 flex-grow">
+                            <li class="flex items-start gap-3 text-base text-[#5c5c5a]">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a] shrink-0"></i> Valid for 6 months
+                            </li>
+                            <li class="flex items-start gap-3 text-base text-[#5c5c5a]">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a] shrink-0"></i> Shareable with friends
+                            </li>
+                            <li class="flex items-start gap-3 text-base text-[#5c5c5a]">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[1.5] text-[#1a1a1a] shrink-0"></i> Mat rental included
+                            </li>
+                        </ul>
+                        <button class="w-full border border-[#1a1a1a] text-[#1a1a1a] py-3 rounded-full font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors">Buy Pack</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Image Gallery / Atmosphere -->
+        <section class="py-0 flex flex-col md:flex-row h-[60vh] min-h-[500px]">
+            <div class="w-full md:w-1/2 h-full relative group overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1593164842264-854604db2260?q=80&amp;w=2069&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="Studio details" loading="lazy">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span class="text-white text-lg tracking-widest uppercase font-medium">The Space</span>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 h-full relative group overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&amp;w=2120&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="Community" loading="lazy">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span class="text-white text-lg tracking-widest uppercase font-medium">The Community</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 9: Pre-footer CTA -->
+        <section class="py-32 bg-[#e8eae4] text-center px-6">
+            <div class="max-w-3xl mx-auto flex flex-col items-center">
+                <div class="w-16 h-16 mb-8 text-[#5d674f]">
+                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="w-full h-full">
+                        <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                        <circle cx="12" cy="12" r="4"></circle>
+                    </svg>
+                </div>
+                <h2 class="text-5xl md:text-7xl tracking-tighter font-medium text-[#1a1a1a] mb-6">Begin your journey.</h2>
+                <p class="text-xl text-[#5c5c5a] mb-10 font-normal">Join our intro offer: 3 classes for $30.</p>
+                <button class="bg-[#1a1a1a] text-white px-10 py-5 rounded-full flex items-center gap-3 font-normal text-lg hover:bg-[#333] transition-colors group">
+                    Claim Offer <i data-lucide="arrow-right" class="w-5 h-5 stroke-[1.5] group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#f5f4f0] pt-24 pb-12 border-t border-[#dcdacd]">
+        <div class="max-w-screen-2xl mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-24 mb-16">
+                <!-- Brand col -->
+                <div class="col-span-1 md:col-span-1">
+                    <a href="#" class="flex items-center gap-3 mb-6">
+                        <div class="w-6 h-6">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-[#1a1a1a]">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-medium tracking-widest uppercase">Soluna</span>
+                    </a>
+                    <p class="text-base text-[#5c5c5a] font-normal leading-relaxed">
+                        A premium yoga sanctuary designed to elevate your practice and reconnect you with your true self.
+                    </p>
+                </div>
+
+                <!-- Links 1 -->
+                <div>
+                    <h4 class="text-sm font-medium tracking-widest uppercase text-[#1a1a1a] mb-6">Explore</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Studio</a></li>
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Class Schedule</a></li>
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Pricing &amp; Memberships</a></li>
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Teachers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links 2 -->
+                <div>
+                    <h4 class="text-sm font-medium tracking-widest uppercase text-[#1a1a1a] mb-6">Connect</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Journal</a></li>
+                        <li><a href="#" class="text-base text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-sm font-medium tracking-widest uppercase text-[#1a1a1a] mb-6">Newsletter</h4>
+                    <p class="text-base text-[#5c5c5a] mb-4">Insights, studio updates, and mindful living tips delivered to your inbox.</p>
+                    <form class="relative flex items-center">
+                        <!-- Custom input line style -->
+                        <input type="email" placeholder="Email address" class="w-full bg-transparent border-b border-[#dcdacd] py-2 text-base text-[#1a1a1a] placeholder:text-[#a0a09e] focus:outline-none focus:border-[#1a1a1a] transition-colors pb-3">
+                        <button type="submit" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-[#1a1a1a] hover:text-[#5d674f] transition-colors">
+                            <i data-lucide="arrow-right" class="w-5 h-5 stroke-[1.5]"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bottom bar -->
+            <div class="pt-8 border-t border-[#dcdacd] flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-sm text-[#5c5c5a]">© 2024 Soluna Yoga Studio. All rights reserved.</span>
+                <div class="flex gap-6">
+                    <a href="#" class="text-sm text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-sm text-[#5c5c5a] hover:text-[#1a1a1a] transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                menuBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6 stroke-[1.5]"></i>';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            } else {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                menuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6 stroke-[1.5]"></i>';
+                document.body.style.overflow = 'auto';
+            }
+            lucide.createIcons(); // Re-initialize icon after changing innerHTML
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // Navbar blur effect on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-sm', 'border-[#dcdacd]/50');
+                navbar.classList.remove('border-transparent');
+            } else {
+                navbar.classList.remove('shadow-sm', 'border-[#dcdacd]/50');
+                navbar.classList.add('border-transparent');
+            }
+        });
+    </script>
+
+</body></html>

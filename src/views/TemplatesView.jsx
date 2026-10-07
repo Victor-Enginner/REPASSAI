@@ -221,7 +221,8 @@ export default function TemplatesView({ onSelectTemplate }) {
     setCarregando(true);
     setErro(null);
     try {
-      const res = await fetch(apiUrl('/api/templates'));
+      let res = await fetch('/templates/catalog.json');
+      if (!res.ok) res = await fetch(apiUrl('/api/templates'));
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const dados = await res.json();
       setTemplates(dados.templates || []);
@@ -239,7 +240,8 @@ export default function TemplatesView({ onSelectTemplate }) {
     let cancelado = false;
     (async () => {
       try {
-        const res = await fetch(apiUrl(`/api/templates/detail?slug=${encodeURIComponent(slugAberto)}`));
+        let res = await fetch(`/templates/${encodeURIComponent(slugAberto)}.json`);
+        if (!res.ok) res = await fetch(apiUrl(`/api/templates/detail?slug=${encodeURIComponent(slugAberto)}`));
         const dados = await res.json();
         if (!cancelado) setDetalhe(res.ok ? dados : null);
       } catch {
@@ -297,7 +299,7 @@ export default function TemplatesView({ onSelectTemplate }) {
 
   // ---------------------------------------------------------------- DETALHE
   if (slugAberto) {
-    const urlPreview = apiUrl(`/api/templates/preview?slug=${encodeURIComponent(slugAberto)}`);
+    const urlPreview = detalhe?.publicado_estatico ? `/templates/${encodeURIComponent(slugAberto)}.html` : apiUrl(`/api/templates/preview?slug=${encodeURIComponent(slugAberto)}`);
 
     return (
       <div style={{ padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 40px)', maxWidth: '1200px', margin: '0 auto', animation: 'fadeIn 0.25s ease' }}>
@@ -332,7 +334,7 @@ export default function TemplatesView({ onSelectTemplate }) {
                       </span>}
                 </div>
                 <a
-                  href={apiUrl(`/api/templates/zip?slug=${encodeURIComponent(detalhe.slug)}`)}
+                  href={detalhe.publicado_estatico ? `/templates/${encodeURIComponent(detalhe.slug)}.zip` : apiUrl(`/api/templates/zip?slug=${encodeURIComponent(detalhe.slug)}`)}
                   className="btn-primary"
                   style={{ marginTop: '10px', fontSize: '11.5px', padding: '10px 18px', textDecoration: 'none', display: 'inline-flex' }}
                 >
@@ -373,7 +375,8 @@ export default function TemplatesView({ onSelectTemplate }) {
                   src={urlPreview}
                   title={`Preview de ${detalhe.titulo}`}
                   loading="lazy"
-                  sandbox="allow-scripts allow-forms allow-popups"
+                  sandbox="allow-scripts"
+                  referrerPolicy="no-referrer"
                   style={{ width: '100%', height: '540px', border: 0, display: 'block', background: 'var(--papel-cartao)' }}
                 />
               ) : (

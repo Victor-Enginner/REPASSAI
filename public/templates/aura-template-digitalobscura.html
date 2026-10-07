@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="scroll-smooth">
+  <head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Archive — Digital Exhibition</title>
+<!-- Fonts: Inter (Clean Sans) & JetBrains Mono (Archival Meta) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;family=JetBrains+Mono:wght@100;300;400&amp;display=swap"
+rel="stylesheet"
+/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Iconify -->
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+mono: ['JetBrains Mono', 'monospace'],
+},
+colors: {
+base: {
+bg: '#f4f3f0', // Warm white/paper
+text: '#1a1a1a', // Soft black
+muted: '#888888', // Faded gray
+border: '#d1d1d1', // Muted silver
+accent: '#a0b0c0' // Washed blue
+}
+},
+transitionTimingFunction: {
+'expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+}
+}
+}
+}
+</script>
+<style>
+/* Atmospheric Grain Texture overlay */
+.bg-noise {
+position: fixed;
+top: -50%;
+left: -50%;
+width: 200vw;
+height: 200vh;
+pointer-events: none;
+z-index: 9999;
+opacity: 0.03;
+background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+mix-blend-mode: multiply;
+transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+animation: grainDrift 20s linear infinite;
+}
+.crt-scanlines {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+pointer-events: none;
+z-index: 9998;
+background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.02) 50%);
+background-size: 100% 4px;
+animation: scanlineDrift 12s linear infinite;
+}
+@keyframes grainDrift {
+0% { background-position: 0px 0px; opacity: 0.02; }
+50% { opacity: 0.035; }
+100% { background-position: 200px 200px; opacity: 0.02; }
+}
+@keyframes scanlineDrift {
+0% { background-position: 0 0px; }
+100% { background-position: 0 4px; }
+}
+/* Base element styling for editorial feel */
+body {
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+/* Cinematic Blur Fade-ins for scroll reveal (Emotional Signature) */
+.reveal-element {
+opacity: 0;
+transform: translateY(32px) scale(0.98);
+filter: blur(16px);
+transition: opacity 3.2s cubic-bezier(0.2, 0.9, 0.1, 1), transform 3.2s cubic-bezier(0.2, 0.9, 0.1, 1), filter 3.2s cubic-bezier(0.2, 0.9, 0.1, 1);
+will-change: opacity, transform, filter;
+}
+.reveal-element.is-visible {
+opacity: 1;
+transform: translateY(0) scale(1);
+filter: blur(0);
+}
+/* Floating Archival Labels */
+@keyframes floatingLabel {
+0% { transform: translate(0, 0) rotate(0deg); }
+33% { transform: translate(-2px, 4px) rotate(-0.5deg); }
+66% { transform: translate(3px, -2px) rotate(0.5deg); }
+100% { transform: translate(0, 0) rotate(0deg); }
+}
+.float-label {
+animation: floatingLabel 24s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+will-change: transform;
+}
+.float-label-alt {
+animation: floatingLabel 28s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+will-change: transform;
+}
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+.reveal-element {
+transition: none !important;
+opacity: 1 !important;
+transform: none !important;
+filter: none !important;
+}
+.float-label, .float-label-alt {
+animation: none !important;
+}
+.hover-scale {
+transition: none !important;
+}
+.hover-scale:hover {
+transform: none !important;
+}
+.bg-noise, .crt-scanlines {
+animation: none !important;
+}
+}
+/* Custom image hover wrapper */
+.img-wrapper {
+overflow: hidden;
+background-color: #e5e5e5;
+}
+.img-wrapper img {
+transition: transform 4s cubic-bezier(0.2, 0.9, 0.1, 1), filter 4s ease;
+}
+.img-wrapper:hover img {
+transform: scale(1.05);
+filter: grayscale(0%);
+}
+</style>
+<style>
+.grid-lines {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+pointer-events: none;
+z-index: 9998;
+background-size: 50px 50px;
+background-image:
+linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+animation: gridMove 20s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+.grid-lines {
+animation: none;
+}
+}
+@keyframes gridMove {
+0% { background-position: 0 0; }
+100% { background-position: 50px 50px; }
+}
+</style>
+<style>
+@keyframes archiveMarquee {
+0% { transform: translate3d(0, 0, 0); }
+100% { transform: translate3d(-50%, 0, 0); }
+}
+.animate-archive-marquee {
+animation: archiveMarquee 120s linear infinite;
+display: flex;
+width: max-content;
+will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+.animate-archive-marquee {
+animation: none;
+}
+}
+</style>
+<style>
+@keyframes cinematicPan {
+0% { transform: scale(1.05) translate(0, 0) rotate(0deg); }
+50% { transform: scale(1.08) translate(-0.5%, 0.5%) rotate(0.2deg); }
+100% { transform: scale(1.05) translate(0, 0) rotate(0deg); }
+}
+.cinematic-pan {
+animation: cinematicPan 60s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+will-change: transform;
+}
+.blinking-rec {
+animation: blink 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes blink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.2; }
+}
+.fixed-xh {
+position: fixed;
+width: 16px;
+height: 16px;
+z-index: 9999;
+mix-blend-mode: difference;
+pointer-events: none;
+animation: pulse 8s ease-in-out infinite;
+}
+@keyframes pulse {
+0%, 100% { opacity: 1; transform: scale(1); }
+50% { opacity: 0.5; transform: scale(0.95); }
+}
+.fixed-xh::before {
+content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.7);
+}
+.fixed-xh::after {
+content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: rgba(255,255,255,0.7);
+}
+.cinematic-whitespace {
+padding-top: 15vw;
+padding-bottom: 15vw;
+}
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body
+    class="bg-base-bg text-base-text font-sans selection:bg-base-text selection:text-base-bg"
+  >
+    <!-- Texture Overlay -->
+    <div class="grid-lines"></div>
+    <div class="bg-noise"></div>
+    <div class="crt-scanlines"></div>
+
+    <!-- Navigation -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-6 text-base-text pointer-events-none text-[10px] font-mono uppercase tracking-widest bg-base-bg/80 backdrop-blur-md"
+    >
+      <div class="pointer-events-auto leading-tight tracking-[0.2em]">
+        DIGITAL
+        <br />
+        OBSCURA
+      </div>
+      <nav class="hidden md:flex gap-12 pointer-events-auto">
+        <a
+          href="#gallery"
+          class="relative inline-block hover:text-base-muted transition-all duration-500 ease-out after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo hover:-translate-y-0.5"
+        >
+          Gallery
+        </a>
+        <a
+          href="#archive"
+          class="relative inline-block hover:text-base-muted transition-all duration-500 ease-out after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo hover:-translate-y-0.5"
+        >
+          Archive
+        </a>
+        <a
+          href="#studio"
+          class="relative inline-block hover:text-base-muted transition-all duration-500 ease-out after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo hover:-translate-y-0.5"
+        >
+          Studio
+        </a>
+        <a
+          href="#contact"
+          class="relative inline-block hover:text-base-muted transition-all duration-500 ease-out after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo hover:-translate-y-0.5"
+        >
+          Contact
+        </a>
+      </nav>
+      <div
+        class="hidden md:flex gap-8 items-center pointer-events-auto text-right"
+      >
+        <span class="leading-tight">
+          Studio for digital
+          <br />
+          experiences
+          <span class="block text-[8px] text-base-text/40 mt-1 tracking-widest">
+            V_2.04
+            <span class="ml-2 text-base-text/30">| SYS_ACTIVE</span>
+          </span>
+        </span>
+        <iconify-icon
+          icon="solar:widget-3-linear"
+          width="16"
+          height="16"
+        ></iconify-icon>
+      </div>
+      <button
+        class="md:hidden pointer-events-auto hover:text-base-muted transition-all duration-500 ease-expo hover:scale-110 transform"
+      >
+        <iconify-icon
+          icon="solar:hamburger-menu-linear"
+          width="24"
+          height="24"
+        ></iconify-icon>
+      </button>
+    </header>
+
+    <main class="">
+      <!-- 1. Hero Section -->
+      <section
+        class="relative min-h-screen flex flex-col md:flex-row px-6 pb-0 border-b border-base-border/50 pt-40"
+      >
+        <div class="w-full md:w-1/2 flex flex-col justify-between pr-8">
+          <div
+            class="mt-12 md:mt-24 reveal-element"
+            style="transition-delay: 0.4s;"
+          >
+            <p
+              class="font-mono text-[10px] uppercase tracking-widest mb-16 text-base-muted"
+            >
+              &gt; 05-23-17-09
+              <span class="ml-4 opacity-50">SYS.STATUS: ONLINE</span>
+            </p>
+            <h1
+              class="font-sans tracking-tighter text-[5rem] md:text-8xl lg:text-[11rem] leading-[0.85] uppercase mb-16 text-base-text font-light"
+            >
+              Digital
+              <br />
+              Obscura
+            </h1>
+            <p
+              class="font-mono text-[10px] uppercase tracking-widest leading-loose max-w-xs mb-16 text-base-text/70"
+            >
+              We document the invisible.
+              <br />
+              Preserving the fragile architecture
+              <br />
+              of memory before the signal fades.
+            </p>
+            <a
+              href="#gallery"
+              class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest pb-1 text-base-text relative group transition-all duration-500 ease-out hover:-translate-y-0.5 hover:text-base-muted after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:bottom-0 after:left-0 after:scale-x-100 hover:after:scale-x-0 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo"
+            >
+              View Gallery
+              <iconify-icon
+                icon="solar:arrow-right-linear"
+                width="14"
+                class="group-hover:translate-x-1 transition-transform duration-500 ease-expo"
+              ></iconify-icon>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="w-full md:w-1/2 relative h-[60vh] md:h-auto md:min-h-[85vh] mt-12 md:mt-0 pb-0 reveal-element is-visible"
+          style="transition-delay: 0.3s;"
+        >
+          <img
+            src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7482de0f-02b9-4af7-98f0-3f747e55f5fe_3840w.png"
+            alt="Architecture"
+            class="w-full h-full object-cover grayscale object-top cinematic-pan contrast-125 brightness-95"
+          />
+          <div
+            class="absolute bottom-4 right-4 md:bottom-8 md:right-8 font-mono text-[9px] text-white/50 tracking-widest z-10 pointer-events-none mix-blend-difference float-label-alt"
+          >
+            LAT 35.6895 / LNG 139.6917
+            <br />
+            <span class="opacity-50 mt-1 block">
+              SYNC: ACTIVE //
+              <span
+                class="blinking-rec inline-block w-1.5 h-1.5 bg-white/50 rounded-full ml-1"
+              ></span>
+            </span>
+          </div>
+          <div
+            class="absolute top-4 left-4 font-mono text-[9px] text-white/70 tracking-widest z-10 flex items-center gap-2 mix-blend-difference float-label"
+          >
+            <div class="w-2 h-2 bg-red-500 rounded-full blinking-rec"></div>
+            REC_01 // SIGNAL_ACTIVE
+            <span class="ml-2 text-white/40 hidden md:inline">
+              [DATA_STREAM_OPEN]
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 rotate-90 origin-right items-center gap-4 font-mono text-[10px] uppercase tracking-widest text-base-muted"
+        >
+          Scroll to explore
+          <iconify-icon
+            icon="solar:arrow-right-linear"
+            class="rotate-90"
+            width="14"
+          ></iconify-icon>
+        </div>
+        <div
+          class="absolute bottom-8 left-6 font-mono text-[9px] text-base-text/30 tracking-[0.3em] uppercase pointer-events-none hidden md:block"
+        >
+          SEQ_01 // SYSTEM_NOMINAL
+        </div>
+      </section>
+      <section
+        class="w-full overflow-hidden border-b border-base-border/50 py-5 bg-base-bg pointer-events-none select-none"
+      >
+        <div class="animate-archive-marquee opacity-40">
+          <div
+            class="flex items-center pr-32 gap-32 font-mono text-[10px] font-thin uppercase tracking-[0.5em] text-base-text"
+          >
+            <span>DIGITAL MEMORY ARCHIVE</span>
+            <span>SIGNAL REMAINS ACTIVE</span>
+            <span>FRAGMENTS OF MODERNISM</span>
+            <span>TRANSMISSION / 1998</span>
+            <span>FUTURE NOSTALGIA</span>
+            <span>OBSERVATION UNIT 02</span>
+            <span>DIGITAL MEMORY ARCHIVE</span>
+            <span>SIGNAL REMAINS ACTIVE</span>
+            <span>FRAGMENTS OF MODERNISM</span>
+            <span>TRANSMISSION / 1998</span>
+            <span>FUTURE NOSTALGIA</span>
+            <span>OBSERVATION UNIT 02</span>
+          </div>
+          <div
+            class="flex items-center pr-32 gap-32 font-mono text-[10px] font-thin uppercase tracking-[0.5em] text-base-text"
+            aria-hidden="true"
+          >
+            <span>DIGITAL MEMORY ARCHIVE</span>
+            <span>SIGNAL REMAINS ACTIVE</span>
+            <span>FRAGMENTS OF MODERNISM</span>
+            <span>TRANSMISSION / 1998</span>
+            <span>FUTURE NOSTALGIA</span>
+            <span>OBSERVATION UNIT 02</span>
+            <span>DIGITAL MEMORY ARCHIVE</span>
+            <span>SIGNAL REMAINS ACTIVE</span>
+            <span>FRAGMENTS OF MODERNISM</span>
+            <span>TRANSMISSION / 1998</span>
+            <span>FUTURE NOSTALGIA</span>
+            <span>OBSERVATION UNIT 02</span>
+          </div>
+        </div>
+      </section>
+      <section
+        class="py-32 md:py-48 px-6 bg-base-bg border-b border-base-border/50 relative overflow-hidden flex items-center justify-center cinematic-whitespace"
+      >
+        <div class="max-w-4xl mx-auto relative z-10 text-center reveal-element">
+          <p
+            class="font-mono text-[10px] uppercase tracking-[0.3em] text-base-muted mb-12 float-label-alt"
+          >
+            [ FRAGMENT // 0042 ]
+          </p>
+          <h2
+            class="font-sans text-4xl md:text-6xl lg:text-[6.5rem] tracking-tighter leading-[1] text-base-text mb-16 font-light"
+          >
+            What remains when
+            <br />
+            <span class="italic font-serif opacity-70">the signal</span>
+            stops?
+          </h2>
+          <div class="flex justify-center">
+            <div class="w-[1px] h-24 bg-base-text/20 mb-16"></div>
+          </div>
+          <p
+            class="font-mono text-[10px] uppercase tracking-widest text-base-text/60 max-w-md mx-auto leading-loose"
+          >
+            We are archeologists of the digital age. Every image is a ghost,
+            every file a memory slowly degrading in the cold storage of a
+            forgotten server.
+          </p>
+        </div>
+        <div
+          class="absolute top-12 left-12 font-mono text-[9px] text-base-text/30 tracking-widest uppercase pointer-events-none float-label hidden md:block"
+        >
+          MEMORY INDEX ACTIVE
+        </div>
+      </section>
+
+      <!-- 2. Intro Statement -->
+
+      <!-- 3. Gallery Showcase (Asymmetrical Editorial Grid) -->
+      <section
+        id="gallery"
+        class="py-24 px-6 border-b border-base-border/50 relative"
+      >
+        <div
+          class="flex justify-between items-center mb-12 font-mono text-[10px] uppercase tracking-widest text-base-text"
+        >
+          <span>01 / Visual Evidence</span>
+          <a
+            href="#"
+            class="relative inline-flex items-center gap-2 transition-all duration-500 ease-out hover:-translate-y-0.5 hover:text-base-muted after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo"
+          >
+            View all works +
+          </a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
+          <div
+            class="relative aspect-[3/4] group overflow-hidden bg-base-border/20 reveal-element"
+            style="transition-delay: 0.1s;"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7482de0f-02b9-4af7-98f0-3f747e55f5fe_3840w.png"
+              class="w-full h-full object-cover grayscale transition-transform group-hover:scale-105 duration-[3000ms] ease-out contrast-125 brightness-95"
+              alt="Gallery 1"
+            />
+            <span
+              class="absolute bottom-4 left-4 font-mono text-[10px] text-white float-label"
+            >
+              001
+            </span>
+            <span
+              class="absolute top-4 right-4 font-mono text-[8px] text-white/40 tracking-widest pointer-events-none float-label-alt"
+            >
+              FRAME_01
+            </span>
+          </div>
+          <div
+            class="relative aspect-[3/4] group overflow-hidden bg-base-border/20 reveal-element"
+            style="transition-delay: 0.3s;"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/369a9b30-1bd2-40ad-b27d-f766d399db30_3840w.png"
+              class="w-full h-full object-cover grayscale transition-transform group-hover:scale-105 duration-[3000ms] ease-out contrast-125 brightness-95"
+              alt="Gallery 2"
+            />
+            <span
+              class="absolute bottom-4 left-4 font-mono text-[10px] text-white float-label-alt"
+            >
+              002
+            </span>
+            <span
+              class="absolute top-4 right-4 font-mono text-[8px] text-white/40 tracking-widest pointer-events-none float-label"
+            >
+              FRAME_02
+            </span>
+          </div>
+          <div
+            class="relative aspect-[3/4] group overflow-hidden bg-base-border/20 reveal-element"
+            style="transition-delay: 0.5s;"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&amp;auto=format&amp;fit=crop"
+              class="w-full h-full object-cover grayscale transition-transform group-hover:scale-105 duration-[3000ms] ease-out contrast-125 brightness-95"
+              alt="Gallery 3"
+            />
+            <span
+              class="absolute bottom-4 left-4 font-mono text-[10px] text-white float-label"
+            >
+              003
+            </span>
+            <span
+              class="absolute top-4 right-4 font-mono text-[8px] text-white/40 tracking-widest pointer-events-none float-label-alt"
+            >
+              FRAME_03
+            </span>
+          </div>
+          <div
+            class="relative aspect-[3/4] group overflow-hidden bg-base-border/20 reveal-element"
+            style="transition-delay: 0.7s;"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/03a0f5b8-e984-4a04-a5b7-2a785cfb6a49_3840w.png"
+              class="w-full h-full object-cover grayscale transition-transform group-hover:scale-105 duration-[3000ms] ease-out contrast-125 brightness-95"
+              alt="Gallery 4"
+            />
+            <span
+              class="absolute bottom-4 left-4 font-mono text-[10px] text-white float-label-alt"
+            >
+              004
+            </span>
+            <span
+              class="absolute top-4 right-4 font-mono text-[8px] text-white/40 tracking-widest pointer-events-none float-label"
+            >
+              FRAME_04
+            </span>
+          </div>
+          <div
+            class="relative aspect-[3/4] group overflow-hidden bg-base-border/20 reveal-element"
+            style="transition-delay: 0.9s;"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8d641c89-3180-4914-b5f0-3071e69f3afd_3840w.png"
+              class="w-full h-full object-cover grayscale transition-transform group-hover:scale-105 duration-[3000ms] ease-out contrast-125 brightness-95"
+              alt="Gallery 5"
+            />
+            <span
+              class="absolute bottom-4 left-4 font-mono text-[10px] text-white float-label"
+            >
+              005
+            </span>
+            <span
+              class="absolute top-4 right-4 font-mono text-[8px] text-white/40 tracking-widest pointer-events-none float-label-alt"
+            >
+              FRAME_05
+            </span>
+          </div>
+        </div>
+        <div
+          class="absolute top-1/2 left-4 -translate-x-1/2 -translate-y-1/2 -rotate-90 origin-center font-mono text-[8px] text-base-text/20 tracking-[0.4em] uppercase pointer-events-none hidden md:block whitespace-nowrap"
+        >
+          DATA_RECOVERY_IN_PROGRESS
+        </div>
+      </section>
+
+      <!-- 4. Featured Visual Story -->
+      <section class="bg-[#ebeae6] px-6 relative py-40">
+        <div
+          class="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center"
+        >
+          <div class="w-full md:w-1/2 order-2 md:order-1 reveal-element">
+            <p
+              class="font-mono text-xs text-base-muted uppercase tracking-widest mb-8"
+            >
+              Focus feature
+              <span class="ml-4 opacity-50">UNIT_1996</span>
+            </p>
+            <h3
+              class="font-sans mb-8 font-light text-5xl md:text-6xl tracking-tighter leading-[1.1]"
+            >
+              The geometry of absence.
+            </h3>
+            <p
+              class="font-sans font-light mb-10 max-w-md leading-relaxed text-lg md:text-xl text-base-text/70"
+            >
+              Documenting structures that exist between utility and
+              obsolescence. These spaces strip away human presence to reveal the
+              underlying grid—a pure, indifferent aesthetic of concrete and
+              light.
+            </p>
+            <a
+              href="#"
+              class="group inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-base-text border border-base-text relative overflow-hidden transition-all duration-500 ease-out hover:text-base-bg hover:border-base-text before:content-[''] before:absolute before:inset-0 before:bg-base-text before:translate-y-full hover:before:translate-y-0 before:transition-transform before:duration-500 before:ease-expo hover:-translate-y-1 hover:shadow-xl hover:shadow-base-text/10 px-8 py-5"
+            >
+              <span class="relative z-10">View Complete Series</span>
+              <iconify-icon
+                icon="solar:arrow-right-linear"
+                width="16"
+                height="16"
+                class="relative z-10 group-hover:translate-x-1 transition-transform duration-500 ease-expo"
+              ></iconify-icon>
+            </a>
+            <div
+              class="font-mono text-[9px] text-base-text/40 uppercase tracking-[0.2em] mt-16 border-t border-base-border/50 pt-4 max-w-[200px]"
+            >
+              ARCHIVE ENTRY / 1998
+              <br />
+              <span class="opacity-60 mt-1 block">SEC_04 // LOC_UNKNOWN</span>
+            </div>
+          </div>
+          <div
+            class="w-full md:w-1/2 order-1 md:order-2 reveal-element"
+            style="transition-delay: 0.2s;"
+          >
+            <div class="img-wrapper aspect-square w-full rounded-sm relative">
+              <img
+                src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8d641c89-3180-4914-b5f0-3071e69f3afd_3840w.png"
+                alt="Abstract architectural staircase"
+                class="w-full h-full object-cover grayscale contrast-125 brightness-95"
+              />
+              <div
+                class="absolute bottom-4 right-4 font-mono text-[9px] text-white/50 tracking-widest z-10 pointer-events-none mix-blend-difference float-label"
+              >
+                MEMORY_INDEX_07
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="px-6 border-b border-base-border/50 bg-base-bg flex justify-center items-center relative py-56 md:py-72"
+      >
+        <div class="reveal-element max-w-5xl mx-auto text-center">
+          <h2
+            class="font-sans tracking-tighter leading-[1.1] text-base-text mb-10 font-light text-5xl md:text-7xl lg:text-[6.5rem]"
+          >
+            "The archive never
+            <br />
+            fully disappears."
+          </h2>
+          <p
+            class="font-mono text-[10px] uppercase tracking-widest text-base-muted"
+          >
+            SYS.LOG // GHOSTS_IN_THE_MACHINE
+          </p>
+        </div>
+        <div
+          class="absolute bottom-8 right-8 font-mono text-[8px] text-base-muted/40 uppercase tracking-[0.3em] pointer-events-none flex items-center gap-2 hidden md:flex"
+        >
+          <div class="w-1 h-1 bg-base-text/30 rounded-full blinking-rec"></div>
+          TRANSMISSION LIVE
+        </div>
+      </section>
+
+      <!-- 5. Archive / Collection (List View) -->
+      <section class="py-24 px-6 border-b border-base-border/50 bg-base-bg">
+        <div
+          class="mb-12 font-mono text-[10px] uppercase tracking-widest text-base-text"
+        >
+          <span>ARCHIVE_02 / MEMORY_UNIT</span>
+        </div>
+        <div class="flex flex-col md:flex-row gap-12 md:gap-24 reveal-element">
+          <div
+            class="w-full md:w-1/2 relative aspect-[16/10] bg-gray-900 overflow-hidden group"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&amp;auto=format&amp;fit=crop"
+              class="w-full h-full object-cover grayscale opacity-80 transition-transform duration-[4000ms] ease-out group-hover:scale-105 group-hover:opacity-100 contrast-125 brightness-95"
+              alt="Featured"
+            />
+            <div
+              class="absolute inset-0 p-6 flex flex-col justify-between text-white font-mono text-[10px]"
+            >
+              <div
+                class="group flex items-center gap-2 cursor-pointer transition-all duration-500 ease-out hover:text-white/70 hover:-translate-y-0.5"
+              >
+                PLAY
+                <iconify-icon
+                  icon="solar:play-bold"
+                  class="group-hover:scale-110 transition-transform duration-500 ease-expo"
+                ></iconify-icon>
+              </div>
+              <div class="flex justify-between items-end">
+                <div>
+                  AM 11:00
+                  <br />
+                  MAR. 23 1998
+                </div>
+                <div class="grid grid-cols-3 gap-1 opacity-50">
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                  <div class="w-1 h-1 bg-white rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full md:w-1/2 flex flex-col justify-center text-base-text"
+          >
+            <p
+              class="font-mono text-[10px] uppercase tracking-widest mb-6 text-base-muted"
+            >
+              Featured Project
+              <span class="ml-4 opacity-50">SIGNAL/ACTIVE</span>
+            </p>
+            <div
+              class="flex justify-between items-start mb-8 w-full border-b border-transparent"
+            >
+              <h3
+                class="font-sans tracking-tighter uppercase leading-none font-light text-4xl md:text-6xl lg:text-6xl"
+              >
+                Echoes
+                <br />
+                Of Silence
+              </h3>
+              <span
+                class="font-mono text-[10px] mt-2 whitespace-nowrap text-base-muted"
+              >
+                1996 — 2024
+              </span>
+            </div>
+            <p
+              class="font-mono text-[10px] uppercase tracking-widest leading-loose max-w-sm mb-12 text-base-text/70"
+            >
+              A visual journey through memory,
+              <br />
+              analog fragments and digital landscapes.
+            </p>
+            <a
+              href="#"
+              class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest pb-1 relative group transition-all duration-500 ease-out hover:-translate-y-0.5 hover:text-base-muted after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:bottom-0 after:left-0 after:scale-x-100 hover:after:scale-x-0 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo self-start"
+            >
+              View Project
+              <iconify-icon
+                icon="solar:arrow-right-linear"
+                width="14"
+                class="group-hover:translate-x-1 transition-transform duration-500 ease-expo"
+              ></iconify-icon>
+            </a>
+            <div
+              class="font-mono text-[8px] text-base-muted/40 uppercase tracking-widest mt-auto pt-8 flex gap-8 hidden md:flex"
+            >
+              <span>LAT 40.7128</span>
+              <span>LNG -74.0060</span>
+              <span>SYNC: STABLE</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Philosophy Section -->
+      <section
+        id="archive"
+        class="py-24 px-6 border-b border-base-border/50 bg-base-bg text-base-text relative"
+      >
+        <div
+          class="flex justify-between items-center mb-24 font-mono text-[10px] uppercase tracking-widest"
+        >
+          <span>04 / Core Memory Bank</span>
+          <a
+            href="#"
+            class="relative inline-flex items-center gap-2 transition-all duration-500 ease-out hover:-translate-y-0.5 hover:text-base-muted after:content-[''] after:absolute after:w-full after:h-px after:bg-base-text after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo"
+          >
+            Browse Archive +
+          </a>
+        </div>
+        <div
+          class="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4 border-t border-base-border/50 pt-16"
+        >
+          <div
+            class="flex flex-col border-l border-base-border/50 pl-4 lg:pl-6 reveal-element"
+            style="transition-delay: 0.1s;"
+          >
+            <span class="font-mono text-[10px] text-base-muted mb-4">1996</span>
+            <span
+              class="font-sans text-5xl lg:text-[5rem] tracking-tighter mb-8 font-light"
+            >
+              96
+            </span>
+            <span
+              class="font-mono text-[9px] uppercase tracking-widest border-b border-base-text pb-1 inline-block self-start"
+            >
+              Static Memories
+            </span>
+            <span
+              class="font-mono text-[8px] text-base-muted/40 mt-8 block uppercase tracking-widest pointer-events-none"
+            >
+              SYS.LOG_96
+            </span>
+          </div>
+          <div
+            class="flex flex-col border-l border-base-border/50 pl-4 lg:pl-6 reveal-element"
+            style="transition-delay: 0.2s;"
+          >
+            <span class="font-mono text-[10px] text-base-muted mb-4">1999</span>
+            <span
+              class="font-sans text-5xl lg:text-[5rem] tracking-tighter mb-8 font-light"
+            >
+              99
+            </span>
+            <span
+              class="font-mono text-[9px] uppercase tracking-widest border-b border-base-text pb-1 inline-block self-start"
+            >
+              Digital Dreams
+            </span>
+            <span
+              class="font-mono text-[8px] text-base-muted/40 mt-8 block uppercase tracking-widest pointer-events-none"
+            >
+              SYS.LOG_99
+            </span>
+          </div>
+          <div
+            class="flex flex-col border-l border-base-border/50 pl-4 lg:pl-6 reveal-element"
+            style="transition-delay: 0.3s;"
+          >
+            <span class="font-mono text-[10px] text-base-muted mb-4">2002</span>
+            <span
+              class="font-sans text-5xl lg:text-[5rem] tracking-tighter mb-8 font-light"
+            >
+              02
+            </span>
+            <span
+              class="font-mono text-[9px] uppercase tracking-widest border-b border-base-text pb-1 inline-block self-start"
+            >
+              Urban Fragments
+            </span>
+            <span
+              class="font-mono text-[8px] text-base-muted/40 mt-8 block uppercase tracking-widest pointer-events-none"
+            >
+              SYS.LOG_02
+            </span>
+          </div>
+          <div
+            class="flex flex-col border-l border-base-border/50 pl-4 lg:pl-6 reveal-element"
+            style="transition-delay: 0.4s;"
+          >
+            <span class="font-mono text-[10px] text-base-muted mb-4">2007</span>
+            <span
+              class="font-sans text-5xl lg:text-[5rem] tracking-tighter mb-8 font-light"
+            >
+              07
+            </span>
+            <span
+              class="font-mono text-[9px] uppercase tracking-widest border-b border-base-text pb-1 inline-block self-start"
+            >
+              Glitch Poetry
+            </span>
+            <span
+              class="font-mono text-[8px] text-base-muted/40 mt-8 block uppercase tracking-widest pointer-events-none"
+            >
+              SYS.LOG_07
+            </span>
+          </div>
+          <div
+            class="flex flex-col border-l border-base-border/50 pl-4 lg:pl-6 reveal-element"
+            style="transition-delay: 0.5s;"
+          >
+            <span class="font-mono text-[10px] text-base-muted mb-4">2016</span>
+            <span
+              class="font-sans text-5xl lg:text-[5rem] tracking-tighter mb-8 font-light"
+            >
+              15
+            </span>
+            <span
+              class="font-mono text-[9px] uppercase tracking-widest border-b border-base-text pb-1 inline-block self-start"
+            >
+              Future Nostalgia
+            </span>
+            <span
+              class="font-mono text-[8px] text-base-muted/40 mt-8 block uppercase tracking-widest pointer-events-none"
+            >
+              SYS.LOG_15
+            </span>
+          </div>
+        </div>
+        <div
+          class="absolute top-32 right-6 font-mono text-[8px] text-base-text/30 uppercase tracking-[0.2em] pointer-events-none text-right hidden md:block"
+        >
+          STORAGE_CAPACITY: 84%
+          <br />
+          FRAGMENTS_RECOVERED: 1,402
+        </div>
+      </section>
+    </main>
+
+    <!-- 7. Contact / Footer -->
+    <footer class="bg-[#111] text-white px-6 relative pt-32 pb-12">
+      <div
+        class="mb-32 font-mono text-[10px] uppercase tracking-widest text-white/50"
+      >
+        <span>
+          05 / Contact
+          <span class="ml-4 opacity-30">END_TRANSMISSION</span>
+        </span>
+      </div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-32 border-b border-white/10 pb-24 reveal-element"
+      >
+        <div class="md:col-span-5">
+          <h2
+            class="font-sans text-5xl md:text-7xl lg:text-[6rem] tracking-tighter uppercase leading-[0.9] font-light"
+          >
+            Initiate
+            <br />
+            Transmission.
+          </h2>
+        </div>
+        <div
+          class="md:col-span-4 font-mono text-[10px] uppercase tracking-widest leading-loose text-white/70 flex flex-col justify-center"
+        >
+          <div class="mb-8">
+            <p class="text-white/40 mb-1">Email</p>
+            <p
+              class="relative inline-block text-white transition-all duration-500 ease-out hover:-translate-y-0.5 hover:text-white/80 after:content-[''] after:absolute after:w-full after:h-px after:bg-white after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo cursor-pointer"
+            >
+              hello@digitalobscura.studio
+            </p>
+          </div>
+          <div class="mb-8">
+            <p class="text-white/40 mb-1">Instagram</p>
+            <p
+              class="relative inline-block text-white transition-all duration-500 ease-out hover:-translate-y-0.5 hover:text-white/80 after:content-[''] after:absolute after:w-full after:h-px after:bg-white after:-bottom-1 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:origin-right hover:after:origin-left after:transition-transform after:duration-500 after:ease-expo cursor-pointer"
+            >
+              @digitalobscura.studio
+            </p>
+          </div>
+          <div>
+            <p class="text-white/40 mb-1">Location</p>
+            <p class="text-white">Worldwide</p>
+          </div>
+        </div>
+        <div class="md:col-span-3">
+          <img
+            src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&amp;auto=format&amp;fit=crop"
+            class="w-full aspect-[4/3] object-cover grayscale opacity-80 contrast-125 brightness-95"
+            alt="Contact"
+          />
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col md:flex-row justify-between items-center font-mono text-[9px] text-white/40 uppercase tracking-widest"
+      >
+        <p class="mb-4 md:mb-0">© Digital Obscura Studio</p>
+        <p class="mb-4 md:mb-0">All Rights Reserved</p>
+        <p>1996 — 2024</p>
+      </div>
+      <div
+        class="absolute top-12 right-6 font-mono text-[8px] text-white/20 uppercase tracking-[0.2em] hidden md:flex items-center gap-2"
+      >
+        <span
+          class="w-1.5 h-1.5 border border-white/20 rounded-sm flex items-center justify-center p-[1px]"
+        >
+          <span class="w-full h-full bg-white/20 blinking-rec"></span>
+        </span>
+        SIGNAL_STABLE
+      </div>
+    </footer>
+
+    <!-- Minimal Intersection Observer for scroll fade-ins -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+          if (!reduceMotion) {
+              const observerOptions = {
+                  root: null,
+                  rootMargin: '0px 0px -10% 0px',
+                  threshold: 0.1
+              };
+
+              const observer = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                      if (entry.isIntersecting) {
+                          entry.target.classList.add('is-visible');
+                      }
+                  });
+              }, observerOptions);
+
+              const revealElements = document.querySelectorAll('.reveal-element');
+              revealElements.forEach(el => observer.observe(el));
+
+              // Mouse-reactive grain
+              document.addEventListener('mousemove', (e) => {
+                  const noise = document.querySelector('.bg-noise');
+                  if (noise) {
+                      const x = (e.clientX / window.innerWidth - 0.5) * 5;
+                      const y = (e.clientY / window.innerHeight - 0.5) * 5;
+                      noise.style.transform = `translate(${x}%, ${y}%)`;
+                  }
+              });
+          }
+      });
+    </script>
+
+    <div class="fixed-xh top-6 left-6 hidden md:block"></div>
+    <div class="fixed-xh top-6 right-6 hidden md:block"></div>
+    <div class="fixed-xh bottom-6 left-6 hidden md:block"></div>
+    <div class="fixed-xh bottom-6 right-6 hidden md:block"></div>
+
+    <div
+      id="live-transmission"
+      class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9997] pointer-events-none font-mono text-[9px] uppercase tracking-[0.35em] text-base-text/60 flex items-center gap-3 px-4 py-2 bg-base-bg/40 backdrop-blur-sm border border-base-border/40 rounded-sm hidden md:flex"
+    >
+      <span class="w-1.5 h-1.5 bg-red-500/70 rounded-full blinking-rec"></span>
+      <span>LIVE TRANSMISSION</span>
+      <span class="text-base-text/40">//</span>
+      <span id="lt-coords" class="text-base-text/50">
+        LAT 00.0000 / LNG 0.0000
+      </span>
+      <span class="text-base-text/40">//</span>
+      <span id="lt-timer" class="text-base-text/80">T+00:00:00</span>
+      <span class="text-base-text/40">//</span>
+      <span id="lt-fragment" class="text-base-text/50 italic">listening…</span>
+    </div>
+    <script>
+      (function(){var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var start=Date.now();var timerEl=document.getElementById('lt-timer');var coordsEl=document.getElementById('lt-coords');var fragEl=document.getElementById('lt-fragment');var fragments=['the signal remembers what we forget','a frame still warm from 1998','someone left the lights on','dust settles on the lens','memory index expanding','an echo, slightly delayed','the archive is breathing','frame held, then released','silence between transmissions','geometry of an empty room'];var fi=0;function pad(n){return n<10?'0'+n:''+n}function tick(){var s=Math.floor((Date.now()-start)/1000);var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;if(timerEl)timerEl.textContent='T+'+pad(h)+':'+pad(m)+':'+pad(ss)}setInterval(tick,1000);tick();var mx=35.6895,my=139.6917;function updateCoords(){if(coordsEl)coordsEl.textContent='LAT '+mx.toFixed(4)+' / LNG '+my.toFixed(4)}updateCoords();document.addEventListener('mousemove',function(e){var nx=(e.clientX/window.innerWidth-0.5);var ny=(e.clientY/window.innerHeight-0.5);mx=35.6895+nx*0.5;my=139.6917+ny*0.5;updateCoords()},{passive:true});function rotateFragment(){if(!fragEl)return;fragEl.style.transition='opacity 1.6s ease';fragEl.style.opacity='0';setTimeout(function(){fi=(fi+1)%fragments.length;fragEl.textContent=fragments[fi];fragEl.style.opacity='1'},1600)}setInterval(rotateFragment,7000);if(!reduce){var imgs=document.querySelectorAll('main img');document.addEventListener('mousemove',function(e){var nx=(e.clientX/window.innerWidth-0.5);var ny=(e.clientY/window.innerHeight-0.5);imgs.forEach(function(img){var r=img.getBoundingClientRect();if(r.bottom<0||r.top>window.innerHeight)return;img.style.transform='translate3d('+(nx*-6).toFixed(2)+'px,'+(ny*-6).toFixed(2)+'px,0) scale(1.02)'})},{passive:true})}})();
+    </script>
+  </body>
+</html>

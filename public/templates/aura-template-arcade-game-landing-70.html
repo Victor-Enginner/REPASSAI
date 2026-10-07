@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en">
+  <head>
+<script>
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Geometry Dash</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap"
+rel="stylesheet"
+/>
+<style>
+.active-tool {
+background-color: rgba(255, 255, 255, 0.15);
+color: white !important;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+border: none;
+border-radius: 4px;
+box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+input[type="color"]::-moz-color-swatch {
+border: none;
+border-radius: 4px;
+box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+/* Hide scrollbar for editor toolbar */
+#editorToolbar::-webkit-scrollbar { display: none; }
+#editorToolbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body
+    class="bg-zinc-950 text-zinc-50 min-h-screen flex flex-col items-center justify-center selection:bg-zinc-800 antialiased overflow-hidden"
+    style="font-family: 'Inter', sans-serif;"
+  >
+    <audio id="bgMusic" loop preload="auto" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"></audio>
+
+    <header class="absolute top-0 w-full max-w-7xl mx-auto p-6 flex justify-between items-center z-30 pointer-events-none">
+      <div class="flex items-center gap-3 pointer-events-auto">
+        <div class="text-xl font-semibold tracking-tighter text-white select-none">GD</div>
+        <div class="w-px h-4 bg-white/20 mx-1"></div>
+        <button id="musicToggleBtn" class="text-zinc-400 hover:text-white transition-colors flex items-center justify-center p-1 focus:outline-none" title="Toggle Music">
+          <iconify-icon id="musicToggleIcon" icon="solar:volume-loud-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+        </button>
+      </div>
+      <div class="flex flex-col items-end">
+        <div class="text-xs text-zinc-500 font-medium tracking-wide uppercase mb-1">Current Score</div>
+        <div class="text-lg font-medium tracking-tight text-white flex items-center gap-2">
+          <iconify-icon icon="solar:cup-star-linear" stroke-width="1.5"></iconify-icon>
+          <span id="scoreDisplay">00000</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="w-full max-w-7xl px-4 flex flex-col items-center z-10 mt-8">
+      <div
+        id="gameContainer"
+        class="w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[75vh] min-h-[400px] max-h-[850px] bg-zinc-900/40 rounded-2xl border border-white/5 relative shadow-2xl backdrop-blur-md overflow-hidden cursor-pointer group transition-colors duration-500"
+        style="touch-action: none; background-size: 32px 32px; background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);"
+      >
+        <div class="absolute bottom-0 w-full h-1 bg-white/10 z-20 pointer-events-none"></div>
+
+        <div id="player" class="absolute w-8 h-8 rounded-sm z-20 hidden transition-[width] duration-300 flex items-center justify-center pointer-events-none" style="bottom: 4px; left: 64px; transform-origin: center;">
+          <!-- Cube -->
+          <div id="cubeSprite" class="w-full h-full bg-white rounded-sm transition-all duration-300" style="box-shadow: 0 0 24px rgba(255, 255, 255, 0.3);"></div>
+          <!-- Ship -->
+          <div id="shipSprite" class="w-full h-full text-white hidden">
+            <svg id="shipSvg" class="w-full h-full" style="filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));" viewBox="0 0 32 32" fill="currentColor">
+              <path d="M2 10 L8 10 L16 4 L26 4 L28 12 L32 16 L28 20 L26 28 L16 28 L8 22 L2 22 C0 22 0 10 2 10 Z"></path>
+              <rect x="16" y="10" width="8" height="12" fill="#09090b" rx="2"></rect>
+            </svg>
+          </div>
+          <!-- Wave -->
+          <div id="waveSprite" class="w-full h-full text-white hidden">
+            <svg id="waveSvg" class="w-full h-full" style="filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));" viewBox="0 0 32 32" fill="currentColor">
+              <path d="M4 4 L28 16 L4 28 Z"></path>
+            </svg>
+          </div>
+          <!-- UFO -->
+          <div id="ufoSprite" class="w-full h-full text-white hidden">
+            <svg id="ufoSvg" class="w-full h-full" style="filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));" viewBox="0 0 32 32" fill="currentColor">
+              <path d="M16 4 C8 4, 4 14, 4 14 L28 14 C28 14, 24 4, 16 4 Z"></path>
+              <rect x="2" y="14" width="28" height="6" rx="3" fill="#fff" opacity="0.9"></rect>
+              <circle cx="16" cy="10" r="4" fill="#09090b"></circle>
+            </svg>
+          </div>
+          <!-- Ball -->
+          <div id="ballSprite" class="w-full h-full text-white hidden">
+            <svg id="ballSvg" class="w-full h-full" style="filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));" viewBox="0 0 32 32" fill="currentColor">
+              <circle cx="16" cy="16" r="14"></circle>
+              <circle cx="16" cy="16" r="8" fill="none" stroke="#09090b" stroke-width="3"></circle>
+              <path d="M16 2 L16 8 M16 30 L16 24 M2 16 L8 16 M30 16 L24 16" stroke="#09090b" stroke-width="3" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <!-- Swing -->
+          <div id="swingSprite" class="w-full h-full text-white hidden">
+            <svg id="swingSvg" class="w-full h-full" style="filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));" viewBox="0 0 32 32" fill="currentColor">
+              <circle cx="16" cy="18" r="12"></circle>
+              <circle cx="16" cy="18" r="4" fill="#09090b"></circle>
+              <path d="M16 6 L16 2 M8 2 L24 2" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <!-- Spider -->
+          <div id="spiderSprite" class="w-full h-full text-white hidden">
+            <svg id="spiderSvg" class="w-full h-full" style="filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="8" fill="currentColor"></circle>
+              <path d="M12 16 L4 8 M12 16 L4 24 M20 16 L28 8 M20 16 L28 24 M16 24 L16 32 M16 8 L16 0" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div id="obstacles" class="absolute inset-0 z-10 pointer-events-none"></div>
+
+        <div id="editorToolbar" class="hidden absolute top-6 left-1/2 -translate-x-1/2 bg-zinc-900/95 backdrop-blur-xl border border-white/10 p-2 rounded-2xl flex items-center gap-1.5 z-40 shadow-2xl pointer-events-auto transition-all w-max max-w-[95%] overflow-x-auto whitespace-nowrap">
+          <button class="tool-btn active-tool rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center shrink-0" data-tool="spike"><iconify-icon icon="solar:danger-triangle-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center shrink-0" data-tool="block"><iconify-icon icon="solar:stop-linear" class="text-xl"></iconify-icon></button>
+          <div class="w-px h-6 bg-white/10 mx-1 shrink-0"></div>
+          
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-blue-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-cube" title="Cube"><iconify-icon icon="solar:box-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-fuchsia-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-ship" title="Ship"><iconify-icon icon="solar:rocket-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-cyan-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-wave" title="Wave"><iconify-icon icon="solar:play-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-orange-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-ufo" title="UFO"><iconify-icon icon="solar:planet-3-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-red-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-ball" title="Ball"><iconify-icon icon="solar:target-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-yellow-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-swing" title="Swing"><iconify-icon icon="solar:helm-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-purple-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-spider" title="Spider"><iconify-icon icon="solar:bug-linear" class="text-xl"></iconify-icon></button>
+          
+          <div class="w-px h-6 bg-white/10 mx-1 shrink-0"></div>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-yellow-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-gravity-up" title="Gravity Up"><iconify-icon icon="solar:round-arrow-up-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-blue-400 transition-all flex items-center justify-center shrink-0" data-tool="portal-gravity-down" title="Gravity Down"><iconify-icon icon="solar:round-arrow-down-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-yellow-300 transition-all flex items-center justify-center shrink-0" data-tool="orb-yellow" title="Yellow Orb"><iconify-icon icon="solar:record-circle-linear" class="text-xl"></iconify-icon></button>
+          
+          <div class="w-px h-6 bg-white/10 mx-1 shrink-0"></div>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-yellow-400 transition-all flex items-center justify-center shrink-0" data-tool="pad-jump-bottom" title="Jump Pad (Floor)"><iconify-icon icon="solar:round-alt-arrow-up-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-yellow-400 transition-all flex items-center justify-center shrink-0" data-tool="pad-jump-top" title="Jump Pad (Ceiling)"><iconify-icon icon="solar:round-alt-arrow-down-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-fuchsia-400 transition-all flex items-center justify-center shrink-0" data-tool="pad-gravity-bottom" title="Gravity Pad (Floor)"><iconify-icon icon="solar:sort-vertical-linear" class="text-xl"></iconify-icon></button>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-fuchsia-400 transition-all flex items-center justify-center shrink-0" data-tool="pad-gravity-top" title="Gravity Pad (Ceiling)"><iconify-icon icon="solar:sort-vertical-linear" class="text-xl transform rotate-180"></iconify-icon></button>
+
+          <div class="w-px h-6 bg-white/10 mx-1 shrink-0"></div>
+          <div class="flex items-center gap-1 relative shrink-0">
+            <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-white/10 hover:text-green-400 transition-all flex items-center justify-center" data-tool="color-trigger" title="Color Trigger"><iconify-icon icon="solar:palette-linear" class="text-xl"></iconify-icon></button>
+            <input type="color" id="triggerColorPicker" class="w-6 h-6 rounded bg-transparent border-0 cursor-pointer outline-none pointer-events-auto shadow-sm" value="#10b981" title="Trigger Color">
+          </div>
+
+          <div class="w-px h-6 bg-white/10 mx-1 shrink-0"></div>
+          <button class="tool-btn rounded-xl p-2 text-zinc-400 hover:bg-red-500/10 hover:text-red-400 transition-all flex items-center justify-center shrink-0" data-tool="delete" title="Delete Tool"><iconify-icon icon="solar:trash-bin-trash-linear" class="text-xl"></iconify-icon></button>
+          <div class="w-px h-6 bg-white/10 mx-1 shrink-0"></div>
+          <button id="editorPlayBtn" class="bg-white text-zinc-950 rounded-xl px-4 py-2 text-xs font-semibold flex items-center gap-1.5 hover:bg-zinc-200 transition-all ml-1 shrink-0"><iconify-icon icon="solar:play-linear" class="text-sm"></iconify-icon> Play</button>
+          <button id="editorExitBtn" class="bg-red-500/10 text-red-500 rounded-xl px-4 py-2 text-xs font-semibold hover:bg-red-500/20 transition-all shrink-0">Exit</button>
+        </div>
+
+        <div id="overlay" class="absolute inset-0 bg-zinc-950/70 backdrop-blur-sm flex flex-col items-center justify-center z-30 transition-opacity duration-300">
+          <button id="customizeBtn" class="absolute top-5 left-5 p-2 text-zinc-400 hover:text-white transition-colors focus:outline-none pointer-events-auto" title="Customize">
+            <iconify-icon icon="solar:palette-linear" class="text-2xl" stroke-width="1.5"></iconify-icon>
+          </button>
+          <button id="settingsBtn" class="absolute top-5 right-5 p-2 text-zinc-400 hover:text-white transition-colors focus:outline-none pointer-events-auto" title="Settings">
+            <iconify-icon icon="solar:settings-linear" class="text-2xl" stroke-width="1.5"></iconify-icon>
+          </button>
+
+          <div id="logoContainer" class="mb-8 p-4 bg-white/5 rounded-2xl border border-white/10 shadow-xl transition-colors duration-300">
+            <iconify-icon icon="solar:box-linear" class="text-5xl text-white drop-shadow-md transition-colors duration-300" stroke-width="1.5"></iconify-icon>
+          </div>
+          <h1 id="overlayTitle" class="text-3xl font-semibold tracking-tight text-white mb-2">Geometry Dash</h1>
+          <p id="overlaySubtitle" class="text-sm text-zinc-400 mb-6 font-medium text-center px-4">Hold Space/Tap to fly or jump</p>
+
+          <div id="levelSelectorsContainer" class="flex flex-col items-center pointer-events-auto w-full mb-8">
+            <div id="diffSelector" class="flex bg-white/5 p-1 rounded-full border border-white/10 mb-4 relative">
+              <button class="diff-btn px-4 py-1.5 rounded-full text-xs font-semibold transition-all text-zinc-400 hover:text-white" data-diff="easy">Easy</button>
+              <button class="diff-btn px-4 py-1.5 rounded-full text-xs font-semibold transition-all text-zinc-950 bg-white shadow-sm" data-diff="normal">Normal</button>
+              <button class="diff-btn px-4 py-1.5 rounded-full text-xs font-semibold transition-all text-zinc-400 hover:text-white" data-diff="hard">Hard</button>
+            </div>
+            <button id="dashLevelBtn" class="flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-orange-500/10 to-red-500/10 text-orange-400 border border-orange-500/20 text-sm font-semibold rounded-full hover:from-orange-500/20 hover:to-red-500/20 hover:text-orange-300 transition-all shadow-lg w-full sm:w-auto mt-2">
+              <iconify-icon icon="solar:fire-linear" stroke-width="1.5" class="text-lg"></iconify-icon>
+              <span>Play "Dash"</span>
+            </button>
+          </div>
+
+          <div id="proceduralBtns" class="flex flex-col sm:flex-row gap-3 pointer-events-auto z-10 w-full justify-center px-4">
+            <button id="startBtn" class="flex items-center justify-center gap-2 px-6 py-3 bg-white text-zinc-950 text-sm font-semibold rounded-full hover:bg-zinc-200 transition-all focus:outline-none shadow-lg w-full sm:w-auto">
+              <iconify-icon id="startIcon" icon="solar:play-linear" stroke-width="1.5" class="text-lg"></iconify-icon>
+              <span id="startText">Play Now</span>
+            </button>
+            <button id="editorBtn" class="flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white text-sm font-semibold rounded-full hover:bg-white/20 transition-all border border-white/5 shadow-lg backdrop-blur-sm w-full sm:w-auto">
+              <iconify-icon icon="solar:pen-linear" stroke-width="1.5" class="text-lg"></iconify-icon>
+              <span>Editor</span>
+            </button>
+          </div>
+
+          <div id="customBtns" class="hidden flex flex-col sm:flex-row gap-3 pointer-events-auto z-10 w-full justify-center px-4">
+            <button id="retryCustomBtn" class="flex items-center justify-center gap-2 px-6 py-3 bg-white text-zinc-950 text-sm font-semibold rounded-full hover:bg-zinc-200 transition-all shadow-lg w-full sm:w-auto"><iconify-icon icon="solar:restart-linear" stroke-width="1.5" class="text-lg"></iconify-icon><span>Retry Editor Level</span></button>
+            <button id="backToEditorBtn" class="flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white text-sm font-semibold rounded-full hover:bg-white/20 transition-all border border-white/5 shadow-lg backdrop-blur-sm w-full sm:w-auto"><iconify-icon icon="solar:pen-linear" stroke-width="1.5" class="text-lg"></iconify-icon><span>Editor</span></button>
+          </div>
+
+          <div id="dashBtns" class="hidden flex flex-col sm:flex-row gap-3 pointer-events-auto z-10 w-full justify-center px-4">
+            <button id="retryDashBtn" class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold rounded-full hover:from-orange-400 hover:to-red-400 transition-all shadow-lg w-full sm:w-auto border border-orange-400/30"><iconify-icon icon="solar:restart-linear" stroke-width="1.5" class="text-lg"></iconify-icon><span>Retry Dash</span></button>
+            <button id="backToMenuBtn" class="flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white text-sm font-semibold rounded-full hover:bg-white/20 transition-all border border-white/5 shadow-lg backdrop-blur-sm w-full sm:w-auto"><iconify-icon icon="solar:home-linear" stroke-width="1.5" class="text-lg"></iconify-icon><span>Main Menu</span></button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="absolute bottom-8 text-xs font-medium text-zinc-600 tracking-wide text-center pointer-events-none">
+      <span id="footerText">Survive as long as possible. The speed increases over time.</span>
+    </footer>
+
+    <div id="settingsModal" class="hidden absolute inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 pointer-events-auto">
+      <div id="settingsPanel" class="bg-zinc-900 border border-white/10 p-6 rounded-2xl w-80 shadow-2xl transform scale-95 transition-transform duration-300">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-lg font-semibold tracking-tight text-white">Settings</h2>
+          <button id="closeSettingsBtn" class="text-zinc-400 hover:text-white transition-colors focus:outline-none"><iconify-icon icon="solar:close-circle-linear" class="text-xl" stroke-width="1.5"></iconify-icon></button>
+        </div>
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-zinc-300">Theme Style</span>
+            <div class="flex bg-white/5 p-1 rounded-lg border border-white/10">
+              <button class="theme-btn px-3 py-1.5 rounded-md text-xs font-semibold transition-all text-zinc-950 bg-white shadow-sm" data-theme="default">Default</button>
+              <button class="theme-btn px-3 py-1.5 rounded-md text-xs font-semibold transition-all text-zinc-400 hover:text-white" data-theme="textured">Textured</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-zinc-300">Auto Play (Bot)</span>
+            <div class="flex bg-white/5 p-1 rounded-lg border border-white/10">
+              <button class="autoplay-btn px-3 py-1.5 rounded-md text-xs font-semibold transition-all text-zinc-950 bg-white shadow-sm" data-autoplay="false">Off</button>
+              <button class="autoplay-btn px-3 py-1.5 rounded-md text-xs font-semibold transition-all text-zinc-400 hover:text-white" data-autoplay="true">On</button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 pt-2">
+            <span class="text-sm font-medium text-zinc-300">Starting Mode</span>
+            <div class="flex bg-white/5 p-1 rounded-lg border border-white/10 justify-between items-center">
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-950 bg-white shadow-sm transition-all flex items-center justify-center" data-mode="cube" title="Cube"><iconify-icon icon="solar:box-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-400 hover:text-white transition-all flex items-center justify-center" data-mode="ship" title="Ship"><iconify-icon icon="solar:rocket-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-400 hover:text-white transition-all flex items-center justify-center" data-mode="wave" title="Wave"><iconify-icon icon="solar:play-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-400 hover:text-white transition-all flex items-center justify-center" data-mode="ufo" title="UFO"><iconify-icon icon="solar:planet-3-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-400 hover:text-white transition-all flex items-center justify-center" data-mode="ball" title="Ball"><iconify-icon icon="solar:target-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-400 hover:text-white transition-all flex items-center justify-center" data-mode="swing" title="Swing"><iconify-icon icon="solar:helm-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+              <button class="startmode-btn p-1.5 rounded-md text-zinc-400 hover:text-white transition-all flex items-center justify-center" data-mode="spider" title="Spider"><iconify-icon icon="solar:bug-linear" class="text-lg" stroke-width="1.5"></iconify-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="customizeModal" class="hidden absolute inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 pointer-events-auto">
+      <div id="customizePanel" class="bg-zinc-900 border border-white/10 p-6 rounded-2xl w-80 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[80vh]">
+        <div class="flex justify-between items-center mb-6 shrink-0">
+          <h2 class="text-lg font-semibold tracking-tight text-white">Customize</h2>
+          <button id="closeCustomizeBtn" class="text-zinc-400 hover:text-white transition-colors focus:outline-none"><iconify-icon icon="solar:close-circle-linear" class="text-xl" stroke-width="1.5"></iconify-icon></button>
+        </div>
+        <div class="space-y-3 overflow-y-auto pr-2 pb-2">
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:box-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">Cube</span></div>
+            <input type="color" id="cubeColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:rocket-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">Ship</span></div>
+            <input type="color" id="shipColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:play-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">Wave</span></div>
+            <input type="color" id="waveColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:planet-3-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">UFO</span></div>
+            <input type="color" id="ufoColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:target-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">Ball</span></div>
+            <input type="color" id="ballColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:helm-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">Swing</span></div>
+            <input type="color" id="swingColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+          <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5">
+            <div class="flex items-center gap-3 text-zinc-300"><iconify-icon icon="solar:bug-linear" class="text-xl text-white drop-shadow-md"></iconify-icon><span class="text-sm font-medium">Spider</span></div>
+            <input type="color" id="spiderColorPicker" class="w-8 h-8 rounded bg-transparent border-0 cursor-pointer outline-none" value="#ffffff">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const container = document.getElementById('gameContainer');
+      const playerEl = document.getElementById('player');
+      const sprites = {
+          cube: document.getElementById('cubeSprite'),
+          ship: { el: document.getElementById('shipSprite'), svg: document.getElementById('shipSvg') },
+          wave: { el: document.getElementById('waveSprite'), svg: document.getElementById('waveSvg') },
+          ufo: { el: document.getElementById('ufoSprite'), svg: document.getElementById('ufoSvg') },
+          ball: { el: document.getElementById('ballSprite'), svg: document.getElementById('ballSvg') },
+          swing: { el: document.getElementById('swingSprite'), svg: document.getElementById('swingSvg') },
+          spider: { el: document.getElementById('spiderSprite'), svg: document.getElementById('spiderSvg') }
+      };
+
+      const obstaclesContainer = document.getElementById('obstacles');
+      const overlay = document.getElementById('overlay');
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      const logoContainer = document.getElementById('logoContainer');
+      const logoIcon = document.querySelector('#logoContainer iconify-icon');
+      const footerText = document.getElementById('footerText');
+      const diffSelector = document.getElementById('diffSelector');
+      const levelSelectorsContainer = document.getElementById('levelSelectorsContainer');
+      const dashLevelBtn = document.getElementById('dashLevelBtn');
+
+      const startBtn = document.getElementById('startBtn');
+      const editorBtn = document.getElementById('editorBtn');
+      const retryCustomBtn = document.getElementById('retryCustomBtn');
+      const backToEditorBtn = document.getElementById('backToEditorBtn');
+      const retryDashBtn = document.getElementById('retryDashBtn');
+      const backToMenuBtn = document.getElementById('backToMenuBtn');
+      
+      const proceduralBtns = document.getElementById('proceduralBtns');
+      const customBtns = document.getElementById('customBtns');
+      const dashBtns = document.getElementById('dashBtns');
+
+      const overlayTitle = document.getElementById('overlayTitle');
+      const overlaySubtitle = document.getElementById('overlaySubtitle');
+      const startIcon = document.getElementById('startIcon');
+      const startText = document.getElementById('startText');
+
+      const editorToolbar = document.getElementById('editorToolbar');
+      const editorPlayBtn = document.getElementById('editorPlayBtn');
+      const editorExitBtn = document.getElementById('editorExitBtn');
+      const triggerColorPicker = document.getElementById('triggerColorPicker');
+
+      const diffBtns = document.querySelectorAll('.diff-btn');
+      const themeBtns = document.querySelectorAll('.theme-btn');
+      const autoPlayBtns = document.querySelectorAll('.autoplay-btn');
+      const startModeBtns = document.querySelectorAll('.startmode-btn');
+      
+      const settingsBtn = document.getElementById('settingsBtn');
+      const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+      const settingsModal = document.getElementById('settingsModal');
+      const settingsPanel = document.getElementById('settingsPanel');
+
+      const customizeBtn = document.getElementById('customizeBtn');
+      const closeCustomizeBtn = document.getElementById('closeCustomizeBtn');
+      const customizeModal = document.getElementById('customizeModal');
+      const customizePanel = document.getElementById('customizePanel');
+      
+      const colors = { cube: '#ffffff', ship: '#ffffff', wave: '#ffffff', ufo: '#ffffff', ball: '#ffffff', swing: '#ffffff', spider: '#ffffff' };
+      const pickers = {
+          cube: document.getElementById('cubeColorPicker'), ship: document.getElementById('shipColorPicker'), wave: document.getElementById('waveColorPicker'),
+          ufo: document.getElementById('ufoColorPicker'), ball: document.getElementById('ballColorPicker'), swing: document.getElementById('swingColorPicker'), spider: document.getElementById('spiderColorPicker')
+      };
+
+      function applyCustomization() {
+          sprites.cube.style.backgroundColor = colors.cube; sprites.cube.style.boxShadow = `0 0 24px ${colors.cube}4D`;
+          if (logoIcon) logoIcon.style.color = colors.cube;
+          
+          ['ship', 'wave', 'ufo', 'ball', 'swing', 'spider'].forEach(mode => {
+              sprites[mode].el.style.color = colors[mode];
+              sprites[mode].svg.style.filter = `drop-shadow(0 0 12px ${colors[mode]}99)`;
+          });
+      }
+
+      Object.keys(pickers).forEach(mode => {
+          pickers[mode].addEventListener('input', (e) => { colors[mode] = e.target.value; applyCustomization(); });
+      });
+
+      customizeBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); customizeModal.classList.remove('hidden'); void customizeModal.offsetWidth;
+          customizeModal.classList.remove('opacity-0'); customizePanel.classList.remove('scale-95'); customizeBtn.blur();
+      });
+
+      closeCustomizeBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); customizeModal.classList.add('opacity-0'); customizePanel.classList.add('scale-95');
+          setTimeout(() => customizeModal.classList.add('hidden'), 300);
+      });
+
+      applyCustomization();
+
+      const bgMusic = document.getElementById('bgMusic');
+      const musicToggleBtn = document.getElementById('musicToggleBtn');
+      const musicToggleIcon = document.getElementById('musicToggleIcon');
+      let isMusicMuted = false;
+      bgMusic.volume = 0.3;
+
+      const levelMusicTracks = {
+          procedural: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+          editor: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+          dash: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3'
+      };
+
+      musicToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); isMusicMuted = !isMusicMuted; bgMusic.muted = isMusicMuted;
+          if (isMusicMuted) musicToggleIcon.setAttribute('icon', 'solar:volume-cross-linear');
+          else { musicToggleIcon.setAttribute('icon', 'solar:volume-loud-linear'); if (isPlaying && !hasWon) bgMusic.play().catch(e => {}); }
+      });
+
+      let audioCtx;
+      function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+
+      function playSound(type) {
+          if (!audioCtx) return;
+          const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+          osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+          if (type === 'jump') {
+              osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+              gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+              osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+          } else if (type === 'crash') {
+              osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+              gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+              osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+          } else if (type === 'portal') {
+              osc.type = 'square'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+              gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+              osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+          }
+      }
+
+      let isPlaying = false, isHolding = false, actionTriggered = false, hasWon = false;
+      let score = 0, lastTime = 0, bgOffset = 0, gameMode = 'cube';
+      let currentLevelState = 'procedural', isEditorMode = false, isCustomLevel = false, editorCameraX = 0, currentTool = 'spike';
+      let customLevelData = [];
+      let isAutoPlay = false, autoPlayCooldown = 0, startingMode = 'cube';
+      
+      const dashLevelData = [];
+      const addD = (type, x, y, color = null) => dashLevelData.push({ type, gridX: x, gridY: y, color });
+      addD('pad-jump-bottom', 11, 0); 
+      addD('spike', 13, 0); addD('spike', 14, 0);
+      addD('pad-gravity-bottom', 17, 0); 
+      addD('pad-gravity-top', 20, 11); 
+      addD('block', 24, 1); addD('spike', 24, 2);
+      addD('portal-ufo', 28, 2); addD('spike', 32, 0); addD('spike', 36, 0);
+      addD('portal-ball', 44, 4); addD('spike', 50, 0); addD('spike', 56, 11);
+      addD('portal-spider', 64, 4); addD('spike', 69, 0); addD('spike', 74, 11);
+      addD('portal-swing', 84, 4); addD('block', 92, 11); addD('block', 92, -1);
+      addD('portal-ship', 104, 4); addD('block', 109, 8); addD('block', 109, -1);
+
+      let currentDifficulty = 'normal', currentTheme = 'default';
+      const diffConfig = {
+          easy: { speed: 4.5, gapMod: 1.4, distMod: 1.3 },
+          normal: { speed: 6.0, gapMod: 1.0, distMod: 1.0 },
+          hard: { speed: 7.5, gapMod: 0.75, distMod: 0.8 }
+      };
+
+      const gravity = -0.75, jumpPower = 12, groundHeight = 4, playerX = 64, playerSize = 32;
+      let playerY = 0, playerVelocityY = 0, playerRotation = 0, isGrounded = true, gravityDirection = 1;
+      let objects = [], gameSpeed = 6.0, distance = 0, nextSpawnDistance = 400, nextPortalDistance = 1500;
+
+      diffBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => { e.stopPropagation(); currentDifficulty = btn.dataset.diff;
+              diffBtns.forEach(b => b.className = 'diff-btn px-4 py-1.5 rounded-full text-xs font-semibold transition-all ' + (b.dataset.diff === currentDifficulty ? 'text-zinc-950 bg-white shadow-sm' : 'text-zinc-400 hover:text-white')); btn.blur();
+          });
+      });
+
+      themeBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => { e.stopPropagation(); currentTheme = btn.dataset.theme;
+              themeBtns.forEach(b => b.className = 'theme-btn px-3 py-1.5 rounded-md text-xs font-semibold transition-all ' + (b.dataset.theme === currentTheme ? 'text-zinc-950 bg-white shadow-sm' : 'text-zinc-400 hover:text-white')); applyTheme(); btn.blur();
+          });
+      });
+
+      autoPlayBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => { e.stopPropagation(); isAutoPlay = btn.dataset.autoplay === 'true';
+              autoPlayBtns.forEach(b => b.className = 'autoplay-btn px-3 py-1.5 rounded-md text-xs font-semibold transition-all ' + (b.dataset.autoplay === String(isAutoPlay) ? 'text-zinc-950 bg-white shadow-sm' : 'text-zinc-400 hover:text-white')); btn.blur();
+          });
+      });
+
+      startModeBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => { e.stopPropagation(); startingMode = btn.dataset.mode;
+              startModeBtns.forEach(b => {
+                  if (b.dataset.mode === startingMode) {
+                      b.className = 'startmode-btn p-1.5 rounded-md transition-all text-zinc-950 bg-white shadow-sm flex items-center justify-center';
+                  } else {
+                      b.className = 'startmode-btn p-1.5 rounded-md transition-all text-zinc-400 hover:text-white flex items-center justify-center';
+                  }
+              }); 
+              btn.blur();
+          });
+      });
+
+      function applyTheme() {
+          if (currentTheme === 'default') {
+              container.style.backgroundSize = '32px 32px'; container.style.backgroundImage = 'linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)'; sprites.cube.style.backgroundImage = 'none';
+          } else {
+              container.style.backgroundSize = '24px 24px'; container.style.backgroundImage = 'repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 12px)'; sprites.cube.style.backgroundImage = 'repeating-linear-gradient(45deg, rgba(0,0,0,0.15) 0, rgba(0,0,0,0.15) 4px, transparent 4px, transparent 8px)';
+          }
+      }
+
+      settingsBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); settingsModal.classList.remove('hidden'); void settingsModal.offsetWidth;
+          settingsModal.classList.remove('opacity-0'); settingsPanel.classList.remove('scale-95'); settingsBtn.blur();
+      });
+
+      closeSettingsBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); settingsModal.classList.add('opacity-0'); settingsPanel.classList.add('scale-95');
+          setTimeout(() => settingsModal.classList.add('hidden'), 300);
+      });
+
+      function jump(powerMod = 1) {
+          playerVelocityY = jumpPower * powerMod * gravityDirection;
+          isGrounded = false; playSound('jump');
+      }
+
+      function tryOrbJump() {
+          if (!isPlaying) return false;
+          for (let i = 0; i < objects.length; i++) {
+              let obs = objects[i];
+              if (obs.type === 'orb-yellow' && !obs.used) {
+                  const oLeft = obs.x, oRight = obs.x + obs.width, oBottom = obs.y, oTop = obs.y + obs.height;
+                  const pLeft = playerX, pRight = playerX + 32, pBottom = playerY, pTop = playerY + 32;
+                  if (pRight > oLeft - 16 && pLeft < oRight + 16 && pBottom < oTop + 16 && pTop > oBottom - 16) {
+                      playerVelocityY = jumpPower * gravityDirection; obs.used = true; obs.el.style.transform = 'scale(1.5)'; obs.el.style.opacity = '0';
+                      playSound('jump'); isGrounded = false; return true;
+                  }
+              }
+          }
+          return false;
+      }
+
+      function updateLevelColor(mode) {
+          const modeColors = { 'cube': '', 'ship': '#2e1065', 'wave': '#083344', 'ufo': '#451a03', 'ball': '#4c0519', 'swing': '#422006', 'spider': '#3b0764', 'gravity-up': '#422006', 'gravity-down': '#1e3a8a' };
+          container.style.backgroundColor = modeColors[mode] || '';
+      }
+
+      function switchMode(mode, isStarting = false) {
+          gameMode = mode; 
+          
+          if (!isStarting) {
+              playSound('portal'); 
+              const flash = document.createElement('div'); flash.className = 'absolute inset-0 bg-white/40 z-40 pointer-events-none transition-opacity duration-300'; container.appendChild(flash);
+              requestAnimationFrame(() => flash.classList.add('opacity-0')); setTimeout(() => flash.remove(), 300);
+          }
+          
+          updateLevelColor(mode);
+
+          Object.keys(sprites).forEach(k => { if(k !== 'cube') sprites[k].el.classList.add('hidden'); else sprites[k].classList.add('hidden'); });
+          
+          if (mode === 'ship') { sprites.ship.el.classList.remove('hidden'); playerEl.style.width = '40px'; }
+          else if (mode === 'wave') { sprites.wave.el.classList.remove('hidden'); playerEl.style.width = '32px'; }
+          else if (mode === 'ufo') { sprites.ufo.el.classList.remove('hidden'); playerEl.style.width = '32px'; }
+          else if (mode === 'ball') { sprites.ball.el.classList.remove('hidden'); playerEl.style.width = '32px'; }
+          else if (mode === 'swing') { sprites.swing.el.classList.remove('hidden'); playerEl.style.width = '32px'; }
+          else if (mode === 'spider') { sprites.spider.el.classList.remove('hidden'); playerEl.style.width = '32px'; }
+          else { sprites.cube.classList.remove('hidden'); playerEl.style.width = '32px'; }
+
+          if (!isCustomLevel && !isStarting) {
+              for (let i = objects.length - 1; i >= 0; i--) { if (objects[i].type === 'pillar') { objects[i].el.remove(); objects.splice(i, 1); } }
+          }
+      }
+
+      function handleAction() {
+          if (!isPlaying && overlay.classList.contains('hidden')) return;
+          if (!isPlaying && overlay.classList.contains('opacity-0')) return;
+          if (!isPlaying) { startGame(); return; }
+          
+          if (tryOrbJump()) return;
+
+          if (gameMode === 'cube' && isGrounded) jump();
+          else if (gameMode === 'ufo') jump(0.85);
+          else if (gameMode === 'ball' && isGrounded) { gravityDirection *= -1; isGrounded = false; playSound('portal'); }
+          else if (gameMode === 'swing') { gravityDirection *= -1; playSound('portal'); }
+          else if (gameMode === 'spider' && isGrounded) {
+              gravityDirection *= -1; isGrounded = true;
+              playerY = gravityDirection === 1 ? 0 : container.clientHeight - playerSize - 4;
+              playSound('portal'); createParticles(playerX, playerY);
+          }
+      }
+
+      window.addEventListener('keydown', (e) => {
+          if (!settingsModal.classList.contains('hidden') || !customizeModal.classList.contains('hidden') || isEditorMode) return;
+          if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); initAudio(); if(!isHolding && !isAutoPlay) { actionTriggered = true; handleAction(); } if (!isAutoPlay) isHolding = true; }
+      });
+      window.addEventListener('keyup', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') { if (!isAutoPlay) isHolding = false; } });
+
+      container.addEventListener('pointerdown', (e) => {
+          if (isEditorMode) {
+              if (e.target.closest('#editorToolbar')) return;
+              e.preventDefault(); const rect = container.getBoundingClientRect(); const absX = (e.clientX - rect.left) + editorCameraX; const absY = container.clientHeight - (e.clientY - rect.top) - 4;
+              if (absY < 0) return;
+              const gridX = Math.floor(absX / 32); const gridY = Math.floor(absY / 32);
+              const existingIndex = customLevelData.findIndex(d => {
+                  if (d.type.startsWith('portal-')) { return absX >= d.gridX * 32 - 8 && absX <= d.gridX * 32 + 40 && absY >= d.gridY * 32 && absY <= d.gridY * 32 + 128; }
+                  return d.gridX === gridX && d.gridY === gridY;
+              });
+              if (existingIndex >= 0) customLevelData.splice(existingIndex, 1);
+              else if (currentTool !== 'delete') { const data = { type: currentTool, gridX, gridY }; if (currentTool === 'color-trigger') data.color = triggerColorPicker.value; customLevelData.push(data); }
+              updateEditorView(); return;
+          }
+          if (e.target.closest('button') || e.target.closest('input')) return;
+          e.preventDefault(); initAudio(); if(!isAutoPlay) { actionTriggered = true; isHolding = true; handleAction(); }
+      });
+      container.addEventListener('pointerup', () => { if (!isAutoPlay) isHolding = false; }); container.addEventListener('pointercancel', () => { if (!isAutoPlay) isHolding = false; });
+
+      container.addEventListener('wheel', (e) => {
+          if (!isEditorMode) return; e.preventDefault(); editorCameraX += Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (editorCameraX < 0) editorCameraX = 0; updateEditorView();
+      });
+
+      startBtn.addEventListener('click', (e) => { e.stopPropagation(); initAudio(); currentLevelState = 'procedural'; isCustomLevel = false; startGame(); });
+      dashLevelBtn.addEventListener('click', (e) => { e.stopPropagation(); initAudio(); currentLevelState = 'dash'; isCustomLevel = true; startGame(); });
+      editorBtn.addEventListener('click', (e) => { e.stopPropagation(); openEditor(); });
+      retryCustomBtn.addEventListener('click', (e) => { e.stopPropagation(); initAudio(); startGame(); });
+      retryDashBtn.addEventListener('click', (e) => { e.stopPropagation(); initAudio(); startGame(); });
+      backToEditorBtn.addEventListener('click', (e) => { e.stopPropagation(); openEditor(); });
+      backToMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); returnToMainMenu(); });
+      editorPlayBtn.addEventListener('click', (e) => { e.stopPropagation(); initAudio(); currentLevelState = 'editor'; isCustomLevel = true; isEditorMode = false; editorToolbar.classList.add('hidden'); startGame(); });
+      editorExitBtn.addEventListener('click', (e) => { e.stopPropagation(); returnToMainMenu(); });
+
+      editorToolbar.addEventListener('click', (e) => {
+          const btn = e.target.closest('.tool-btn'); if(!btn) return; e.stopPropagation(); currentTool = btn.dataset.tool;
+          document.querySelectorAll('.tool-btn').forEach(b => { b.classList.remove('active-tool', 'text-white'); b.classList.add('text-zinc-400'); });
+          btn.classList.add('active-tool', 'text-white'); btn.classList.remove('text-zinc-400');
+      });
+
+      function openEditor() {
+          bgMusic.pause(); isEditorMode = true; isCustomLevel = false; isPlaying = false; currentLevelState = 'editor'; editorCameraX = 0;
+          container.style.backgroundColor = ''; overlay.classList.add('hidden'); overlay.classList.remove('flex'); editorToolbar.classList.remove('hidden');
+          playerEl.classList.add('hidden'); footerText.innerText = "Scroll to pan. Click grid to place or remove elements."; obstaclesContainer.innerHTML = ''; updateEditorView();
+      }
+
+      function returnToMainMenu() {
+          bgMusic.pause(); isEditorMode = false; currentLevelState = 'procedural'; editorToolbar.classList.add('hidden'); container.style.backgroundColor = '';
+          overlayTitle.innerText = 'Geometry Dash'; overlaySubtitle.innerText = 'Hold Space/Tap to fly or jump';
+          proceduralBtns.classList.remove('hidden'); customBtns.classList.add('hidden'); dashBtns.classList.add('hidden');
+          logoContainer.classList.remove('hidden'); levelSelectorsContainer.classList.remove('hidden');
+          footerText.innerText = "Survive as long as possible. The speed increases over time.";
+          overlay.classList.remove('hidden'); overlay.classList.add('flex'); void overlay.offsetWidth; overlay.classList.remove('opacity-0');
+          obstaclesContainer.innerHTML = ''; container.style.backgroundPosition = `0px bottom`;
+      }
+
+      function updateEditorView() {
+          container.style.backgroundPosition = `-${editorCameraX}px bottom`; obstaclesContainer.innerHTML = '';
+          const playerStart = document.createElement('div'); playerStart.className = 'absolute w-8 h-8 border-2 border-dashed border-white/40 z-20 pointer-events-none opacity-50 flex items-center justify-center';
+          playerStart.style.left = (64 - editorCameraX) + 'px'; playerStart.style.bottom = '4px'; playerStart.innerHTML = '<span class="text-[10px] text-white/70 font-semibold">START</span>'; obstaclesContainer.appendChild(playerStart);
+          customLevelData.forEach(data => { const el = createEditorDOM(data.type, data.color); el.style.left = (data.gridX * 32 - editorCameraX) + 'px'; el.style.bottom = (data.gridY * 32 + 4) + 'px'; obstaclesContainer.appendChild(el); });
+      }
+
+      function createEditorDOM(type, color = null) {
+          const el = document.createElement('div');
+          if (type === 'spike') {
+              el.className = 'absolute w-8 h-8 z-10 pointer-events-none'; el.innerHTML = `<svg class="w-full h-full text-zinc-400 drop-shadow-[0_0_8px_rgba(161,161,170,0.2)]" viewBox="0 0 32 32" fill="currentColor"><path d="M16 4L30 30H2Z" /></svg>`;
+          } else if (type === 'block') { el.className = 'absolute w-8 h-8 bg-zinc-800 border border-zinc-700 backdrop-blur-sm z-10 shadow-lg pointer-events-none'; }
+          else if (type.startsWith('portal-')) {
+              const mode = type.replace('portal-', ''); let colorClass, icon;
+              if (mode === 'ship') { colorClass = 'text-fuchsia-500 shadow-fuchsia-500/20'; icon = 'solar:rocket-linear'; } else if (mode === 'wave') { colorClass = 'text-cyan-500 shadow-cyan-500/20'; icon = 'solar:play-linear'; } else if (mode === 'cube') { colorClass = 'text-blue-500 shadow-blue-500/20'; icon = 'solar:box-linear'; } else if (mode === 'gravity-up') { colorClass = 'text-yellow-400 shadow-yellow-400/20'; icon = 'solar:round-arrow-up-linear'; } else if (mode === 'gravity-down') { colorClass = 'text-blue-400 shadow-blue-400/20'; icon = 'solar:round-arrow-down-linear'; } else if (mode === 'ufo') { colorClass = 'text-orange-400 shadow-orange-400/20'; icon = 'solar:planet-3-linear'; } else if (mode === 'ball') { colorClass = 'text-red-500 shadow-red-500/20'; icon = 'solar:target-linear'; } else if (mode === 'swing') { colorClass = 'text-yellow-500 shadow-yellow-500/20'; icon = 'solar:helm-linear'; } else if (mode === 'spider') { colorClass = 'text-purple-500 shadow-purple-500/20'; icon = 'solar:bug-linear'; }
+              el.className = `absolute w-12 h-32 rounded-full border-4 shadow-2xl z-10 flex items-center justify-center opacity-90 pointer-events-none ${colorClass}`; el.style.borderColor = 'currentColor'; el.style.marginLeft = '-8px'; el.innerHTML = `<iconify-icon icon="${icon}" class="text-3xl drop-shadow-md" stroke-width="1.5"></iconify-icon>`;
+          } else if (type === 'orb-yellow') { el.className = 'absolute w-8 h-8 rounded-full border-4 border-yellow-400 flex items-center justify-center shadow-[0_0_12px_rgba(250,204,21,0.5)] z-10 pointer-events-none transition-all duration-200'; el.innerHTML = `<div class="w-3 h-3 bg-yellow-400 rounded-full"></div>`; }
+          else if (type === 'color-trigger') {
+              el.className = 'absolute w-8 h-8 rounded-full border-2 border-white/50 flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.2)] z-10 pointer-events-none transition-all duration-200 opacity-80'; el.innerHTML = `<iconify-icon icon="solar:palette-linear" class="text-white text-lg drop-shadow-md" stroke-width="1.5"></iconify-icon>`;
+              if (color) { el.style.backgroundColor = color; el.style.borderColor = color; }
+          } else if (type.startsWith('pad-')) {
+              el.className = 'absolute w-8 h-8 z-10 pointer-events-none flex transition-transform duration-100';
+              if (type === 'pad-jump-bottom') {
+                  el.classList.add('items-end');
+                  el.innerHTML = `<div class="w-full h-3 bg-yellow-400 rounded-t-full shadow-[0_0_12px_rgba(250,204,21,0.5)] border-t border-white/40 transition-transform duration-100 origin-bottom"></div>`;
+              } else if (type === 'pad-jump-top') {
+                  el.classList.add('items-start');
+                  el.innerHTML = `<div class="w-full h-3 bg-yellow-400 rounded-b-full shadow-[0_0_12px_rgba(250,204,21,0.5)] border-b border-white/40 transition-transform duration-100 origin-top"></div>`;
+              } else if (type === 'pad-gravity-bottom') {
+                  el.classList.add('items-end');
+                  el.innerHTML = `<div class="w-full h-3 bg-fuchsia-400 rounded-t-full shadow-[0_0_12px_rgba(232,121,249,0.5)] border-t border-white/40 transition-transform duration-100 origin-bottom"></div>`;
+              } else if (type === 'pad-gravity-top') {
+                  el.classList.add('items-start');
+                  el.innerHTML = `<div class="w-full h-3 bg-fuchsia-400 rounded-b-full shadow-[0_0_12px_rgba(232,121,249,0.5)] border-b border-white/40 transition-transform duration-100 origin-top"></div>`;
+              }
+          }
+          return el;
+      }
+
+      function startGame() {
+          isPlaying = true; isHolding = false; actionTriggered = false; hasWon = false; score = 0; distance = 0; container.style.backgroundColor = '';
+          const expectedTrack = levelMusicTracks[currentLevelState]; if (!bgMusic.src.includes(expectedTrack)) { bgMusic.src = expectedTrack; bgMusic.load(); }
+          if (!isMusicMuted) { bgMusic.currentTime = 0; bgMusic.play().catch(e => {}); }
+          
+          let dataToLoad = [];
+          if (isCustomLevel) { dataToLoad = currentLevelState === 'dash' ? dashLevelData : customLevelData; gameSpeed = currentLevelState === 'dash' ? 7.5 : 6.0; }
+          else { gameSpeed = diffConfig[currentDifficulty].speed; }
+          
+          nextSpawnDistance = window.innerWidth > 600 ? 500 : 300; nextPortalDistance = 1200;
+          playerY = 0; playerVelocityY = 0; playerRotation = 0; isGrounded = true; gravityDirection = 1; obstaclesContainer.innerHTML = ''; objects = []; scoreDisplay.innerText = '00000'; autoPlayCooldown = 0;
+          overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); playerEl.classList.remove('hidden'); }, 300);
+
+          switchMode(startingMode, true);
+
+          if (isCustomLevel) {
+              footerText.innerText = currentLevelState === 'dash' ? "Playing Level: Dash" : "Playing Custom Editor Level";
+              dataToLoad.forEach(data => {
+                  let el = createEditorDOM(data.type, data.color); let x = data.gridX * 32, y = data.gridY * 32 + 4, width = 32, height = 32, objType = data.type, targetMode = null, color = data.color;
+                  if (objType.startsWith('portal-')) { targetMode = objType.replace('portal-', ''); objType = 'portal'; width = 48; height = 128; x -= 8; }
+                  else if (objType === 'block') objType = 'pillar'; else if (objType === 'color-trigger') { width = 10; height = 1000; }
+                  el.style.left = x + 'px'; el.style.bottom = y + 'px'; obstaclesContainer.appendChild(el); objects.push({ el, x, y, width, height, type: objType, targetMode, color, used: false });
+              });
+          } else footerText.innerText = "Survive as long as possible. The speed increases over time.";
+          lastTime = performance.now(); requestAnimationFrame(gameLoop);
+      }
+
+      function createParticles(x, y) {
+          const currentColor = colors[gameMode] || colors.cube;
+          for(let i = 0; i < 10; i++) {
+              let p = document.createElement('div'); p.className = 'absolute w-2 h-2 rounded-sm z-20 pointer-events-none'; p.style.backgroundColor = currentColor; p.style.boxShadow = `0 0 12px ${currentColor}99`;
+              p.style.left = (x + 12) + 'px'; p.style.bottom = (y + 12) + 'px';
+              let angle = (Math.PI * 2 / 10) * i, speed = Math.random() * 4 + 3, vx = Math.cos(angle) * speed, vy = Math.sin(angle) * speed; obstaclesContainer.appendChild(p);
+              let time = 0; function animPart() { time++; p.style.left = (parseFloat(p.style.left) + vx) + 'px'; p.style.bottom = (parseFloat(p.style.bottom) + vy) + 'px'; vy -= 0.3; p.style.opacity = 1 - (time / 30); p.style.transform = `rotate(${time * 10}deg)`; if (time < 30) requestAnimationFrame(animPart); else p.remove(); } requestAnimationFrame(animPart);
+          }
+      }
+
+      function gameOver() {
+          isPlaying = false; isHolding = false; bgMusic.pause(); playSound('crash'); createParticles(playerX, playerY + groundHeight); playerEl.classList.add('hidden');
+          setTimeout(() => {
+              overlayTitle.innerText = 'Crashed'; logoContainer.classList.add('hidden'); levelSelectorsContainer.classList.add('hidden');
+              if (currentLevelState === 'dash') { proceduralBtns.classList.add('hidden'); customBtns.classList.add('hidden'); dashBtns.classList.remove('hidden'); overlaySubtitle.innerText = 'You crashed on the Dash level!'; }
+              else if (currentLevelState === 'editor') { proceduralBtns.classList.add('hidden'); customBtns.classList.remove('hidden'); dashBtns.classList.add('hidden'); overlaySubtitle.innerText = 'You died in your custom level.'; }
+              else { proceduralBtns.classList.remove('hidden'); customBtns.classList.add('hidden'); dashBtns.classList.add('hidden'); overlaySubtitle.innerText = `Final Score: ${Math.floor(score).toString().padStart(5, '0')}`; startIcon.setAttribute('icon', 'solar:restart-linear'); startText.innerText = 'Try Again'; }
+              overlay.classList.remove('hidden'); overlay.classList.add('flex'); void overlay.offsetWidth; overlay.classList.remove('opacity-0');
+          }, 400);
+      }
+
+      function levelComplete() {
+          isPlaying = false; isHolding = false; bgMusic.pause(); overlayTitle.innerText = 'Level Complete!'; logoContainer.classList.remove('hidden'); levelSelectorsContainer.classList.add('hidden');
+          if (currentLevelState === 'dash') { proceduralBtns.classList.add('hidden'); customBtns.classList.add('hidden'); dashBtns.classList.remove('hidden'); overlaySubtitle.innerText = 'You beat the Dash level!'; }
+          else { proceduralBtns.classList.add('hidden'); customBtns.classList.remove('hidden'); dashBtns.classList.add('hidden'); overlaySubtitle.innerText = 'You beat your custom creation!'; }
+          overlay.classList.remove('hidden'); overlay.classList.add('flex'); void overlay.offsetWidth; overlay.classList.remove('opacity-0');
+      }
+
+      function createObstacle(offsetX = 0, isTop = false, customY = null) {
+          const el = document.createElement('div'); el.className = 'absolute w-8 h-8 z-10 pointer-events-none';
+          const yPos = customY !== null ? customY : (isTop ? container.clientHeight - 36 : 4);
+          el.style.bottom = yPos + 'px';
+          const rotClass = isTop ? 'transform rotate-180' : '';
+          el.innerHTML = `<svg class="w-full h-full text-zinc-400 drop-shadow-[0_0_8px_rgba(161,161,170,0.2)] ${rotClass}" viewBox="0 0 32 32" fill="currentColor"><path d="M16 4L30 30H2Z" /></svg>`;
+          const startX = container.clientWidth + offsetX; el.style.left = startX + 'px'; obstaclesContainer.appendChild(el);
+          return { el, x: startX, y: yPos, width: 32, height: 32, type: 'spike' };
+      }
+
+      function createFloatingBlock(offsetX, yPos, width = 48) {
+          const el = document.createElement('div'); 
+          el.className = 'absolute bg-zinc-800 border border-zinc-700 backdrop-blur-sm z-10 shadow-lg pointer-events-none';
+          el.style.height = '48px';
+          el.style.width = width + 'px';
+          el.style.bottom = yPos + 'px';
+          const startX = container.clientWidth + offsetX; 
+          el.style.left = startX + 'px'; 
+          obstaclesContainer.appendChild(el);
+          return { el, x: startX, y: yPos, width: width, height: 48, type: 'pillar' };
+      }
+
+      function createPortal(targetMode) {
+          const el = document.createElement('div'); let colorClass, icon;
+          if (targetMode === 'ship') { colorClass = 'text-fuchsia-500 shadow-fuchsia-500/20'; icon = 'solar:rocket-linear'; } else if (targetMode === 'wave') { colorClass = 'text-cyan-500 shadow-cyan-500/20'; icon = 'solar:play-linear'; } else if (targetMode === 'cube') { colorClass = 'text-blue-500 shadow-blue-500/20'; icon = 'solar:box-linear'; } else if (targetMode === 'gravity-up') { colorClass = 'text-yellow-400 shadow-yellow-400/20'; icon = 'solar:round-arrow-up-linear'; } else if (targetMode === 'gravity-down') { colorClass = 'text-blue-400 shadow-blue-400/20'; icon = 'solar:round-arrow-down-linear'; } else if (targetMode === 'ufo') { colorClass = 'text-orange-400 shadow-orange-400/20'; icon = 'solar:planet-3-linear'; } else if (targetMode === 'ball') { colorClass = 'text-red-500 shadow-red-500/20'; icon = 'solar:target-linear'; } else if (targetMode === 'swing') { colorClass = 'text-yellow-500 shadow-yellow-500/20'; icon = 'solar:helm-linear'; } else if (targetMode === 'spider') { colorClass = 'text-purple-500 shadow-purple-500/20'; icon = 'solar:bug-linear'; }
+          el.className = `absolute w-12 h-32 rounded-full border-4 shadow-2xl z-10 flex items-center justify-center opacity-90 pointer-events-none ${colorClass}`; el.style.borderColor = 'currentColor'; el.style.bottom = '32px'; el.innerHTML = `<iconify-icon icon="${icon}" class="text-3xl drop-shadow-md" stroke-width="1.5"></iconify-icon>`;
+          const startX = container.clientWidth + 50; el.style.left = startX + 'px'; obstaclesContainer.appendChild(el);
+          return { el, x: startX, y: 32, width: 48, height: 128, type: 'portal', targetMode };
+      }
+
+      function createOrb(yOffset) {
+          const el = document.createElement('div'); el.className = 'absolute w-8 h-8 rounded-full border-4 border-yellow-400 flex items-center justify-center shadow-[0_0_12px_rgba(250,204,21,0.5)] z-10 pointer-events-none transition-all duration-200'; el.innerHTML = `<div class="w-3 h-3 bg-yellow-400 rounded-full"></div>`;
+          const startX = container.clientWidth; el.style.left = startX + 'px'; el.style.bottom = yOffset + 'px'; obstaclesContainer.appendChild(el);
+          return { el, x: startX, y: yOffset, width: 32, height: 32, type: 'orb-yellow', used: false };
+      }
+
+      function createPad(offsetX, yPos, type) {
+          const el = createEditorDOM(type);
+          const startX = container.clientWidth + offsetX;
+          el.style.left = startX + 'px';
+          el.style.bottom = yPos + 'px';
+          obstaclesContainer.appendChild(el);
+          return { el, x: startX, y: yPos, width: 32, height: 32, type: type, used: false };
+      }
+
+      function createPillar(isTop, height) {
+          const el = document.createElement('div'); el.className = 'absolute w-12 bg-zinc-800 border border-zinc-700 backdrop-blur-sm z-10 shadow-lg pointer-events-none'; el.style.height = height + 'px';
+          if (isTop) { el.style.top = '0px'; el.style.borderTop = 'none'; } else { el.style.bottom = '4px'; el.style.borderBottom = 'none'; }
+          const startX = container.clientWidth; el.style.left = startX + 'px'; obstaclesContainer.appendChild(el);
+          return { el, x: startX, y: isTop ? container.clientHeight - height : 4, width: 48, height, type: 'pillar', isTop };
+      }
+
+      function createWaveTrail(x, y, rotation) {
+          const el = document.createElement('div'); el.className = 'absolute rounded-full z-0 pointer-events-none'; el.style.backgroundColor = colors.wave; el.style.boxShadow = `0 0 12px ${colors.wave}99`; el.style.width = '24px'; el.style.height = '6px'; el.style.left = x + 'px'; el.style.bottom = y + 'px'; el.style.transform = `translate(-50%, 50%) rotate(${rotation}deg)`;
+          if (obstaclesContainer.firstChild) obstaclesContainer.insertBefore(el, obstaclesContainer.firstChild); else obstaclesContainer.appendChild(el);
+          return { el, x, y, width: 0, height: 0, type: 'trail', life: 1.0 };
+      }
+
+      function gameLoop(time) {
+          if (!isPlaying) return;
+          const deltaTime = Math.min(time - lastTime, 32); lastTime = time; const timeScale = deltaTime / 16.66;
+          actionTriggered = false;
+
+          if (autoPlayCooldown > 0) autoPlayCooldown -= timeScale;
+          
+          if (isAutoPlay) {
+              let imminent = [];
+              for (let obs of objects) {
+                  if (obs.type === 'trail' || obs.type === 'color-trigger' || obs.type === 'portal') continue;
+                  let dist = obs.x - (playerX + playerSize);
+                  if (dist > -40 && dist < 500) imminent.push({...obs, dist});
+              }
+              imminent.sort((a, b) => a.dist - b.dist);
+
+              let orb = imminent.find(o => o.type === 'orb-yellow' && !o.used && o.dist > -16 && o.dist < 16);
+              if (orb && autoPlayCooldown <= 0) {
+                  handleAction();
+                  autoPlayCooldown = 15;
+              }
+
+              if (['cube', 'ball', 'spider'].includes(gameMode)) {
+                  let upcoming = imminent.filter(o => o.dist > 0 && ['spike', 'pillar', 'block'].includes(o.type));
+                  let threat = null;
+                  
+                  for (let o of upcoming) {
+                      let oBottom = o.y;
+                      let oTop = o.y + o.height;
+                      let myBottom = playerY;
+                      let myTop = playerY + playerSize;
+                      
+                      let isThreat = false;
+                      if (gravityDirection === 1 && oBottom < myTop + 10 && oTop > myBottom) isThreat = true;
+                      if (gravityDirection === -1 && oTop > myBottom - 10 && oBottom < myTop) isThreat = true;
+                      
+                      if (isThreat) {
+                          threat = o;
+                          break;
+                      }
+                  }
+
+                  if (threat && autoPlayCooldown <= 0) {
+                      let jumpDistThreshold = gameSpeed * 7 + 10; 
+                      if (threat.dist < jumpDistThreshold) {
+                          if (isGrounded) {
+                              handleAction();
+                              autoPlayCooldown = 12;
+                          }
+                      }
+                  }
+              } else if (['ship', 'wave', 'ufo', 'swing'].includes(gameMode)) {
+                  let gapTop = container.clientHeight - 20;
+                  let gapBottom = 20;
+                  
+                  let upcoming = imminent.filter(o => o.dist > -10 && ['spike', 'pillar', 'block'].includes(o.type));
+                  if (upcoming.length > 0) {
+                      let firstX = upcoming[0].x;
+                      let colObjects = upcoming.filter(o => Math.abs(o.x - firstX) < 80);
+                      
+                      let highestFloor = 0;
+                      let lowestCeil = container.clientHeight;
+                      
+                      for (let o of colObjects) {
+                          let midY = o.y + (o.height || 32) / 2;
+                          if (o.type === 'pillar') {
+                              if (o.isTop) lowestCeil = Math.min(lowestCeil, o.y);
+                              else highestFloor = Math.max(highestFloor, o.y + o.height);
+                          } else {
+                              if (midY > container.clientHeight / 2) lowestCeil = Math.min(lowestCeil, o.y);
+                              else highestFloor = Math.max(highestFloor, o.y + (o.height || 32));
+                          }
+                      }
+                      gapTop = Math.min(gapTop, lowestCeil - 25);
+                      gapBottom = Math.max(gapBottom, highestFloor + 25);
+                  }
+                  
+                  if (gapTop <= gapBottom) {
+                      gapTop = container.clientHeight / 2 + 10;
+                      gapBottom = container.clientHeight / 2 - 10;
+                  }
+                  
+                  let targetY = (gapTop + gapBottom) / 2;
+                  
+                  if (gameMode === 'wave') {
+                      let safeMargin = Math.max(12, (gapTop - gapBottom) * 0.25);
+                      if (gravityDirection === 1) {
+                          if (isHolding && playerY > targetY + safeMargin) isHolding = false;
+                          else if (!isHolding && playerY < targetY - safeMargin) isHolding = true;
+                      } else {
+                          if (isHolding && playerY < targetY - safeMargin) isHolding = false;
+                          else if (!isHolding && playerY > targetY + safeMargin) isHolding = true;
+                      }
+                  } else if (gameMode === 'ship') {
+                      let predictedY = playerY + playerVelocityY * 6;
+                      isHolding = gravityDirection === 1 ? (predictedY < targetY - 5) : (predictedY > targetY + 5);
+                  } else { 
+                      if (autoPlayCooldown <= 0) {
+                          let predictedY = playerY + playerVelocityY * 10;
+                          let needsJump = gravityDirection === 1 ? (predictedY < targetY - 10 && playerVelocityY < 3) : (predictedY > targetY + 10 && playerVelocityY > -3);
+                          if (needsJump) {
+                              handleAction();
+                              autoPlayCooldown = 12;
+                          }
+                      }
+                  }
+              }
+          }
+
+          if (['cube', 'ufo', 'ball', 'swing', 'spider'].includes(gameMode)) {
+              playerVelocityY += gravity * gravityDirection * timeScale; playerY += playerVelocityY * timeScale;
+              const maxHeight = container.clientHeight - playerSize - 4;
+              if (playerY <= 0) { playerY = 0; if (gravityDirection === 1) { playerVelocityY = 0; isGrounded = true; } else { if (playerVelocityY < 0) playerVelocityY = 0; isGrounded = false; } }
+              else if (playerY >= maxHeight) { playerY = maxHeight; if (gravityDirection === -1) { playerVelocityY = 0; isGrounded = true; } else { if (playerVelocityY > 0) playerVelocityY = 0; isGrounded = false; } }
+              else isGrounded = false;
+
+              if (gameMode === 'cube') { if (isGrounded) playerRotation += (Math.round(playerRotation / 90) * 90 - playerRotation) * 0.4; else playerRotation += 5.5 * timeScale * gravityDirection; }
+              else if (gameMode === 'ball') { if (isGrounded) playerRotation += 8 * timeScale * gravityDirection; else playerRotation += 4 * timeScale * gravityDirection; }
+              else if (gameMode === 'spider') playerRotation = gravityDirection === -1 ? 180 : 0;
+              else if (gameMode === 'ufo' || gameMode === 'swing') playerRotation = -playerVelocityY * 2 * gravityDirection;
+          } else if (gameMode === 'ship') {
+              if (isHolding) playerVelocityY += 0.35 * gravityDirection * timeScale; else playerVelocityY += gravity * 0.45 * gravityDirection * timeScale;
+              playerVelocityY = Math.max(-6, Math.min(playerVelocityY, 6)); playerY += playerVelocityY * timeScale;
+              const maxHeight = container.clientHeight - playerSize - 4;
+              if (playerY <= 0) { playerY = 0; playerVelocityY = 0; playerRotation = 0; } else if (playerY >= maxHeight) { playerY = maxHeight; playerVelocityY = 0; playerRotation = 0; } else playerRotation = -playerVelocityY * 3 * gravityDirection;
+          } else if (gameMode === 'wave') {
+              const waveYVelocity = gameSpeed; if (isHolding) { playerY += waveYVelocity * gravityDirection * timeScale; playerRotation = -45 * gravityDirection; } else { playerY -= waveYVelocity * gravityDirection * timeScale; playerRotation = 45 * gravityDirection; }
+              const maxHeight = container.clientHeight - playerSize - 4; if (playerY <= 0) { playerY = 0; playerRotation = 0; } else if (playerY >= maxHeight) { playerY = maxHeight; playerRotation = 0; }
+              objects.push(createWaveTrail(playerX + 16 + (gameSpeed * timeScale), playerY + groundHeight + 16, playerRotation));
+          }
+
+          playerEl.style.bottom = (playerY + groundHeight) + 'px'; playerEl.style.transform = `rotate(${playerRotation}deg)`;
+          score += 0.1 * timeScale; scoreDisplay.innerText = Math.floor(score).toString().padStart(5, '0');
+          if (!isCustomLevel) gameSpeed += 0.0004 * timeScale;
+          bgOffset -= (gameSpeed * 0.5) * timeScale; container.style.backgroundPosition = `${bgOffset}px bottom`; distance += gameSpeed * timeScale;
+
+          if (isCustomLevel) {
+              const dataToLoad = currentLevelState === 'dash' ? dashLevelData : customLevelData;
+              const maxDist = dataToLoad.length > 0 ? Math.max(...dataToLoad.map(d => d.gridX * 32)) + 600 : 1000;
+              if (distance > maxDist && !hasWon) { hasWon = true; levelComplete(); return; }
+          } else {
+              if (distance > nextSpawnDistance) {
+                  if (distance > nextPortalDistance) {
+                      const modes = ['cube', 'ship', 'wave', 'ufo', 'ball', 'swing', 'spider', 'gravity-up', 'gravity-down'].filter(m => { if (m === 'gravity-up' && gravityDirection === -1) return false; if (m === 'gravity-down' && gravityDirection === 1) return false; if (m === gameMode) return false; return true; });
+                      const selectedMode = modes[Math.floor(Math.random() * modes.length)]; objects.push(createPortal(selectedMode));
+                      if (selectedMode.startsWith('gravity-')) { nextPortalDistance = distance + 1000; nextSpawnDistance = distance + 200; } else { nextPortalDistance = distance + 1800; nextSpawnDistance = distance + 600; }
+                  } else {
+                      const gapMod = diffConfig[currentDifficulty].gapMod, distMod = diffConfig[currentDifficulty].distMod;
+                      const rand = Math.random();
+                      
+                      if (gameMode === 'cube') {
+                          if (rand > 0.85) {
+                              objects.push(createOrb(80 + Math.random() * 60));
+                          } else if (rand > 0.75) {
+                              objects.push(createPad(0, 4, 'pad-jump-bottom'));
+                              if (gameSpeed > 5 && rand > 0.8) objects.push(createObstacle(32, false)); 
+                              nextSpawnDistance = distance + (Math.max(300, 450 - (gameSpeed * 10)) * distMod) + Math.random() * 200;
+                          } else {
+                              objects.push(createObstacle(0)); if (gameSpeed > 7 && rand > 0.4) objects.push(createObstacle(32));
+                              nextSpawnDistance = distance + (Math.max(250, 400 - (gameSpeed * 10)) * distMod) + Math.random() * 200;
+                          }
+                      } else if (gameMode === 'ship') {
+                          const gapCenter = 80 + Math.random() * (container.clientHeight - 160), gapSize = Math.max(100, 140 - (gameSpeed * 2)) * gapMod;
+                          objects.push(createPillar(true, container.clientHeight - (gapCenter + gapSize/2))); objects.push(createPillar(false, gapCenter - gapSize/2));
+                          nextSpawnDistance = distance + (Math.max(300, 500 - (gameSpeed * 8)) * distMod) + Math.random() * 200;
+                      } else if (gameMode === 'wave') {
+                          const timePhase = distance / 400, waveCenter = (container.clientHeight / 2) + Math.sin(timePhase) * (container.clientHeight / 4) + Math.cos(timePhase * 1.5) * (container.clientHeight / 6), gapSize = Math.max(110, 160 - (gameSpeed * 3)) * gapMod;
+                          objects.push(createPillar(true, container.clientHeight - (waveCenter + gapSize/2))); objects.push(createPillar(false, waveCenter - gapSize/2));
+                          nextSpawnDistance = distance + (120 * distMod);
+                      } else if (gameMode === 'ufo') {
+                          if (rand > 0.6) {
+                              const blockY = 50 + Math.random() * (container.clientHeight - 150);
+                              objects.push(createFloatingBlock(0, blockY, 64));
+                              objects.push(createObstacle(16, false, blockY + 48)); 
+                              objects.push(createObstacle(16, true, blockY - 32));
+                          } else {
+                              const gapCenter = 80 + Math.random() * (container.clientHeight - 160), gapSize = Math.max(120, 160 - (gameSpeed * 2)) * gapMod;
+                              objects.push(createPillar(true, container.clientHeight - (gapCenter + gapSize/2))); objects.push(createPillar(false, gapCenter - gapSize/2));
+                          }
+                          nextSpawnDistance = distance + (Math.max(300, 500 - (gameSpeed * 8)) * distMod) + Math.random() * 200;
+                      } else if (gameMode === 'swing') {
+                          if (rand > 0.6) {
+                              objects.push(createFloatingBlock(0, container.clientHeight / 2 - 24, 96));
+                              objects.push(createObstacle(32, false, container.clientHeight / 2 + 24));
+                              objects.push(createObstacle(32, true, container.clientHeight / 2 - 56));
+                          } else {
+                              const gapCenter = 80 + Math.random() * (container.clientHeight - 160), gapSize = Math.max(140, 180 - (gameSpeed * 2)) * gapMod;
+                              objects.push(createPillar(true, container.clientHeight - (gapCenter + gapSize/2))); objects.push(createPillar(false, gapCenter - gapSize/2));
+                          }
+                          nextSpawnDistance = distance + (Math.max(300, 500 - (gameSpeed * 8)) * distMod) + Math.random() * 200;
+                      } else if (['ball', 'spider'].includes(gameMode)) {
+                          if (rand > 0.7) {
+                              objects.push(createObstacle(0, false)); objects.push(createObstacle(0, true));
+                          } else if (rand > 0.35) {
+                              objects.push(createObstacle(0, false)); if (gameSpeed > 7 && rand > 0.5) objects.push(createObstacle(32, false));
+                          } else {
+                              objects.push(createObstacle(0, true)); if (gameSpeed > 7 && rand > 0.5) objects.push(createObstacle(32, true));
+                          }
+                          nextSpawnDistance = distance + (Math.max(250, 400 - (gameSpeed * 10)) * distMod) + Math.random() * 200;
+                      }
+                  }
+              }
+          }
+
+          const currentPlayerWidth = gameMode === 'ship' ? 40 : 32;
+          for (let i = 0; i < objects.length; i++) {
+              let obs = objects[i]; obs.x -= gameSpeed * timeScale; obs.el.style.left = obs.x + 'px';
+              if (obs.type === 'trail') { obs.life -= 0.04 * timeScale; obs.el.style.opacity = obs.life; if (obs.life <= 0 || obs.x < -50) { obs.el.remove(); objects.splice(i, 1); i--; } continue; }
+              const pLeft = playerX + 6, pRight = playerX + currentPlayerWidth - 6, pBottom = playerY + 4, pTop = playerY + playerSize - 4, oLeft = obs.x, oRight = obs.x + obs.width, oBottom = obs.y, oTop = obs.y + obs.height;
+              
+              if (obs.type === 'color-trigger') { if (!obs.used && pRight > oLeft) { container.style.backgroundColor = obs.color; obs.used = true; } if (obs.x < -100) { obs.el.remove(); objects.splice(i, 1); i--; } continue; }
+              if (obs.type === 'portal') {
+                  if (pRight > oLeft + 10 && pLeft < oRight - 10 && pBottom < oTop && pTop > oBottom) {
+                      if (obs.targetMode === 'gravity-up') { gravityDirection = -1; playSound('portal'); updateLevelColor('gravity-up'); } else if (obs.targetMode === 'gravity-down') { gravityDirection = 1; playSound('portal'); updateLevelColor('gravity-down'); } else switchMode(obs.targetMode);
+                      obs.el.remove(); objects.splice(i, 1); i--; continue;
+                  }
+              } else if (obs.type.startsWith('pad-')) {
+                  let padTop = oTop, padBottom = oBottom;
+                  if (obs.type.endsWith('-bottom')) padTop = oBottom + 12; else padBottom = oTop - 12;
+                  if (!obs.used && pRight > oLeft + 2 && pLeft < oRight - 2 && pBottom <= padTop && pTop >= padBottom) {
+                      obs.used = true;
+                      if (obs.type === 'pad-jump-bottom') { playerVelocityY = jumpPower * 1.3; gravityDirection = 1; isGrounded = false; playSound('jump'); }
+                      else if (obs.type === 'pad-jump-top') { playerVelocityY = -jumpPower * 1.3; gravityDirection = -1; isGrounded = false; playSound('jump'); }
+                      else if (obs.type === 'pad-gravity-bottom') { gravityDirection = -1; playerVelocityY = -jumpPower * 0.6; updateLevelColor('gravity-up'); playSound('portal'); }
+                      else if (obs.type === 'pad-gravity-top') { gravityDirection = 1; playerVelocityY = jumpPower * 0.6; updateLevelColor('gravity-down'); playSound('portal'); }
+                      if(obs.el.firstElementChild) {
+                          obs.el.firstElementChild.style.transform = 'scaleY(0.5)';
+                          setTimeout(() => { if(obs.el.firstElementChild) obs.el.firstElementChild.style.transform = 'scaleY(1)'; }, 100);
+                      }
+                  }
+              } else if (obs.type !== 'orb-yellow') {
+                  const hPad = obs.type === 'spike' ? 10 : 4, vPad = obs.type === 'spike' ? 10 : 4;
+                  if (pRight > oLeft + hPad && pLeft < oRight - hPad && pBottom < oTop - vPad && pTop > oBottom + vPad) { gameOver(); return; }
+              }
+              if (obs.x < -100) { obs.el.remove(); objects.splice(i, 1); i--; }
+          }
+          requestAnimationFrame(gameLoop);
+      }
+    </script>
+  </body>
+</html>

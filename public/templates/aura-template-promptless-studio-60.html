@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="cs"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promptless Studio — Marketing, který nemusí tlačit</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+.hover-lift{transition:transform .45s cubic-bezier(.22,1,.36,1);will-change:transform;}
+.hover-lift:hover{transform:translateY(-6px);}
+.hover-lift>iconify-icon{transition:transform .35s ease;}
+.hover-lift:hover>iconify-icon{transform:scale(1.15) rotate(-6deg);}
+.img-zoom{overflow:hidden;}
+.img-zoom img,.img-zoom video{transition:transform .9s cubic-bezier(.22,1,.36,1);}
+.img-zoom:hover img,.img-zoom:hover video{transform:scale(1.08);}
+a>iconify-icon{transition:transform .35s ease;}
+a:hover>iconify-icon{transform:translateX(4px);}
+@keyframes floatY{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-14px) rotate(var(--r,0deg));}}
+.float-slow{animation:floatY 6s ease-in-out infinite;}
+@keyframes spinSlow{to{transform:rotate(360deg);}}
+.spin-slow{display:inline-block;animation:spinSlow 12s linear infinite;}
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body class="bg-[#0A171D] text-[#FFF6E9] antialiased overflow-x-hidden" style="font-family:'Inter',sans-serif;">
+    
+    <div id="cursor-glow" class="hidden md:block fixed pointer-events-none z-[5] w-[520px] h-[520px] rounded-full opacity-0" style="left:-260px;top:-260px;background:radial-gradient(circle, rgba(255,189,118,0.07), transparent 70%);"></div><div id="scroll-progress" class="fixed top-0 left-0 right-0 h-[2px] z-[60] origin-left bg-[#FFBD76]" style="transform:scaleX(0);"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style="background:rgba(10,23,29,0.7); border-bottom:1px solid rgba(255,246,233,0.08);">
+      <div class="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+        <a href="#" class="text-lg font-semibold" style="letter-spacing:-0.04em;">
+          Promptless
+          <span class="text-[#FFBD76]">•</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8 text-sm text-[#FFF6E9]/60">
+          <a href="#proc" class="hover:text-[#FFF6E9] transition-colors">
+            Proč my
+          </a>
+          <a href="#jak" class="hover:text-[#FFF6E9] transition-colors">
+            Jak to funguje
+          </a>
+          <a href="#prokoho" class="hover:text-[#FFF6E9] transition-colors">
+            Pro koho
+          </a>
+          <a href="#proof" class="hover:text-[#FFF6E9] transition-colors">
+            O nás
+          </a>
+        </div>
+        <a href="#cta" class="inline-flex items-center gap-2 bg-[#FFBD76] text-[#0A171D] text-sm font-medium px-4 py-2 rounded-full hover:opacity-90 transition-opacity magnetic">
+          Domluvit hovor
+          <iconify-icon icon="solar:arrow-right-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative min-h-screen flex flex-col justify-center pt-28 pb-20 px-5 md:px-8 overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,189,118,0.07), transparent 60%);"></div>
+      <div class="absolute inset-0 pointer-events-none opacity-[0.04]" style="background-image:linear-gradient(rgba(255,246,233,1) 1px, transparent 1px),linear-gradient(90deg, rgba(255,246,233,1) 1px, transparent 1px); background-size:72px 72px;"></div>
+
+      <div class="max-w-7xl mx-auto w-full relative">
+        <div class="hero-fade flex items-center gap-2 text-xs tracking-[0.2em] text-[#FFF6E9]/50 mb-8 font-medium">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#FFBD76] animate-pulse"></span>
+          PROLOG · PROMPTLESS STUDIO · BRNO
+        </div>
+
+        <h1 class="hero-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight leading-[1.02] max-w-5xl" style="letter-spacing:-0.02em;">
+          <span class="block overflow-hidden">
+            <span class="hero-line block">Lidi nekupují od těch,</span>
+          </span>
+          <span class="block overflow-hidden">
+            <span class="hero-line block">kdo tlačí.Kupují od těch,</span>
+          </span>
+          <span class="block overflow-hidden">
+            <span class="hero-line block">
+              kterým
+              <span class="relative inline-block text-[#FFBD76]">
+                věří.
+                <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 120 12" fill="none">
+                  <path id="underline" d="M3 9 C 30 3, 80 3, 117 7" stroke="#FFBD76" stroke-width="2.5" stroke-linecap="round" style="stroke-dashoffset: 0px; stroke-dasharray: 114.391;"></path>
+                </svg>
+              </span>
+            </span>
+          </span>
+        </h1>
+
+        <p class="hero-fade mt-8 text-base md:text-lg text-[#FFF6E9]/60 max-w-xl leading-relaxed font-light">
+          Stavíme značky, ke kterým si zákazník přijde sám. Obsahem, který
+          buduje důvěru — a reklamami, které tu důvěru rozšíří do objemu. Bez
+          slev, bez urgency, bez „kupte teď".
+        </p>
+
+        <p class="hero-fade mt-5 text-xl md:text-2xl text-[#FFBD76]/90 rotate-[-1.5deg] inline-block" style="font-family:'Caveat',cursive;">
+          ↳ pro D2C značky, kouče a tvůrce, co chtějí růst — ne tlačit
+        </p>
+
+        <div class="hero-fade mt-10 flex flex-col sm:flex-row gap-4">
+          <a href="#cta" class="inline-flex items-center justify-center gap-2 bg-[#FFBD76] text-[#0A171D] font-medium px-7 py-3.5 rounded-full text-sm hover:opacity-90 transition-opacity magnetic">
+            Domluvit hovor se Žankem
+            <iconify-icon icon="solar:arrow-right-linear" stroke-width="1.5" class="text-lg"></iconify-icon>
+          </a>
+          <a href="#proc" class="inline-flex items-center justify-center gap-2 text-[#FFF6E9]/70 font-medium px-7 py-3.5 rounded-full text-sm hover:text-[#FFF6E9] transition-colors" style="border:1px solid rgba(255,246,233,0.15);">
+            Proč to děláme jinak
+            <iconify-icon icon="solar:arrow-down-linear" stroke-width="1.5" class="text-lg"></iconify-icon>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-fade absolute bottom-8 right-5 md:right-8 hidden md:flex items-center gap-2 text-xs tracking-[0.2em] text-[#FFF6E9]/35 font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#FFBD76]"></span>
+        MARKETING, KTERÝ NEMUSÍ TLAČIT
+      </div>
+      <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&q=80" alt="Filmová kamera" class="hero-img float-slow hidden lg:block absolute top-28 right-8 w-44 h-56 object-cover rounded-2xl opacity-80 pointer-events-none" style="--r:6deg;border:1px solid rgba(255,246,233,0.15);">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" alt="Tým při práci" class="hero-img float-slow hidden lg:block absolute bottom-36 right-52 w-36 h-44 object-cover rounded-2xl opacity-70 pointer-events-none" style="--r:-5deg;animation-delay:-3s;border:1px solid rgba(255,246,233,0.15);">
+    </header>
+
+    <!-- MARQUEE -->
+    <section class="py-10" style="border-top:1px solid rgba(255,246,233,0.08); border-bottom:1px solid rgba(255,246,233,0.08);">
+      <div class="overflow-hidden whitespace-nowrap relative">
+        <div class="marquee-track inline-flex items-center gap-10 will-change-transform">
+          <span class="inline-flex items-center gap-10 text-2xl md:text-4xl font-semibold tracking-tight text-[#FFF6E9]/80" style="letter-spacing:-0.04em;">
+            370M+ zhlédnutí
+            <span class="text-[#FFBD76]">✱</span>
+            5 let za střihem
+            <span class="text-[#FFBD76]">✱</span>
+            20+ spoluprací
+            <span class="text-[#FFBD76]">✱</span>
+            Brno
+            <span class="text-[#FFBD76]">✱</span>
+          </span>
+          <span class="inline-flex items-center gap-10 text-2xl md:text-4xl font-semibold tracking-tight text-[#FFF6E9]/80" style="letter-spacing:-0.04em;">
+            370M+ zhlédnutí
+            <span class="text-[#FFBD76]">✱</span>
+            5 let za střihem
+            <span class="text-[#FFBD76]">✱</span>
+            20+ spoluprací
+            <span class="text-[#FFBD76]">✱</span>
+            Brno
+            <span class="text-[#FFBD76]">✱</span>
+          </span>
+          <span class="inline-flex items-center gap-10 text-2xl md:text-4xl font-semibold tracking-tight text-[#FFF6E9]/80" style="letter-spacing:-0.04em;">
+            370M+ zhlédnutí
+            <span class="text-[#FFBD76]">✱</span>
+            5 let za střihem
+            <span class="text-[#FFBD76]">✱</span>
+            20+ spoluprací
+            <span class="text-[#FFBD76]">✱</span>
+            Brno
+            <span class="text-[#FFBD76]">✱</span>
+          </span>
+        </div>
+      </div>
+      <p class="text-center mt-6 text-sm text-[#FFF6E9]/40 px-5 font-light">
+        ↳ Než vám řekneme, co děláme, řekneme vám, proč. Zbytek dává smysl až
+        potom.
+      </p>
+    </section>
+
+    <!-- WHY -->
+    <section id="proc" class="py-24 md:py-36 px-5 md:px-8">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-3">
+          <div class="reveal sticky top-28 flex items-center gap-3 text-xs tracking-[0.25em] text-[#FFBD76] font-medium">
+            <span class="w-8 h-px bg-[#FFBD76]"></span>
+            KAPITOLA 01 — PROČ
+          </div>
+        </div>
+        <div class="md:col-span-9 max-w-3xl">
+          <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]" style="letter-spacing:-0.055em;">
+            Pozornost se dá koupit.
+            <br>
+            <span class="text-[#FFF6E9]/40 inline-block md:ml-24">
+              Důvěra ne.
+            </span>
+          </h2>
+          <div class="reveal mt-8 space-y-6 text-base md:text-lg text-[#FFF6E9]/60 leading-relaxed font-light">
+            <p class="">
+              Roky platilo jednoduché pravidlo: kdo si zaplatí víc reklam,
+              vyhraje. Ta hra ale končí. Lidé vidí denně stovky reklam a naučili
+              se je přehlížet. Na tlak, slevy a „poslední šance" jsou dnes
+              alergičtí — poznají je na první pohled a odscrollují dál.
+            </p>
+            <p class="">
+              Co se přehlížet nedá, je značka, které člověk věří. A důvěra
+              funguje jinak než pozornost. Nedá se zapnout rozpočtem. Roste
+              pomalu, pokaždé, když někdo uvidí, že své práci rozumíte a nic mu
+              nevnucujete. Až přijde čas nakoupit, nevybírá z reklam. Vybere si
+              vás — protože vás už zná.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIGNATURE MOMENT: scrubbed manifesto -->
+    <section class="relative px-5 md:px-8" style="background:#0A171D;">
+      <div class="max-w-5xl mx-auto py-24 md:py-40 min-h-[70vh] flex items-center">
+        <p id="manifesto" class="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.15] md:ml-[6%]" style="letter-spacing:-0.05em;"><span class="m-word" style=" transition: none; color: rgb(255, 246, 233);">Svět</span> <span class="m-word" style=" transition:none;">se</span> <span class="m-word" style=" transition:none;">přesouvá</span> <span class="m-word" style=" transition:none;">z</span> <span class="m-word" style=" transition:none;">ekonomiky</span> <span class="m-word" style=" transition:none;">pozornosti</span> <span class="m-word" style=" transition:none;">do</span> <span class="m-word" style=" transition:none;">ekonomiky</span> <span class="m-word" style=" transition:none;">důvěry.</span> <span class="m-word" style=" transition:none;">A</span> <span class="m-word" style=" transition:none;">důvěru</span> <span class="m-word" style=" transition:none;">si</span> <span class="m-word" style=" transition:none;">nekoupíte.</span> <span class="m-word" style=" transition:none;">Zasloužíte</span> <span class="m-word" style=" transition:none;">si</span> <span class="m-word" style=" transition:none;">ji</span> <span class="m-word" style=" transition:none;">tím,</span> <span class="m-word" style=" transition:none;">že</span> <span class="m-word" style=" transition:none;">ukážete,</span> <span class="m-word" style=" transition:none;">kým</span> <span class="m-word" style=" transition:none;">doopravdy</span> <span class="m-word" style=" transition:none;">jste.</span></p>
+      </div>
+    </section>
+
+    <!-- PROBLEM (light section) -->
+    <section class="bg-[#FFF6E9] text-[#0A171D] py-24 md:py-36 px-5 md:px-8 rounded-t-[2.5rem] md:rounded-t-[4rem]">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-3">
+          <div class="reveal sticky top-28 flex items-center gap-3 text-xs tracking-[0.25em] text-[#B85C3A] font-medium">
+            <span class="w-8 h-px bg-[#B85C3A]"></span>
+            KAPITOLA 02 — KDE TO DRHNE
+          </div>
+        </div>
+        <div class="md:col-span-9">
+          <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style="letter-spacing:-0.055em;">
+            Točíte dobrý obsah.
+            <br>
+            <span class="text-[#0A171D]/40 inline-block md:ml-20">
+              A stejně to neprodává.
+            </span>
+          </h2>
+          <div class="reveal mt-8 space-y-6 text-base md:text-lg text-[#0A171D]/65 leading-relaxed max-w-3xl font-light">
+            <p>
+              Znáte to. Vydáváte, postujete, natáčíte. Zhlédnutí přicházejí, ale
+              poptávky ne. Tak vám někdo poradí to, co radí všichni: přidejte
+              rozpočet, dejte slevu, skočte na trend, který zrovna letí.
+            </p>
+            <p>
+              Funguje to měsíc. Možná dva. Pak se z vás stane jen další značka,
+              která tlačí — k nerozeznání od konkurence, co dělá přesně to samé.
+            </p>
+            <p class="font-medium text-[#0A171D]">
+              Problém není ve vás ani ve vašem produktu. Problém je v tom, že
+              vám prodali hru, kde se vyhrává tlakem. A v té hře dobrá značka
+              prohrává s tou hlasitější.
+            </p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-5 mt-12 max-w-3xl">
+            <div class="reveal p-7 rounded-2xl bg-[#F4E9D2] hover-lift rotate-[-1.5deg]" style="border:1px solid rgba(10,23,29,0.08);">
+              <iconify-icon icon="solar:graph-down-linear" stroke-width="1.5" class="text-2xl text-[#B85C3A]"></iconify-icon>
+              <h3 class="font-semibold mt-4 mb-2">Všechno do reklam</h3>
+              <p class="text-sm text-[#0A171D]/60 leading-relaxed font-light">
+                → drahá kliknutí od lidí, co vás neznají. Vypnete rozpočet,
+                skončí příjem.
+              </p>
+            </div>
+            <div class="reveal p-7 rounded-2xl bg-[#F4E9D2] hover-lift rotate-[1.5deg] md:mt-8" style="border:1px solid rgba(10,23,29,0.08);">
+              <iconify-icon icon="solar:eye-linear" stroke-width="1.5" class="text-2xl text-[#B85C3A]"></iconify-icon>
+              <h3 class="font-semibold mt-4 mb-2">Všechno do organiky</h3>
+              <p class="text-sm text-[#0A171D]/60 leading-relaxed font-light">
+                → zhlédnutí rostou, brand ne. A jeden tým nikdy nenatočí dost,
+                aby z toho bylo číslo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BELIEF -->
+    <section class="bg-[#FFF6E9] text-[#0A171D] py-24 md:py-36 px-5 md:px-8" style="border-top:1px solid rgba(10,23,29,0.08);">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-3">
+          <div class="reveal sticky top-28 flex items-center gap-3 text-xs tracking-[0.25em] text-[#0A171D]/50 font-medium">
+            <span class="w-8 h-px bg-[#0A171D]/40"></span>
+            KAPITOLA 03 — V CO VĚŘÍME
+          </div>
+        </div>
+        <div class="md:col-span-9 max-w-3xl">
+          <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]" style="letter-spacing:-0.055em;">
+            Věříme v pravý opak.
+          </h2>
+          <div class="reveal mt-8 space-y-6 text-base md:text-lg text-[#0A171D]/65 leading-relaxed font-light">
+            <p>
+              Že nejlepší marketing nevypadá jako marketing. Že nemusíte nikoho
+              honit, abyste rostli. A že značka, která ukáže své pravé já,
+              vydrží dlouhodobě — zatímco ta, co kopíruje trendy, zmizí s nimi.
+            </p>
+            <p>
+              Proto začínáme úplně jinde než ostatní. Ne u formátu, ne u toho,
+              co letí na TikToku. Začínáme otázkou, kterou si většina agentur
+              nepoloží:
+            </p>
+          </div>
+          <blockquote class="reveal mt-10 pl-6 md:pl-8 text-xl md:text-3xl font-medium tracking-tight leading-snug rotate-[-1deg]" style="border-left:3px solid #FFBD76; letter-spacing:-0.04em;">
+            Proč vaše firma vůbec vznikla — a co si má zákazník odnést, i když
+            dnes nenakoupí?
+          </blockquote>
+          <p class="reveal mt-8 text-base md:text-lg text-[#0A171D]/65 leading-relaxed font-light">
+            Až máme odpověď, postavíme kolem ní celý systém. Ne jednotlivé
+            posty. Systém, který tu odpověď připomíná znovu a znovu — a každý
+            měsíc roste, ať točíte, nebo zrovna spíte.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="jak" class="py-24 md:py-36 px-5 md:px-8 rounded-t-[2.5rem] md:rounded-t-[4rem] bg-[#0A171D] -mt-8 relative">
+      <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 text-xs tracking-[0.25em] text-[#FFBD76] font-medium mb-6">
+          <span class="w-8 h-px bg-[#FFBD76]"></span>
+          KAPITOLA 04 — JAK TO FUNGUJE
+        </div>
+        <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style="letter-spacing:-0.055em;">
+          Jeden systém vás přitáhne.
+          <br>
+          <span class="text-[#FFF6E9]/40 inline-block md:ml-16">
+            Druhý vás rozšíří.
+          </span>
+        </h2>
+        <p class="reveal mt-6 text-base md:text-lg text-[#FFF6E9]/55 max-w-2xl leading-relaxed font-light">
+          Stavíme dvě cesty, které spolu pracují. Nejdřív si získáte důvěru. Pak
+          ji rozšíříte do objemu, který by jeden tým ručně nestihl. Můžete mít
+          jednu, druhou, nebo obě.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-5 mt-14">
+          <!-- Invisible Funnel -->
+          <div class="reveal group p-8 md:p-10 rounded-3xl transition-colors duration-300 hover:bg-[#FFF6E9]/[0.04] hover-lift md:-rotate-1" style="border:1px solid rgba(255,246,233,0.12); background:rgba(255,246,233,0.02);">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:rgba(255,189,118,0.12);">
+                <iconify-icon icon="solar:magnet-linear" stroke-width="1.5" class="text-2xl text-[#FFBD76]"></iconify-icon>
+              </span>
+              <span class="text-xs tracking-[0.2em] text-[#FFF6E9]/40 font-medium">
+                ORGANICKÁ CESTA
+              </span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mt-8" style="letter-spacing:-0.04em;">
+              Invisible Funnel
+            </h3>
+            <p class="mt-4 text-[#FFF6E9]/60 leading-relaxed text-sm md:text-base font-light">
+              Obsah, který prodává, aniž by prodával. Každé video má v
+              zákaznické cestě svoji roli — od prvního zastavení až po moment,
+              kdy vám někdo napíše do DM už rozhodnutý. Nehoníme zhlédnutí.
+              Měníme úhel pohledu, dokud vám zákazník sám nedá zapravdu.
+            </p>
+            <p class="mt-6 text-sm text-[#FFBD76] font-medium">
+              ↳ Výsledek: lidé, kteří vás znají dřív, než s vámi začnou mluvit.
+            </p>
+            <ul class="mt-8 pt-7 space-y-3 text-sm text-[#FFF6E9]/55 font-light" style="border-top:1px solid rgba(255,246,233,0.1);">
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                Nastavení celého funnelu
+              </li>
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                12 reels měsíčně · 4 story sekvence
+              </li>
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                Profil jako výkladní skříň
+              </li>
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                DM automatizace
+              </li>
+            </ul>
+          </div>
+          <!-- Machine Creative -->
+          <div class="reveal group p-8 md:p-10 rounded-3xl transition-colors duration-300 hover:bg-[#FFF6E9]/[0.04] hover-lift md:rotate-1 md:mt-12" style="border:1px solid rgba(255,246,233,0.12); background:rgba(255,246,233,0.02);">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:rgba(255,189,118,0.12);">
+                <iconify-icon icon="solar:cpu-bolt-linear" stroke-width="1.5" class="text-2xl text-[#FFBD76]"></iconify-icon>
+              </span>
+              <span class="text-xs tracking-[0.2em] text-[#FFF6E9]/40 font-medium">
+                AI CESTA
+              </span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mt-8" style="letter-spacing:-0.04em;">
+              Machine Creative
+            </h3>
+            <p class="mt-4 text-[#FFF6E9]/60 leading-relaxed text-sm md:text-base font-light">
+              Reklamy úrovně TV spotu — s příběhem, metaforou, řemeslem — v
+              objemu, který by člověk sám nezvládl. AI udělá množství, my dáme
+              směr a vkus. Každý měsíc se z dat učíme, co lidi zastaví, a podle
+              toho jdeme dál.
+            </p>
+            <p class="mt-6 text-sm text-[#FFBD76] font-medium">
+              ↳ Výsledek: víc otestovaných reklam za měsíc, než stihne celý
+              kreativní tým.
+            </p>
+            <ul class="mt-8 pt-7 space-y-3 text-sm text-[#FFF6E9]/55 font-light" style="border-top:1px solid rgba(255,246,233,0.1);">
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                4 cinematic AI reklamy měsíčně
+              </li>
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                20–50 UGC variant k testování
+              </li>
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                Měsíční report z dat
+              </li>
+              <li class="flex gap-3">
+                <iconify-icon icon="solar:check-circle-linear" stroke-width="1.5" class="text-lg text-[#FFBD76] shrink-0"></iconify-icon>
+                Správa kampaní
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reveal mt-8 p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4" style="border:1px solid rgba(255,246,233,0.1); background:rgba(255,246,233,0.02);">
+          <iconify-icon icon="solar:monitor-smartphone-linear" stroke-width="1.5" class="text-2xl text-[#FFBD76] shrink-0"></iconify-icon>
+          <p class="text-sm text-[#FFF6E9]/60 leading-relaxed font-light">
+            A všechno na jednom místě — ve vlastním klientském portálu, kde
+            vidíte stav každého videa, strategii i čísla.
+            <span class="text-[#FFF6E9] font-medium">
+              Žádný WhatsApp chaos.
+            </span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROOF -->
+    <section id="proof" class="py-24 md:py-36 px-5 md:px-8" style="border-top:1px solid rgba(255,246,233,0.08);">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-12 gap-10">
+          <div class="md:col-span-3">
+            <div class="reveal sticky top-28 flex items-center gap-3 text-xs tracking-[0.25em] text-[#FFBD76] font-medium">
+              <span class="w-8 h-px bg-[#FFBD76]"></span>
+              KAPITOLA 05 — PROČ NÁM
+            </div>
+          </div>
+          <div class="md:col-span-9">
+            <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style="letter-spacing:-0.055em;">
+              Pozornost neumíme věštit.
+              <br>
+              <span class="text-[#FFF6E9]/40 inline-block md:ml-20">
+                Umíme ji číst.
+              </span>
+            </h2>
+            <div class="reveal mt-8 space-y-6 text-base md:text-lg text-[#FFF6E9]/60 leading-relaxed max-w-3xl font-light">
+              <p>
+                Pět let stříhám pro velké české tvůrce — Tary, Kuba English, Pan
+                Čung, Flexybabka. Naše střihy zhlédli lidi přes 370 milionů
+                krát. Za tu dobu jsem se naučil číst, která sekunda drží
+                pozornost a která už ne, který hook funguje a kdy lidé scrollují
+                dál.
+              </p>
+              <p>
+                To není teorie z kurzu. To je šest let u střihového stolu,
+                převedených do systému, který tu samou pozornost staví pro vaši
+                značku.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mt-12 max-w-3xl">
+              <div class="reveal text-center py-8 rounded-2xl hover-lift md:-rotate-2" style="border:1px solid rgba(255,246,233,0.1);">
+                <div class="counter text-2xl md:text-5xl font-semibold tracking-tight text-[#FFBD76]" data-target="370" data-suffix="M+" style="letter-spacing:-0.04em;">
+                  0M+
+                </div>
+                <div class="text-xs tracking-[0.15em] text-[#FFF6E9]/45 mt-2 font-medium">
+                  ZHLÉDNUTÍ
+                </div>
+              </div>
+              <div class="reveal text-center py-8 rounded-2xl hover-lift md:mt-8" style="border:1px solid rgba(255,246,233,0.1);">
+                <div class="counter text-2xl md:text-5xl font-semibold tracking-tight text-[#FFBD76]" data-target="5" data-suffix="+" style="letter-spacing:-0.04em;">
+                  0+
+                </div>
+                <div class="text-xs tracking-[0.15em] text-[#FFF6E9]/45 mt-2 font-medium">
+                  LET ZA STŘIHEM
+                </div>
+              </div>
+              <div class="reveal text-center py-8 rounded-2xl hover-lift md:rotate-2" style="border:1px solid rgba(255,246,233,0.1);">
+                <div class="counter text-2xl md:text-5xl font-semibold tracking-tight text-[#FFBD76]" data-target="20" data-suffix="+" style="letter-spacing:-0.04em;">
+                  0+
+                </div>
+                <div class="text-xs tracking-[0.15em] text-[#FFF6E9]/45 mt-2 font-medium">
+                  SPOLUPRACÍ
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- creator marquee -->
+      <div class="mt-16 py-8 overflow-hidden whitespace-nowrap" style="border-top:1px solid rgba(255,246,233,0.08); border-bottom:1px solid rgba(255,246,233,0.08);">
+        <div class="marquee-track-2 inline-flex items-center gap-8 will-change-transform">
+          <span class="inline-flex items-center gap-8 text-lg md:text-2xl font-medium text-[#FFF6E9]/45">
+            Tary
+            <span class="text-[#FFBD76]">✱</span>
+            Kuba English
+            <span class="text-[#FFBD76]">✱</span>
+            Kuba Letenky
+            <span class="text-[#FFBD76]">✱</span>
+            Pan Čung
+            <span class="text-[#FFBD76]">✱</span>
+            Flexybabka
+            <span class="text-[#FFBD76]">✱</span>
+            Geicha
+            <span class="text-[#FFBD76]">✱</span>
+          </span>
+          <span class="inline-flex items-center gap-8 text-lg md:text-2xl font-medium text-[#FFF6E9]/45">
+            Tary
+            <span class="text-[#FFBD76]">✱</span>
+            Kuba English
+            <span class="text-[#FFBD76]">✱</span>
+            Kuba Letenky
+            <span class="text-[#FFBD76]">✱</span>
+            Pan Čung
+            <span class="text-[#FFBD76]">✱</span>
+            Flexybabka
+            <span class="text-[#FFBD76]">✱</span>
+            Geicha
+            <span class="text-[#FFBD76]">✱</span>
+          </span>
+          <span class="inline-flex items-center gap-8 text-lg md:text-2xl font-medium text-[#FFF6E9]/45">
+            Tary
+            <span class="text-[#FFBD76]">✱</span>
+            Kuba English
+            <span class="text-[#FFBD76]">✱</span>
+            Kuba Letenky
+            <span class="text-[#FFBD76]">✱</span>
+            Pan Čung
+            <span class="text-[#FFBD76]">✱</span>
+            Flexybabka
+            <span class="text-[#FFBD76]">✱</span>
+            Geicha
+            <span class="text-[#FFBD76]">✱</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto mt-12 grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-3"></div>
+        <div class="md:col-span-9">
+          <div class="reveal max-w-3xl p-7 md:p-8 rounded-2xl rotate-[0.5deg]" style="border:1px solid rgba(255,189,118,0.25); background:rgba(255,189,118,0.05);">
+            <div class="flex items-center gap-3 mb-4">
+              <iconify-icon icon="solar:shield-check-linear" stroke-width="1.5" class="text-xl text-[#FFBD76]"></iconify-icon>
+              <span class="text-2xl text-[#FFBD76]" style="font-family:'Caveat',cursive;">
+                ↘ na rovinu
+              </span>
+            </div>
+            <p class="text-sm md:text-base text-[#FFF6E9]/60 leading-relaxed font-light">
+              Tahle čísla jsou ze ZandaVisuals — mé editační agentury, ze které
+              Promptless vyrůstá. Většinou šlo o střih, ne o celou strategii. Co
+              si z těch let beru, je pochopení, co na sítích funguje a co ne. To
+              teď stavím do nové podoby — celý systém od jádra značky po AI
+              škálu. První case studies přímo z Promptless zveřejníme, až budeme
+              mít data, která je obhájí.
+              <span class="text-[#FFF6E9] font-medium">
+                Žádná vymyšlená čísla tu nenajdete.
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="ukazky" class="py-24 md:py-36 px-5 md:px-8 bg-[#0A171D]" style="border-top:1px solid rgba(255,246,233,0.08);">
+      <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 text-xs tracking-[0.25em] text-[#FFBD76] font-medium mb-6">
+          <span class="w-8 h-px bg-[#FFBD76]"></span>
+          MEZIHRA — UKÁZKY
+        </div>
+        <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style="letter-spacing:-0.055em;">
+          Obsah, který se
+          <br>
+          <span class="text-[#FFF6E9]/40 inline-block md:ml-16">
+            nedá odscrollovat.
+          </span>
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mt-14">
+          <div class="tile img-zoom rounded-2xl overflow-hidden aspect-[3/4] md:mt-10" style="border:1px solid rgba(255,246,233,0.1);">
+            <video class="w-full h-full object-cover" src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4" autoplay="" muted="" loop="" playsinline=""></video>
+          </div>
+          <div class="tile img-zoom rounded-2xl overflow-hidden aspect-[3/4]" style="border:1px solid rgba(255,246,233,0.1);">
+            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80" alt="Natáčení obsahu">
+          </div>
+          <div class="tile img-zoom rounded-2xl overflow-hidden aspect-[3/4] md:mt-10" style="border:1px solid rgba(255,246,233,0.1);">
+            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?auto=format&fit=crop&w=800&q=80" alt="Sociální sítě">
+          </div>
+          <div class="tile img-zoom rounded-2xl overflow-hidden aspect-[3/4]" style="border:1px solid rgba(255,246,233,0.1);">
+            <video class="w-full h-full object-cover" src="https://assets.mixkit.co/videos/preview/mixkit-man-under-multicolored-lights-1237-large.mp4" autoplay="" muted="" loop="" playsinline=""></video>
+          </div>
+        </div>
+        <p class="reveal mt-10 text-xl md:text-2xl text-[#FFBD76]/90 rotate-[-1deg] inline-block" style="font-family:'Caveat',cursive;">
+          ↳ ukázkové vizuály — příště tu může být vaše značka
+        </p>
+      </div>
+    </section>
+
+    <!-- WHO FOR (light) -->
+    <section id="prokoho" class="bg-[#F4E9D2] text-[#0A171D] py-24 md:py-36 px-5 md:px-8 rounded-t-[2.5rem] md:rounded-t-[4rem]">
+      <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 text-xs tracking-[0.25em] text-[#0A171D]/50 font-medium mb-6">
+          <span class="w-8 h-px bg-[#0A171D]/40"></span>
+          KAPITOLA 06 — PRO KOHO
+        </div>
+        <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style="letter-spacing:-0.055em;">
+          Nejsme pro každého.
+          <br>
+          <span class="text-[#0A171D]/40 inline-block md:ml-16">
+            A je to tak dobře.
+          </span>
+        </h2>
+        <p class="reveal mt-6 text-base md:text-lg text-[#0A171D]/60 max-w-2xl leading-relaxed font-light">
+          Spolupráce funguje, když věříte v to samé co my: že značka se buduje
+          dlouhodobě, že důvěra je cennější než rychlý prodej a že manipulace je
+          slepá ulička.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-12">
+          <div class="reveal p-7 rounded-2xl bg-[#FFF6E9] hover-lift md:-rotate-2" style="border:1px solid rgba(10,23,29,0.08);">
+            <iconify-icon icon="solar:bag-heart-linear" stroke-width="1.5" class="text-2xl text-[#FFBD76]"></iconify-icon>
+            <h3 class="font-semibold mt-4 mb-2 tracking-tight">
+              Značka s ověřeným produktem
+            </h3>
+            <p class="text-sm text-[#0A171D]/60 leading-relaxed font-light">
+              co chce růst, aniž by si rozbila brand pod tlakem slev.
+            </p>
+          </div>
+          <div class="reveal p-7 rounded-2xl bg-[#FFF6E9] hover-lift md:mt-10" style="border:1px solid rgba(10,23,29,0.08);">
+            <iconify-icon icon="solar:square-academic-cap-linear" stroke-width="1.5" class="text-2xl text-[#FFBD76]"></iconify-icon>
+            <h3 class="font-semibold mt-4 mb-2 tracking-tight">
+              Kouč nebo vzdělávací projekt
+            </h3>
+            <p class="text-sm text-[#0A171D]/60 leading-relaxed font-light">
+              co ví, že autorita prodává líp než studené reklamy.
+            </p>
+          </div>
+          <div class="reveal p-7 rounded-2xl bg-[#FFF6E9] hover-lift md:rotate-2 md:mt-4" style="border:1px solid rgba(10,23,29,0.08);">
+            <iconify-icon icon="solar:videocamera-record-linear" stroke-width="1.5" class="text-2xl text-[#FFBD76]"></iconify-icon>
+            <h3 class="font-semibold mt-4 mb-2 tracking-tight">Tvůrce</h3>
+            <p class="text-sm text-[#0A171D]/60 leading-relaxed font-light">
+              co už něco vydělává a chce systém, který poroste i mimo natáčecí
+              dny.
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal mt-10 p-7 md:p-9 rounded-2xl" style="border:1.5px dashed rgba(184,92,58,0.4); background:rgba(184,92,58,0.04);">
+          <h3 class="text-xl md:text-2xl font-semibold tracking-tight mb-6 text-[#B85C3A]" style="letter-spacing:-0.04em;">
+            ↳ Nejspíš si nesedneme, pokud:
+          </h3>
+          <ul class="space-y-5 max-w-3xl">
+            <li class="flex gap-4 text-sm md:text-base text-[#0A171D]/65 leading-relaxed font-light">
+              <span class="text-[#B85C3A] font-semibold shrink-0">×</span>
+              Hledáte nejlevnější agenturu. Dáváme smysl od určité úrovně —
+              řekneme si to na rovinu hned na hovoru.
+            </li>
+            <li class="flex gap-4 text-sm md:text-base text-[#0A171D]/65 leading-relaxed font-light">
+              <span class="text-[#B85C3A] font-semibold shrink-0">×</span>
+              Chcete výsledky za měsíc. Důvěra ani data se za 30 dní nedají
+              postavit. Proto jedeme na 3–6 měsíců, ne na kampaň.
+            </li>
+            <li class="flex gap-4 text-sm md:text-base text-[#0A171D]/65 leading-relaxed font-light">
+              <span class="text-[#B85C3A] font-semibold shrink-0">×</span>
+              Chcete „jen nějaký obsah". My stavíme systém. Na pět reels a nic
+              dál najdete levnější.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="py-24 md:py-36 px-5 md:px-8 bg-[#0A171D] rounded-t-[2.5rem] md:rounded-t-[4rem] -mt-8 relative">
+      <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 text-xs tracking-[0.25em] text-[#FFBD76] font-medium mb-6">
+          <span class="w-8 h-px bg-[#FFBD76]"></span>
+          KAPITOLA 07 — JAK ZAČNEME
+        </div>
+        <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style="letter-spacing:-0.055em;">
+          Tři kroky a systém
+          <br>
+          <span class="text-[#FFF6E9]/40 inline-block md:ml-20">
+            běží za vás.
+          </span>
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-14">
+          <div class="reveal p-8 rounded-3xl flex flex-col" style="border:1px solid rgba(255,246,233,0.12); background:rgba(255,246,233,0.02);">
+            <div class="flex items-center justify-between mb-8">
+              <span class="text-5xl font-light text-[#FFF6E9]/20 tracking-tight" style="letter-spacing:-0.05em;">
+                01
+              </span>
+              <span class="text-xs px-3 py-1.5 rounded-full font-medium text-[#FFBD76]" style="border:1px solid rgba(255,189,118,0.35);">
+                30 minut
+              </span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3" style="letter-spacing:-0.03em;">
+              Hovor
+            </h3>
+            <p class="text-sm text-[#FFF6E9]/55 leading-relaxed font-light">
+              Nezávazně si zavoláme. Projdeme vaši značku, kde jste teď a kam
+              chcete. Žádný pitch, žádný tlak — jen si řekneme, jestli si
+              sedneme.
+            </p>
+          </div>
+          <div class="reveal p-8 rounded-3xl flex flex-col md:mt-10" style="border:1px solid rgba(255,246,233,0.12); background:rgba(255,246,233,0.02);">
+            <div class="flex items-center justify-between mb-8">
+              <span class="text-5xl font-light text-[#FFF6E9]/20 tracking-tight" style="letter-spacing:-0.05em;">
+                02
+              </span>
+              <span class="text-xs px-3 py-1.5 rounded-full font-medium text-[#FFBD76]" style="border:1px solid rgba(255,189,118,0.35);">
+                první 2 týdny
+              </span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3" style="letter-spacing:-0.03em;">
+              Strategie
+            </h3>
+            <p class="text-sm text-[#FFF6E9]/55 leading-relaxed font-light">
+              Najdeme jádro vaší značky a postavíme kolem něj plán. Co točit, co
+              testovat, čím se odlišit. Jeden dokument, oba systémy.
+            </p>
+          </div>
+          <div class="reveal p-8 rounded-3xl flex flex-col md:rotate-1" style="border:1px solid rgba(255,246,233,0.12); background:rgba(255,246,233,0.02);">
+            <div class="flex items-center justify-between mb-8">
+              <span class="text-5xl font-light text-[#FFF6E9]/20 tracking-tight" style="letter-spacing:-0.05em;">
+                03
+              </span>
+              <span class="text-xs px-3 py-1.5 rounded-full font-medium text-[#FFBD76]" style="border:1px solid rgba(255,189,118,0.35);">
+                od 14. dne
+              </span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3" style="letter-spacing:-0.03em;">
+              Systém běží
+            </h3>
+            <p class="text-sm text-[#FFF6E9]/55 leading-relaxed font-light">
+              Pustíme obsah i reklamy a každý měsíc se z dat učíme. Vy řešíte
+              byznys, my obsah. Co funguje, posílíme. Co ne, jde stranou.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section id="cta" class="relative py-28 md:py-44 px-5 md:px-8 overflow-hidden" style="border-top:1px solid rgba(255,246,233,0.08);">
+      <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 70% 60% at 50% 110%, rgba(255,189,118,0.1), transparent 60%);"></div>
+      <div class="max-w-4xl mx-auto text-center relative">
+        <p class="reveal text-2xl md:text-3xl text-[#FFBD76]/90 mb-6 rotate-[-1deg]" style="font-family:'Caveat',cursive;">
+          — epilog: tady začíná váš příběh
+        </p>
+        <h2 class="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] rotate-[-1deg]" style="letter-spacing:-0.055em;">
+          Vaše značka si zaslouží růst,
+          <br>
+          aniž by musela
+          <span class="text-[#FFBD76]">tlačit.</span>
+        </h2>
+        <p class="reveal mt-8 text-base md:text-lg text-[#FFF6E9]/55 leading-relaxed max-w-xl mx-auto font-light">
+          Invisible Funnel přitáhne ty správné lidi. Machine Creative to rozšíří
+          do objemu. A vy se konečně soustředíte na byznys — ne na obsahový
+          kalendář.
+        </p>
+        <div class="reveal mt-10">
+          <a href="#" class="inline-flex items-center gap-3 bg-[#FFBD76] text-[#0A171D] font-medium px-9 py-4 rounded-full text-base hover:opacity-90 transition-opacity magnetic">
+            Domluvit hovor se Žankem
+            <iconify-icon icon="solar:arrow-right-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+          </a>
+        </div>
+        <div class="reveal mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs text-[#FFF6E9]/45 font-medium">
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#FFBD76]"></span>
+            Odpověď do 24 hodin
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#FFBD76]"></span>
+            Brno · vzdáleně
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#FFBD76]"></span>
+            NDA na vyžádání
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="px-5 md:px-8 pt-16 pb-8" style="border-top:1px solid rgba(255,246,233,0.08);">
+      <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div class="col-span-2 md:col-span-1">
+          <div class="text-xl font-semibold" style="letter-spacing:-0.04em;">
+            Promptless
+            <span class="text-[#FFBD76]">•</span>
+          </div>
+          <p class="mt-4 text-sm text-[#FFF6E9]/50 leading-relaxed font-light">
+            Marketing, který nemusí tlačit.
+            <br>
+            Invisible Funnel · Machine Creative.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-xs tracking-[0.2em] text-[#FFF6E9]/40 font-medium mb-5">
+            STUDIO
+          </h4>
+          <ul class="space-y-3 text-sm text-[#FFF6E9]/60 font-light">
+            <li>
+              <a href="#proc" class="hover:text-[#FFF6E9] transition-colors">
+                Proč my
+              </a>
+            </li>
+            <li>
+              <a href="#jak" class="hover:text-[#FFF6E9] transition-colors">
+                Jak to funguje
+              </a>
+            </li>
+            <li>
+              <a href="#prokoho" class="hover:text-[#FFF6E9] transition-colors">
+                Pro koho
+              </a>
+            </li>
+            <li>
+              <a href="#proof" class="hover:text-[#FFF6E9] transition-colors">
+                O nás
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs tracking-[0.2em] text-[#FFF6E9]/40 font-medium mb-5">
+            KONTAKT
+          </h4>
+          <ul class="space-y-3 text-sm text-[#FFF6E9]/60 font-light">
+            <li>
+              <a href="#" class="hover:text-[#FFF6E9] transition-colors">
+                kontakt@promptless.studio
+              </a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-[#FFF6E9] transition-colors">
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a href="#cta" class="hover:text-[#FFF6E9] transition-colors">
+                Domluvit hovor
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs tracking-[0.2em] text-[#FFF6E9]/40 font-medium mb-5">
+            SÍDLO
+          </h4>
+          <p class="text-sm text-[#FFF6E9]/60 leading-relaxed font-light">
+            Žanek Nguyen
+            <br>
+            Doubravice nad Svitavou
+            <br>
+            Dolní 54, 679 11
+            <br>
+            IČO: 22301038
+          </p>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto mt-14 pt-7 flex flex-col sm:flex-row justify-between gap-3 text-xs text-[#FFF6E9]/35 font-medium" style="border-top:1px solid rgba(255,246,233,0.08);">
+        <span>© 2026 Promptless Studio</span>
+        <span class="tracking-[0.2em]">VYROBENO V BRNĚ</span>
+      </div>
+    </footer>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Hero entrance
+      gsap.set(".hero-line", { yPercent: 110 });
+      gsap.set(".hero-fade", { opacity: 0, y: 20 });
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(".hero-line", { yPercent: 0, duration: 1.1, stagger: 0.12 }, 0.2)
+        .to(".hero-fade", { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, 0.7);
+
+      // underline draw
+      const ul = document.getElementById("underline");
+      if (ul) {
+        const len = ul.getTotalLength();
+        gsap.set(ul, { strokeDasharray: len, strokeDashoffset: len });
+        tl.to(ul, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 1.3);
+      }
+
+      // Generic reveals
+      document.querySelectorAll(".reveal").forEach(el => {
+        gsap.fromTo(el, { opacity: 0, y: 36 }, {
+          opacity: 1, y: 0, duration: 1, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 88%" }
+        });
+      });
+
+      // Marquees
+      gsap.to(".marquee-track", { xPercent: -33.333, duration: 22, ease: "none", repeat: -1 });
+      gsap.to(".marquee-track-2", { xPercent: -33.333, duration: 26, ease: "none", repeat: -1 });
+
+      // Signature: scrubbed word-by-word manifesto
+      const man = document.getElementById("manifesto");
+      const words = man.textContent.trim().split(/\s+/);
+      man.innerHTML = words.map(w => `<span class="m-word" style="opacity:0.12; transition:none;">${w}</span>`).join(" ");
+      gsap.to(".m-word", {
+        opacity: 1,
+        color: "#FFBD76",
+        stagger: 0.4,
+        ease: "none",
+        scrollTrigger: {
+          trigger: man,
+          start: "top 75%",
+          end: "bottom 45%",
+          scrub: 0.5
+        }
+      });
+
+      // Counters
+      document.querySelectorAll(".counter").forEach(el => {
+        const target = +el.dataset.target;
+        const suffix = el.dataset.suffix || "";
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target, duration: 1.8, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+          onUpdate: () => { el.textContent = Math.round(obj.val) + suffix; }
+        });
+      });
+    </script>
+
+    <script>
+      // Scroll progress bar
+      gsap.to("#scroll-progress",{scaleX:1,ease:"none",scrollTrigger:{trigger:document.body,start:"top top",end:"bottom bottom",scrub:0.3}});
+
+      // Gallery tiles stagger reveal
+      gsap.utils.toArray(".tile").forEach((t,i)=>{
+        gsap.fromTo(t,{opacity:0,y:60,rotate:i%2===0?-2:2},{opacity:1,y:0,rotate:0,duration:1,ease:"power3.out",scrollTrigger:{trigger:t,start:"top 92%"}});
+      });
+
+      // Hero floating visuals fade-in
+      gsap.from(".hero-img",{opacity:0,duration:1.4,stagger:0.25,delay:1,ease:"power2.out"});
+
+      // Marquee velocity skew on scroll
+      const skewSetter=gsap.quickSetter(".marquee-track, .marquee-track-2","skewX","deg");
+      const skewClamp=gsap.utils.clamp(-10,10);
+      const skewProxy={skew:0};
+      ScrollTrigger.create({onUpdate:(self)=>{
+        const s=skewClamp(self.getVelocity()/-300);
+        if(Math.abs(s)>Math.abs(skewProxy.skew)){
+          skewProxy.skew=s;
+          gsap.to(skewProxy,{skew:0,duration:0.8,ease:"power3",overwrite:true,onUpdate:()=>skewSetter(skewProxy.skew)});
+        }
+      }});
+
+      // Magnetic CTA buttons
+      document.querySelectorAll(".magnetic").forEach((btn)=>{
+        btn.addEventListener("mousemove",(e)=>{
+          const r=btn.getBoundingClientRect();
+          gsap.to(btn,{x:(e.clientX-r.left-r.width/2)*0.25,y:(e.clientY-r.top-r.height/2)*0.25,duration:0.3,ease:"power2.out"});
+        });
+        btn.addEventListener("mouseleave",()=>{gsap.to(btn,{x:0,y:0,duration:0.6,ease:"elastic.out(1,0.4)"});});
+      });
+
+      // Marquees slow down on hover
+      document.querySelectorAll(".marquee-track, .marquee-track-2").forEach((track)=>{
+        const tw=gsap.getTweensOf(track)[0];
+        if(tw){
+          const wrap=track.parentElement;
+          wrap.addEventListener("mouseenter",()=>tw.timeScale(0.25));
+          wrap.addEventListener("mouseleave",()=>tw.timeScale(1));
+        }
+      });
+    </script>
+
+    <script>
+      (function(){
+        // Cursor spotlight follows the reader through the story
+        var glowEl=document.getElementById("cursor-glow");
+        if(glowEl){window.addEventListener("mousemove",function(e){gsap.to(glowEl,{x:e.clientX,y:e.clientY,opacity:1,duration:0.6,ease:"power2.out"});});}
+
+        // Hero floating images parallax
+        gsap.utils.toArray(".hero-img").forEach(function(img,i){
+          gsap.to(img,{yPercent:i%2===0?-22:16,ease:"none",scrollTrigger:{trigger:"header",start:"top top",end:"bottom top",scrub:0.5}});
+        });
+
+        // Manifesto cinematic zoom-in
+        var manEl=document.getElementById("manifesto");
+        if(manEl){gsap.fromTo(manEl,{scale:0.93,transformOrigin:"left center"},{scale:1,ease:"none",scrollTrigger:{trigger:manEl,start:"top 95%",end:"top 35%",scrub:true}});}
+
+        // Chapter headings drift in like turning pages
+        gsap.utils.toArray("section h2.reveal").forEach(function(h,i){
+          gsap.fromTo(h,{x:i%2===0?-40:40},{x:0,ease:"none",scrollTrigger:{trigger:h,start:"top 98%",end:"top 55%",scrub:true}});
+        });
+
+        // Gallery tiles parallax depth
+        gsap.utils.toArray(".tile").forEach(function(t,i){
+          gsap.to(t,{yPercent:i%2===0?-7:7,ease:"none",scrollTrigger:{trigger:"#ukazky",start:"top bottom",end:"bottom top",scrub:true}});
+        });
+
+        // Big process numbers rise in
+        gsap.utils.toArray(".text-5xl.font-light").forEach(function(n){
+          gsap.fromTo(n,{y:26,opacity:0.3},{y:0,opacity:1,duration:1,ease:"power2.out",scrollTrigger:{trigger:n,start:"top 90%"}});
+        });
+
+        // Final CTA — epilogue swell
+        var ctaH=document.querySelector("#cta h2");
+        if(ctaH){gsap.fromTo(ctaH,{scale:0.92},{scale:1,ease:"none",scrollTrigger:{trigger:"#cta",start:"top 90%",end:"top 40%",scrub:true}});}
+      })();
+    </script>
+
+    <script>
+      (function(){
+        // 3D tilt on cards and gallery tiles
+        document.querySelectorAll('.hover-lift, .tile').forEach(function(card){
+          card.style.transformStyle='preserve-3d';
+          card.addEventListener('mousemove',function(e){
+            var r=card.getBoundingClientRect();
+            var rx=((e.clientY-r.top)/r.height-0.5)*-10;
+            var ry=((e.clientX-r.left)/r.width-0.5)*10;
+            gsap.to(card,{rotationX:rx,rotationY:ry,y:-6,transformPerspective:800,duration:0.4,ease:'power2.out'});
+          });
+          card.addEventListener('mouseleave',function(){
+            gsap.to(card,{rotationX:0,rotationY:0,y:0,duration:0.8,ease:'elastic.out(1,0.5)'});
+          });
+        });
+        // 3D flip-in reveal for service and process cards
+        gsap.utils.toArray('#jak .reveal.group, #prokoho .grid > div.reveal').forEach(function(el){
+          gsap.fromTo(el,{rotationX:18,transformPerspective:900,transformOrigin:'center bottom',opacity:0},{rotationX:0,opacity:1,duration:1.1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%'}});
+        });
+        // Hero floating images subtle 3D sway
+        gsap.utils.toArray('.hero-img').forEach(function(img,i){
+          gsap.to(img,{rotationY:i%2===0?12:-12,transformPerspective:700,duration:5,yoyo:true,repeat:-1,ease:'sine.inOut'});
+        });
+        // Counters 3D pop
+        gsap.utils.toArray('.counter').forEach(function(c){
+          gsap.fromTo(c,{rotationX:60,transformPerspective:600,transformOrigin:'center bottom'},{rotationX:0,duration:1.2,ease:'back.out(1.6)',scrollTrigger:{trigger:c,start:'top 88%'}});
+        });
+        // Gallery tiles 3D depth flip on scroll
+        gsap.utils.toArray('.tile').forEach(function(t,i){
+          gsap.fromTo(t,{rotationY:i%2===0?-20:20,transformPerspective:900},{rotationY:0,ease:'none',scrollTrigger:{trigger:t,start:'top 95%',end:'top 50%',scrub:true}});
+        });
+      })();
+    </script>
+  
+</body></html>

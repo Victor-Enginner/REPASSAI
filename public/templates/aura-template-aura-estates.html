@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="antialiased"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Estates | Premium Real Estate</title>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body {
+font-family: 'Inter', sans-serif;
+background-color: #F7F5F0;
+color: #1A1A1A;
+overflow-x: hidden;
+}
+/* Custom selection color */
+::selection {
+background: #E6A756;
+color: #fff;
+}
+/* Utility for GSAP text reveals */
+.clip-text {
+clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+.line-wrapper {
+overflow: hidden;
+display: inline-block;
+vertical-align: top;
+}
+/* Smooth scrolling */
+html { scroll-behavior: auto; } /* GSAP handles smoothness better if native is auto sometimes, but let's keep it simple */
+/* Hide scrollbar for clean horizontal scroll area */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+</style>
+<meta name="aura-font-heading-class" content="font-dm-serif-display">
+<meta name="aura-font-body-class" content="font-dm-sans">
+<meta name="aura-font-heading-label" content="DM Serif Display">
+<meta name="aura-font-body-label" content="DM Sans">
+<link id="all-fonts-link-font-dm-serif-display" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
+<style id="all-fonts-style-font-dm-serif-display">
+.font-dm-serif-display { font-family: 'DM Serif Display', serif !important; }
+</style>
+<link id="all-fonts-link-font-dm-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap">
+<style id="all-fonts-style-font-dm-sans">
+.font-dm-sans { font-family: 'DM Sans', sans-serif !important; }
+</style>
+<meta name="disabled-font-classes" content="font-aboreto"><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body class="relative w-full selection:bg-amber-600 selection:text-white">
+    <!-- Global Background SVG Flow Lines -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <svg class="absolute top-0 w-[150vw] h-[150vh] left-[-25vw]" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice">
+        <path id="bg-line-1" d="M -100 200 C 300 100, 600 500, 1100 300" stroke="#E6A756" stroke-width="2" opacity="0.3" class="path-anim" style="stroke-dashoffset: 648px; stroke-dasharray: 1231.71;"></path>
+        <path id="bg-line-2" d="M -100 600 C 400 800, 500 200, 1100 700" stroke="#E6A756" stroke-width="1.5" opacity="0.2" class="path-anim" style="stroke-dashoffset: 676px; stroke-dasharray: 1284.05;"></path>
+      </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-6 mix-blend-difference text-white">
+      <div class="max-w-7xl mx-auto flex justify-between items-center gs-nav">
+        <div class="flex items-center gap-6">
+          <button class="flex items-center gap-2 hover:opacity-70 transition-opacity text-base font-medium font-dm-sans">
+            <i data-lucide="menu" stroke-width="1.5" class="w-5 h-5"></i>
+            Menu
+          </button>
+          <button class="hover:opacity-70 transition-opacity">
+            <i data-lucide="shopping-bag" stroke-width="1.5" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 text-xl tracking-tight font-dm-serif-display font-normal">
+          <i data-lucide="hexagon" stroke-width="1.5" class="w-6 h-6 text-amber-500"></i>
+          Aura Estates
+        </div>
+
+        <a href="#" class="flex items-center gap-2 border border-white/30 rounded-full px-5 py-2 hover:bg-white hover:text-black transition-colors text-sm font-medium font-dm-sans">
+          Apply Now
+          <i data-lucide="arrow-up-right" stroke-width="1.5" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </nav>
+
+    <main class="relative z-10">
+      <!-- Hero Section -->
+      <section class="min-h-screen pt-32 pb-20 px-6 md:px-12 max-w-[1400px] mx-auto flex flex-col justify-center">
+        <!-- Headline Area -->
+        <div class="relative z-10 w-full mb-12">
+          <h1 class="text-6xl md:text-8xl lg:text-[7rem] font-medium tracking-tighter leading-[0.95] text-gray-900 gs-title">
+            <div class="line-wrapper">
+              <div class="line-inner font-dm-serif-display font-normal">
+                Exclusive spaces for
+              </div>
+            </div>
+            <br>
+            <div class="line-wrapper">
+              <div class="line-inner flex items-center flex-wrap gap-4 font-dm-serif-display font-normal">
+                elevated living
+                <div class="inline-block w-24 h-16 md:w-32 md:h-20 rounded-full overflow-hidden align-middle gs-hero-img-small" style=" width: 0px;">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/91126dae-53d0-49d3-b421-2b3d436408b8_320w.png" alt="Interior" class="w-full h-full object-cover">
+                </div>
+                today
+              </div>
+            </div>
+          </h1>
+
+          <div class="mt-8 flex flex-col sm:flex-row justify-between items-start sm:items-end w-full max-w-4xl gap-6 gs-hero-meta">
+            <div class="text-sm font-medium text-gray-500 uppercase tracking-widest font-dm-sans">
+              Premium Coastal Villa Collection
+            </div>
+
+            <div class="flex items-center gap-6">
+              <div class="flex -space-x-3">
+                <img class="w-10 h-10 rounded-full border-2 border-[#F7F5F0] object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cdc1049c-42bd-4031-b8c8-9734c8f86824_320w.webp" alt="Avatar">
+                <img class="w-10 h-10 rounded-full border-2 border-[#F7F5F0] object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6d175901-404a-4952-9039-0acd551851ed_320w.webp" alt="Avatar">
+                <img class="w-10 h-10 rounded-full border-2 border-[#F7F5F0] object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a9f2a6f7-f473-484f-9db4-504cae45afd1_320w.webp" alt="Avatar">
+              </div>
+              <div>
+                <div class="flex items-center gap-1 text-amber-500">
+                  <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                  <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                  <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                  <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                  <i data-lucide="star-half" class="w-4 h-4 fill-current"></i>
+                  <span class="text-gray-900 font-semibold ml-2 font-dm-sans">
+                    4.9/5
+                  </span>
+                </div>
+                <div class="text-sm text-gray-500 font-dm-sans">
+                  From 10K+ reviews
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-4 text-sm font-medium text-gray-600">
+              <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                Monaco
+              </span>
+              <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                Ibiza
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Hero Image -->
+        <div class="w-full h-[60vh] md:h-[75vh] rounded-[2rem] overflow-hidden relative gs-hero-main">
+          <div class="absolute inset-0 bg-black/10 z-10 rounded-[2rem]"></div>
+          <video src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/9109ecbb-cdc4-4815-981e-2ea83be13765/1779682946127-64f8684a-b85f-4722-9f37-cc3ca5858b50.mp4" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/888df594-f216-4947-87d8-f376282c3108_3840w.png" data-aura-generated-video="true" data-aura-video-preset="loop-in-view" muted="" playsinline="" preload="metadata" loop="" aria-label="Modern Architecture" class="w-full h-full object-cover object-center scale-110" data-speed="0.8"></video>
+        </div>
+      </section>
+
+      <!-- Quote & Detail Section -->
+      <section class="py-32 px-6 md:px-12 max-w-[1400px] mx-auto relative gs-section">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-8 relative">
+            <h2 class="text-4xl md:text-6xl font-medium tracking-tight leading-tight gs-reveal-text">
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  Discover
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  environments
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  without
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  boundaries—
+                </div>
+              </div>
+            </h2>
+
+            <div class="my-12 w-64 h-48 rounded-2xl overflow-hidden shadow-2xl relative inline-block gs-reveal-img ml-0 md:ml-24">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d3741b9d-7e0b-4ea3-9166-401eb8c2696e_3840w.png" alt="Minimalist Building" class="w-full h-full object-cover" data-speed="0.9">
+            </div>
+
+            <h2 class="text-4xl md:text-6xl font-medium tracking-tight leading-tight text-right gs-reveal-text">
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  Where
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  visionary
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  design
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  meets
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  enduring
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  elegance.
+                </div>
+              </div>
+            </h2>
+          </div>
+
+          <div class="lg:col-span-4 flex flex-col items-end text-right gs-reveal-up">
+            <div class="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-4 w-full border-t border-gray-300 pt-4 text-left font-dm-sans">
+              The architects of premium living
+            </div>
+            <div class="flex -space-x-4 w-full justify-start mt-2">
+              <img class="w-14 h-14 rounded-full border-4 border-[#F7F5F0] object-cover" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Architect">
+              <img class="w-14 h-14 rounded-full border-4 border-[#F7F5F0] object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/30104e3c-5eea-4b93-93e9-5313698a7156_1600w.webp" alt="Designer">
+              <img class="w-14 h-14 rounded-full border-4 border-[#F7F5F0] object-cover" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Consultant">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="py-12 px-6 md:px-12 max-w-[1400px] mx-auto gs-section">
+        <div class="w-full rounded-[2rem] overflow-hidden relative min-h-[50vh] flex items-center justify-center py-20 gs-reveal-scale">
+          <div class="absolute inset-0 z-0">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4aaec83e-20d7-4e47-a5eb-bf5b935c70eb_3840w.png" alt="Skyscraper" class="w-full h-full object-cover" data-speed="0.8">
+            <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]"></div>
+          </div>
+
+          <div class="relative z-10 w-full grid grid-cols-2 md:grid-cols-4 gap-8 px-8 text-white text-center">
+            <div class="gs-stat">
+              <div class="text-5xl md:text-7xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                <span class="counter font-dm-serif-display font-normal" data-target="32">
+                  32
+                </span>
+                +
+              </div>
+              <div class="text-sm font-medium tracking-wide uppercase opacity-80 font-dm-sans">
+                Years Expertise
+              </div>
+            </div>
+            <div class="gs-stat">
+              <div class="text-5xl md:text-7xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                <span class="counter font-dm-serif-display font-normal" data-target="250">
+                  250
+                </span>
+                K+
+              </div>
+              <div class="text-sm font-medium tracking-wide uppercase opacity-80 font-dm-sans">
+                Properties Sold
+              </div>
+            </div>
+            <div class="gs-stat">
+              <div class="text-5xl md:text-7xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                <span class="counter font-dm-serif-display font-normal" data-target="150">
+                  150
+                </span>
+                M+
+              </div>
+              <div class="text-sm font-medium tracking-wide uppercase opacity-80 font-dm-sans">
+                Satisfied Clients
+              </div>
+            </div>
+            <div class="gs-stat">
+              <div class="text-5xl md:text-7xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                <span class="counter font-dm-serif-display font-normal" data-target="98">
+                  98
+                </span>
+                %
+              </div>
+              <div class="text-sm font-medium tracking-wide uppercase opacity-80 font-dm-sans">
+                Success Rate
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Process/Steps Section -->
+      <section class="py-32 px-6 md:px-12 max-w-[1400px] mx-auto gs-section">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+          <!-- Left: Title -->
+          <div class="flex flex-col justify-center sticky top-32 h-fit">
+            <h2 class="text-5xl md:text-7xl font-medium tracking-tight leading-tight mb-8 gs-reveal-text">
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  Navigating
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  your
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  real
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  estate
+                </div>
+              </div>
+              <div class="line-wrapper mr-2 mb-2 inline-block">
+                <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                  journey.
+                </div>
+              </div>
+            </h2>
+            <a href="#" class="inline-flex items-center gap-2 border border-gray-300 rounded-full px-6 py-3 w-max hover:bg-gray-900 hover:text-white transition-colors text-base font-medium gs-reveal-up font-dm-sans">
+              Start Process
+              <i data-lucide="arrow-up-right" stroke-width="1.5" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+          <!-- Right: Staggered Cards -->
+          <div class="relative w-full">
+            <!-- Flow Line specific to this section -->
+            <svg class="absolute inset-0 w-full h-full -z-10 pointer-events-none" preserveAspectRatio="none">
+              <path d="M 50,0 C 100,200 -50,400 150,800" stroke="#E6A756" stroke-width="2" fill="none" opacity="0.3" class="path-anim" style="stroke-dashoffset: 819px; stroke-dasharray: 819.211;"></path>
+            </svg>
+
+            <div class="grid gap-12 md:gap-24 relative z-10">
+              <!-- Card 1 -->
+              <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-[85%] md:w-[70%] ml-auto gs-step-card">
+                <div class="text-amber-500 font-medium mb-4 text-lg font-dm-sans">
+                  01
+                </div>
+                <div class="w-full h-48 rounded-2xl overflow-hidden mb-6">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5d9d8ce8-902d-4a3d-b83a-0ef3112a4ae8_3840w.png" alt="Consultation" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl tracking-tight mb-3 font-dm-serif-display font-normal">
+                  Initial Consultation
+                </h3>
+                <p class="text-gray-500 text-lg font-dm-sans">
+                  We begin by understanding your unique vision, lifestyle
+                  requirements, and investment goals.
+                </p>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-[85%] md:w-[70%] gs-step-card">
+                <div class="text-amber-500 font-medium mb-4 text-lg font-dm-sans">
+                  02
+                </div>
+                <div class="w-full h-48 rounded-2xl overflow-hidden mb-6">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5b7e525d-1728-45b7-b451-ccb53cb4fa20_3840w.png" alt="Search" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl tracking-tight mb-3 font-dm-serif-display font-normal">
+                  Curated Selection
+                </h3>
+                <p class="text-gray-500 text-lg font-dm-sans">
+                  Leveraging our exclusive network to present properties that
+                  perfectly align with your criteria.
+                </p>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-[85%] md:w-[70%] ml-auto gs-step-card">
+                <div class="text-amber-500 font-medium mb-4 text-lg font-dm-sans">
+                  03
+                </div>
+                <div class="w-full h-48 rounded-2xl overflow-hidden mb-6">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/41d21a4d-1115-4da8-a22f-be6134477d28_3840w.png" alt="Finance" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl tracking-tight mb-3 font-dm-serif-display font-normal">
+                  Strategic Financing
+                </h3>
+                <p class="text-gray-500 text-lg font-dm-sans">
+                  Connecting you with premium financial partners to structure
+                  the most advantageous terms.
+                </p>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-[85%] md:w-[70%] gs-step-card">
+                <div class="text-amber-500 font-medium mb-4 text-lg font-dm-sans">
+                  04
+                </div>
+                <div class="w-full h-48 rounded-2xl overflow-hidden mb-6">
+                  <video src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/9109ecbb-cdc4-4815-981e-2ea83be13765/1779255254276-22e12670-bcb8-423c-b49a-84dd10414eb9.mp4" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/662b395e-d31e-417d-8b67-f60cd783052e_3840w.png" data-aura-generated-video="true" data-aura-video-preset="hover" muted="" playsinline="" preload="metadata" aria-label="Negotiation" class="w-full h-full object-cover"></video>
+                </div>
+                <h3 class="text-2xl tracking-tight mb-3 font-dm-serif-display font-normal">
+                  Expert Negotiation
+                </h3>
+                <p class="text-gray-500 text-lg font-dm-sans">
+                  Securing your property with uncompromising dedication to your
+                  best interests.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Horizontal Scroll Pinned Section (Handpicked Luxury) -->
+      <section id="portfolio-section" class="py-24 relative overflow-hidden bg-[#F2F0EA] w-full">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12 mb-12 flex justify-between items-end">
+          <h2 class="text-5xl md:text-7xl font-medium tracking-tight leading-tight w-1/2 gs-reveal-text">
+            <div class="line-wrapper mr-2 mb-2 inline-block">
+              <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                Curated
+              </div>
+            </div>
+            <div class="line-wrapper mr-2 mb-2 inline-block">
+              <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                Collection of
+              </div>
+            </div>
+            <div class="line-wrapper mr-2 mb-2 inline-block">
+              <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+                Excellence.
+              </div>
+            </div>
+          </h2>
+          <a href="#" class="hidden md:inline-flex items-center gap-2 border border-gray-300 rounded-full px-6 py-3 hover:bg-gray-900 hover:text-white transition-colors text-base font-medium gs-reveal-up font-dm-sans">
+            View All Properties
+            <i data-lucide="arrow-up-right" stroke-width="1.5" class="w-5 h-5"></i>
+          </a>
+        </div>
+
+        <!-- The Horizontal Scroller -->
+        <div class="portfolio-container h-[70vh] flex items-center w-full relative">
+          <!-- Background sweeping line -->
+          <svg class="absolute inset-0 w-[200%] h-full -z-10 pointer-events-none" viewBox="0 0 2000 500" fill="none">
+            <path d="M -100 250 Q 500 0, 1000 250 T 2100 250" stroke="#E6A756" stroke-width="3" opacity="0.4" class="path-anim" style="stroke-dashoffset: 2274px; stroke-dasharray: 2273.88;"></path>
+          </svg>
+
+          <div class="cards-track flex gap-8 px-6 md:px-12 w-max h-[80%] items-center">
+            <!-- Property 1 -->
+            <div class="property-card relative w-[350px] md:w-[450px] h-full rounded-[2rem] overflow-hidden group shadow-xl shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/66a54053-738a-4db5-8715-740cc463958c_3840w.png" alt="Villa" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 w-full p-8 text-white">
+                <div class="flex justify-between items-end mb-4">
+                  <div class="bg-white/20 backdrop-blur-md rounded-full px-4 py-2 text-sm font-medium font-dm-sans">
+                    $4,500/m
+                    <span class="text-white/70 text-xs font-dm-sans">
+                      (Rent)
+                    </span>
+                  </div>
+                  <button class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-colors">
+                    <i data-lucide="arrow-up-right" stroke-width="1.5" class="w-6 h-6"></i>
+                  </button>
+                </div>
+                <h3 class="text-2xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                  Modernist Oceanfront Estate
+                </h3>
+                <div class="flex gap-4 text-sm font-medium text-white/80">
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    Malibu
+                  </span>
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    California
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Property 2 -->
+            <div class="property-card relative w-[350px] md:w-[450px] h-[90%] rounded-[2rem] overflow-hidden group shadow-xl shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e8f80f43-b369-4f9a-b7be-e207d620424a_3840w.png" alt="Villa" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 w-full p-8 text-white">
+                <h3 class="text-2xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                  Architectural Glass House
+                </h3>
+                <div class="flex gap-4 text-sm font-medium text-white/80">
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    Portland
+                  </span>
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    Oregon
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Property 3 -->
+            <div class="property-card relative w-[350px] md:w-[450px] h-[80%] rounded-[2rem] overflow-hidden group shadow-xl shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1ec66a08-bc03-4284-be4c-e91826256c09_3840w.png" alt="Villa" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 w-full p-8 text-white">
+                <h3 class="text-2xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                  Bespoke Urban Penthouse
+                </h3>
+                <div class="flex gap-4 text-sm font-medium text-white/80">
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    Manhattan
+                  </span>
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    New York
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Property 4 -->
+            <div class="property-card relative w-[350px] md:w-[450px] h-[90%] rounded-[2rem] overflow-hidden group shadow-xl shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a832ad90-a899-4ad3-a89f-383330411174_3840w.png" alt="Villa" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 w-full p-8 text-white">
+                <h3 class="text-2xl tracking-tight mb-2 font-dm-serif-display font-normal">
+                  Tranquil Lakeside Retreat
+                </h3>
+                <div class="flex gap-4 text-sm font-medium text-white/80">
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    Geneva
+                  </span>
+                  <span class="flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-amber-500 before:rounded-full font-dm-sans">
+                    Switzerland
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer / Trust Section -->
+      <section id="testimonials-section" class="py-32 px-6 md:px-12 max-w-[1400px] mx-auto text-center relative overflow-hidden gs-section">
+        <svg class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[300px] -z-10 pointer-events-none" viewBox="0 0 1000 300" fill="none">
+          <path d="M 0 300 Q 500 -100, 1000 300" stroke="#E6A756" stroke-width="2" opacity="0.5" class="path-anim" style="stroke-dashoffset: 975px; stroke-dasharray: 1098.23;"></path>
+        </svg>
+        <h2 class="text-4xl md:text-6xl font-medium tracking-tight leading-tight max-w-3xl mx-auto mb-16 gs-reveal-text">
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              Respected
+            </div>
+          </div>
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              by
+            </div>
+          </div>
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              industry
+            </div>
+          </div>
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              leaders,
+            </div>
+          </div>
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              cherished
+            </div>
+          </div>
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              by
+            </div>
+          </div>
+          <div class="line-wrapper mr-2 mb-2 inline-block">
+            <div class="line-inner translate-y-[110%] opacity-0 rotate-2 font-dm-serif-display font-normal">
+              homeowners.
+            </div>
+          </div>
+        </h2>
+        <div class="flex items-center justify-center gap-4 gs-reveal-up">
+          <button class="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-900 hover:text-white transition-colors">
+            <i data-lucide="arrow-left" stroke-width="1.5" class="w-5 h-5"></i>
+          </button>
+          <div class="text-sm font-semibold tracking-widest text-gray-500 font-dm-sans">
+            <span class="text-gray-900 font-dm-sans">01</span>
+            / 05
+          </div>
+          <button class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center hover:bg-gray-900 text-white transition-colors">
+            <i data-lucide="arrow-right" stroke-width="1.5" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </section>
+      <section id="contact-section" class="py-32 px-6 md:px-12 max-w-[1400px] mx-auto gs-section relative">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+          <div class="lg:col-span-5 flex flex-col justify-between h-full">
+            <div>
+              <span class="text-sm font-medium text-amber-600 uppercase tracking-widest font-dm-sans mb-4 block">
+                Begin Your Legacy
+              </span>
+              <h2 class="text-5xl md:text-6xl font-medium tracking-tight leading-tight mb-8 font-dm-serif-display font-normal">
+                Let's discuss your next elevated space.
+              </h2>
+              <p class="text-gray-600 text-lg mb-12 font-dm-sans leading-relaxed">
+                Whether you are seeking a coastal villa in Ibiza, a penthouse in
+                Manhattan, or an architectural marvel in Monaco, our expert
+                advisors are ready to craft your bespoke real estate experience.
+              </p>
+            </div>
+            <div class="space-y-6 border-t border-gray-200 pt-8">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-amber-500/10 text-amber-600 rounded-full flex items-center justify-center">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400 uppercase tracking-wider font-dm-sans">
+                    Inquire via Email
+                  </div>
+                  <a href="mailto:concierge@auraestates.com" class="text-gray-900 font-medium hover:text-amber-600 transition-colors font-dm-sans">
+                    concierge@auraestates.com
+                  </a>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-amber-500/10 text-amber-600 rounded-full flex items-center justify-center">
+                  <i data-lucide="phone" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400 uppercase tracking-wider font-dm-sans">
+                    Direct Line
+                  </div>
+                  <a href="tel:+37793000000" class="text-gray-900 font-medium hover:text-amber-600 transition-colors font-dm-sans">
+                    +377 93 00 00 00
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-7 bg-white rounded-[2rem] p-8 md:p-12 shadow-sm border border-gray-100 relative">
+            <form class="space-y-8">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="relative">
+                  <input type="text" id="name" required="" class="w-full bg-transparent border-b border-gray-300 py-3 text-gray-900 focus:outline-none focus:border-amber-500 transition-colors font-dm-sans peer placeholder-transparent" placeholder="Your Name">
+                  <label for="name" class="absolute left-0 top-3 text-gray-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-amber-600 font-dm-sans">
+                    Your Name
+                  </label>
+                </div>
+                <div class="relative">
+                  <input type="email" id="email" required="" class="w-full bg-transparent border-b border-gray-300 py-3 text-gray-900 focus:outline-none focus:border-amber-500 transition-colors font-dm-sans peer placeholder-transparent" placeholder="Email Address">
+                  <label for="email" class="absolute left-0 top-3 text-gray-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-amber-600 font-dm-sans">
+                    Email Address
+                  </label>
+                </div>
+              </div>
+              <div class="relative">
+                <select id="interest" class="w-full bg-transparent border-b border-gray-300 py-3 text-gray-900 focus:outline-none focus:border-amber-500 transition-colors font-dm-sans">
+                  <option value="" disabled="" selected="" class="text-gray-400">
+                    Select Region of Interest
+                  </option>
+                  <option value="monaco" class="text-gray-900">
+                    Monaco Collection
+                  </option>
+                  <option value="ibiza" class="text-gray-900">
+                    Ibiza Collection
+                  </option>
+                  <option value="malibu" class="text-gray-900">
+                    Malibu Coastal
+                  </option>
+                  <option value="swiss" class="text-gray-900">
+                    Swiss Lakeside
+                  </option>
+                </select>
+              </div>
+              <div class="relative">
+                <textarea id="message" rows="4" required="" class="w-full bg-transparent border-b border-gray-300 py-3 text-gray-900 focus:outline-none focus:border-amber-500 transition-colors font-dm-sans peer placeholder-transparent" placeholder="Your Message"></textarea>
+                <label for="message" class="absolute left-0 top-3 text-gray-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-amber-600 font-dm-sans">
+                  Your Message
+                </label>
+              </div>
+              <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-amber-600 text-white rounded-full px-8 py-4 transition-colors text-base font-medium font-dm-sans group shadow-md">
+                Send Inquiry
+                <i data-lucide="arrow-up-right" stroke-width="1.5" class="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+      <footer class="bg-gray-950 text-white pt-24 pb-12 mt-20 relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16 border-b border-white/10">
+            <div class="lg:col-span-4 space-y-6">
+              <div class="flex items-center gap-2 text-2xl tracking-tight font-dm-serif-display font-normal">
+                <i data-lucide="hexagon" stroke-width="1.5" class="w-6 h-6 text-amber-500"></i>
+                Aura Estates
+              </div>
+              <p class="text-gray-400 text-sm font-dm-sans leading-relaxed max-w-sm">
+                Curating architectural masterpieces and ultra-exclusive
+                residences across the world's most desired coastal and
+                metropolitan regions.
+              </p>
+              <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors">
+                  <i data-lucide="instagram" class="w-4 h-4"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors">
+                  <i data-lucide="linkedin" class="w-4 h-4"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors">
+                  <i data-lucide="twitter" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="lg:col-span-2 space-y-4">
+              <h4 class="text-xs uppercase tracking-widest text-amber-500 font-semibold font-dm-sans">
+                Portfolios
+              </h4>
+              <ul class="space-y-2 text-sm text-gray-400 font-dm-sans">
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Monaco Collection
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Ibiza Coastline
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Malibu Oceanfront
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Swiss Lakes
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="lg:col-span-2 space-y-4">
+              <h4 class="text-xs uppercase tracking-widest text-amber-500 font-semibold font-dm-sans">
+                Company
+              </h4>
+              <ul class="space-y-2 text-sm text-gray-400 font-dm-sans">
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Our Story
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    The Architects
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Careers
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-white transition-colors">
+                    Journal
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="lg:col-span-4 space-y-4">
+              <h4 class="text-xs uppercase tracking-widest text-amber-500 font-semibold font-dm-sans">
+                Global Head Office
+              </h4>
+              <p class="text-sm text-gray-400 font-dm-sans leading-relaxed">
+                Avenue des Beaux-Arts, 98000
+                <br>
+                Monte Carlo, Monaco
+              </p>
+              <div class="pt-2 text-sm text-gray-400 font-dm-sans">
+                T:
+                <span class="text-white">+377 93 00 00 00</span>
+              </div>
+            </div>
+          </div>
+          <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-dm-sans">
+            <div>
+              © 2025 Aura Estates. All rights reserved. Crafted for timeless
+              elegance.
+            </div>
+            <div class="flex gap-6">
+              <a href="#" class="hover:text-white transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" class="hover:text-white transition-colors">
+                Terms of Service
+              </a>
+              <a href="#" class="hover:text-white transition-colors">
+                Cookie Settings
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <script>
+        if(typeof lucide !== 'undefined') { lucide.createIcons(); }
+      </script>
+    </main>
+
+    <!-- GSAP & Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+      // Initialize Icons
+      lucide.createIcons();
+
+      // GSAP Setup
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Utility: Wrap text lines for animation
+      const wrapLines = (element) => {
+          const lines = element.innerHTML.split('<br>');
+          element.innerHTML = lines.map(line => `<div class="line-wrapper"><div class="line-inner">${line}</div></div>`).join('');
+      };
+
+      // Custom ease for cinematic feel
+      const customEase = "power4.out";
+
+      // Initial Load Timeline
+      const initTL = gsap.timeline();
+
+      initTL.from(".gs-nav", {
+          y: -20,
+          opacity: 0,
+          duration: 1.2,
+          ease: customEase,
+          delay: 0.2
+      })
+      .from(".gs-title .line-inner", {
+          y: 120,
+          opacity: 0,
+          rotationZ: 3,
+          duration: 1.5,
+          stagger: 0.15,
+          ease: "expo.out",
+      }, "-=0.8")
+      .from(".gs-hero-img-small", {
+          width: 0,
+          opacity: 0,
+          duration: 1.2,
+          ease: "expo.out"
+      }, "-=1.2")
+      .from(".gs-hero-meta", {
+          y: 30,
+          opacity: 0,
+          duration: 1,
+          ease: customEase
+      }, "-=1")
+      .from(".gs-hero-main", {
+          y: 100,
+          scale: 0.95,
+          opacity: 0,
+          duration: 1.8,
+          ease: "expo.out",
+          clearProps: "all"
+      }, "-=1.4");
+
+      // Scroll Reveals (Generic)
+      gsap.utils.toArray('.gs-reveal-up').forEach(elem => {
+          gsap.from(elem, {
+              scrollTrigger: {
+                  trigger: elem,
+                  start: "top 85%",
+              },
+              y: 50,
+              opacity: 0,
+              duration: 1.2,
+              ease: customEase
+          });
+      });
+
+      // Text Reveals specific to sections
+      gsap.utils.toArray('.gs-reveal-text').forEach(textBlock => {
+          // Basic text wrap if not already done manually in HTML
+          if(!textBlock.querySelector('.line-wrapper')) {
+               const words = textBlock.innerText.split(' ');
+               textBlock.innerHTML = '';
+               words.forEach(word => {
+                   const wrapper = document.createElement('div');
+                   wrapper.className = 'line-wrapper mr-2 mb-2 inline-block';
+                   wrapper.innerHTML = `<div class="line-inner translate-y-[110%] opacity-0 rotate-2">${word}</div>`;
+                   textBlock.appendChild(wrapper);
+               });
+          }
+
+          gsap.to(textBlock.querySelectorAll('.line-inner'), {
+              scrollTrigger: {
+                  trigger: textBlock,
+                  start: "top 85%",
+              },
+              y: 0,
+              opacity: 1,
+              rotationZ: 0,
+              duration: 1.2,
+              stagger: 0.02,
+              ease: "expo.out"
+          });
+      });
+
+      // Image Parallax / Reveal
+      gsap.utils.toArray('.gs-reveal-img').forEach(container => {
+          const img = container.querySelector('img');
+
+          gsap.from(container, {
+              scrollTrigger: {
+                  trigger: container,
+                  start: "top 90%",
+              },
+              scale: 0.8,
+              opacity: 0,
+              rotation: -5,
+              duration: 1.5,
+              ease: "expo.out"
+          });
+
+          // Parallax inner
+          gsap.to(img, {
+              yPercent: 15,
+              ease: "none",
+              scrollTrigger: {
+                  trigger: container,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true
+              }
+          });
+      });
+
+      // Stats Reveal & Counter
+      const statsSection = document.querySelector('.gs-reveal-scale');
+      if(statsSection) {
+          gsap.from(statsSection, {
+              scrollTrigger: {
+                  trigger: statsSection,
+                  start: "top 85%",
+              },
+              scale: 0.95,
+              opacity: 0,
+              duration: 1.5,
+              ease: customEase
+          });
+
+          gsap.utils.toArray('.gs-stat').forEach((stat, i) => {
+              const counter = stat.querySelector('.counter');
+              const target = parseInt(counter.getAttribute('data-target'));
+
+              gsap.from(stat, {
+                  scrollTrigger: {
+                      trigger: statsSection,
+                      start: "top 70%",
+                  },
+                  y: 40,
+                  opacity: 0,
+                  duration: 1,
+                  delay: i * 0.1,
+                  ease: customEase,
+                  onStart: () => {
+                      gsap.to(counter, {
+                          innerHTML: target,
+                          duration: 2,
+                          ease: "power2.out",
+                          snap: { innerHTML: 1 },
+                          onUpdate: function() {
+                              counter.innerHTML = Math.round(this.targets()[0].innerHTML);
+                          }
+                      });
+                  }
+              });
+          });
+      }
+
+      // Process Cards Stagger
+      gsap.utils.toArray('.gs-step-card').forEach((card, i) => {
+          gsap.from(card, {
+              scrollTrigger: {
+                  trigger: card,
+                  start: "top 85%",
+              },
+              x: i % 2 === 0 ? 50 : -50, // Alternate slide direction slightly
+              y: 50,
+              opacity: 0,
+              duration: 1.2,
+              ease: "expo.out"
+          });
+      });
+
+      // Horizontal Scroll Pinned Section
+      const portfolioSection = document.getElementById('portfolio-section');
+      const cardsTrack = document.querySelector('.cards-track');
+
+      if (portfolioSection && cardsTrack) {
+          // Calculate total scroll distance based on content width vs window width
+          let getScrollAmount = () => -(cardsTrack.scrollWidth - window.innerWidth + 100);
+
+          const tween = gsap.to(cardsTrack, {
+              x: getScrollAmount,
+              ease: "none"
+          });
+
+          ScrollTrigger.create({
+              trigger: portfolioSection,
+              start: "top top",
+              end: () => `+=${getScrollAmount() * -1}`,
+              pin: true,
+              animation: tween,
+              scrub: 1,
+              invalidateOnRefresh: true
+          });
+
+          // Card specific animations during scrub
+          gsap.utils.toArray('.property-card').forEach((card, i) => {
+              gsap.from(card, {
+                  scrollTrigger: {
+                      trigger: portfolioSection,
+                      start: "top top",
+                      end: () => `+=${getScrollAmount() * -1}`,
+                      scrub: 1,
+                  },
+                  y: (i % 2 === 0) ? 40 : -40, // slight up/down bobbing while scrolling
+                  ease: "sine.inOut"
+              });
+          });
+      }
+
+      // SVG Path Animations (The flowing lines)
+      gsap.utils.toArray('.path-anim').forEach(path => {
+          const length = path.getTotalLength();
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+
+          gsap.to(path, {
+              strokeDashoffset: 0,
+              ease: "none",
+              scrollTrigger: {
+                  trigger: path.closest('section') || path.closest('div'),
+                  start: "top 90%",
+                  end: "bottom top",
+                  scrub: 1
+              }
+          });
+      });
+
+      // Global Parallax for elements with data-speed
+      gsap.utils.toArray('[data-speed]').forEach(elem => {
+          const speed = elem.getAttribute('data-speed');
+          gsap.to(elem, {
+              y: () => (1 - speed) * 100 * -1, // Simple parallax calc
+              ease: "none",
+              scrollTrigger: {
+                  trigger: elem.parentElement,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true
+              }
+          });
+      });
+    </script>
+
+    
+  
+<script data-aura-video-controller="true">
+(function () {
+  function playVideo(video) {
+    var promise = video.play();
+    if (promise && typeof promise.catch === "function") {
+      promise.catch(function () {});
+    }
+  }
+
+  function setupVideo(video) {
+    if (video.__auraVideoReady === true) return;
+    video.__auraVideoReady = true;
+    video.removeAttribute("data-aura-video-ready");
+    video.removeAttribute("data-aura-video-played");
+    video.muted = true;
+    video.playsInline = true;
+
+    var preset = video.dataset.auraVideoPreset || "loop-in-view";
+    if (preset === "hover") {
+      video.addEventListener("mouseenter", function () {
+        playVideo(video);
+      });
+      video.addEventListener("mouseleave", function () {
+        video.pause();
+        video.currentTime = 0;
+      });
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      playVideo(video);
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          if (preset === "play-once" && video.__auraVideoPlayed === true) {
+            return;
+          }
+          playVideo(video);
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.35 });
+
+    if (preset === "play-once") {
+      video.addEventListener("ended", function () {
+        video.__auraVideoPlayed = true;
+      }, { once: true });
+    }
+
+    observer.observe(video);
+  }
+
+  function setupVideos() {
+    document
+      .querySelectorAll("video[data-aura-video-preset]")
+      .forEach(setupVideo);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupVideos);
+  } else {
+    setupVideos();
+  }
+})();</script></body></html>

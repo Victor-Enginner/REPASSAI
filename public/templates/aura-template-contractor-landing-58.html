@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handy Prime</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Inter', sans-serif;
+}
+</style>
+<meta name="aura-font-heading-class" content="font-bricolage">
+<meta name="aura-font-body-class" content="font-sans">
+<meta name="aura-font-heading-label" content="Bricolage Grotesque">
+<meta name="aura-font-body-label" content="Inter">
+<meta name="disabled-font-classes" content="font-manrope,font-space-grotesk,font-geist-mono,font-geist,font-jetbrains-mono,font-instrument-serif,font-google-sans,font-nunito">
+<link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&display=swap">
+<style id="all-fonts-style-font-bricolage">
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body class="min-h-screen bg-white font-sans text-slate-900 selection:bg-[#132347] selection:text-white antialiased">
+    <div id="root" class="">
+      <style>
+        [class*="rounded"] { border-radius: 8px !important; }
+      </style>
+      <div class="absolute top-8 inset-x-4 md:top-10 md:inset-x-12 z-50">
+        <div class="max-w-[1400px] mx-auto bg-white/95 backdrop-blur-xl rounded-xl shadow-xl shadow-slate-900/10 border border-white/70 px-5 py-3 md:px-8 md:py-3.5 flex items-center justify-between transition-all">
+          <div class="flex items-center text-[#132347] z-50">
+            <span class="text-2xl tracking-tighter font-bricolage font-extrabold transition-transform hover:scale-105 duration-300 inline-block">
+              Handy Prime
+            </span>
+          </div>
+          <div class="hidden lg:flex items-center gap-8 font-normal text-sm text-slate-600">
+            <a href="#home" class="hover:text-[#132347] transition-colors flex items-center gap-1.5 font-sans">
+              Home
+            </a>
+            <a href="#about" class="hover:text-[#132347] transition-colors font-sans">
+              About
+            </a>
+            <a href="#services" class="hover:text-[#132347] transition-colors flex items-center gap-1.5 font-sans">
+              Services
+            </a>
+            <a href="#projects" class="hover:text-[#132347] transition-colors flex items-center gap-1.5 font-sans">
+              Gallery
+            </a>
+            <a href="#reviews" class="hover:text-[#132347] transition-colors flex items-center gap-1.5 font-sans">
+              Reviews
+            </a>
+            <a href="#contact" class="hover:text-[#132347] transition-colors font-sans">
+              Contact
+            </a>
+          </div>
+          <div class="hidden md:flex items-center gap-3">
+            <div class="flex items-center justify-center w-11 h-11 bg-[#f5b82e]/10 text-[#f5b82e] rounded-full shrink-0 border border-[#f5b82e]">
+              <iconify-icon icon="solar:phone-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xs text-slate-500 font-normal font-sans">
+                Open Now
+              </span>
+              <span class="font-semibold text-[#132347] text-sm tracking-tight font-sans">
+                +1 (778) 726-9755
+              </span>
+            </div>
+          </div>
+          <button class="lg:hidden p-2 text-[#132347] z-50 hover:bg-slate-50 rounded-md transition-colors">
+            <iconify-icon icon="solar:hamburger-menu-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+          </button>
+        </div>
+      </div>
+
+      <main class="">
+        <div class="">
+          <section id="home" class="relative h-screen min-h-[700px] overflow-hidden bg-[#132347] flex items-center">
+            <div class="absolute inset-0 z-0 bg-cover bg-[center_right_15%]" style="background-image: url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1dfd8e47-9956-4558-802a-26da78800e98_1600w.png');"></div>
+            <div class="absolute inset-0 z-0 bg-gradient-to-r from-[#132347]/90 from-30% via-[#132347]/60 via-60% to-transparent w-full"></div>
+            <div class="absolute bottom-0 right-0 w-full md:w-[45%] lg:w-[40%] h-[45%] md:h-[48%] z-10 bg-[#132347]" style="clip-path: polygon(0px 25%, 100% 0px, 100% 100%, 0px 100%);"></div>
+
+            <div class="relative z-20 w-full max-w-[1400px] mx-auto h-full flex flex-col md:flex-row">
+              <div class="flex-1 flex flex-col justify-center px-6 md:px-12 pt-72 md:pt-96 pb-8 md:pb-12">
+                <div class="inline-flex border border-white/20 bg-white/5 rounded-full px-4 py-1.5 mb-6 self-start backdrop-blur-md">
+                  <span class="text-xs text-white tracking-widest font-normal font-sans">
+                    Licensed General Contractor • Duncan, BC
+                  </span>
+                </div>
+                <h1 class="md:text-6xl lg:text-7xl leading-[1.1] text-5xl font-medium text-white tracking-tighter font-bricolage max-w-2xl mb-0">
+                  Renovations &amp;
+                  <br>
+                  General Contracting
+                  <br>
+                  Done Right
+                </h1>
+              </div>
+
+              <div class="md:w-[45%] lg:w-[40%] md:h-full flex flex-col md:p-12 lg:pb-16 md:mt-0 w-full h-auto mt-auto pt-6 pr-6 pb-12 pl-6 relative justify-end">
+                <div class="max-w-[420px] ml-auto mr-auto md:mr-0">
+                  <p class="text-blue-100/80 text-sm md:text-base leading-relaxed mb-8 font-light font-sans">
+                    Handy Prime provides professional home improvement,
+                    renovation, demolition, junk removal, and general repair
+                    services across Duncan, Nanaimo, Victoria, and Vancouver
+                    Island.
+                  </p>
+                  <div class="flex flex-col xl:flex-row xl:items-center gap-8">
+                    <a href="#contact" class="inline-flex items-center gap-3 bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] font-normal pr-6 py-1.5 pl-1.5 rounded-full transition-colors group whitespace-nowrap">
+                      <div class="bg-white p-2 rounded-full flex items-center justify-center text-[#132347] shadow-sm">
+                        <iconify-icon icon="solar:arrow-right-up-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                      </div>
+                      <span class="text-sm font-sans whitespace-nowrap">
+                        Get a free estimate
+                      </span>
+                    </a>
+                    <div class="flex items-center gap-3">
+                      <span class="text-white text-3xl tracking-tight font-bricolage font-semibold">
+                        5.0
+                      </span>
+                      <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-0.5 text-[#f5b82e]">
+                          <iconify-icon icon="solar:star-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                          <iconify-icon icon="solar:star-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                          <iconify-icon icon="solar:star-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                          <iconify-icon icon="solar:star-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                          <iconify-icon icon="solar:star-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                        </div>
+                        <span class="text-xs text-white/60 tracking-wide font-sans">
+                          3 Google Reviews • Open Now
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section id="about" class="py-24 md:py-32 bg-[#f8f9fc]">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="flex flex-col lg:flex-row lg:gap-24 gap-x-16 gap-y-16 items-center">
+              <div class="flex-1 lg:pr-12">
+                <div class="inline-flex border border-slate-200 bg-white rounded-full px-4 py-1.5 mb-6 shadow-sm">
+                  <span class="text-xs text-[#132347] tracking-widest font-semibold font-sans">
+                    About Us
+                  </span>
+                </div>
+                <h2 class="lg:text-5xl leading-[1.1] text-4xl font-medium text-[#132347] tracking-tighter font-bricolage mb-8">
+                  Licensed Duncan general contractor for clean, reliable home
+                  improvements.
+                </h2>
+                <p class="text-slate-500 leading-relaxed text-base mb-12 max-w-xl font-light font-sans">
+                  Handy Prime is a licensed Vancouver Island contracting
+                  business providing professional home improvement and
+                  renovation services throughout Duncan, Nanaimo, Victoria, and
+                  surrounding communities. We specialize in drywall, framing,
+                  painting, flooring, trim carpentry, renovations, demolition,
+                  junk removal, and general repairs. Our company is committed to
+                  delivering reliable service, quality workmanship, and
+                  professional results on every project. We take pride in honest
+                  communication, attention to detail, and customer satisfaction
+                  while helping homeowners improve the value, appearance, and
+                  functionality of their homes.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-8 mb-12">
+                  <div class="flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full bg-[#f5b82e]/20 text-[#e0a628] flex items-center justify-center shrink-0 border border-[#f5b82e]">
+                      <iconify-icon icon="solar:check-read-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                    </div>
+                    <span class="font-medium text-slate-700 text-sm font-sans">
+                      Licensed General Contractor
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full bg-[#f5b82e]/20 text-[#e0a628] flex items-center justify-center shrink-0 border border-[#f5b82e]">
+                      <iconify-icon icon="solar:check-read-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                    </div>
+                    <span class="font-medium text-slate-700 text-sm font-sans">
+                      Honest Communication
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full bg-[#f5b82e]/20 text-[#e0a628] flex items-center justify-center shrink-0 border border-[#f5b82e]">
+                      <iconify-icon icon="solar:check-read-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                    </div>
+                    <span class="font-medium text-slate-700 text-sm font-sans">
+                      Quality Workmanship
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full bg-[#f5b82e]/20 text-[#e0a628] flex items-center justify-center shrink-0 border border-[#f5b82e]">
+                      <iconify-icon icon="solar:check-read-linear" stroke-width="1.5" class="text-sm"></iconify-icon>
+                    </div>
+                    <span class="font-medium text-slate-700 text-sm font-sans">
+                      Professional Results
+                    </span>
+                  </div>
+                </div>
+                <a href="#about" class="inline-flex items-center gap-3 bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] font-medium pr-6 py-1.5 pl-1.5 rounded-full transition-colors group">
+                  <div class="bg-white p-2 rounded-full flex items-center justify-center text-[#132347] shadow-sm">
+                    <iconify-icon icon="solar:arrow-right-up-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                  </div>
+                  <span class="text-sm font-sans">Our Services</span>
+                </a>
+              </div>
+              <div class="flex-1 relative w-full lg:w-[50%] mt-12 lg:mt-0">
+                <div class="relative w-full pb-10 pr-4 md:pr-8">
+                  <div class="w-[85%] h-[400px] md:h-[550px] rounded-3xl overflow-hidden ml-auto relative z-10 shadow-xl">
+                    <img alt="Contractor working" class="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/25fc5af0-4d4d-47ee-bb27-fda1d44b856c_1600w.png">
+                  </div>
+                  <div class="absolute bottom-0 left-0 w-[55%] md:w-[320px] aspect-square rounded-[2rem] overflow-hidden border-[12px] md:border-[16px] border-[#f8f9fc] z-20 bg-[#f8f9fc] shadow-lg">
+                    <img alt="Construction details" class="w-full h-full object-cover rounded-xl" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4baf4108-9aae-40c2-8622-4284797ede0b_800w.png">
+                  </div>
+                  <div class="absolute bottom-6 right-0 bg-white border py-6 px-8 md:py-8 md:px-10 rounded-2xl z-30 flex flex-col items-center justify-center shadow-xl border-slate-200">
+                    <span class="text-5xl md:text-6xl text-[#132347] tracking-tighter leading-none mb-2 font-bricolage font-semibold">
+                      5.0
+                    </span>
+                    <div class="flex flex-col text-slate-500 uppercase tracking-widest font-medium text-xs leading-tight text-center">
+                      <span class="font-sans">Google</span>
+                      <span class="font-sans">Rating</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="services" class="py-24 md:py-32 border-t border-slate-100 overflow-hidden relative">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+              <div class="max-w-3xl">
+                <div class="inline-flex border border-slate-200 bg-white rounded-full px-4 py-1.5 mb-6 shadow-sm">
+                  <span class="text-xs text-[#132347] tracking-widest font-semibold font-sans">
+                    Our Services
+                  </span>
+                </div>
+                <h2 class="text-[#132347] text-4xl lg:text-5xl tracking-tighter leading-[1.1] font-bricolage font-semibold">
+                  Complete Home Renovation &amp; Repair Services
+                </h2>
+              </div>
+              <p class="text-slate-500 text-sm md:text-base leading-relaxed font-light max-w-xl font-sans">
+                From accessory buildings and basement remodeling to drywall
+                repair, flooring, painting, trim carpentry, demolition, junk
+                removal, and general home repairs, Handy Prime keeps projects
+                organized, clean, and professionally finished.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:buildings-2-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Accessory Building Construction
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Practical outbuildings and functional spaces built with
+                  durable materials and clean execution.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:bath-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Bathroom Remodeling
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Bathroom renovations with custom finishing work, tile,
+                  fixtures, and detail-focused results.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:garage-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Basement Remodeling
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Basements transformed into cleaner, more useful rooms with
+                  professional finishing.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:chef-hat-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Kitchen Remodeling
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Kitchen upgrades, cabinetry support, flooring, trim, and
+                  finish improvements.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:layers-minimalistic-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Drywall Repair
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Drywall patching, repairs, prep, and smooth surfaces ready for
+                  paint and finishing.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:palette-round-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Painting &amp; Trim Carpentry
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Crisp paintwork, trim details, and finishing touches that
+                  elevate the whole room.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:widget-5-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Flooring &amp; Flooring Repair
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Flooring installs, repairs, and practical updates that improve
+                  durability and appearance.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:hammer-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Framing &amp; Remodeling
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Framing, layout changes, and remodeling work completed with a
+                  clean, structured process.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:dropper-minimalistic-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Concrete Pouring
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Concrete pouring and surface preparation for practical
+                  residential improvements.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:trash-bin-minimalistic-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Demolition &amp; Junk Removal
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Clean removal, demolition support, and site cleanup to keep
+                  projects moving smoothly.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:waterdrops-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Gutter Cleaning
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  Routine exterior maintenance that helps protect your home from
+                  preventable issues.
+                </p>
+              </div>
+              <div class="group bg-[#f8f9fc] border rounded-2xl p-7 hover:bg-[#132347] transition-all duration-300 shadow-sm hover:shadow-xl border-slate-200">
+                <div class="w-11 h-11 bg-[#f5b82e]/15 text-[#132347] group-hover:bg-[#f5b82e] rounded-full flex items-center justify-center mb-6 transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:wrench-linear" stroke-width="1.5" class="text-2xl"></iconify-icon>
+                </div>
+                <h3 class="font-medium text-lg tracking-tight text-[#132347] group-hover:text-white mb-3 font-sans">
+                  Home Repairs
+                </h3>
+                <p class="text-slate-500 group-hover:text-blue-100/80 text-sm leading-relaxed font-light font-sans">
+                  General repairs handled with dependable service, clear
+                  communication, and care.
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-14 text-center">
+              <a href="#contact" class="inline-flex items-center gap-3 bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] font-medium pr-6 py-1.5 pl-1.5 rounded-full transition-colors group">
+                <div class="bg-white p-2 rounded-full flex items-center justify-center text-[#132347] shadow-sm">
+                  <iconify-icon icon="solar:arrow-right-up-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                </div>
+                <span class="text-sm font-sans">Contact Handy Prime</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="py-24 md:py-32 bg-slate-950 text-white overflow-hidden relative premium-glow" id="projects">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+              <div class="max-w-3xl">
+                <div class="inline-flex border border-white/10 bg-white/5 rounded-full px-4 py-1.5 mb-6 backdrop-blur-sm">
+                  <span class="text-xs text-slate-300 tracking-widest font-medium font-sans">
+                    Recent Work &amp; Posts
+                  </span>
+                </div>
+                <h2 class="text-4xl md:text-5xl tracking-tighter text-white leading-tight font-bricolage font-semibold">
+                  Bathroom Renovations, Custom Finishing &amp; Home Upgrades
+                </h2>
+              </div>
+              <p class="text-slate-400 text-sm md:text-base leading-relaxed font-light max-w-xl font-sans">
+                A simple look at the kind of careful renovation, repair,
+                finishing, concrete, flooring, and remodeling work Handy Prime
+                completes for homeowners across Vancouver Island.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[260px] gap-4">
+              <a href="#contact" class="gallery-card group relative overflow-hidden rounded-2xl border bg-slate-900 sm:col-span-2 sm:row-span-2 border-white/20">
+                <img alt="Modern bathroom renovation" class="absolute inset-0 w-full h-full object-cover opacity-85" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2545c586-0bbc-4698-a7e3-5b4d3797720e_1600w.png">
+                <div class="absolute left-6 right-6 bottom-6 z-10">
+                  <p class="text-[#f5b82e] text-xs tracking-widest font-medium mb-2 font-sans">
+                    Bathroom Renovation
+                  </p>
+                  <h3 class="text-2xl md:text-3xl tracking-tight text-white font-bricolage font-semibold">
+                    New bathroom renovation projects completed with custom
+                    finishing work
+                  </h3>
+                </div>
+              </a>
+              <a href="#contact" class="gallery-card group relative overflow-hidden rounded-2xl border bg-slate-900 border-white/20">
+                <img alt="Kitchen remodeling project" class="absolute inset-0 w-full h-full object-cover opacity-85" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4baf4108-9aae-40c2-8622-4284797ede0b_800w.png">
+                <div class="absolute left-5 right-5 bottom-5 z-10">
+                  <p class="text-[#f5b82e] text-[11px] tracking-widest font-medium mb-2 font-sans">
+                    Kitchen
+                  </p>
+                  <h3 class="font-medium text-lg tracking-tight text-white font-sans">
+                    Cabinetry &amp; finish upgrades
+                  </h3>
+                </div>
+              </a>
+              <a href="#contact" class="gallery-card group relative overflow-hidden rounded-2xl border bg-slate-900 border-white/20">
+                <img alt="Room makeover project" class="absolute inset-0 w-full h-full object-cover opacity-85" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/42f4b9fc-2ed6-4f17-9e35-64d2004fef43_800w.png">
+                <div class="absolute left-5 right-5 bottom-5 z-10">
+                  <p class="text-[#f5b82e] text-[11px] tracking-widest font-medium mb-2 font-sans">
+                    Interior
+                  </p>
+                  <h3 class="font-medium text-lg tracking-tight text-white font-sans">
+                    Room makeovers
+                  </h3>
+                </div>
+              </a>
+              <a href="#contact" class="gallery-card group relative overflow-hidden rounded-2xl border bg-slate-900 border-white/20">
+                <img alt="Basement finishing project" class="absolute inset-0 w-full h-full object-cover opacity-85" src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=900">
+                <div class="absolute left-5 right-5 bottom-5 z-10">
+                  <p class="text-[#f5b82e] text-[11px] tracking-widest font-medium mb-2 font-sans">
+                    Basement
+                  </p>
+                  <h3 class="font-medium text-lg tracking-tight text-white font-sans">
+                    Clean finishing work
+                  </h3>
+                </div>
+              </a>
+              <a href="#contact" class="gallery-card group relative overflow-hidden rounded-2xl border bg-slate-900 border-white/20">
+                <img alt="Concrete pouring project" class="absolute inset-0 w-full h-full object-cover opacity-85" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/72e9fef5-877a-4fd8-b937-c517f6452c20_800w.png">
+                <div class="absolute left-5 right-5 bottom-5 z-10">
+                  <p class="text-[#f5b82e] text-[11px] tracking-widest font-medium mb-2 font-sans">
+                    Concrete
+                  </p>
+                  <h3 class="font-medium text-lg tracking-tight text-white font-sans">
+                    Pouring &amp; surface prep
+                  </h3>
+                </div>
+              </a>
+              <a href="#contact" class="gallery-card group relative overflow-hidden rounded-2xl border bg-slate-900 sm:col-span-2 border-white/20">
+                <img alt="Construction detail work" class="absolute inset-0 w-full h-full object-cover opacity-85" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ac270b7d-3491-47b0-9b9c-543b66a13abb_1600w.png">
+                <div class="absolute left-6 right-6 bottom-6 z-10">
+                  <p class="text-[#f5b82e] text-xs tracking-widest font-medium mb-2 font-sans">
+                    Detail Work
+                  </p>
+                  <h3 class="text-2xl tracking-tight text-white font-bricolage font-semibold">
+                    Repairs, installs, and finishing touches
+                  </h3>
+                </div>
+              </a>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center md:p-8 border rounded-2xl mt-12 pt-6 pr-6 pb-6 pl-6 gap-x-5 gap-y-5 items-start justify-between border-white/20">
+              <p class="text-slate-300 text-sm md:text-base font-light max-w-2xl font-sans">
+                Contact Handy Prime for free estimates on renovations,
+                remodeling, drywall, flooring, painting, demolition, junk
+                removal, concrete, and general home repairs.
+              </p>
+              <a href="#contact" class="inline-flex items-center gap-3 bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] font-medium pr-6 py-1.5 pl-1.5 rounded-full transition-colors group shrink-0">
+                <span class="bg-white p-2 rounded-full flex items-center justify-center text-[#132347] shadow-sm">
+                  <iconify-icon icon="solar:arrow-right-up-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                </span>
+                <span class="text-sm font-sans">Request an Estimate</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="py-24 relative overflow-hidden border-t border-slate-100" id="reviews">
+          <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-10 mb-14">
+              <div class="max-w-2xl">
+                <div class="inline-flex items-center gap-2 border border-slate-200 bg-white rounded-full px-4 py-1.5 mb-6 shadow-sm">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"></path>
+                  </svg>
+                  <span class="text-xs text-slate-600 tracking-widest font-medium font-sans">
+                    Google Reviews
+                  </span>
+                </div>
+                <h2 class="text-4xl md:text-5xl text-[#132347] tracking-tighter leading-tight font-bricolage font-semibold">
+                  5 out of 5 from Duncan homeowners
+                </h2>
+              </div>
+              <div class="flex items-center gap-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-300">
+                <div class="text-5xl tracking-tighter text-[#132347] font-bricolage font-semibold">
+                  5.0
+                </div>
+                <div>
+                  <div class="flex items-center gap-0.5 text-[#f5b82e] mb-1">
+                    <iconify-icon icon="solar:star-bold" class="text-lg"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold" class="text-lg"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold" class="text-lg"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold" class="text-lg"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold" class="text-lg"></iconify-icon>
+                  </div>
+                  <p class="text-xs font-normal text-slate-400 tracking-wide font-sans">
+                    Based on 3 Google reviews
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm border relative hover:-translate-y-1 transition-transform duration-300 border-slate-300">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-[#132347] to-blue-900 rounded-full flex items-center justify-center text-white font-medium text-lg font-bricolage shadow-md">
+                      J
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-slate-900 text-sm font-sans">
+                        Jake Cooper
+                      </h4>
+                      <p class="text-xs text-slate-500 font-sans mt-0.5">
+                        2 weeks ago
+                      </p>
+                    </div>
+                  </div>
+                  <svg aria-label="Google" viewBox="0 0 24 24" class="w-5 h-5 shrink-0 opacity-80">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"></path>
+                  </svg>
+                </div>
+                <div class="flex items-center gap-1 text-[#f5b82e] mb-5">
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-sm font-light font-sans relative z-10">
+                  “We recently had our bathroom renovated and couldn't be
+                  happier with the results. The team was professional,
+                  communicated clearly throughout the project, and paid great
+                  attention to detail. The work was completed on time, and the
+                  finished space exceeded our expectations. We would highly
+                  recommend them.”
+                </p>
+              </div>
+              <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm border relative hover:-translate-y-1 transition-transform duration-300 border-slate-300">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-[#132347] to-blue-900 rounded-full flex items-center justify-center text-white font-medium text-lg font-bricolage shadow-md">
+                      D
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-slate-900 text-sm font-sans">
+                        Dallas Wise
+                      </h4>
+                      <p class="text-xs text-slate-500 font-sans mt-0.5">
+                        1 month ago
+                      </p>
+                    </div>
+                  </div>
+                  <svg aria-label="Google" viewBox="0 0 24 24" class="w-5 h-5 shrink-0 opacity-80">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"></path>
+                  </svg>
+                </div>
+                <div class="flex items-center gap-1 text-[#f5b82e] mb-5">
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-sm font-light font-sans relative z-10">
+                  “I’m extremely happy with how my room renovation turned out.
+                  The team was professional, reliable, and paid close attention
+                  to every detail throughout the project. They kept the
+                  workspace clean, communicated clearly, and delivered
+                  high-quality workmanship. The finished room looks amazing.”
+                </p>
+              </div>
+              <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm border relative hover:-translate-y-1 transition-transform duration-300 border-slate-300">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-[#132347] to-blue-900 rounded-full flex items-center justify-center text-white font-medium text-lg font-bricolage shadow-md">
+                      M
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-slate-900 text-sm font-sans">
+                        Mike T.
+                      </h4>
+                      <p class="text-xs text-slate-500 font-sans mt-0.5">
+                        3 months ago
+                      </p>
+                    </div>
+                  </div>
+                  <svg aria-label="Google" viewBox="0 0 24 24" class="w-5 h-5 shrink-0 opacity-80">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"></path>
+                  </svg>
+                </div>
+                <div class="flex items-center gap-1 text-[#f5b82e] mb-5">
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" class="text-base"></iconify-icon>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-sm font-light font-sans relative z-10">
+                  “Handy Prime completely transformed our kitchen. From the
+                  initial quote to the final touches, their team was incredibly
+                  reliable. They provided helpful suggestions along the way and
+                  made sure everything was perfect before wrapping up. Best
+                  contractors we've worked with in Duncan.”
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="find-us" class="py-24 md:py-32 relative overflow-hidden border-t border-slate-100">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+              <div class="max-w-xl">
+                <div class="flex items-center gap-3 mb-5">
+                  <span class="w-10 h-[1px] bg-slate-300"></span>
+                  <span class="text-xs text-[#132347] tracking-widest font-medium font-sans">
+                    Location
+                  </span>
+                </div>
+                <h2 class="text-[#132347] text-4xl md:text-5xl tracking-tighter leading-[1.1] mb-5 font-bricolage font-semibold">
+                  Handy Prime in Duncan
+                </h2>
+                <p class="text-slate-500 text-sm leading-relaxed font-light mb-8 max-w-lg font-sans">
+                  Handy Prime is located at 3238 Moorfield Rd in Duncan, BC and
+                  serves Duncan, Nanaimo, Victoria, and surrounding Vancouver
+                  Island communities with dependable contracting and renovation
+                  services.
+                </p>
+                <div class="space-y-6 mb-8">
+                  <div class="border-b border-slate-200 pb-5">
+                    <h3 class="text-xs text-[#132347] tracking-widest font-medium mb-3 font-sans">
+                      Address
+                    </h3>
+                    <div class="flex items-start gap-3 text-sm text-slate-600 font-light">
+                      <iconify-icon icon="solar:map-point-linear" stroke-width="1.5" class="text-[#132347] text-lg mt-0.5"></iconify-icon>
+                      <span class="font-sans">
+                        3238 Moorfield Rd, Duncan, BC V9L 4A9, Canada
+                      </span>
+                    </div>
+                  </div>
+                  <div class="border-b border-slate-200 pb-5">
+                    <h3 class="text-xs text-[#132347] tracking-widest font-medium mb-3 font-sans">
+                      Opening Hours
+                    </h3>
+                    <div class="flex items-center gap-3 text-sm text-slate-600 font-light">
+                      <iconify-icon icon="solar:clock-circle-linear" stroke-width="1.5" class="text-[#132347] text-lg mt-0.5"></iconify-icon>
+                      <div class="grid grid-cols-[90px_1fr] gap-x-4 gap-y-1">
+                        <span class="font-sans">Monday</span>
+                        <span class="font-sans">8:00 AM – 6:30 PM</span>
+                        <span class="font-sans">Tuesday</span>
+                        <span class="font-sans">8:00 AM – 6:30 PM</span>
+                        <span class="font-sans">Wednesday</span>
+                        <span class="font-sans">8:00 AM – 6:30 PM</span>
+                        <span class="font-sans">Thursday</span>
+                        <span class="font-sans">8:00 AM – 6:30 PM</span>
+                        <span class="font-sans">Friday</span>
+                        <span class="font-sans">8:00 AM – 6:30 PM</span>
+                        <span class="font-sans">Saturday</span>
+                        <span class="font-sans">8:00 AM – 6:30 PM</span>
+                        <span class="font-sans">Sunday</span>
+                        <span class="font-sans">8:30 AM – 6:00 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <a href="https://www.google.com/maps/search/?api=1&query=3238%20Moorfield%20Rd%2C%20Duncan%2C%20BC%20V9L%204A9%2C%20Canada" class="inline-flex items-center justify-center gap-3 bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] font-medium px-6 py-3 rounded-full transition-colors text-xs uppercase tracking-widest font-sans">
+                    Get Directions
+                    <iconify-icon icon="solar:arrow-right-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                  </a>
+                  <span class="hidden sm:block text-slate-300 font-sans">
+                    or
+                  </span>
+                  <a href="tel:+17787269755" class="inline-flex items-center gap-3 text-[#132347] font-semibold tracking-tight hover:text-[#f5b82e] transition-colors font-sans">
+                    <span class="w-10 h-10 bg-slate-100 flex items-center justify-center rounded-full">
+                      <iconify-icon icon="solar:phone-linear" stroke-width="1.5" class="text-lg"></iconify-icon>
+                    </span>
+                    +1 (778) 726-9755
+                  </a>
+                </div>
+              </div>
+              <div class="relative">
+                <div class="aspect-[4/3] w-full overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-slate-100">
+                  <iframe title="Handy Prime location map" src="https://www.google.com/maps?q=3238%20Moorfield%20Rd%2C%20Duncan%2C%20BC%20V9L%204A9%2C%20Canada&output=embed" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer id="contact" class="bg-[#132347] text-slate-300 pt-16 pb-8 border-t border-slate-800">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div class="w-full overflow-hidden rounded-3xl border bg-white/[0.04] premium-glow px-6 py-8 md:px-10 md:py-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12 border-white/20">
+            <div class="max-w-3xl">
+              <p class="text-[#f5b82e] text-xs tracking-widest font-medium mb-3 font-sans">
+                Free Estimates • Open Now
+              </p>
+              <h2 class="text-white text-3xl md:text-4xl tracking-tighter leading-tight font-bricolage font-semibold">
+                Ready for a cleaner, more professional renovation experience?
+              </h2>
+              <p class="text-slate-400 text-sm leading-relaxed font-light mt-4 max-w-2xl font-sans">
+                Contact Handy Prime for licensed contracting, bathroom
+                remodeling, basement remodeling, drywall repair, concrete
+                pouring, flooring, painting, trim carpentry, demolition, junk
+                removal, and home repairs.
+              </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
+              <a href="#find-us" class="inline-flex items-center justify-center gap-2 bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] font-medium px-6 py-3 rounded-full transition-colors text-xs uppercase tracking-widest font-sans">
+                Get a Free Estimate
+                <iconify-icon icon="solar:arrow-right-up-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+              </a>
+              <a href="tel:+17787269755" class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-medium px-6 py-3 rounded-full transition-colors text-xs uppercase tracking-widest border border-white/10 font-sans">
+                <iconify-icon icon="solar:phone-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                +1 (778) 726-9755
+              </a>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-12">
+            <div class="">
+              <div class="flex items-center text-white mb-5">
+                <span class="text-xl tracking-tighter font-bricolage font-extrabold transition-transform hover:scale-105 duration-300 inline-block">
+                  Handy Prime
+                </span>
+              </div>
+              <p class="text-xs leading-relaxed mb-6 font-light text-slate-400 font-sans">
+                Licensed Vancouver Island general contractor helping homeowners
+                improve the value, appearance, and functionality of their homes
+                with dependable renovation and repair services.
+              </p>
+              <div class="flex items-center gap-3">
+                <a href="#" aria-label="Facebook" class="w-9 h-9 bg-[#f5b82e] text-[#132347] flex items-center justify-center rounded-full hover:bg-white transition-colors border border-[#f5b82e]">
+                  <iconify-icon icon="solar:letter-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                </a>
+                <a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-white/10 text-white flex items-center justify-center rounded-full hover:bg-white/20 transition-colors">
+                  <iconify-icon icon="solar:user-id-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                </a>
+                <a href="#" aria-label="Instagram" class="w-9 h-9 bg-white/10 text-white flex items-center justify-center rounded-full hover:bg-white/20 transition-colors">
+                  <iconify-icon icon="solar:camera-linear" stroke-width="1.5" class="text-base"></iconify-icon>
+                </a>
+              </div>
+            </div>
+
+            <div class="">
+              <h4 class="text-white font-medium text-xs mb-5 tracking-widest font-sans">
+                Quick Links
+              </h4>
+              <div class="space-y-3 text-xs font-light">
+                <a href="#home" class="block hover:text-white transition-colors font-sans">
+                  Home
+                </a>
+                <a href="#about" class="block hover:text-white transition-colors font-sans">
+                  About
+                </a>
+                <a href="#services" class="block hover:text-white transition-colors font-sans">
+                  Services
+                </a>
+                <a href="#projects" class="block hover:text-white transition-colors font-sans">
+                  Gallery
+                </a>
+                <a href="#find-us" class="block hover:text-white transition-colors font-sans">
+                  Find Us
+                </a>
+              </div>
+            </div>
+
+            <div class="">
+              <h4 class="text-white font-medium text-xs mb-5 tracking-widest font-sans">
+                Contact
+              </h4>
+              <div class="space-y-4 text-xs font-light">
+                <a href="tel:+17787269755" class="flex items-start gap-3 hover:text-white transition-colors">
+                  <iconify-icon icon="solar:phone-linear" stroke-width="1.5" class="text-slate-500 mt-0.5 shrink-0 text-base"></iconify-icon>
+                  <span class="font-sans">+1 (778) 726-9755</span>
+                </a>
+                <div class="flex items-start gap-3">
+                  <iconify-icon icon="solar:map-point-linear" stroke-width="1.5" class="text-slate-500 mt-0.5 shrink-0 text-base"></iconify-icon>
+                  <span class="leading-relaxed font-sans">
+                    3238 Moorfield Rd,
+                    <br>
+                    Duncan, BC V9L 4A9,
+                    <br>
+                    Canada
+                  </span>
+                </div>
+                <div>
+                  <h5 class="text-white font-medium tracking-widest mb-2 font-sans">
+                    Working Hours
+                  </h5>
+                  <p class="font-sans">Monday–Saturday · 8:00 AM – 6:30 PM</p>
+                  <p class="font-sans">Sunday · 8:30 AM – 6:00 PM</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="text-white font-medium text-xs mb-5 tracking-widest font-sans">
+                Newsletter
+              </h4>
+              <p class="text-xs leading-relaxed mb-4 font-light text-slate-400 font-sans">
+                Request project updates, renovation tips, and seasonal home
+                maintenance reminders.
+              </p>
+              <form class="flex items-center gap-2 bg-white p-1.5 rounded-full">
+                <input type="email" placeholder="Email Address" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-xs text-slate-700 outline-none placeholder:text-slate-400">
+                <button type="button" class="bg-[#f5b82e] hover:bg-[#e0a628] text-[#132347] px-4 py-2 rounded-full text-xs font-medium transition-colors font-sans">
+                  Subscribe
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="pt-8 border-t border-white/10 text-xs flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 font-light">
+            <p class="font-sans">
+              © 2026 Handy Prime. Licensed General Contractor in Duncan, BC.
+            </p>
+            <div class="flex gap-6">
+              <a href="#" class="hover:text-slate-300 transition-colors font-sans">
+                Privacy Policy
+              </a>
+              <a href="#" class="hover:text-slate-300 transition-colors font-sans">
+                Terms of Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <style>
+        html, body, #root { width: 100%; }
+        @keyframes hp-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes hp-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        #root section { animation: hp-fade-up .8s cubic-bezier(.22,1,.36,1) both; }
+        #root section:nth-of-type(2) { animation-delay: .08s; }
+        #root section:nth-of-type(3) { animation-delay: .14s; }
+        #root section:nth-of-type(4) { animation-delay: .2s; }
+        #root section:nth-of-type(5) { animation-delay: .26s; }
+        #root a, #root button { transition: transform .25s ease, background-color .25s ease, color .25s ease, border-color .25s ease, opacity .25s ease; }
+        #root a:hover, #root button:hover { transform: translateY(-1px); }
+        .hp-float { animation: hp-float 5s ease-in-out infinite; }
+        .gallery-card img { transition: transform .8s cubic-bezier(.22,1,.36,1), opacity .5s ease; }
+        .gallery-card:hover img { transform: scale(1.08); opacity: 1; }
+        .gallery-card:after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(19,35,71,.92), rgba(19,35,71,.18), transparent); opacity: .92; transition: opacity .35s ease; }
+        .gallery-card:hover:after { opacity: 1; }
+        .premium-glow { position: relative; isolation: isolate; overflow: hidden; }
+        .premium-glow:before { content: ''; position: absolute; inset: -1px; background: radial-gradient(circle at 25% 20%, rgba(245,184,46,.22), transparent 34%), radial-gradient(circle at 80% 0%, rgba(59,130,246,.16), transparent 30%); z-index: -1; }
+        @media (prefers-reduced-motion: reduce) { #root section, .hp-float { animation: none !important; } #root a:hover, #root button:hover { transform: none; } }
+      </style>
+      <style>
+        #root{background:linear-gradient(180deg,#fff 0%,#f8f9fc 100%)}#root section{position:relative}#root h1,#root h2{letter-spacing:-.055em}.gallery-card:before{content:'';position:absolute;inset:1px;border:1px solid rgba(255,255,255,.16);border-radius:inherit;z-index:2;pointer-events:none}#services .group,#reviews .bg-white,#find-us iframe{will-change:transform}#services .group:hover{transform:translateY(-4px)}#about, #reviews, #services, #find-us { background-color: #f8f9fc; background-image:radial-gradient(circle at 12% 8%,rgba(245,184,46,.08),transparent 32%),radial-gradient(circle at 88% 12%,rgba(19,35,71,.05),transparent 30%); }footer{background-image:radial-gradient(circle at 20% 0%,rgba(245,184,46,.14),transparent 30%),linear-gradient(180deg,#132347,#0d1832)}
+      </style>
+    </div>
+
+    <textarea class="-edit tracking-tight" style="font-size: 72px; font-weight: 500; font-family: &quot;JetBrains Mono&quot;, monospace; color: rgb(255, 255, 255); line-height: 72px; text-align: start; text-transform: none; letter-spacing: -3.96px; position: absolute; left: 68px; top: 230.5px; width: 320px; height: 432px; box-sizing: border-box; padding: 0px; margin: 0px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; outline: none; background: transparent; resize: none; overflow: auto; z-index: 2147483647;"></textarea>
+  
+</body></html>

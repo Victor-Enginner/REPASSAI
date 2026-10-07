@@ -1,0 +1,1975 @@
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="fr"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institut de Beauté Image de Soi | Aubel</title>
+<meta name="description" content="Institut de beauté haut de gamme à Aubel. Soins personnalisés, technologies de pointe, expérience privatisée. Prenez rendez-vous en ligne.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&amp;family=Nunito+Sans:wght@200;300;400;600&amp;display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+PALETTE FIDÈLE AU SITE ORIGINAL image-de-soi.be
+Blanc pur · beige nude · noir profond · rose terracotta discret
+═══════════════════════════════════════════════════════ */
+:root {
+/* Backgrounds — extraits du site original */
+--blanc: #FFFFFF;
+--blanc-casse: #FAF8F6;
+--beige-pale: #F5F0EB;
+--beige-moyen: #EDE6DE;
+--beige-fonce: #DED4C7;
+/* Textes */
+--noir: #1C1C1C;
+--gris-titre: #2E2A27;
+--gris-corps: #5A5350;
+--gris-light: #8F8A87;
+/* Accent — rose terracotta doux du site */
+--rose: #C8927A;
+--rose-light: #DDB09C;
+--rose-pale: #EDD5CA;
+--rose-ultra: #F7EDE8;
+/* Typographies */
+--serif: 'Cormorant Garamond', 'Times New Roman', serif;
+--sans: 'Nunito Sans', 'Helvetica Neue', sans-serif;
+--ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+/* ── RESET ── */
+*,
+*::before,
+*::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+html {
+scroll-behavior: smooth;
+font-size: 16px;
+}
+body {
+font-family: var(--sans);
+background: var(--blanc);
+color: var(--gris-corps);
+overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+}
+img {
+display: block;
+max-width: 100%;
+height: auto;
+}
+a {
+text-decoration: none;
+color: inherit;
+}
+/* ── SCROLL REVEAL ── */
+.reveal {
+opacity: 0;
+transform: translateY(28px);
+transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+}
+.reveal.in {
+opacity: 1;
+transform: translateY(0);
+}
+.d1 {
+transition-delay: 0.08s;
+}
+.d2 {
+transition-delay: 0.18s;
+}
+.d3 {
+transition-delay: 0.28s;
+}
+.d4 {
+transition-delay: 0.40s;
+}
+.d5 {
+transition-delay: 0.52s;
+}
+/* ══════════════════════════════
+NAV
+══════════════════════════════ */
+nav {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+z-index: 200;
+height: 68px;
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border-bottom: 1px solid var(--beige-moyen);
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 5vw;
+transition: height 0.35s var(--ease), box-shadow 0.35s;
+}
+nav.scrolled {
+height: 58px;
+box-shadow: 0 1px 18px rgba(28, 28, 28, 0.07);
+}
+.nav-logo {
+font-family: var(--serif);
+font-size: 1.25rem;
+font-weight: 500;
+letter-spacing: 0.04em;
+color: var(--noir);
+line-height: 1.25;
+}
+.nav-logo small {
+display: block;
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.56rem;
+letter-spacing: 0.32em;
+text-transform: uppercase;
+color: var(--gris-light);
+margin-top: 1px;
+}
+.nav-center {
+display: flex;
+align-items: center;
+gap: 2.2rem;
+list-style: none;
+}
+.nav-center a {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.74rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(--gris-titre);
+position: relative;
+padding-bottom: 3px;
+}
+.nav-center a::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: 0;
+width: 0;
+height: 1px;
+background: var(--rose);
+transition: width 0.3s var(--ease);
+}
+.nav-center a:hover {
+color: var(--rose);
+}
+.nav-center a:hover::after {
+width: 100%;
+}
+.nav-cta {
+font-family: var(--sans);
+font-weight: 400;
+font-size: 0.7rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(--blanc) !important;
+background: var(--rose);
+padding: 0.55rem 1.3rem;
+border: 1px solid var(--rose);
+transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.nav-cta::after {
+display: none !important;
+}
+.nav-cta:hover {
+background: transparent;
+color: var(--rose) !important;
+}
+.burger {
+display: none;
+flex-direction: column;
+gap: 5px;
+cursor: pointer;
+padding: 4px;
+background: none;
+border: none;
+}
+.burger span {
+display: block;
+width: 22px;
+height: 1.5px;
+background: var(--noir);
+transition: 0.3s;
+}
+/* mobile overlay */
+.mob-nav {
+position: fixed;
+inset: 0;
+z-index: 300;
+background: var(--blanc);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 2.2rem;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.4s var(--ease);
+}
+.mob-nav.open {
+opacity: 1;
+pointer-events: all;
+}
+.mob-nav a {
+font-family: var(--serif);
+font-size: 2rem;
+font-weight: 300;
+color: var(--noir);
+letter-spacing: 0.04em;
+}
+.mob-nav a:hover {
+color: var(--rose);
+}
+.mob-close {
+position: absolute;
+top: 1.4rem;
+right: 1.8rem;
+font-size: 1.4rem;
+color: var(--gris-light);
+background: none;
+border: none;
+cursor: pointer;
+}
+.mob-close:hover {
+color: var(--rose);
+}
+/* ══════════════════════════════
+HERO — plein écran, 2 colonnes
+══════════════════════════════ */
+.hero {
+min-height: 100vh;
+padding-top: 68px;
+display: grid;
+grid-template-columns: 52% 48%;
+}
+.hero-left {
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 7vw 5vw 7vw 6vw;
+position: relative;
+}
+.hero-pretitle {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.68rem;
+letter-spacing: 0.32em;
+text-transform: uppercase;
+color: var(--rose);
+margin-bottom: 2rem;
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+.hero-pretitle::before {
+content: '';
+display: block;
+width: 32px;
+height: 1px;
+background: var(--rose-light);
+}
+.hero-h1 {
+font-family: var(--serif);
+font-weight: 300;
+font-size: clamp(2.8rem, 5vw, 4.8rem);
+line-height: 1.1;
+color: var(--noir);
+letter-spacing: -0.01em;
+margin-bottom: 2rem;
+}
+.hero-h1 em {
+font-style: italic;
+color: var(--rose);
+font-weight: 300;
+}
+.hero-p {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.97rem;
+line-height: 1.9;
+color: var(--gris-corps);
+max-width: 430px;
+margin-bottom: 3rem;
+}
+.hero-btns {
+display: flex;
+align-items: center;
+gap: 1.6rem;
+flex-wrap: wrap;
+}
+.btn-fill {
+font-family: var(--sans);
+font-weight: 400;
+font-size: 0.73rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(--blanc);
+background: var(--rose);
+padding: 0.95rem 2.2rem;
+border: 1px solid var(--rose);
+display: inline-block;
+transition: background 0.3s, color 0.3s;
+}
+.btn-fill:hover {
+background: transparent;
+color: var(--rose);
+}
+.btn-line {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.73rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(--gris-titre);
+border-bottom: 1px solid var(--beige-fonce);
+padding-bottom: 2px;
+transition: color 0.3s, border-color 0.3s;
+}
+.btn-line:hover {
+color: var(--rose);
+border-color: var(--rose-light);
+}
+/* stat pills */
+.hero-stats {
+display: flex;
+gap: 2rem;
+margin-top: 3.5rem;
+padding-top: 2rem;
+border-top: 1px solid var(--beige-moyen);
+}
+.stat-item {}
+.stat-num {
+font-family: var(--serif);
+font-size: 2rem;
+font-weight: 400;
+color: var(--noir);
+line-height: 1;
+}
+.stat-label {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.68rem;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--gris-light);
+margin-top: 0.3rem;
+}
+/* hero right — photo mosaic */
+.hero-right {
+position: relative;
+overflow: hidden;
+background: var(--beige-pale);
+}
+.hero-mosaic {
+display: grid;
+grid-template-columns: 1fr 1fr;
+grid-template-rows: 1fr 1fr;
+height: 100%;
+gap: 3px;
+}
+.mosaic-cell {
+overflow: hidden;
+position: relative;
+background: var(--beige-moyen);
+}
+.mosaic-cell img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 7s var(--ease);
+}
+.mosaic-cell:hover img {
+transform: scale(1.04);
+}
+/* image placeholders avec les vraies photos du site */
+.mc1 {
+background: linear-gradient(150deg, #E8D5C8 0%, #D4B4A0 100%);
+}
+.mc2 {
+background: linear-gradient(150deg, #DEC9B8 0%, #C9A68E 100%);
+}
+.mc3 {
+background: linear-gradient(150deg, #CDBBA8 0%, #B89A84 100%);
+}
+.mc4 {
+background: linear-gradient(150deg, #E2CEC0 0%, #D0B09A 100%);
+}
+.mosaic-cell img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+/* flottant sur hero-right */
+.hero-float {
+position: absolute;
+bottom: 2rem;
+right: 2rem;
+background: rgba(255, 255, 255, 0.93);
+backdrop-filter: blur(8px);
+padding: 1.1rem 1.5rem;
+border-left: 2px solid var(--rose);
+z-index: 2;
+}
+.float-tag {
+font-family: var(--sans);
+font-size: 0.6rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(--gris-light);
+margin-bottom: 0.35rem;
+}
+.float-text {
+font-family: var(--serif);
+font-size: 1rem;
+font-weight: 400;
+color: var(--noir);
+line-height: 1.3;
+}
+/* ══════════════════════════════
+MARQUES — ruban défilant
+══════════════════════════════ */
+.brands-bar {
+background: var(--beige-pale);
+border-top: 1px solid var(--beige-moyen);
+border-bottom: 1px solid var(--beige-moyen);
+padding: 1rem 0;
+overflow: hidden;
+}
+.brands-track {
+display: flex;
+gap: 4rem;
+animation: scroll-brands 24s linear infinite;
+width: max-content;
+}
+.brands-track:hover {
+animation-play-state: paused;
+}
+@keyframes scroll-brands {
+from {
+transform: translateX(0);
+}
+to {
+transform: translateX(-50%);
+}
+}
+.brand-item {
+font-family: var(--serif);
+font-style: italic;
+font-size: 1rem;
+font-weight: 400;
+color: var(--gris-light);
+white-space: nowrap;
+transition: color 0.3s;
+cursor: default;
+}
+.brand-item:hover {
+color: var(--rose);
+}
+.brand-dot {
+display: inline-block;
+width: 3px;
+height: 3px;
+background: var(--rose-pale);
+border-radius: 50%;
+vertical-align: middle;
+margin: 0 1.5rem;
+}
+/* ══════════════════════════════
+INTRO / PHILOSOPHIE
+══════════════════════════════ */
+.intro {
+display: grid;
+grid-template-columns: 1fr 1fr;
+min-height: 82vh;
+}
+.intro-img {
+position: relative;
+overflow: hidden;
+background: var(--beige-pale);
+}
+.intro-img img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.intro-img-placeholder {
+width: 100%;
+height: 100%;
+background: linear-gradient(160deg, var(--beige-pale) 0%, var(--beige-moyen) 50%, var(--rose-pale) 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.intro-img-placeholder span {
+font-family: var(--serif);
+font-style: italic;
+font-size: 0.9rem;
+color: rgba(90, 83, 80, 0.45);
+text-align: center;
+padding: 2rem;
+line-height: 1.8;
+}
+/* étiquette flottante sur l'image */
+.intro-tag {
+position: absolute;
+bottom: 2.5rem;
+right: -1px;
+background: var(--blanc);
+padding: 1.2rem 1.8rem;
+border-left: 2px solid var(--rose);
+}
+.intro-tag p {
+font-family: var(--serif);
+font-style: italic;
+font-size: 1.1rem;
+color: var(--noir);
+line-height: 1.5;
+}
+.intro-tag small {
+display: block;
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(--gris-light);
+margin-top: 0.5rem;
+}
+.intro-content {
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 6vw 6vw 6vw 5vw;
+background: var(--blanc);
+}
+.eyebrow {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.67rem;
+letter-spacing: 0.32em;
+text-transform: uppercase;
+color: var(--rose);
+display: flex;
+align-items: center;
+gap: 0.9rem;
+margin-bottom: 1.6rem;
+}
+.eyebrow::before {
+content: '';
+display: block;
+width: 26px;
+height: 1px;
+background: var(--rose-light);
+}
+.section-h2 {
+font-family: var(--serif);
+font-weight: 300;
+font-size: clamp(1.9rem, 3.2vw, 2.9rem);
+line-height: 1.18;
+color: var(--noir);
+margin-bottom: 1.8rem;
+}
+.section-h2 em {
+font-style: italic;
+color: var(--rose);
+}
+.intro-quote {
+font-family: var(--serif);
+font-style: italic;
+font-size: 1.2rem;
+line-height: 1.6;
+color: var(--gris-titre);
+padding-left: 1.4rem;
+border-left: 2px solid var(--rose-pale);
+margin-bottom: 1.8rem;
+}
+.body-text {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.94rem;
+line-height: 1.9;
+color: var(--gris-corps);
+margin-bottom: 1.4rem;
+}
+/* ══════════════════════════════
+EXPERIENCE — 3 colonnes sur fond beige
+══════════════════════════════ */
+.experience {
+background: var(--beige-pale);
+padding: 8vw 6vw;
+}
+.exp-head {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 3rem;
+align-items: end;
+margin-bottom: 5vw;
+}
+.exp-head p {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.93rem;
+line-height: 1.85;
+color: var(--gris-corps);
+max-width: 380px;
+justify-self: end;
+}
+.exp-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 1px;
+}
+.exp-card {
+background: var(--blanc);
+padding: 2.6rem 2.2rem;
+position: relative;
+overflow: hidden;
+transition: background 0.35s;
+}
+.exp-card:hover {
+background: var(--blanc-casse);
+}
+.exp-card::before {
+content: '';
+position: absolute;
+bottom: 0;
+left: 0;
+width: 0;
+height: 1.5px;
+background: var(--rose);
+transition: width 0.5s var(--ease);
+}
+.exp-card:hover::before {
+width: 100%;
+}
+.exp-n {
+font-family: var(--serif);
+font-size: 3rem;
+font-weight: 300;
+color: var(--beige-moyen);
+line-height: 1;
+margin-bottom: 1.4rem;
+letter-spacing: -0.02em;
+}
+.exp-title {
+font-family: var(--serif);
+font-size: 1.2rem;
+font-weight: 400;
+color: var(--noir);
+margin-bottom: 0.75rem;
+}
+.exp-text {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.86rem;
+line-height: 1.8;
+color: var(--gris-corps);
+}
+/* ══════════════════════════════
+HYDRAFACIAL — split noir / blanc
+══════════════════════════════ */
+.hydra {
+display: grid;
+grid-template-columns: 45% 55%;
+min-height: 68vh;
+}
+.hydra-left {
+background: var(--noir);
+padding: 6vw 5vw;
+display: flex;
+flex-direction: column;
+justify-content: center;
+position: relative;
+overflow: hidden;
+}
+.hydra-left::before {
+content: '®';
+position: absolute;
+top: -3rem;
+right: -2rem;
+font-family: var(--serif);
+font-size: 18rem;
+font-weight: 300;
+color: rgba(255, 255, 255, 0.03);
+line-height: 1;
+}
+.hydra-left .eyebrow {
+color: var(--rose-light);
+margin-bottom: 1.4rem;
+}
+.hydra-left .eyebrow::before {
+background: var(--rose);
+}
+.hydra-left .section-h2 {
+color: var(--blanc);
+margin-bottom: 1.4rem;
+}
+.hydra-left .section-h2 em {
+color: var(--rose-light);
+}
+.hydra-left .body-text {
+color: rgba(255, 255, 255, 0.55);
+margin-bottom: 2.5rem;
+}
+.hydra-left .btn-fill {
+align-self: flex-start;
+}
+.hydra-right {
+background: var(--blanc-casse);
+padding: 6vw 5vw;
+display: flex;
+flex-direction: column;
+justify-content: center;
+border-left: 1px solid var(--beige-moyen);
+}
+.step-list {
+display: flex;
+flex-direction: column;
+gap: 1.8rem;
+margin-bottom: 3rem;
+}
+.step {
+display: flex;
+gap: 1.4rem;
+align-items: flex-start;
+}
+.step-n {
+font-family: var(--serif);
+font-size: 2rem;
+font-weight: 300;
+color: var(--rose-pale);
+line-height: 1;
+flex-shrink: 0;
+width: 2rem;
+}
+.step-body {}
+.step-body strong {
+display: block;
+font-family: var(--sans);
+font-weight: 600;
+font-size: 0.82rem;
+letter-spacing: 0.08em;
+color: var(--noir);
+margin-bottom: 0.3rem;
+text-transform: uppercase;
+}
+.step-body p {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.88rem;
+line-height: 1.7;
+color: var(--gris-corps);
+}
+.hydra-pill {
+display: inline-flex;
+align-items: center;
+gap: 0.6rem;
+background: var(--rose-ultra);
+border: 1px solid var(--rose-pale);
+padding: 0.6rem 1.2rem;
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.78rem;
+color: var(--gris-titre);
+letter-spacing: 0.06em;
+}
+.hydra-pill::before {
+content: '✓';
+color: var(--rose);
+font-size: 0.8rem;
+}
+/* ══════════════════════════════
+TEMOIGNAGES
+══════════════════════════════ */
+.testimonials {
+background: var(--blanc);
+padding: 8vw 6vw;
+}
+.testi-head {
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+margin-bottom: 4vw;
+flex-wrap: wrap;
+gap: 1.5rem;
+}
+.testi-rating {
+text-align: right;
+}
+.stars-row {
+color: var(--rose);
+font-size: 1rem;
+letter-spacing: 0.12em;
+margin-bottom: 0.3rem;
+}
+.testi-rating span {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.68rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(--gris-light);
+}
+.testi-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 1px;
+}
+.testi-card {
+background: var(--beige-pale);
+padding: 2.4rem 2.2rem;
+border: 1px solid var(--beige-moyen);
+position: relative;
+transition: border-color 0.3s, background 0.3s;
+}
+.testi-card:hover {
+border-color: var(--rose-pale);
+background: var(--rose-ultra);
+}
+.testi-stars {
+color: var(--rose);
+font-size: 0.8rem;
+letter-spacing: 0.1em;
+margin-bottom: 1.2rem;
+}
+.testi-text {
+font-family: var(--serif);
+font-style: italic;
+font-size: 1.05rem;
+line-height: 1.72;
+color: var(--gris-titre);
+margin-bottom: 1.6rem;
+}
+.testi-author {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.68rem;
+letter-spacing: 0.22em;
+text-transform: uppercase;
+color: var(--rose);
+}
+.testi-source {
+position: absolute;
+top: 1.2rem;
+right: 1.4rem;
+font-family: var(--sans);
+font-size: 0.6rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(--beige-fonce);
+}
+/* ══════════════════════════════
+DETAILS D'EXCEPTION — 4 tuiles
+══════════════════════════════ */
+.details {
+background: var(--beige-pale);
+padding: 6vw;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1px;
+}
+.detail-tile {
+background: var(--blanc);
+padding: 2.6rem 2rem;
+text-align: center;
+transition: background 0.3s;
+}
+.detail-tile:hover {
+background: var(--blanc-casse);
+}
+.detail-icon {
+font-size: 1.6rem;
+display: block;
+margin-bottom: 1.1rem;
+}
+.detail-name {
+font-family: var(--serif);
+font-size: 1.1rem;
+font-weight: 400;
+color: var(--noir);
+margin-bottom: 0.55rem;
+}
+.detail-text {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.82rem;
+line-height: 1.7;
+color: var(--gris-corps);
+}
+/* ══════════════════════════════
+SERVICES — grille
+══════════════════════════════ */
+.services {
+background: var(--blanc);
+padding: 8vw 6vw;
+}
+.svc-head {
+text-align: center;
+margin-bottom: 5vw;
+}
+.svc-head .eyebrow {
+justify-content: center;
+}
+.svc-head .section-h2 {
+margin-top: 0.8rem;
+}
+.svc-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1px;
+}
+.svc-card {
+background: var(--beige-pale);
+padding: 2.2rem 1.8rem;
+position: relative;
+overflow: hidden;
+cursor: default;
+transition: background 0.3s;
+}
+.svc-card:hover {
+background: var(--beige-moyen);
+}
+.svc-card::after {
+content: '→';
+position: absolute;
+bottom: 1.4rem;
+right: 1.4rem;
+font-family: var(--sans);
+font-size: 0.9rem;
+color: var(--rose-pale);
+transition: color 0.3s, transform 0.3s;
+}
+.svc-card:hover::after {
+color: var(--rose);
+transform: translateX(3px);
+}
+.svc-name {
+font-family: var(--serif);
+font-size: 1.15rem;
+font-weight: 400;
+color: var(--noir);
+margin-bottom: 0.6rem;
+line-height: 1.3;
+}
+.svc-desc {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.82rem;
+line-height: 1.7;
+color: var(--gris-corps);
+}
+/* ══════════════════════════════
+CTA FINAL
+══════════════════════════════ */
+.cta {
+background: var(--beige-pale);
+padding: 9vw 6vw;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.cta::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse at 50% 80%, rgba(200, 146, 122, 0.12) 0%, transparent 65%);
+pointer-events: none;
+}
+.cta .eyebrow {
+justify-content: center;
+margin-bottom: 1.4rem;
+}
+.cta .section-h2 {
+font-size: clamp(2rem, 3.8vw, 3.5rem);
+margin-bottom: 1.2rem;
+}
+.cta>p {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.96rem;
+line-height: 1.85;
+color: var(--gris-corps);
+max-width: 460px;
+margin: 0 auto 3rem;
+}
+.cta-btns {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 1.6rem;
+flex-wrap: wrap;
+margin-bottom: 4rem;
+}
+.btn-fill-large {
+font-family: var(--sans);
+font-weight: 400;
+font-size: 0.76rem;
+letter-spacing: 0.22em;
+text-transform: uppercase;
+color: var(--blanc);
+background: var(--rose);
+padding: 1.15rem 2.8rem;
+border: 1px solid var(--rose);
+display: inline-block;
+transition: background 0.3s, color 0.3s;
+}
+.btn-fill-large:hover {
+background: transparent;
+color: var(--rose);
+}
+.btn-outline-large {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.76rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(--gris-titre);
+border: 1px solid var(--beige-fonce);
+padding: 1.1rem 2.4rem;
+display: inline-block;
+transition: border-color 0.3s, color 0.3s;
+}
+.btn-outline-large:hover {
+border-color: var(--rose);
+color: var(--rose);
+}
+.horaires {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0;
+flex-wrap: wrap;
+border: 1px solid var(--beige-moyen);
+background: var(--blanc);
+display: inline-flex;
+}
+.horaire-item {
+padding: 1.2rem 2rem;
+border-right: 1px solid var(--beige-moyen);
+text-align: center;
+}
+.horaire-item:last-child {
+border-right: none;
+}
+.h-label {
+font-family: var(--sans);
+font-size: 0.6rem;
+letter-spacing: 0.24em;
+text-transform: uppercase;
+color: var(--rose);
+margin-bottom: 0.35rem;
+}
+.h-val {
+font-family: var(--serif);
+font-size: 1rem;
+font-weight: 400;
+color: var(--noir);
+}
+/* ══════════════════════════════
+FOOTER
+══════════════════════════════ */
+footer {
+background: var(--noir);
+padding: 6vw 6vw 3vw;
+}
+.footer-grid {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+gap: 4vw;
+padding-bottom: 4vw;
+border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+margin-bottom: 2.5vw;
+}
+.ft-brand .nav-logo {
+color: var(--blanc);
+}
+.ft-brand .nav-logo small {
+color: rgba(200, 146, 122, 0.7);
+}
+.ft-brand p {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.83rem;
+line-height: 1.8;
+color: rgba(255, 255, 255, 0.35);
+margin-top: 1.3rem;
+max-width: 240px;
+}
+.ft-socials {
+display: flex;
+gap: 0.8rem;
+margin-top: 1.8rem;
+}
+.social {
+width: 34px;
+height: 34px;
+border: 1px solid rgba(255, 255, 255, 0.12);
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: var(--sans);
+font-size: 0.68rem;
+color: rgba(255, 255, 255, 0.35);
+transition: border-color 0.3s, color 0.3s;
+}
+.social:hover {
+border-color: var(--rose);
+color: var(--rose-light);
+}
+.ft-col h4 {
+font-family: var(--sans);
+font-weight: 400;
+font-size: 0.63rem;
+letter-spacing: 0.28em;
+text-transform: uppercase;
+color: var(--rose-light);
+margin-bottom: 1.3rem;
+}
+.ft-col ul {
+list-style: none;
+}
+.ft-col ul li {
+margin-bottom: 0.6rem;
+}
+.ft-col ul li a {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.83rem;
+color: rgba(255, 255, 255, 0.38);
+transition: color 0.3s;
+}
+.ft-col ul li a:hover {
+color: var(--rose-pale);
+}
+.ft-col p {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.83rem;
+line-height: 1.8;
+color: rgba(255, 255, 255, 0.38);
+}
+.ft-col a.ft-link {
+color: var(--rose-light);
+transition: color 0.3s;
+}
+.ft-col a.ft-link:hover {
+color: var(--rose-pale);
+}
+.footer-bottom {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 0.8rem;
+}
+.ft-copy {
+font-family: var(--sans);
+font-weight: 300;
+font-size: 0.7rem;
+letter-spacing: 0.06em;
+color: rgba(255, 255, 255, 0.18);
+}
+/* ══════════════════════════════
+RESPONSIVE
+══════════════════════════════ */
+@media (max-width: 1100px) {
+.exp-grid {
+grid-template-columns: 1fr 1fr;
+}
+.svc-grid {
+grid-template-columns: 1fr 1fr;
+}
+.testi-grid {
+grid-template-columns: 1fr 1fr;
+}
+.testi-grid .testi-card:nth-child(3) {
+display: none;
+}
+.footer-grid {
+grid-template-columns: 1fr 1fr;
+}
+}
+@media (max-width: 768px) {
+.nav-center,
+.nav-cta {
+display: none;
+}
+.burger {
+display: flex;
+}
+.hero {
+grid-template-columns: 1fr;
+}
+.hero-left {
+padding: 4rem 1.5rem 3rem;
+}
+.hero-right {
+min-height: 55vw;
+}
+.intro {
+grid-template-columns: 1fr;
+}
+.intro-img {
+min-height: 55vw;
+}
+.intro-content {
+padding: 3rem 1.5rem;
+}
+.hydra {
+grid-template-columns: 1fr;
+}
+.hydra-left {
+padding: 4rem 1.5rem;
+}
+.hydra-right {
+padding: 3rem 1.5rem;
+}
+.exp-head {
+grid-template-columns: 1fr;
+}
+.exp-grid {
+grid-template-columns: 1fr;
+}
+.svc-grid {
+grid-template-columns: 1fr 1fr;
+}
+.details {
+grid-template-columns: 1fr 1fr;
+padding: 4vw 1.5rem;
+}
+.testi-grid {
+grid-template-columns: 1fr;
+}
+.testi-grid .testi-card:nth-child(3) {
+display: block;
+}
+.footer-grid {
+grid-template-columns: 1fr;
+gap: 3rem;
+}
+.horaire-item {
+padding: 0.9rem 1.2rem;
+}
+.hero-stats {
+gap: 1.2rem;
+}
+}
+@media (max-width: 480px) {
+.details {
+grid-template-columns: 1fr;
+}
+.svc-grid {
+grid-template-columns: 1fr;
+}
+.hero-btns {
+flex-direction: column;
+align-items: flex-start;
+}
+.cta-btns {
+flex-direction: column;
+align-items: center;
+}
+.horaires {
+flex-direction: column;
+}
+.horaire-item {
+border-right: none;
+border-bottom: 1px solid var(--beige-moyen);
+width: 100%;
+}
+.horaire-item:last-child {
+border-bottom: none;
+}
+}
+</style>
+<script src="https://cdn.tailwindcss.com"></script><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+
+<body class="">
+
+  <!-- ── MOBILE MENU ── -->
+  <div class="mob-nav" id="mobNav">
+    <button class="mob-close" id="mobClose">✕</button>
+    <a href="#philosophie">L'expérience</a>
+    <a href="#soins">Nos soins</a>
+    <a href="#avis">Avis</a>
+    <a href="#contact">Contact</a>
+    <a href="https://salonkee.be/salon/image-de-soi" style="color:var(--rose);margin-top:0.8rem;">Réserver →</a>
+  </div>
+
+  <!-- ══════════════════════════════
+     NAV
+══════════════════════════════ -->
+  <nav class="" id="nav">
+  <a href="index.html" class="nav-logo">
+    Image de Soi
+
+  </a>
+  <ul class="hidden md:flex gap-10 gap-x-10 gap-y-10 items-center">
+    <li class="">
+      <a href="/l-exp-rience" class="text-xs uppercase tracking-widest font-extralight text-[#2E2A27] relative group py-2">
+        L'expérience
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C8927A] transition-all duration-300 ease-out group-hover:w-full"></span>
+      </a>
+    </li>
+    <li class="">
+      <a href="/a-propos" class="text-xs uppercase tracking-widest font-extralight text-[#2E2A27] relative group py-2">
+        À propos
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C8927A] transition-all duration-300 ease-out group-hover:w-full"></span>
+      </a>
+    </li>
+    <li class="relative group">
+      <a href="/#soins" class="text-xs uppercase tracking-widest font-extralight text-[#2E2A27] relative py-2 flex items-center gap-1 cursor-pointer">
+        Nos soins
+        <span class="text-base transition-transform duration-300 group-hover:rotate-90 leading-none -mt-[2px]">
+              ›
+            </span>
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C8927A] transition-all duration-300 ease-out group-hover:w-full"></span>
+      </a>
+      <div class="md:absolute static md:left-0 md:top-full md:mt-4 mt-2 md:w-max md:min-w-[320px] w-full bg-white md:border-t-2 md:border-[#C8927A] md:opacity-0 md:-translate-y-1.5 md:invisible group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 md:shadow-xl z-[250] hidden md:block group-hover:block border-l md:border-l-0 pl-4 md:pl-0 border-[#C8927A]/30 md:before:content-[''] md:before:absolute md:before:w-full md:before:h-4 md:before:-top-4 md:before:left-0">
+        <ul class="flex flex-col py-3 md:py-4 gap-3 md:gap-0">
+          <li class="">
+            <a href="/soins-corps" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Soins corps &amp; Rituels Afterwork Wellness
+            </a>
+          </li>
+          <li class="">
+            <a href="/hydrafacial" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Hydrafacial
+            </a>
+          </li>
+          <li class="">
+            <a href="/head-spa-holistique" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Head Spa Holistique
+            </a>
+          </li>
+          <li class="">
+            <a href="/beauty-academy" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Beauty Academy
+            </a>
+          </li>
+          <li class="">
+            <a href="/soins-enfants" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Soins Enfants
+            </a>
+          </li>
+          <li class="">
+            <a href="/beauty-coaching" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">Beauty
+              Coaching</a>
+          </li>
+          <li class="">
+            <a href="/photobiomodulation" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Photobiomodulation LED
+            </a>
+          </li>
+          <li class="">
+            <a href="/ems" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              EMS
+            </a>
+          </li>
+          <li class="">
+            <a href="/soins-visage" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Soins du visage
+            </a>
+          </li>
+          <li class="">
+            <a href="/autres-soins" class="block md:px-8 md:py-2.5 text-[0.78rem] font-light tracking-[0.14em] uppercase text-[#2E2A27] hover:text-[#C8927A] transition-colors duration-300">
+              Autres soins
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="">
+      <a href="/gammes" class="text-xs uppercase tracking-widest font-extralight text-[#2E2A27] relative group py-2">
+        Nos gammes
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C8927A] transition-all duration-300 ease-out group-hover:w-full"></span>
+      </a>
+    </li>
+    <li class="">
+      <a href="/contact" class="text-xs uppercase tracking-widest font-extralight text-[#2E2A27] relative group py-2">
+        Contact &amp; FAQ
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C8927A] transition-all duration-300 ease-out group-hover:w-full"></span>
+      </a>
+    </li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem;" class="">
+    <a href="https://salonkee.be/salon/image-de-soi" class="nav-cta">
+      Réserver
+    </a>
+    <button class="burger" id="burger" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+  </div>
+</nav>
+
+  <!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-pretitle reveal in">Institut de Beauté · Aubel, Belgique</p>
+
+      <h1 class="hero-h1 reveal d1 in">
+        Votre beauté,<br>
+        <em class="">une parenthèse</em><br>
+      qui vous ressemble.
+      </h1>
+
+      <p class="hero-p reveal d2 in">
+        Chez Image de Soi, chaque soin est un moment privatisé, pensé pour vous et uniquement vous. Des produits
+        d'exception, des technologies de pointe, une attention sans partage — parce que votre bien-être ne se négocie
+        pas.
+      </p>
+
+      <div class="hero-btns reveal d3 in">
+        <a href="https://salonkee.be/salon/image-de-soi" class="btn-fill">Prendre rendez-vous</a>
+        <a href="#philosophie" class="btn-line">Découvrir l'institut</a>
+      </div>
+
+      <div class="hero-stats reveal d4">
+        <div class="stat-item">
+          <div class="stat-num">20+</div>
+          <div class="stat-label">Ans d'expertise</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Soins privatisés</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">★ 5/5</div>
+          <div class="stat-label">Avis Google</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <!-- Remplacer les div.mosaic-cell par des <img> avec les photos du site -->
+      <div class="hero-mosaic">
+        <div class="mosaic-cell mc1">
+          <img src="https://static.wixstatic.com/media/d14d8a_a528e9233878496eab6654ec7ffdca82~mv2.jpeg/v1/fit/w_480,h_709,q_90,enc_avif,quality_auto/c2afb08e-467e-499a-baf5-3ca4c8175015.jpeg" alt="Soin visage Institut Image de Soi Aubel" onerror="this.style.display='none'" class="">
+        </div>
+        <div class="mosaic-cell mc2">
+          <img src="https://static.wixstatic.com/media/d14d8a_da6b3b8ea5e34cd1a99781c62505af10~mv2.jpeg/v1/fit/w_960,h_659,q_90,enc_avif,quality_auto/c5a89290-1fa1-458a-a9fa-fe2eb486e6bc.jpeg" alt="Institut de beauté Aubel" onerror="this.style.display='none'" class="">
+        </div>
+        <div class="mosaic-cell mc3">
+          <img src="https://static.wixstatic.com/media/d14d8a_2f1f3b538d78478fbd07a210e00bbb01~mv2.jpeg/v1/fit/w_480,h_709,q_90,enc_avif,quality_auto/2592f17f-4ef3-49a0-887d-c77dd623e8b6.jpeg" alt="Soin bien-être Image de Soi" onerror="this.style.display='none'" class="">
+        </div>
+        <div class="mosaic-cell mc4">
+          <img src="https://static.wixstatic.com/media/d14d8a_b605db01610a4914b8e3661a0de2e35d~mv2.jpeg/v1/fit/w_681,h_480,q_90,enc_avif,quality_auto/8ac3902e-7605-43a0-b879-c4e0366ae7c0.jpeg" alt="Produits beauté Institut Image de Soi" onerror="this.style.display='none'" class="">
+        </div>
+      </div>
+
+      <div class="hero-float reveal d5">
+        <p class="float-tag">Concept unique</p>
+        <p class="float-text">Soin privatisé<br>&amp; sur-mesure</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     MARQUES
+══════════════════════════════ -->
+  <div class="brands-bar">
+    <div class="brands-track">
+  <span class="brand-item">Maria Galland</span><span class="brand-dot"></span>
+  <span class="brand-item">Cellcosmet</span><span class="brand-dot"></span>
+  <span class="brand-item">Hydrafacial®</span><span class="brand-dot"></span>
+  <span class="brand-item">Dermalogica</span><span class="brand-dot"></span>
+  <span class="brand-item">Juliette has a gun</span><span class="brand-dot"></span>
+  <span class="brand-item">Manucurist</span><span class="brand-dot"></span>
+  <span class="brand-item">Meraki</span><span class="brand-dot"></span>
+  <span class="brand-item">Pune</span><span class="brand-dot"></span>
+  <span class="brand-item">Ouate</span><span class="brand-dot"></span>
+  <!-- duplicate -->
+  <span class="brand-item">Maria Galland</span><span class="brand-dot"></span>
+  <span class="brand-item">Cellcosmet</span><span class="brand-dot"></span>
+  <span class="brand-item">Hydrafacial®</span><span class="brand-dot"></span>
+  <span class="brand-item">Dermalogica</span><span class="brand-dot"></span>
+  <span class="brand-item">Juliette has a gun</span><span class="brand-dot"></span>
+  <span class="brand-item">Manucurist</span><span class="brand-dot"></span>
+  <span class="brand-item">Meraki</span><span class="brand-dot"></span>
+  <span class="brand-item">Pune</span><span class="brand-dot"></span>
+  <span class="brand-item">Ouate</span><span class="brand-dot"></span>
+</div>
+  </div>
+
+  <!-- ══════════════════════════════
+     PHILOSOPHIE
+══════════════════════════════ -->
+  <section class="intro" id="philosophie">
+    <div class="intro-img">
+      
+      <div class="intro-tag reveal in">
+        <p>« Parce que votre beauté dépend<br>intimement du bien-être de votre esprit. »</p>
+        
+      </div>
+    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bd5514a5-ae87-43b3-9dc4-fce6976a42c7_1600w.jpg" alt="Soin visage Institut Image de Soi Aubel" onerror="this.style.display='none'" class=""></div>
+
+    <div class="intro-content">
+      <p class="eyebrow reveal in">Notre philosophie</p>
+      <h2 class="section-h2 reveal d1 in">L'attention<br><em class="">que vous méritez</em></h2>
+      <blockquote class="intro-quote reveal d2 in">
+        Un espace privatisé, une praticienne entièrement dédiée à vous, des soins pensés dans le moindre détail.
+      </blockquote>
+      <p class="body-text reveal d3 in">L'Institut Image de Soi vous accueille à Aubel depuis plus de 15 ans. Nathalie et son équipe ont bâti un concept rare : des soins individuels, au calme, sans précipitation. Pas de file d'attente, pas de bruit — juste vous.</p>
+      <p class="body-text reveal d4 in">
+        Nous sélectionnons chaque marque, chaque technologie, chaque petit détail — jusqu'à la coupe de champagne qui
+        conclut votre visite — pour que l'expérience soit à la hauteur de vos attentes.
+      </p>
+      <a href="#soins" class="btn-line reveal d5 in">Découvrir nos soins</a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     EXPERIENCE
+══════════════════════════════ -->
+  <section class="experience" id="soins">
+    <div class="exp-head">
+      <div class="">
+        <p class="eyebrow reveal">Ce qui nous distingue</p>
+        <h2 class="section-h2 reveal d1">L'expérience<br><em>Image de Soi</em></h2>
+      </div>
+      <p class="reveal d2">Chaque détail est pensé pour faire de votre visite un moment d'exception, bien au-delà d'un
+        simple rendez-vous beauté.</p>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-card reveal">
+        <div class="exp-n">01</div>
+        <h3 class="exp-title">Espace privatisé</h3>
+        <p class="exp-text">Un concept de soins individuels au calme. Toute l'attention de votre praticienne est pour
+          vous, et uniquement vous.</p>
+      </div>
+      <div class="exp-card reveal d1">
+        <div class="exp-n">02</div>
+        <h3 class="exp-title">Technologies de pointe</h3>
+        <p class="exp-text">Hydrafacial®, photobiomodulation LED, EMS, Head Spa holistique — les meilleures technologies
+          beauté, entre des mains expertes.</p>
+      </div>
+      <div class="exp-card reveal d2">
+        <div class="exp-n">03</div>
+        <h3 class="exp-title">Produits d'exception</h3>
+        <p class="exp-text">Maria Galland, Cellcosmet, Dermalogica... Une sélection rigoureuse de marques premium pour
+          des résultats visibles et durables.</p>
+      </div>
+      <div class="exp-card reveal">
+        <div class="exp-n">04</div>
+        <h3 class="exp-title">Beauty Academy</h3>
+        <p class="exp-text">Ateliers anniversaire, soins enfants, soins duo — un institut qui s'adresse à toute la
+          famille avec la même exigence.</p>
+      </div>
+      <div class="exp-card reveal d1">
+        <div class="exp-n">05</div>
+        <h3 class="exp-title">Bons cadeaux</h3>
+        <p class="exp-text">Offrez un moment de bien-être inoubliable. Bons cadeaux disponibles à l'institut pour toutes
+          les occasions.</p>
+      </div>
+      <div class="exp-card reveal d2">
+        <div class="exp-n">06</div>
+        <h3 class="exp-title">Horaires flexibles</h3>
+        <p class="exp-text">Ouvert dès 6h le samedi et jusqu'à 21h certains jour en semaine. Votre bien-être s'adapte à votre rythme, pas l'inverse.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     HYDRAFACIAL
+══════════════════════════════ -->
+  <section class="hydra">
+    <div class="hydra-left">
+      <p class="eyebrow reveal">Soin vedette</p>
+      <h2 class="section-h2 reveal d1">Hydrafacial®<br><em class="">La révolution peau</em></h2>
+      <p class="body-text reveal d2">Le seul protocole combinant nettoyage, exfoliation, extraction, hydratation et protection antioxydante en 75 minutes. Résultats immédiatement visibles, convient à tous types de peaux.</p>
+      <a href="https://salonkee.be/salon/image-de-soi" class="btn-fill reveal d3">Réserver mon Hydrafacial®</a>
+    </div>
+
+    <div class="hydra-right">
+      <div class="step-list reveal">
+        <div class="step">
+          <span class="step-n">1</span>
+          <div class="step-body">
+            <strong class="">Nettoyage &amp; Exfoliation</strong>
+            <p class="">Élimination des cellules mortes et des impuretés en surface pour une peau nette et lisse.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">2</span>
+          <div class="step-body">
+            <strong class="">Extraction &amp; Hydratation</strong>
+            <p class="">Désincrustage indolore et hydratation intense à l'acide hyaluronique et aux peptides.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">3</span>
+          <div class="step-body">
+            <strong>Protection antioxydante</strong>
+            <p>Apport d'antioxydants puissants pour protéger et illuminer durablement la peau.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:0.7rem;" class="reveal d1">
+        <span class="hydra-pill">Traitement indolore</span>
+        <span class="hydra-pill">Résultats immédiats</span>
+        <span class="hydra-pill">Tous types de peaux</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     SERVICES
+══════════════════════════════ -->
+  <section class="services">
+    <div class="svc-head">
+      <p class="eyebrow reveal">Ce que nous proposons</p>
+      <h2 class="section-h2 reveal d1">Nos <em>soins &amp; services</em></h2>
+    </div>
+
+    <div class="svc-grid">
+      <div class="svc-card reveal">
+        <h3 class="svc-name">Soins du visage</h3>
+        <p class="svc-desc">Soins personnalisés selon votre type de peau, avec les meilleures marques professionnelles.
+        </p>
+      </div>
+      <div class="svc-card reveal d1">
+        <h3 class="svc-name">Head Spa holistique</h3>
+        <p class="svc-desc">Soin du cuir chevelu et de la nuque alliant détente profonde et soins capillaires premium.
+        </p>
+      </div>
+      <div class="svc-card reveal d2">
+        <h3 class="svc-name">Photobiomodulation LED</h3>
+        <p class="svc-desc">Technologie lumineuse pour stimuler la régénération cellulaire et traiter de nombreuses
+          problématiques.</p>
+      </div>
+      <div class="svc-card reveal d3">
+        <h3 class="svc-name">EMS — Remodelage</h3>
+        <p class="svc-desc">Stimulation musculaire électrique pour tonifier et raffermir le corps en douceur.</p>
+      </div>
+      <div class="svc-card reveal">
+        <h3 class="svc-name">Afterwork Wellness</h3>
+        <p class="svc-desc">Rituels corps &amp; détente pensés pour décompresser après une longue journée de travail.</p>
+      </div>
+      <div class="svc-card reveal d1">
+        <h3 class="svc-name">Beauty Academy</h3>
+        <p class="svc-desc">Ateliers anniversaire et formations beauté pour petits et grands dans une ambiance
+          conviviale.</p>
+      </div>
+      <div class="svc-card reveal d2">
+        <h3 class="svc-name">Beauty Coaching</h3>
+        <p class="svc-desc">Conseils personnalisés pour sublimer votre image au quotidien, adapté à votre style de vie.
+        </p>
+      </div>
+      <div class="svc-card reveal d3">
+        <h3 class="svc-name">Soins enfants</h3>
+        <p class="svc-desc">Soins adaptés aux plus jeunes, seuls ou en duo parent-enfant, dans une atmosphère ludique et
+          douce.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     TEMOIGNAGES
+══════════════════════════════ -->
+  <section class="testimonials" id="avis">
+    <div class="testi-head">
+      <div class="">
+        <p class="eyebrow reveal">Ce qu'elles disent</p>
+        <h2 class="section-h2 reveal d1">Elles nous font <em class="">confiance</em></h2>
+      </div>
+      <div class="testi-rating reveal d2">
+        <div class="stars-row">★★★★★</div>
+        <span class="">Avis salonkee vérifiés</span>
+      </div>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+  <span class="testi-source">Salonkee</span>
+  <div class="testi-stars">★★★★★</div>
+  <p class="testi-text">« J’ai apprécié mon soin visage. Le résultat est instantané. Nathalie prend le temps d’expliquer
+    les différentes étapes du soins mais aussi comment prolonger ses effets à domicile. »</p>
+  <p class="testi-author">JULIE</p>
+</div>
+      <div class="testi-card reveal d1">
+        <span class="testi-source">Salonkee</span>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« C'est devenu un rituel mensuel... Tout le monde est adorable, aux petits soins et les soins sont d'une grandes qualités !  J'adore ce petit moment à moi. »</p>
+        <p class="testi-author">Cynthia</p>
+      </div>
+      <div class="testi-card reveal d2">
+        <span class="testi-source">Google</span>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Depuis mon Hydrafacial, ma peau n'a jamais été aussi belle. L'équipe est
+          professionnelle, et l'ambiance de l'institut est vraiment apaisante. »</p>
+        <p class="testi-author">Sophie D.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     DÉTAILS D'EXCEPTION
+══════════════════════════════ -->
+  <section class="details">
+    <div class="detail-tile reveal">
+      <span class="detail-icon">🫖</span>
+      <h3 class="detail-name">Tea Tower Factory</h3>
+      <p class="detail-text">Infusions et thés bio belges pour accompagner votre soin dans la douceur.</p>
+    </div>
+    <div class="detail-tile reveal d1">
+      <span class="detail-icon">🥂</span>
+      <h3 class="detail-name">Champagne Deutz</h3>
+      <p class="detail-text">Une coupe de champagne frais pour clore votre visite avec élégance.</p>
+    </div>
+    <div class="detail-tile reveal d2">
+      <span class="detail-icon">💧</span>
+      <h3 class="detail-name">Eau filtrée Berkey</h3>
+      <p class="detail-text">Une eau pure filtrée par un système haut de gamme, pour une pause rafraîchissante.</p>
+    </div>
+    <div class="detail-tile reveal d3">
+      <span class="detail-icon">🎁</span>
+      <h3 class="detail-name">Bons cadeaux</h3>
+      <p class="detail-text">Offrez un moment de bien-être. Disponibles à l'institut pour toutes les occasions.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     CTA CONTACT
+══════════════════════════════ -->
+  <section class="cta" id="contact">
+    <p class="eyebrow reveal">Prête à vous faire chouchouter ?</p>
+    <h2 class="section-h2 reveal d1">Prenez rendez-vous<br><em class="">dès aujourd'hui</em></h2>
+    <p class="reveal d2">Réservez en ligne en quelques clics, ou contactez-nous directement par téléphone. Nous sommes
+      là pour vous accueillir dans la sérénité.</p>
+
+    <div class="cta-btns reveal d3">
+  <a href="https://wa.me/32478616003?text=Bonjour%2C%20je%20souhaite%20avoir%20des%20informations." class="btn-fill">
+    💬 Écrire sur WhatsApp
+  </a>
+  <a href="https://salonkee.be/salon/image-de-soi" class="btn-outline">
+    📅 Réserver en ligne
+  </a>
+</div>
+
+    <div class="horaires reveal d4">
+      <div class="horaire-item">
+        <p class="h-label">Lun — Mar</p>
+        <p class="h-val">9h – 21h</p>
+      </div>
+      <div class="horaire-item">
+        <p class="h-label">Mercredi</p>
+        <p class="h-val">6h – 18h</p>
+      </div><div class="horaire-item">
+        <p class="h-label">Jeudi</p>
+        <p class="h-val">15h – 21h</p>
+      </div><div class="horaire-item">
+        <p class="h-label">Vendredi</p>
+        <p class="h-val">6h – 18h30</p>
+      </div>
+      
+      <div class="horaire-item">
+        <p class="h-label">Samedi</p>
+        <p class="h-val">06h - 13h</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+     FOOTER
+══════════════════════════════ -->
+  <footer class="">
+  <div class="footer-grid">
+    <div class="ft-brand">
+      <div class="nav-logo">
+        Image de Soi
+        <small class="">Institut de Beauté · Aubel</small>
+      </div>
+      <p class="">
+        Votre espace de beauté et de bien-être à Aubel depuis plus de 20
+        ans. Soins en cabine, produits d'exception, technologies de pointe.
+      </p>
+      <div class="ft-socials">
+        <a href="https://www.facebook.com/imagedesoiinstitut" class="social" aria-label="Facebook">
+          f
+        </a>
+        <a href="https://www.instagram.com/imagedesoi_nathaliechantraine/" class="social" aria-label="Instagram">
+          ig
+        </a>
+      </div>
+    </div>
+    
+
+    
+    <div class="ft-col">
+      <h4 class="">Nous joindre</h4>
+      <p class="">
+        Rue de la Station 2/1
+        <br>
+            4880 Aubel
+      </p>
+      <br>
+      <p class="">
+        <a href="https://wa.me/32478616003" class="ft-link">💬 WhatsApp</a>
+      </p>
+      <br>
+      <p class="">
+        <a href="https://salonkee.be/salon/image-de-soi" class="ft-link" style="font-size:0.78rem;">
+          📅 Réserver en ligne
+        </a>
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="ft-copy">
+      © 2025 Institut Image de Soi — Nathalie Chantraine · Aubel, Belgique
+    </p>
+    <p class="ft-copy">Rue de la Station 2/1 · 4880 Aubel</p>
+  </div>
+</footer>
+
+  <!-- ══════════════════════════════
+     JS
+══════════════════════════════ -->
+  <script>
+    // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+
+  // Mobile menu
+  const burger  = document.getElementById('burger');
+  const mobNav  = document.getElementById('mobNav');
+  const mobClose = document.getElementById('mobClose');
+  burger.addEventListener('click',   () => mobNav.classList.add('open'));
+  mobClose.addEventListener('click', () => mobNav.classList.remove('open'));
+  mobNav.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => mobNav.classList.remove('open'))
+  );
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Smooth anchor
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+  </script>
+
+
+</body></html>

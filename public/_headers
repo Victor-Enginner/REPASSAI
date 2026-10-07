@@ -1,0 +1,4 @@
+/templates/*.html
+  Content-Security-Policy: sandbox allow-scripts; connect-src 'none'; form-action 'none'; base-uri 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer

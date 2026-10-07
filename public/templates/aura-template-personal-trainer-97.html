@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="pt-BR" class="scroll-smooth">
+<head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas Prado · Personal Trainer</title>
+<!-- Scripts -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- Fonts -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap');
+/* Typography System */
+.font-display { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
+.font-body { font-family: 'Inter', sans-serif; }
+.font-mono { font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; }
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #050D1A; }
+::-webkit-scrollbar-thumb { background: #0B3D91; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #1565C0; }
+/* Core Elements */
+body { background-color: #050D1A; color: #F2F2F2; overflow-x: hidden; }
+.btn-primary {
+background-color: #2979FF;
+color: #FFFFFF;
+transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+text-transform: uppercase;
+border-radius: 4px;
+}
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 0 24px rgba(41, 121, 255, 0.35);
+}
+.btn-secondary {
+border: 1px solid #F2F2F2;
+color: #FFFFFF;
+transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+text-transform: uppercase;
+border-radius: 4px;
+background: transparent;
+}
+.btn-secondary:hover {
+background: rgba(242, 242, 242, 0.1);
+}
+.eyebrow {
+color: #2979FF;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+}
+/* Glassmorphism */
+.glass-card {
+background: rgba(11, 61, 145, 0.15);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border: 1px solid rgba(41, 121, 255, 0.2);
+border-radius: 12px;
+transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card:hover {
+transform: translateY(-6px);
+border-color: rgba(41, 121, 255, 0.5);
+box-shadow: 0 20px 60px rgba(5, 13, 26, 0.6), 0 0 24px rgba(41, 121, 255, 0.15);
+}
+.glass-nav {
+background: rgba(5, 13, 26, 0.72);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border-bottom: 1px solid rgba(41, 121, 255, 0.1);
+}
+/* Animations */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(32px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+@keyframes scaleIn {
+from { opacity: 0; transform: scale(0.92); }
+to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideRight {
+from { opacity: 0; transform: translateX(-20px); }
+to { opacity: 1; transform: translateX(0); }
+}
+@keyframes float {
+0%, 100% { transform: translateY(0px) scale(1); }
+50% { transform: translateY(-20px) scale(1.05); }
+}
+@keyframes ticker {
+from { transform: translateX(0); }
+to { transform: translateX(-50%); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-ticker { animation: ticker 20s linear infinite; display: inline-block; white-space: nowrap; }
+/* Animation Utility Classes (Triggered by JS) */
+.reveal-up { opacity: 0; }
+.reveal-up.is-visible { animation: fadeUp 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.reveal-right { opacity: 0; }
+.reveal-right.is-visible { animation: slideRight 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.reveal-scale { opacity: 0; }
+.reveal-scale.is-visible { animation: scaleIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+/* Utilities */
+.text-gradient-brand {
+background: linear-gradient(135deg, #1565C0 0%, #2979FF 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+/* FAQ Accordion */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+details[open] .faq-icon { transform: rotate(180deg); }
+details[open] .faq-content { animation: fadeIn 300ms ease forwards; }
+</style><!-- aura-ga4-start -->
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+<body class="font-body font-light text-base text-[#F2F2F2] selection:bg-[#2979FF] selection:text-white">
+
+    <!-- HEADER -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent border-b border-transparent">
+        <div class="container mx-auto px-5 md:px-10 py-4 flex items-center justify-between">
+            <div class="flex flex-col">
+                <a href="#" class="font-display font-extrabold text-2xl text-white tracking-tight flex items-center gap-2">
+                    <span class="text-[#2979FF]">LP</span> LUCAS PRADO
+                </a>
+            </div>
+            
+            <nav class="hidden lg:flex items-center gap-8 font-mono text-xs font-normal text-[#B0B0B0]">
+                <a href="#metodo" class="hover:text-white transition-colors relative group">
+                    Método
+                    <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#2979FF] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#resultados" class="hover:text-white transition-colors relative group">
+                    Resultados
+                    <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#2979FF] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#modalidades" class="hover:text-white transition-colors relative group">
+                    Modalidades
+                    <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#2979FF] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#sobre" class="hover:text-white transition-colors relative group">
+                    Sobre
+                    <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#2979FF] transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </nav>
+
+            <a href="#whatsapp" class="hidden md:flex btn-primary px-6 py-3 font-mono text-xs items-center gap-2 font-normal">
+                <iconify-icon icon="solar:phone-calling-linear" width="16"></iconify-icon>
+                Falar no WhatsApp
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="lg:hidden text-[#F2F2F2] p-2">
+                <iconify-icon icon="solar:hamburger-menu-linear" width="24"></iconify-icon>
+            </button>
+        </div>
+        <!-- Tagline -->
+        <div class="w-full bg-[#050D1A]/90 border-b border-[#2979FF]/10 py-2 hidden md:block">
+            <div class="container mx-auto px-5 text-center font-mono text-[0.65rem] text-[#B0B0B0]">
+                PERSONAL TRAINER · PRESENCIAL & ONLINE · @TEAMLUCASPRADO
+            </div>
+        </div>
+    </header>
+
+    <!-- SEÇÃO 01 · Hero -->
+    <section class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-[#050D1A]">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2000&auto=format&fit=crop" alt="Lucas Prado" class="w-full h-full object-cover object-top opacity-60 mix-blend-luminosity hero-img">
+            <div class="absolute inset-0" style="background: linear-gradient(90deg, rgba(5,13,26,0.95) 10%, rgba(5,13,26,0.7) 50%, transparent 100%);"></div>
+            <!-- Bottom Fade -->
+            <div class="absolute bottom-0 left-0 w-full h-32" style="background: linear-gradient(0deg, #050D1A 0%, transparent 100%);"></div>
+        </div>
+
+        <!-- Giant Text Background -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-full text-center pointer-events-none hero-text">
+            <h1 class="font-display font-extrabold text-9xl md:text-[12rem] lg:text-[16rem] text-[#2979FF] opacity-5 tracking-tighter leading-none whitespace-nowrap">
+                LUCAS PRADO
+            </h1>
+        </div>
+
+        <!-- Glow Orb -->
+        <div class="absolute top-1/3 right-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[#1565C0] opacity-20 blur-[80px] rounded-full animate-float z-0 pointer-events-none"></div>
+
+        <div class="container mx-auto px-5 md:px-10 relative z-10 flex flex-col justify-center min-h-[70vh]">
+            <div class="max-w-3xl">
+                <h1 class="font-display font-extrabold text-6xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9] text-white mb-6">
+                    <span class="block reveal-up">SEM FRESCURA.</span>
+                    <span class="block reveal-up delay-100">SEM ENROLAÇÃO.</span>
+                    <span class="block text-[#2979FF] reveal-up delay-200">SÓ RESULTADO.</span>
+                </h1>
+                
+                <p class="font-body font-normal text-lg md:text-xl text-[#F2F2F2] mb-4 reveal-up delay-300 max-w-xl">
+                    Treino simples, descomplicado e com método testado em alunos reais.
+                </p>
+                <p class="font-body font-light text-sm md:text-base text-[#B0B0B0] mb-10 reveal-up delay-400 max-w-lg leading-relaxed">
+                    Não importa se você quer emagrecer, ganhar massa ou simplesmente se sentir bem. O caminho existe — e é mais direto do que te fizeram acreditar.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 reveal-scale delay-500">
+                    <a href="https://instagram.com/teamlucasprado" target="_blank" class="btn-primary px-8 py-4 font-mono text-xs font-normal text-center flex items-center justify-center gap-2">
+                        <iconify-icon icon="solar:instagram-linear" width="18"></iconify-icon>
+                        Seguir no Instagram
+                    </a>
+                    <a href="#modalidades" class="btn-secondary px-8 py-4 font-mono text-xs font-normal text-center">
+                        Quero Começar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Stats Mobile/Desktop -->
+        <div class="absolute bottom-10 left-0 w-full z-20 px-5 md:px-10">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 reveal-up delay-500">
+                    <div class="glass-card p-4 md:p-5">
+                        <div class="font-mono text-[0.65rem] text-[#B0B0B0] mb-1">Modalidades</div>
+                        <div class="font-display font-extrabold text-xl md:text-2xl text-white tracking-tight">PRESENCIAL · ONLINE</div>
+                    </div>
+                    <div class="glass-card p-4 md:p-5">
+                        <div class="font-mono text-[0.65rem] text-[#B0B0B0] mb-1">Especialidades</div>
+                        <div class="font-display font-extrabold text-xl md:text-2xl text-white tracking-tight">5 ÁREAS</div>
+                    </div>
+                    <div class="glass-card p-4 md:p-5 hidden sm:block">
+                        <div class="font-mono text-[0.65rem] text-[#B0B0B0] mb-1">Atendimento</div>
+                        <div class="font-display font-extrabold text-xl md:text-2xl text-white tracking-tight">PERSONALIZADO</div>
+                    </div>
+                    <div class="glass-card p-4 md:p-5 hidden lg:block">
+                        <div class="font-mono text-[0.65rem] text-[#B0B0B0] mb-1">Método</div>
+                        <div class="font-display font-extrabold text-xl md:text-2xl text-[#2979FF] tracking-tight">TESTADO E APROVADO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 02 · Strip de Prova Rápida -->
+    <section class="py-6 md:py-8 relative z-20" style="background: linear-gradient(135deg, #0B3D91 0%, #1565C0 100%);">
+        <div class="container mx-auto px-5 overflow-hidden">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 md:gap-10 text-center sm:text-left reveal-scale">
+                <div class="flex-1">
+                    <div class="font-display font-extrabold text-4xl md:text-5xl text-white tracking-tight">+200</div>
+                    <div class="font-mono text-xs text-white/70 mt-1">Alunos transformados</div>
+                </div>
+                <div class="hidden sm:block w-[1px] h-12 bg-white/15"></div>
+                <div class="flex-1">
+                    <div class="font-display font-extrabold text-4xl md:text-5xl text-white tracking-tight">5</div>
+                    <div class="font-mono text-xs text-white/70 mt-1">Focos de atuação</div>
+                </div>
+                <div class="hidden md:block w-[1px] h-12 bg-white/15"></div>
+                <div class="flex-1 hidden md:block">
+                    <div class="font-display font-extrabold text-4xl md:text-5xl text-white tracking-tight">3</div>
+                    <div class="font-mono text-xs text-white/70 mt-1">Formas de treinar</div>
+                </div>
+                <div class="hidden lg:block w-[1px] h-12 bg-white/15"></div>
+                <div class="flex-1 hidden lg:block text-right">
+                    <div class="font-display font-extrabold text-2xl text-white tracking-tight">RESULTADO</div>
+                    <div class="font-display font-extrabold text-2xl text-white/70 tracking-tight">REAL E COMPROVADO</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 03 · Para Quem É / Especialidades -->
+    <section class="py-24 md:py-32 relative bg-[#050D1A]" id="sobre-metodo">
+        <!-- Decor Background Image -->
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-5 pointer-events-none" alt="">
+        <div class="absolute inset-0" style="background: linear-gradient(180deg, #050D1A 0%, transparent 20%, transparent 80%, #050D1A 100%); pointer-events: none;"></div>
+
+        <div class="container mx-auto px-5 md:px-10 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
+                
+                <!-- Left Content -->
+                <div class="max-w-lg">
+                    <span class="font-mono text-xs eyebrow block mb-6 reveal-right">Para quem é</span>
+                    <h2 class="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight leading-[0.95] mb-8 reveal-up">
+                        VOCÊ NÃO<br>
+                        PRECISA DE<br>
+                        COMPLICAÇÃO.
+                    </h2>
+                    <p class="font-body text-[#B0B0B0] text-base md:text-lg leading-relaxed mb-10 reveal-up delay-100">
+                        A maioria das pessoas já tentou. Desistiu porque o processo era cansativo, confuso ou sem resultado visível. Aqui é diferente — o método é simples porque foi construído para funcionar de verdade.
+                    </p>
+                    
+                    <div class="space-y-4 reveal-up delay-200">
+                        <div class="flex items-start gap-4">
+                            <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF] mt-1 shrink-0" width="20"></iconify-icon>
+                            <p class="font-body text-sm text-[#F2F2F2]">Quer <strong class="font-normal text-white">emagrecer</strong> sem dietas mirabolantes e sem passar fome.</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF] mt-1 shrink-0" width="20"></iconify-icon>
+                            <p class="font-body text-sm text-[#F2F2F2]">Busca <strong class="font-normal text-white">hipertrofia</strong> com treino estruturado e progressivo.</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF] mt-1 shrink-0" width="20"></iconify-icon>
+                            <p class="font-body text-sm text-[#F2F2F2]">Treina há anos e sente que está <strong class="font-normal text-white">travado, sem evolução.</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 lg:mt-24">
+                    <!-- Item -->
+                    <div class="glass-card p-6 reveal-up delay-100">
+                        <iconify-icon icon="solar:running-linear" class="text-[#2979FF] mb-4" width="32"></iconify-icon>
+                        <h3 class="font-display font-semibold text-2xl text-white tracking-tight mb-2">EMAGRECIMENTO</h3>
+                        <p class="font-body text-sm text-[#B0B0B0]">Déficit calórico inteligente + treino que acelera o metabolismo.</p>
+                    </div>
+                    <!-- Item -->
+                    <div class="glass-card p-6 reveal-up delay-200">
+                        <iconify-icon icon="solar:dumbbell-linear" class="text-[#2979FF] mb-4" width="32"></iconify-icon>
+                        <h3 class="font-display font-semibold text-2xl text-white tracking-tight mb-2">HIPERTROFIA</h3>
+                        <p class="font-body text-sm text-[#B0B0B0]">Periodização progressiva para ganho de massa real.</p>
+                    </div>
+                    <!-- Item -->
+                    <div class="glass-card p-6 reveal-up delay-300">
+                        <iconify-icon icon="solar:heart-pulse-linear" class="text-[#2979FF] mb-4" width="32"></iconify-icon>
+                        <h3 class="font-display font-semibold text-2xl text-white tracking-tight mb-2">CONDICIONAMENTO</h3>
+                        <p class="font-body text-sm text-[#B0B0B0]">Capacidade cardiovascular e resistência sem sacrifício.</p>
+                    </div>
+                    <!-- Item -->
+                    <div class="glass-card p-6 reveal-up delay-400">
+                        <iconify-icon icon="solar:users-group-rounded-linear" class="text-[#2979FF] mb-4" width="32"></iconify-icon>
+                        <h3 class="font-display font-semibold text-2xl text-white tracking-tight mb-2">ADAPTADOS</h3>
+                        <p class="font-body text-sm text-[#B0B0B0]">Treinos focados no público feminino e terceira idade, com segurança.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 04 · Método / Como Funciona -->
+    <section class="py-24 md:py-32 bg-[#0B1628] relative" id="metodo">
+        <!-- Top/Bottom Gradient Border simulation -->
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#2979FF]/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#2979FF]/20 to-transparent"></div>
+
+        <div class="container mx-auto px-5 md:px-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+                <span class="font-mono text-xs eyebrow block mb-6 reveal-up">Como funciona</span>
+                <h2 class="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight leading-[0.95] mb-6 reveal-up delay-100">
+                    UM MÉTODO SIMPLES<br>QUE FUNCIONA DE VERDADE.
+                </h2>
+                <p class="font-body text-[#B0B0B0] text-base md:text-lg reveal-up delay-200">
+                    Sem planilha genérica. Sem protocolo copiado da internet. Cada aluno começa com uma avaliação e sai com um caminho desenhado para o seu corpo e objetivo.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative">
+                <!-- Connector Line Desktop -->
+                <div class="hidden md:block absolute top-[40%] left-[10%] w-[80%] h-[1px] border-t border-dashed border-[#2979FF]/40 z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="relative z-10 flex flex-col group reveal-up delay-100">
+                    <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-6 border border-white/5 group-hover:border-[#2979FF]/50 transition-colors">
+                        <div class="absolute inset-0 bg-[#050D1A]/30 z-10 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=800&auto=format&fit=crop" alt="Avaliação" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 left-4 z-20 bg-[#050D1A]/80 backdrop-blur-sm px-3 py-1 rounded font-mono text-xs text-[#2979FF] border border-[#2979FF]/30">01</div>
+                    </div>
+                    <h3 class="font-display font-semibold text-3xl text-white tracking-tight mb-3">AVALIAÇÃO</h3>
+                    <p class="font-body text-sm text-[#B0B0B0] leading-relaxed">
+                        Entendemos o seu histórico, objetivo e rotina antes de montar qualquer treino. O ponto de partida é individual — sempre.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 flex flex-col group reveal-up delay-200">
+                    <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-6 border border-[#2979FF]/40 group-hover:border-[#2979FF] transition-colors shadow-[0_0_24px_rgba(41,121,255,0.1)] group-hover:shadow-[0_0_32px_rgba(41,121,255,0.2)]">
+                        <div class="absolute inset-0 bg-[#050D1A]/20 z-10 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop" alt="Protocolo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 left-4 z-20 bg-[#2979FF] px-3 py-1 rounded font-mono text-xs text-white">02</div>
+                    </div>
+                    <h3 class="font-display font-semibold text-3xl text-white tracking-tight mb-3">PROTOCOLO</h3>
+                    <p class="font-body text-sm text-[#B0B0B0] leading-relaxed">
+                        Treino desenhado para o seu nível, sua disponibilidade e seu objetivo. Ajustado a cada ciclo. Nada genérico.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 flex flex-col group reveal-up delay-300">
+                    <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-6 border border-white/5 group-hover:border-[#2979FF]/50 transition-colors">
+                        <div class="absolute inset-0 bg-[#050D1A]/30 z-10 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop" alt="Acompanhamento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 left-4 z-20 bg-[#050D1A]/80 backdrop-blur-sm px-3 py-1 rounded font-mono text-xs text-[#2979FF] border border-[#2979FF]/30">03</div>
+                    </div>
+                    <h3 class="font-display font-semibold text-3xl text-white tracking-tight mb-3">ACOMPANHAMENTO</h3>
+                    <p class="font-body text-sm text-[#B0B0B0] leading-relaxed">
+                        Suporte contínuo, ajustes constantes e motivação quando você precisar. Presencialmente ou à distância.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 05 · Resultados / Prova Social -->
+    <section class="py-24 md:py-32 bg-[#050D1A] relative" id="resultados">
+        <div class="container mx-auto px-5 md:px-10">
+            <div class="max-w-xl mb-16 md:mb-20">
+                <span class="font-mono text-xs eyebrow block mb-6 reveal-right">Resultados Reais</span>
+                <h2 class="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight leading-[0.95] mb-6 reveal-up">
+                    ALUNOS REAIS.<br>RESULTADOS REAIS.
+                </h2>
+                <p class="font-body text-[#B0B0B0] text-base reveal-up delay-100">
+                    Nada de fotografia editada ou resultado milagroso. O que você vê aqui foi conquistado com trabalho, constância e método.
+                </p>
+            </div>
+
+            <!-- Before/After Placeholders Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-20 reveal-up delay-200">
+                <!-- Pair 1 -->
+                <div class="relative aspect-[3/4] bg-[#0B1628] rounded-lg overflow-hidden group border border-white/5">
+                    <div class="absolute inset-0 flex items-center justify-center font-mono text-xs text-[#6B6B6B]">ANTES/DEPOIS</div>
+                    <div class="absolute top-2 left-2 bg-[#050D1A]/80 backdrop-blur-sm px-2 py-1 rounded font-mono text-[0.6rem] text-white">EMAGRECIMENTO</div>
+                </div>
+                <!-- Pair 2 -->
+                <div class="relative aspect-[3/4] bg-[#0B1628] rounded-lg overflow-hidden group border border-white/5">
+                    <div class="absolute inset-0 flex items-center justify-center font-mono text-xs text-[#6B6B6B]">ANTES/DEPOIS</div>
+                    <div class="absolute top-2 left-2 bg-[#050D1A]/80 backdrop-blur-sm px-2 py-1 rounded font-mono text-[0.6rem] text-white">HIPERTROFIA</div>
+                </div>
+                 <!-- Pair 3 -->
+                 <div class="relative aspect-[3/4] bg-[#0B1628] rounded-lg overflow-hidden group border border-white/5 hidden md:block">
+                    <div class="absolute inset-0 flex items-center justify-center font-mono text-xs text-[#6B6B6B]">ANTES/DEPOIS</div>
+                </div>
+                <!-- Pair 4 -->
+                <div class="relative aspect-[3/4] bg-[#0B1628] rounded-lg overflow-hidden group border border-white/5 hidden lg:block">
+                    <div class="absolute inset-0 flex items-center justify-center font-mono text-xs text-[#6B6B6B]">ANTES/DEPOIS</div>
+                </div>
+            </div>
+
+            <!-- Action Shots (Columns) -->
+            <div class="columns-2 md:columns-3 gap-2 md:gap-4 space-y-2 md:space-y-4 mb-24 reveal-up delay-300">
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" class="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style="mix-blend-mode: luminosity;" alt="Treino">
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style="mix-blend-mode: luminosity;" alt="Treino">
+                <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop" class="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style="mix-blend-mode: luminosity;" alt="Treino">
+                <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=600&auto=format&fit=crop" class="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style="mix-blend-mode: luminosity;" alt="Treino">
+            </div>
+
+            <!-- Testimonials -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card p-6 md:p-8 flex flex-col h-full reveal-up delay-100">
+                    <div class="flex gap-1 text-[#2979FF] mb-4">
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                    </div>
+                    <p class="font-body text-sm md:text-base text-[#F2F2F2] mb-8 italic flex-1">
+                        "Nunca achei que fosse ser tão direto assim. Sem enrolação, sem aquela sensação de que você é só mais um aluno. Em 3 meses perdi 9kg e não passei um dia com fome."
+                    </p>
+                    <div class="flex items-center gap-4 border-t border-white/10 pt-4 mt-auto">
+                        <div class="w-12 h-12 rounded-full border-2 border-[#2979FF] bg-[#1A1A1A] overflow-hidden"></div>
+                        <div>
+                            <h4 class="font-display font-semibold text-lg text-white tracking-tight">ANA C.</h4>
+                            <p class="font-mono text-[0.6rem] text-[#B0B0B0]">EMAGRECIMENTO · PRESENCIAL</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-6 md:p-8 flex flex-col h-full reveal-up delay-200" style="border-color: rgba(41,121,255,0.4); box-shadow: 0 0 24px rgba(41,121,255,0.1);">
+                    <div class="flex gap-1 text-[#2979FF] mb-4">
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                    </div>
+                    <p class="font-body text-sm md:text-base text-[#F2F2F2] mb-8 italic flex-1">
+                        "Fazia academia há 2 anos sem resultado. Com o Lucas, em 4 meses comecei a ver diferença real na musculatura. O treino é sério, mas você consegue seguir."
+                    </p>
+                    <div class="flex items-center gap-4 border-t border-[#2979FF]/20 pt-4 mt-auto">
+                        <div class="w-12 h-12 rounded-full border-2 border-[#2979FF] bg-[#1A1A1A] overflow-hidden"></div>
+                        <div>
+                            <h4 class="font-display font-semibold text-lg text-white tracking-tight">MARCOS R.</h4>
+                            <p class="font-mono text-[0.6rem] text-[#B0B0B0]">HIPERTROFIA · ONLINE</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-6 md:p-8 flex flex-col h-full reveal-up delay-300">
+                    <div class="flex gap-1 text-[#2979FF] mb-4">
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                    </div>
+                    <p class="font-body text-sm md:text-base text-[#F2F2F2] mb-8 italic flex-1">
+                        "Tenho 62 anos e achei que treino pesado não era para mim. Ele adaptou tudo. Hoje faço exercícios que não conseguia nem imaginar há 6 meses."
+                    </p>
+                    <div class="flex items-center gap-4 border-t border-white/10 pt-4 mt-auto">
+                        <div class="w-12 h-12 rounded-full border-2 border-[#2979FF] bg-[#1A1A1A] overflow-hidden"></div>
+                        <div>
+                            <h4 class="font-display font-semibold text-lg text-white tracking-tight">MARIA L.</h4>
+                            <p class="font-mono text-[0.6rem] text-[#B0B0B0]">TERCEIRA IDADE · A DOMICÍLIO</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 06 · Modalidades -->
+    <section class="py-24 md:py-32 bg-[#0B1628] relative" id="modalidades">
+        <!-- Top Gradient Border -->
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#1565C0]/30 to-transparent"></div>
+
+        <div class="container mx-auto px-5 md:px-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+                <span class="font-mono text-xs eyebrow block mb-6 reveal-up">Como posso te atender</span>
+                <h2 class="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight leading-[0.95] mb-6 reveal-up delay-100">
+                    VOCÊ ESCOLHE<br>ONDE TREINAR.
+                </h2>
+                <p class="font-body text-[#B0B0B0] text-base md:text-lg reveal-up delay-200">
+                    Sem desculpa de distância ou de horário. O acompanhamento acontece do jeito que funciona para a sua rotina.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-center">
+                
+                <!-- Presencial -->
+                <div class="bg-[#050D1A] rounded-[12px] border border-white/5 overflow-hidden flex flex-col h-full reveal-up delay-100">
+                    <div class="h-40 w-full relative">
+                        <div class="absolute inset-0 bg-[#050D1A]/60 z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Presencial">
+                        <div class="absolute bottom-4 left-6 z-20">
+                            <h3 class="font-display font-extrabold text-3xl text-white tracking-tight">PRESENCIAL</h3>
+                            <p class="font-mono text-[0.65rem] text-[#B0B0B0]">ACADEMIA PARCEIRA</p>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col">
+                        <ul class="space-y-4 mb-8 flex-1">
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF]"></iconify-icon> Treino 100% acompanhado
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF]"></iconify-icon> Correção de movimento na hora
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF]"></iconify-icon> Avaliação física inclusa
+                            </li>
+                        </ul>
+                        <div class="border-t border-white/10 pt-6 mb-6">
+                            <span class="font-display font-semibold text-2xl text-white">SOB CONSULTA</span>
+                        </div>
+                        <a href="#whatsapp" class="btn-secondary w-full py-3 text-center text-xs font-mono">Saber Mais</a>
+                    </div>
+                </div>
+
+                <!-- Online (Destaque) -->
+                <div class="glass-card overflow-hidden flex flex-col h-full relative lg:scale-105 z-10 reveal-up delay-200" style="border-width: 2px; border-color: #2979FF; box-shadow: 0 0 32px rgba(41,121,255,0.2);">
+                    <div class="absolute top-4 right-4 z-30 bg-[#2979FF] px-3 py-1 rounded font-mono text-[0.6rem] text-white tracking-wider">MAIS ESCOLHIDO</div>
+                    <div class="h-48 w-full relative">
+                        <div class="absolute inset-0 bg-[#0B3D91]/60 z-10" style="background: linear-gradient(0deg, #050D1A 0%, rgba(11,61,145,0.4) 100%);"></div>
+                        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Online">
+                        <div class="absolute bottom-4 left-6 z-20">
+                            <h3 class="font-display font-extrabold text-4xl text-white tracking-tight">ONLINE</h3>
+                            <p class="font-mono text-[0.65rem] text-[#B0B0B0]">ONDE VOCÊ ESTIVER</p>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col bg-[#0B1628]/50">
+                        <ul class="space-y-4 mb-8 flex-1">
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-[#2979FF]"></iconify-icon> Protocolo personalizado
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-[#2979FF]"></iconify-icon> Suporte direto por WhatsApp
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-[#2979FF]"></iconify-icon> Ajustes periódicos
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-[#2979FF]"></iconify-icon> Análise de vídeos de execução
+                            </li>
+                        </ul>
+                        <div class="border-t border-[#2979FF]/20 pt-6 mb-6">
+                            <span class="font-display font-semibold text-3xl text-white">SOB CONSULTA</span>
+                        </div>
+                        <a href="#whatsapp" class="btn-primary w-full py-4 text-center text-xs font-mono font-normal">Quero Começar</a>
+                    </div>
+                </div>
+
+                <!-- A Domicílio -->
+                <div class="bg-[#050D1A] rounded-[12px] border border-white/5 overflow-hidden flex flex-col h-full reveal-up delay-300">
+                    <div class="h-40 w-full relative">
+                        <div class="absolute inset-0 bg-[#050D1A]/60 z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="A Domicílio">
+                        <div class="absolute bottom-4 left-6 z-20">
+                            <h3 class="font-display font-extrabold text-3xl text-white tracking-tight">A DOMICÍLIO</h3>
+                            <p class="font-mono text-[0.65rem] text-[#B0B0B0]">NA SUA CASA OU PRÉDIO</p>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col">
+                        <ul class="space-y-4 mb-8 flex-1">
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF]"></iconify-icon> Comodidade total
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF]"></iconify-icon> Adaptação ao seu espaço
+                            </li>
+                            <li class="flex items-center gap-3 font-body text-sm text-[#F2F2F2]">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-[#2979FF]"></iconify-icon> Equipamentos levados por mim
+                            </li>
+                        </ul>
+                        <div class="border-t border-white/10 pt-6 mb-6">
+                            <span class="font-display font-semibold text-2xl text-white">SOB CONSULTA</span>
+                        </div>
+                        <a href="#whatsapp" class="btn-secondary w-full py-3 text-center text-xs font-mono">Saber Mais</a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <p class="text-center font-mono text-[0.65rem] text-[#6B6B6B] mt-12 reveal-up delay-400">
+                VALORES E DISPONIBILIDADE VIA WHATSAPP · SEM COMPROMISSO NA PRIMEIRA CONVERSA
+            </p>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 07 · Sobre Lucas Prado -->
+    <section class="py-24 md:py-32 bg-[#050D1A] relative overflow-hidden" id="sobre">
+        <!-- Decor background -->
+        <div class="absolute right-0 top-0 w-1/2 h-full opacity-10 blur-md pointer-events-none z-0">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+        </div>
+
+        <div class="container mx-auto px-5 md:px-10 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                
+                <!-- Image side -->
+                <div class="relative reveal-scale">
+                    <!-- Accent Line -->
+                    <div class="absolute -left-4 md:-left-8 top-10 w-[3px] h-3/4 bg-gradient-to-b from-[#2979FF] to-transparent rounded-full z-20"></div>
+                    
+                    <div class="relative aspect-[3/4] rounded-xl overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.6)]">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" class="w-full h-full object-cover" alt="Lucas Prado - Perfil">
+                        <!-- Subtle inner shadow -->
+                        <div class="absolute inset-0 border border-white/10 rounded-xl pointer-events-none"></div>
+                    </div>
+                </div>
+
+                <!-- Text side -->
+                <div class="max-w-xl">
+                    <span class="font-mono text-xs eyebrow block mb-6 reveal-right">Quem é Lucas Prado</span>
+                    <h2 class="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight leading-[0.95] mb-8 reveal-up">
+                        PERSONAL TRAINER<br>
+                        QUE ENTREGA<br>
+                        O QUE PROMETE.
+                    </h2>
+                    
+                    <div class="space-y-6 font-body text-[#B0B0B0] text-base leading-relaxed mb-12 reveal-up delay-100">
+                        <p>
+                            Lucas Prado é Personal Trainer com atuação presencial, online e a domicílio. Especialista em emagrecimento, hipertrofia, condicionamento, público feminino e terceira idade.
+                        </p>
+                        <p>
+                            A filosofia é simples: resultado não vem de método complicado — vem de consistência, acompanhamento real e um protocolo feito para você, não para uma planilha genérica.
+                        </p>
+                        <p>
+                            Cada aluno atendido é uma prova de que o processo funciona quando é feito com seriedade e sem frescura.
+                        </p>
+                    </div>
+
+                    <!-- Credentials -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8 border-t border-white/10 reveal-up delay-200">
+                        <div class="flex items-start gap-3">
+                            <iconify-icon icon="solar:diploma-linear" class="text-[#2979FF] mt-1" width="20"></iconify-icon>
+                            <div>
+                                <h4 class="font-mono text-[0.65rem] text-[#6B6B6B] mb-1">FORMAÇÃO</h4>
+                                <p class="font-body text-sm text-[#F2F2F2]">Educação Física</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <iconify-icon icon="solar:target-linear" class="text-[#2979FF] mt-1" width="20"></iconify-icon>
+                            <div>
+                                <h4 class="font-mono text-[0.65rem] text-[#6B6B6B] mb-1">ESPECIALIDADES</h4>
+                                <p class="font-body text-sm text-[#F2F2F2]">Emagrecimento, Hipertrofia</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <iconify-icon icon="solar:map-point-linear" class="text-[#2979FF] mt-1" width="20"></iconify-icon>
+                            <div>
+                                <h4 class="font-mono text-[0.65rem] text-[#6B6B6B] mb-1">ATUAÇÃO</h4>
+                                <p class="font-body text-sm text-[#F2F2F2]">Presencial, Online, Domicílio</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <iconify-icon icon="solar:instagram-linear" class="text-[#2979FF] mt-1" width="20"></iconify-icon>
+                            <div>
+                                <h4 class="font-mono text-[0.65rem] text-[#6B6B6B] mb-1">INSTAGRAM</h4>
+                                <a href="#" class="font-body text-sm text-[#F2F2F2] hover:text-[#2979FF] transition-colors">@teamlucasprado</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 08 · FAQ -->
+    <section class="py-24 md:py-32 bg-[#0B1628] relative overflow-hidden" id="faq">
+        <!-- Decor side image mask -->
+        <div class="absolute right-0 top-0 w-[40%] h-full opacity-[0.07] z-0 pointer-events-none" style="mask-image: linear-gradient(to right, transparent, rgba(0,0,0,0.8)); -webkit-mask-image: linear-gradient(to right, transparent, rgba(0,0,0,0.8));">
+            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+        </div>
+
+        <div class="container mx-auto px-5 md:px-10 relative z-10">
+            <div class="max-w-3xl mx-auto">
+                <span class="font-mono text-xs eyebrow block mb-6 text-center reveal-up">Dúvidas</span>
+                <h2 class="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight leading-[0.95] mb-16 text-center reveal-up delay-100">
+                    PERGUNTAS DIRETAS.
+                </h2>
+
+                <div class="space-y-4 reveal-up delay-200">
+                    
+                    <!-- Item 1 -->
+                    <details class="group bg-[#050D1A] rounded-lg border border-white/5 overflow-hidden transition-all duration-300 [&[open]]:glass-card">
+                        <summary class="flex justify-between items-center p-6 text-lg font-body font-medium text-white cursor-pointer select-none">
+                            Preciso ter experiência prévia?
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-[#2979FF] transition-transform duration-300" width="24"></iconify-icon>
+                        </summary>
+                        <div class="faq-content px-6 pb-6 text-[#B0B0B0] font-body text-sm md:text-base leading-relaxed border-t border-transparent group-open:border-[#2979FF]/10 pt-4">
+                            Não. Iniciantes são bem-vindos. Avaliamos o seu ponto de partida e montamos o protocolo do zero, no seu ritmo.
+                        </div>
+                    </details>
+
+                    <!-- Item 2 -->
+                    <details class="group bg-[#050D1A] rounded-lg border border-white/5 overflow-hidden transition-all duration-300 [&[open]]:glass-card">
+                        <summary class="flex justify-between items-center p-6 text-lg font-body font-medium text-white cursor-pointer select-none">
+                            Como funciona o acompanhamento online?
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-[#2979FF] transition-transform duration-300" width="24"></iconify-icon>
+                        </summary>
+                        <div class="faq-content px-6 pb-6 text-[#B0B0B0] font-body text-sm md:text-base leading-relaxed border-t border-transparent group-open:border-[#2979FF]/10 pt-4">
+                            Você recebe o protocolo de treino completo, suporte por mensagem e revisões periódicas. A distância não muda o compromisso com o seu resultado.
+                        </div>
+                    </details>
+
+                    <!-- Item 3 -->
+                    <details class="group bg-[#050D1A] rounded-lg border border-white/5 overflow-hidden transition-all duration-300 [&[open]]:glass-card">
+                        <summary class="flex justify-between items-center p-6 text-lg font-body font-medium text-white cursor-pointer select-none">
+                            E o atendimento a domicílio?
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-[#2979FF] transition-transform duration-300" width="24"></iconify-icon>
+                        </summary>
+                        <div class="faq-content px-6 pb-6 text-[#B0B0B0] font-body text-sm md:text-base leading-relaxed border-t border-transparent group-open:border-[#2979FF]/10 pt-4">
+                            Atendo na sua casa, condomínio ou espaço de sua preferência. Sem necessidade de deslocamento — o treino vai até você.
+                        </div>
+                    </details>
+
+                    <!-- Item 4 -->
+                    <details class="group bg-[#050D1A] rounded-lg border border-white/5 overflow-hidden transition-all duration-300 [&[open]]:glass-card">
+                        <summary class="flex justify-between items-center p-6 text-lg font-body font-medium text-white cursor-pointer select-none">
+                            Em quanto tempo vejo resultado?
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-[#2979FF] transition-transform duration-300" width="24"></iconify-icon>
+                        </summary>
+                        <div class="faq-content px-6 pb-6 text-[#B0B0B0] font-body text-sm md:text-base leading-relaxed border-t border-transparent group-open:border-[#2979FF]/10 pt-4">
+                            Depende do objetivo e da consistência — mas alunos costumam notar diferença nas primeiras 4 a 8 semanas de protocolo. Resultado real leva tempo, e o processo é esse.
+                        </div>
+                    </details>
+
+                     <!-- Item 5 -->
+                     <details class="group bg-[#050D1A] rounded-lg border border-white/5 overflow-hidden transition-all duration-300 [&[open]]:glass-card">
+                        <summary class="flex justify-between items-center p-6 text-lg font-body font-medium text-white cursor-pointer select-none">
+                            Qual é o valor?
+                            <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-[#2979FF] transition-transform duration-300" width="24"></iconify-icon>
+                        </summary>
+                        <div class="faq-content px-6 pb-6 text-[#B0B0B0] font-body text-sm md:text-base leading-relaxed border-t border-transparent group-open:border-[#2979FF]/10 pt-4">
+                            Os valores variam conforme a modalidade e o plano. Entre em contato para receber uma proposta personalizada sem compromisso.
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 09 · CTA Final -->
+    <section class="relative py-32 md:py-48 flex items-center overflow-hidden bg-[#050D1A]">
+        <!-- Full Bleed Image Background -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2000&auto=format&fit=crop" alt="Lucas Prado CTA" class="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity">
+            <div class="absolute inset-0 bg-[#050D1A]/85 backdrop-blur-[2px]"></div>
+        </div>
+
+        <!-- Giant Orb -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#2979FF] opacity-[0.08] blur-[120px] rounded-full z-0 pointer-events-none"></div>
+
+        <!-- Ticker Strip -->
+        <div class="absolute top-20 left-0 w-full overflow-hidden whitespace-nowrap z-10 opacity-70 pointer-events-none select-none border-y border-[#2979FF]/10 py-2">
+            <div class="animate-ticker font-display font-extrabold text-2xl md:text-4xl text-[#2979FF] tracking-widest inline-block">
+                S E G U I R · N O · I N S T A G R A M · @ T E A M L U C A S P R A D O · C O M E Ç A R · A G O R A · S E M · E N R O L A Ç Ã O · R E S U L T A D O · R E A L · S E G U I R · N O · I N S T A G R A M · @ T E A M L U C A S P R A D O ·
+            </div>
+             <div class="animate-ticker font-display font-extrabold text-2xl md:text-4xl text-[#2979FF] tracking-widest inline-block" aria-hidden="true">
+                S E G U I R · N O · I N S T A G R A M · @ T E A M L U C A S P R A D O · C O M E Ç A R · A G O R A · S E M · E N R O L A Ç Ã O · R E S U L T A D O · R E A L · S E G U I R · N O · I N S T A G R A M · @ T E A M L U C A S P R A D O ·
+            </div>
+        </div>
+
+        <div class="container mx-auto px-5 md:px-10 relative z-20 text-center flex flex-col items-center">
+            <h2 class="font-display font-extrabold text-6xl md:text-8xl lg:text-9xl text-white tracking-tight leading-[0.9] mb-8 reveal-up">
+                CHEGA DE<br>ESPERAR O<br>MOMENTO CERTO.
+            </h2>
+            
+            <p class="font-body text-[#F2F2F2] text-lg md:text-xl max-w-2xl mb-12 reveal-up delay-100">
+                Primeira conversa sem compromisso. Você fala, a gente escuta e monta o plano certo para o seu objetivo.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto reveal-scale delay-200">
+                <a href="https://instagram.com/teamlucasprado" target="_blank" class="btn-primary px-10 py-5 font-mono text-sm font-normal text-center flex items-center justify-center gap-2">
+                    <iconify-icon icon="solar:instagram-linear" width="20"></iconify-icon>
+                    Seguir no Instagram
+                </a>
+                <a href="#whatsapp" class="btn-secondary px-10 py-5 font-mono text-sm font-normal text-center flex items-center justify-center gap-2">
+                    <iconify-icon icon="solar:phone-calling-linear" width="20"></iconify-icon>
+                    Falar no WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#050D1A] relative pt-20 pb-10 border-t" style="border-image: linear-gradient(90deg, transparent, rgba(41,121,255,0.5), transparent) 1;">
+        <div class="container mx-auto px-5 md:px-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16">
+                
+                <!-- Brand Col -->
+                <div class="md:col-span-5 flex flex-col items-start">
+                    <a href="#" class="font-display font-extrabold text-3xl text-white tracking-tight flex items-center gap-2 mb-4">
+                        <span class="text-[#2979FF]">LP</span> LUCAS PRADO
+                    </a>
+                    <p class="font-mono text-xs text-[#6B6B6B] tracking-widest">RESULTADO SEM FRESCURA.</p>
+                </div>
+
+                <!-- Nav Col -->
+                <div class="md:col-span-3">
+                    <h4 class="font-mono text-xs text-white mb-6">NAVEGAÇÃO</h4>
+                    <ul class="space-y-3 font-body text-sm text-[#B0B0B0]">
+                        <li><a href="#metodo" class="hover:text-[#2979FF] transition-colors">Método</a></li>
+                        <li><a href="#resultados" class="hover:text-[#2979FF] transition-colors">Resultados</a></li>
+                        <li><a href="#modalidades" class="hover:text-[#2979FF] transition-colors">Modalidades</a></li>
+                        <li><a href="#sobre" class="hover:text-[#2979FF] transition-colors">Sobre</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Col -->
+                <div class="md:col-span-4">
+                    <h4 class="font-mono text-xs text-white mb-6">CONTATO</h4>
+                    <ul class="space-y-4 font-body text-sm text-[#B0B0B0]">
+                        <li>
+                            <a href="https://instagram.com/teamlucasprado" target="_blank" class="flex items-center gap-2 hover:text-[#2979FF] transition-colors">
+                                <iconify-icon icon="solar:instagram-linear" width="18"></iconify-icon>
+                                @teamlucasprado
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:lucasspradoo01@gmail.com" class="flex items-center gap-2 hover:text-[#2979FF] transition-colors">
+                                <iconify-icon icon="solar:letter-linear" width="18"></iconify-icon>
+                                lucasspradoo01@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#whatsapp" class="flex items-center gap-2 hover:text-[#2979FF] transition-colors">
+                                <iconify-icon icon="solar:phone-calling-linear" width="18"></iconify-icon>
+                                WhatsApp
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="font-mono text-[0.65rem] text-[#6B6B6B]">
+                    LUCAS PRADO PERSONAL TRAINER · © 2026
+                </p>
+                <div class="flex gap-4">
+                    <!-- Decor mini line -->
+                    <div class="w-12 h-[2px] bg-[#2979FF]/30 rounded mt-1"></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Intersection Observer & Interactions Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Header Glassmorphism on Scroll
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('glass-nav');
+                    header.classList.remove('bg-transparent', 'border-transparent');
+                } else {
+                    header.classList.remove('glass-nav');
+                    header.classList.add('bg-transparent', 'border-transparent');
+                }
+            });
+
+            // Parallax Effect for Hero
+            const heroImg = document.querySelector('.hero-img');
+            const heroText = document.querySelector('.hero-text');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                if(scrollY < window.innerHeight) {
+                    if(heroImg) heroImg.style.transform = `translateY(${scrollY * 0.3}px)`;
+                    if(heroText) heroText.style.transform = `translate(-50%, calc(-50% + ${scrollY * -0.1}px))`;
+                }
+            });
+
+            // Scroll Reveal Animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -10% 0px', // Trigger slightly before it hits the bottom
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Optional: stop observing once animated
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal-up, .reveal-right, .reveal-scale');
+            revealElements.forEach(el => observer.observe(el));
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerOffset = 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
