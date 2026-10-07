@@ -7,6 +7,7 @@
     "dev": "node scripts/dev.mjs",
     "dev:vite": "vite",
     "build": "node scripts/verificar-tokens.mjs && vite build",
+    "build:netlify": "npm run build && node scripts/configurar-netlify.mjs",
     "build:index": "node scripts/build-component-index.mjs",
     "lint": "node scripts/verificar-tokens.mjs",
     "preview": "vite preview",

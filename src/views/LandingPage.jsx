@@ -84,7 +84,7 @@ export default function LandingPage({ onOpenApp }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', width: '100%', background: 'var(--papel)', color: 'var(--tinta)', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', width: '100%', background: 'var(--papel)', color: 'var(--tinta)', position: 'relative', overflowX: 'clip', overflowY: 'visible' }}>
       
       {/* SVG Scroll Journey Connector Line */}
       <ScrollJourneyLine strokeColor={isDark ? "var(--accent-indigo)" : "var(--accent-blue)"} glowColor={isDark ? "var(--accent-rosa)" : "var(--iris-ciano)"} />

@@ -3,14 +3,14 @@ import { ArrowRight, AlertCircle, Sparkles, CheckCircle2, TrendingUp, ChevronRig
 import DarkVeil from '../components/ui/DarkVeil';
 
 export default function DashboardView({ leads, onNavigateLeads, onNavigateCRM }) {
-  const totalLeads = leads.length || 40;
+  const totalLeads = leads.length;
   const abordados = leads.filter(l => ['Abordados', 'Em Negociação', 'Agendados', 'Convertidos'].includes(l.status_crm)).length;
   const agendados = leads.filter(l => l.status_crm === 'Agendados').length;
   const followUp = leads.filter(l => l.status_crm === 'Em Negociação').length;
   const perdidos = leads.filter(l => l.status_crm === 'Perdido').length;
   const convertidos = leads.filter(l => l.status_crm === 'Convertidos').length;
 
-  const pctAbordados = Math.round((abordados / totalLeads) * 100);
+  const pctAbordados = totalLeads > 0 ? Math.round((abordados / totalLeads) * 100) : 0;
   const pctAgendados = abordados > 0 ? Math.round((agendados / abordados) * 100) : 0;
   const pctFollowUp = abordados > 0 ? Math.round((followUp / abordados) * 100) : 0;
   const pctPerdidos = abordados > 0 ? Math.round((perdidos / abordados) * 100) : 0;

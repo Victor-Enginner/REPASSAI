@@ -735,28 +735,7 @@ export default function RelatoriosView({ leads = [], onNavigate }) {
               )}
             </div>
 
-            <button
-              onClick={() => onNavigate && onNavigate('fluxos')}
-              style={{
-                width: '100%',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                padding: '10px 16px',
-                borderRadius: 'var(--raio-sm)',
-                border: '1px solid var(--aro-cor)',
-                backgroundColor: 'var(--papel-fundo)',
-                color: 'var(--tinta)',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'background-color 0.15s ease'
-              }}
-            >
-              <Zap size={14} color="var(--accent-indigo)" />
-              Criar fluxo de follow-up
-            </button>
+{/* Atalho para equipe de agentes removido: funcionalidade pertence ao escritório 3D. */}
           </div>
 
           {/* Card: Por que perdemos (Motivos de perda) */}

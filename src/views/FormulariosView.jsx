@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import ModuleScope from '../components/ModuleScope';
+import './SiteWorkspace.css';
 import {
   FileText,
   Plus,
@@ -67,9 +69,9 @@ const CORES_PALETA = [
 const FORMULARIOS_INICIAIS = [
   {
     id: 'form-my-briefing',
-    titulo: 'My briefing',
+    titulo: 'Briefing de criação de site',
     descricao: 'Formulário oficial de diagnóstico para novos clientes e levantamento de necessidades.',
-    agradecimento: 'Obrigado pelo envio! Nossa equipe de especialistas entrará em contato em menos de 10 minutos.',
+    agradecimento: 'Prévia concluída. Nenhum dado foi enviado.',
     corDestaque: 'var(--iris-violeta)',
     pipeline: 'b2b_repass',
     status: 'rascunho', // 'rascunho' | 'publicado'
@@ -78,10 +80,10 @@ const FORMULARIOS_INICIAIS = [
     campos: [
       {
         id: 'c-1',
-        pergunta: 'Qual o seu seguimento oficial?',
+        pergunta: 'Qual é o segmento do negócio?',
         tipo: 'texto_curto',
         obrigatorio: true,
-        mapearPara: 'telefone',
+        mapearPara: 'segmento',
         placeholder: 'Ex: Barbearia, Odontologia, Oficina mecânica...',
         opcoes: []
       },
@@ -109,11 +111,11 @@ const FORMULARIOS_INICIAIS = [
     id: 'form-prospeccao-express',
     titulo: 'Diagnóstico de Presença Digital',
     descricao: 'Avaliação express de autoridade local no Google Maps e velocidade de carregamento de site.',
-    agradecimento: 'Diagnóstico recebido! Seu score e proposta personalizada foram encaminhados.',
+    agradecimento: 'Prévia concluída. Nenhuma proposta foi enviada.',
     corDestaque: 'var(--iris-azul)',
     pipeline: 'b2b_repass',
-    status: 'publicado',
-    envios: 14,
+    status: 'rascunho',
+    envios: 0,
     criadoEm: '27/09/2026',
     campos: [
       {
@@ -147,11 +149,12 @@ const FORMULARIOS_INICIAIS = [
   }
 ];
 
-export default function FormulariosView({ leads = [], setLeads, onNavigate }) {
+export default function FormulariosView({ leads = [], setLeads, onNavigate, userId }) {
+  const storageKey = userId ? 'repass.sites.v1.formularios.' + userId : null;
   const [formularios, setFormularios] = useState(() => {
     try {
-      const salvo = localStorage.getItem('repass_formularios_db');
-      if (salvo) return JSON.parse(salvo);
+      const salvo = storageKey ? localStorage.getItem(storageKey) : null;
+      if (salvo) { const data=JSON.parse(salvo); if(Array.isArray(data)) return data.filter(f=>f&&typeof f.id==='string'&&typeof f.titulo==='string'&&Array.isArray(f.campos)).slice(0,300); }
     } catch {}
     return FORMULARIOS_INICIAIS;
   });
@@ -177,9 +180,9 @@ export default function FormulariosView({ leads = [], setLeads, onNavigate }) {
   // Persistência local automática
   useEffect(() => {
     try {
-      localStorage.setItem('repass_formularios_db', JSON.stringify(formularios));
+      if(storageKey) localStorage.setItem(storageKey, JSON.stringify(formularios));
     } catch {}
-  }, [formularios]);
+  }, [formularios, storageKey]);
 
   // Abre editor para um formulário específico
   const abrirEditor = (form) => {
@@ -315,62 +318,22 @@ export default function FormulariosView({ leads = [], setLeads, onNavigate }) {
     setFormularios(prev => [duplicado, ...prev]);
   };
 
-  // Submissão real no preview/teste
+  // Testar campos não envia dados ao CRM ou incrementa respostas reais.
   const handleSubmeterPreview = (e) => {
     e.preventDefault();
-    if (!formularioAtivo) return;
-
-    // Incrementa contagem de envios
-    setFormularios(prev => prev.map(f => f.id === formularioAtivo.id ? { ...f, envios: f.envios + 1 } : f));
-    setFormularioAtivo(prev => ({ ...prev, envios: prev.envios + 1 }));
-
-    // Se tiver pipeline mapeada, cria o lead no CRM
-    if (formularioAtivo.pipeline && formularioAtivo.pipeline !== 'none' && setLeads) {
-      let nomeLead = 'Lead de Formulário';
-      let telLead = '';
-      let emailLead = '';
-      let empresaLead = formularioAtivo.titulo;
-      let notasLead = `Enviado via formulário: ${formularioAtivo.titulo}\n`;
-
-      formularioAtivo.campos.forEach(c => {
-        const val = respostasPreview[c.id];
-        if (!val) return;
-        notasLead += `\n• ${c.pergunta}: ${val}`;
-        if (c.mapearPara === 'nome') nomeLead = val;
-        if (c.mapearPara === 'telefone') telLead = val;
-        if (c.mapearPara === 'email') emailLead = val;
-        if (c.mapearPara === 'empresa') empresaLead = val;
-      });
-
-      const novoLeadCRM = {
-        id: `lead-form-${Date.now()}`,
-        nome: nomeLead,
-        telefone: telLead || '(11) 99999-0000',
-        email: emailLead,
-        empresa: empresaLead,
-        categoria: 'Formulário Inbound',
-        status_crm: 'Leads em Aberto',
-        origem: `Form: ${formularioAtivo.titulo}`,
-        enviado_crm: true,
-        data_criacao: new Date().toISOString(),
-        observacoes: notasLead
-      };
-
-      setLeads(prev => [novoLeadCRM, ...(Array.isArray(prev) ? prev : [])]);
-    }
-
     setEnvioSucessoPreview(true);
   };
 
-  // URL pública simulada
+  // Sem endpoint público: não emitir link ou embed que não funciona.
   const urlPublica = typeof window !== 'undefined'
-    ? `${window.location.origin}/#f/${formularioAtivo?.id || 'demo'}`
-    : `https://repass-ai-beta.netlify.app/#f/${formularioAtivo?.id || 'demo'}`;
+    ? ''
+    : '';
 
-  const codigoEmbed = `<iframe src="${urlPublica}" width="100%" height="650" frameborder="0" style="border:0; border-radius:12px; max-width:600px; width:100%;"></iframe>`;
+  const codigoEmbed = '';
 
   return (
-    <div style={{ padding: '24px 32px', minHeight: '100vh', boxSizing: 'border-box' }}>
+    <div className="forms-workspace" style={{ padding: '24px 32px', minHeight: '100vh', boxSizing: 'border-box' }}>
+      <ModuleScope module="formularios" onNavigate={onNavigate}/>
       
       {/* ============================================================
           TOAST DE CONFIRMAÇÃO DE SALVAMENTO
@@ -764,6 +727,8 @@ export default function FormulariosView({ leads = [], setLeads, onNavigate }) {
               </button>
 
               <button
+                disabled
+                title="Publicação ainda não conectada. Use Visualizar para testar localmente."
                 onClick={() => setModalShareAberta(true)}
                 style={{
                   display: 'inline-flex',
@@ -788,6 +753,8 @@ export default function FormulariosView({ leads = [], setLeads, onNavigate }) {
                   const novoStatus = formularioAtivo.status === 'publicado' ? 'rascunho' : 'publicado';
                   handleSalvarEditor(novoStatus);
                 }}
+                disabled
+                title="A publicação depende de conectar o recebimento de respostas ao servidor."
                 style={{
                   padding: '8px 16px',
                   background: formularioAtivo.status === 'publicado' ? 'var(--papel-cartao)' : 'var(--iris-violeta)',
@@ -1469,7 +1436,7 @@ export default function FormulariosView({ leads = [], setLeads, onNavigate }) {
                 </div>
 
                 <h4 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--tinta)', marginBottom: '8px' }}>
-                  Sucesso!
+                  Teste local concluído
                 </h4>
 
                 <p style={{ fontSize: '0.92rem', color: 'var(--tinta-media)', marginBottom: '24px' }}>

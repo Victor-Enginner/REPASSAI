@@ -1,0 +1,11 @@
+{
+  "currency": "BRL",
+  "billing_interval": "month",
+  "version": 1,
+  "plans": [
+    { "id": "gratuito", "name": "Gratuito", "audience": "Para explorar a plataforma", "price_cents": 0, "leads_month": 10, "categories_count": 5, "all_categories": false, "sites_month": 2, "approach_scripts_month": 10, "features": [] },
+    { "id": "starter", "name": "Starter", "audience": "Para freelancers iniciantes", "price_cents": 4990, "leads_month": 500, "categories_count": 12, "all_categories": false, "sites_month": 15, "approach_scripts_month": null, "features": ["Exportação CSV", "Suporte por e-mail"] },
+    { "id": "pro", "name": "Pro", "audience": "Para freelancers ativos", "price_cents": 9450, "leads_month": 1500, "categories_count": 29, "all_categories": false, "sites_month": 50, "approach_scripts_month": null, "features": ["Domínio próprio customizável", "Suporte via WhatsApp"] },
+    { "id": "agencia", "name": "Agência", "audience": "Para agências e equipes", "price_cents": 29500, "leads_month": 3000, "categories_count": null, "all_categories": true, "sites_month": 90, "approach_scripts_month": null, "features": ["Retirar marca d'água", "WhatsApp prioritário + Onboarding"] }
+  ]
+}

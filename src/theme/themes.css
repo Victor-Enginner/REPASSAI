@@ -1,3 +1,31 @@
+:root {
+  --sidebar-glass-solid: #111923;
+  --sidebar-glass-surface: rgba(15, 23, 34, .94);
+  --sidebar-glass-text: #edf3fc;
+  --sidebar-glass-muted: #b7c6db;
+  --sidebar-glass-border: rgba(201, 222, 250, .2);
+  --sidebar-glass-reflection: rgba(230, 241, 255, .3);
+  --sidebar-glass-highlight: rgba(134, 162, 209, .19);
+  --sidebar-glass-wash: rgba(213, 231, 255, .065);
+  --sidebar-glass-shadow: rgba(0, 0, 0, .32);
+  --sidebar-glass-cyan-wash: rgba(86, 216, 230, .15);
+  --sidebar-glass-violet-wash: rgba(124, 92, 255, .18);
+}
+
+:root[data-theme='light'] {
+  --sidebar-glass-solid: #f3f6fb;
+  --sidebar-glass-surface: rgba(246, 249, 253, .94);
+  --sidebar-glass-text: #19283b;
+  --sidebar-glass-muted: #4b6079;
+  --sidebar-glass-border: rgba(50, 76, 109, .2);
+  --sidebar-glass-reflection: rgba(255, 255, 255, .85);
+  --sidebar-glass-highlight: rgba(255, 255, 255, .7);
+  --sidebar-glass-wash: rgba(50, 76, 109, .055);
+  --sidebar-glass-shadow: rgba(30, 47, 75, .14);
+  --sidebar-glass-cyan-wash: rgba(32, 155, 172, .1);
+  --sidebar-glass-violet-wash: rgba(124, 92, 255, .1);
+}
+
 /* ============================================================
    REPASS AI — DESIGN SYSTEM // FONTE ÚNICA DA VERDADE
    ============================================================

@@ -1,91 +1,32 @@
-import React from 'react';
-import { Calendar, Clock, CheckCircle2, Phone, User, MessageSquare, Video } from 'lucide-react';
-
-export default function AppointmentsView({ leads }) {
-  const agendados = leads.filter(l => l.status_crm === 'Agendados');
-
-  return (
-    <div style={{ padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', animation: 'fadeIn 0.3s ease' }}>
-      
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
-        <div>
-          <span className="mono-label">MODULE // SCHEDULE_APPOINTMENTS_06</span>
-          <h1 className="font-headline" style={{ fontSize: '32px', color: 'var(--fg-white)', marginTop: '4px' }}>
-            AGENDA DE REUNIÕES & DEMOS
-          </h1>
-          <p style={{ fontSize: '13.5px', color: 'var(--fg-muted)', marginTop: '4px' }}>
-            Acompanhe suas reuniões agendadas com tomadores de decisão
-          </p>
-        </div>
-
-        <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', padding: '10px 18px' }}>
-          <span className="mono-label" style={{ color: 'var(--estado-alerta)' }}>{agendados.length} DEMOS AGENDADAS</span>
-        </div>
-      </div>
-
-      {/* Appointments List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        {agendados.map(lead => (
-          <div 
-            key={lead.id}
-            className="glass-panel"
-            style={{
-              padding: '20px 24px',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(160px, 100%), 1fr))',
-              alignItems: 'center',
-              gap: '20px',
-              background: 'var(--bg-surface)',
-              border: '0.5px solid var(--sobre-12)'
-            }}
-          >
-            <div>
-              <h3 className="font-headline" style={{ fontSize: '16px', color: 'var(--fg-white)' }}>
-                {lead.nome}
-              </h3>
-              <div style={{ fontSize: '11px', color: 'var(--fg-muted)', marginTop: '2px' }}>
-                {lead.categoria} · {lead.cidade}, {lead.estado}
-              </div>
-            </div>
-
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--fg-white)' }}>
-                <Clock size={13} color="#f59e0b" /> Hoje às 15:30h
-              </div>
-              <div style={{ fontSize: '10px', color: 'var(--fg-subtle)', marginTop: '2px' }}>
-                Apresentação de protótipo de site
-              </div>
-            </div>
-
-            <div>
-              <span className="badge badge-morno">
-                ● Demo Agendada
-              </span>
-            </div>
-
-            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-              <a 
-                href={lead.whatsapp} 
-                target="_blank" 
-                rel="noreferrer"
-                className="btn-secondary" 
-                style={{ padding: '8px 14px', fontSize: '10px', textDecoration: 'none' }}
-              >
-                <Video size={13} /> Entrar na Sala
-              </a>
-            </div>
-
-          </div>
-        ))}
-
-        {agendados.length === 0 && (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--fg-muted)' }}>
-            Nenhum agendamento pendente no momento. Mova leads para a coluna "Agendados" no CRM.
-          </div>
-        )}
-      </div>
-
-    </div>
-  );
+import React, { useState } from 'react';
+import { CalendarDays, ChevronLeft, ChevronRight, Plus, Pencil, Trash2 } from 'lucide-react';
+import './AppointmentsView.css';
+const types = { tarefa:'Tarefa', trabalho:'Trabalho', projeto:'Projeto', fechado:'Fechado' };
+const iso = d => [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+const months = Array.from({length:12},(_,m)=>new Date(2026,m,1).toLocaleDateString('pt-BR',{month:'long'}));
+export default function AppointmentsView({ leads=[], userId }) {
+  const today=new Date(), key=userId ? 'repass.agenda.v1.'+userId : null;
+  const [month,setMonth]=useState(new Date(today.getFullYear(),today.getMonth(),1));
+  const [selected,setSelected]=useState(iso(today));
+  const [events,setEvents]=useState(()=>{try{const a=key?JSON.parse(localStorage.getItem(key)||'[]'):[];return Array.isArray(a)?a.filter(e=>e&&typeof e.id==='string'&&typeof e.title==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(e.date)&&types[e.type]).slice(0,2000):[];}catch{return [];}});
+  const [draft,setDraft]=useState(null), [error,setError]=useState('');
+  function persist(next){if(!key){setError('Entre na sua conta para salvar.');return false;}try{localStorage.setItem(key,JSON.stringify(next));setEvents(next);setError('');return true;}catch{setError('Armazenamento indisponível ou cheio. Não foi salvo.');return false;}}
+  function create(){setDraft({title:'',date:selected,time:'',type:'tarefa',project:'',notes:''});}
+  function save(e){e.preventDefault();if(!draft.title.trim())return;if(!draft.id&&events.length>=2000){setError('Limite local de 2.000 compromissos.');return;}const item={...draft,title:draft.title.trim(),id:draft.id||crypto.randomUUID()};if(persist([...events.filter(e=>e.id!==item.id),item])){setSelected(item.date);setMonth(new Date(item.date+'T12:00:00'));setDraft(null);}}
+  const start=new Date(month.getFullYear(),month.getMonth(),1);start.setDate(1-(start.getDay()+6)%7);
+  const days=Array.from({length:42},(_,i)=>{const d=new Date(start);d.setDate(start.getDate()+i);return d;});
+  const daily=events.filter(e=>e.date===selected).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  const shift=n=>setMonth(new Date(month.getFullYear(),month.getMonth()+n,1));
+  return <section className="agenda-page">
+    <header className="agenda-header"><div><span className="mono-label">PLANEJAMENTO // REPASS</span><h1><CalendarDays/> Agenda de projetos</h1><p>Tarefas, entregas e trabalhos fechados.</p></div><button className="btn-primary" onClick={create}><Plus size={16}/> Novo compromisso</button></header>
+    <p className="agenda-storage">Salvo somente neste navegador, por conta. Não sincroniza entre dispositivos. Evite dados sensíveis em computadores compartilhados.</p>
+    {error&&<p role="alert">{error}</p>}
+    <div className="agenda-layout"><div className="agenda-calendar">
+      <div className="agenda-toolbar"><button aria-label="Mês anterior" onClick={()=>shift(-1)}><ChevronLeft size={18}/></button><select aria-label="Mês" value={month.getMonth()} onChange={e=>setMonth(new Date(month.getFullYear(),Number(e.target.value),1))}>{months.map((m,i)=><option key={m} value={i}>{m}</option>)}</select><input aria-label="Ano" type="number" min="1900" max="2200" value={month.getFullYear()} onChange={e=>{const y=Number(e.target.value);if(y>=1900&&y<=2200)setMonth(new Date(y,month.getMonth(),1));}}/><button aria-label="Próximo mês" onClick={()=>shift(1)}><ChevronRight size={18}/></button><button onClick={()=>{setMonth(new Date(today.getFullYear(),today.getMonth(),1));setSelected(iso(today));}}>Hoje</button></div>
+      <div className="agenda-grid agenda-week">{['SEG','TER','QUA','QUI','SEX','SÁB','DOM'].map(d=><span key={d}>{d}</span>)}</div>
+      <div className="agenda-grid">{days.map(d=>{const date=iso(d),list=events.filter(e=>e.date===date);return <button key={date} aria-label={'Selecionar '+date} aria-pressed={selected===date} className={'agenda-day '+(d.getMonth()!==month.getMonth()?'outside ':'')+(selected===date?'selected':'')} onClick={()=>setSelected(date)}><span className={date===iso(today)?'today':''}>{d.getDate()}</span>{list.slice(0,2).map(e=><span className={'agenda-chip '+e.type} key={e.id}>{e.title}</span>)}{list.length>2&&<small>+{list.length-2}</small>}</button>;})}</div>
+    </div><aside className="agenda-details"><span className="mono-label">PROGRAMADO PARA</span><h2>{new Date(selected+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'})}</h2><button className="btn-secondary" onClick={create}><Plus size={14}/> Adicionar neste dia</button>{!daily.length&&<p className="agenda-empty">Dia livre. Planeje sua próxima entrega.</p>}{daily.map(e=><article className="agenda-event" key={e.id}><span className={'agenda-chip '+e.type}>{types[e.type]} · {e.time||'Sem horário'}</span><h3>{e.title}</h3>{e.project&&<p>Projeto: {e.project}</p>}{e.notes&&<p>{e.notes}</p>}<div><button aria-label={'Editar '+e.title} onClick={()=>setDraft({...e})}><Pencil size={14}/> Editar</button><button aria-label={'Excluir '+e.title} onClick={()=>{if(window.confirm('Excluir este compromisso?'))persist(events.filter(item=>item.id!==e.id));}}><Trash2 size={14}/></button></div></article>)}</aside></div>
+    {leads.some(l=>l.status_crm==='Agendados')&&<details className="agenda-crm"><summary>Agendamentos do CRM sem data no calendário</summary>{leads.filter(l=>l.status_crm==='Agendados').map(l=><p key={l.id}>{l.nome} <button onClick={()=>setDraft({title:'Reunião com '+l.nome,date:selected,time:'',type:'trabalho',project:l.nome,notes:''})}>Agendar</button></p>)}</details>}
+    {draft&&<div className="agenda-overlay"><form className="agenda-form" onSubmit={save} role="dialog" aria-modal="true" aria-label="Compromisso" onKeyDown={e=>{if(e.key==='Escape')setDraft(null);if(e.key==='Tab'){const items=[...e.currentTarget.querySelectorAll('input,select,textarea,button')];const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}}><h2>{draft.id?'Editar':'Novo'} compromisso</h2><label>Título<input autoFocus required maxLength={150} value={draft.title} onChange={e=>setDraft({...draft,title:e.target.value})}/></label><div className="agenda-fields"><label>Data<input required type="date" min="1900-01-01" max="2200-12-31" value={draft.date} onChange={e=>setDraft({...draft,date:e.target.value})}/></label><label>Horário<input type="time" value={draft.time} onChange={e=>setDraft({...draft,time:e.target.value})}/></label></div><label>Tipo<select value={draft.type} onChange={e=>setDraft({...draft,type:e.target.value})}>{Object.entries(types).map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label><label>Projeto<input maxLength={150} value={draft.project} onChange={e=>setDraft({...draft,project:e.target.value})}/></label><label>Observações<textarea maxLength={2000} value={draft.notes} onChange={e=>setDraft({...draft,notes:e.target.value})}/></label><footer><button type="button" onClick={()=>setDraft(null)}>Cancelar</button><button className="btn-primary" type="submit">Salvar compromisso</button></footer></form></div>}
+  </section>;
 }

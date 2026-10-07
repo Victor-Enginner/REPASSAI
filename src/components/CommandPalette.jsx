@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { SECOES_MENU } from './Sidebar';
 import {
   Search,
   LayoutDashboard,
@@ -27,30 +28,43 @@ import {
   Bot,
   Shield,
   ChevronRight,
-  ArrowRight
+  ArrowRight,
+  Calendar,
+  Globe,
+  Award,
+  Layout,
+  PlusCircle
 } from 'lucide-react';
 
 export const COMMAND_ITEMS = [
-  // PRINCIPAL
-  { id: 'dashboard', nome: 'Dashboard', categoria: 'Páginas', grupo: 'Principal', icon: LayoutDashboard },
-  { id: 'atendimentos', nome: 'Atendimentos', categoria: 'Páginas', grupo: 'Principal', icon: MessageSquare },
-  { id: 'crm', nome: 'CRM', categoria: 'Páginas', grupo: 'Principal', icon: Kanban },
-  { id: 'contatos', nome: 'Contatos', categoria: 'Páginas', grupo: 'Principal', icon: Users },
-  { id: 'relatorios', nome: 'Relatórios', categoria: 'Páginas', grupo: 'Principal', icon: BarChart3 },
-  { id: 'disparos', nome: 'Disparos', categoria: 'Páginas', grupo: 'Principal', icon: Send },
+  // SUÍTE REPASS [8 MÓDULOS]
+  { id: 'dashboard', nome: '01 Painel (Dashboard)', categoria: 'Suíte REPASS', grupo: 'Principal', icon: LayoutDashboard },
+  { id: 'prospector', nome: '02 Prospector [OSINT]', categoria: 'Suíte REPASS', grupo: 'Prospecção', icon: Crosshair },
+  { id: 'crm', nome: '03 Funil de Vendas (CRM)', categoria: 'Suíte REPASS', grupo: 'Vendas', icon: Kanban },
+  { id: 'disparos', nome: '04 Abordagem 1-a-1 (WhatsApp)', categoria: 'Suíte REPASS', grupo: 'Disparos', icon: Send },
+  { id: 'agendamentos', nome: '05 Agenda & Calls (Meet)', categoria: 'Suíte REPASS', grupo: 'Comercial', icon: Calendar },
+  { id: 'projetos', nome: '06 Meus Sites (Landing Pages)', categoria: 'Suíte REPASS', grupo: 'Sites', icon: Globe },
+  { id: 'templates', nome: '07 Loja de Templates & 57 Fluxos N8N', categoria: 'Suíte REPASS', grupo: 'Templates', icon: Layout },
+  { id: 'wizard', nome: '08 Criar Site [Wizard]', categoria: 'Suíte REPASS', grupo: 'Sites', icon: PlusCircle },
 
   // AUTOMAÇÃO & IA
-  { id: 'fluxos', nome: 'Fluxos', categoria: 'Páginas', grupo: 'Automação & IA', icon: GitBranch },
-  { id: 'automacoes', nome: 'Automações', categoria: 'Páginas', grupo: 'Automação & IA', icon: Zap },
-  { id: 'conhecimento', nome: 'Base de Conhecimento', categoria: 'Páginas', grupo: 'Automação & IA', icon: Sparkles },
-  { id: 'formularios', nome: 'Formulários', categoria: 'Páginas', grupo: 'Automação & IA', icon: FileText },
-  { id: 'prospector', nome: 'Prospector', categoria: 'Páginas', grupo: 'Automação & IA', icon: Crosshair },
+  { id: 'engine', nome: 'Motor Neural [PRO]', categoria: 'IA Agêntica & Comunicação', grupo: 'Inteligência Artificial', icon: Sparkles },
+  { id: 'automacoes', nome: 'Estúdio de Automações (n8n)', categoria: 'Automação & IA', grupo: 'Fluxos', icon: Zap },
+  { id: 'conhecimento', nome: 'Base de Conhecimento (RAG)', categoria: 'Automação & IA', grupo: 'Conhecimento', icon: Sparkles },
+  { id: 'formularios', nome: 'Formulários & Captura', categoria: 'Automação & IA', grupo: 'Briefing', icon: FileText },
+  { id: 'atendimentos', nome: 'Atendimentos Omnichannel', categoria: 'Atendimento', grupo: 'Omnichannel', icon: MessageSquare },
+  { id: 'contatos', nome: 'Contatos & Diretório', categoria: 'Comercial', grupo: 'Contatos', icon: Users },
+  { id: 'relatorios', nome: 'Relatórios & Métricas', categoria: 'Análise', grupo: 'BI', icon: BarChart3 },
+
+  // GESTÃO & CRESCIMENTO
+  { id: 'cobrar', nome: 'Faturamento & Cobranças', categoria: 'Gestão & Crescimento', grupo: 'Financeiro', icon: CreditCard },
+  { id: 'ranking', nome: 'Indicações & Afiliados', categoria: 'Gestão & Crescimento', grupo: 'Crescimento', icon: Award },
 
   // AJUSTES · WORKSPACE
   { id: 'empresas', nome: 'Empresas', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: Building2 },
   { id: 'canais', nome: 'Canais (WhatsApp / Ligação IA)', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: MessageCircle },
   { id: 'equipe', nome: 'Equipe & Filas', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: Users2 },
-  { id: 'tags', nome: 'Tags', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: Tag },
+  { id: 'tags', nome: 'Tags & Segmentos', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: Tag },
   { id: 'pipelines', nome: 'Pipelines', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: Columns },
   { id: 'respostas_rapidas', nome: 'Respostas rápidas', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: Send },
   { id: 'motivos_perda', nome: 'Motivos de perda', categoria: 'Ajustes · Workspace', grupo: 'Workspace', icon: TrendingDown },
@@ -64,7 +78,12 @@ export const COMMAND_ITEMS = [
   { id: 'plano', nome: 'Plano & Assinatura', categoria: 'Ajustes · Configurações', grupo: 'Configurações', icon: CreditCard },
   { id: 'ia_config', nome: 'IA & Conhecimento', categoria: 'Ajustes · Configurações', grupo: 'Configurações', icon: Bot },
   { id: 'lgpd', nome: 'Privacidade & LGPD', categoria: 'Ajustes · Configurações', grupo: 'Configurações', icon: Shield },
-];
+].filter(item => SECOES_MENU.some(section => section.itens.some(entry => entry.id === item.id)))
+  .map(item => {
+    const section = SECOES_MENU.find(section => section.itens.some(entry => entry.id === item.id));
+    const entry = section.itens.find(entry => entry.id === item.id);
+    return { ...item, nome: entry.nome, categoria: section.titulo };
+  }).sort((a, b) => Number(a.id === 'engine') - Number(b.id === 'engine'));
 
 export default function CommandPalette({ isOpen, onClose, onSelectTab }) {
   const [busca, setBusca] = useState('');

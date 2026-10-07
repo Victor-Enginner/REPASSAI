@@ -13,15 +13,15 @@
  */
 
 import React from 'react';
-import { Search, Kanban, PlusCircle, Cpu } from 'lucide-react';
+import { Search, Kanban, PlusCircle, Globe } from 'lucide-react';
 import { useEhMobile } from '../hooks/useMediaQuery';
 
-/** As 4 telas do fluxo principal: achar → trabalhar → entregar → configurar. */
+/** As 4 telas do fluxo principal: achar → trabalhar → criar → acompanhar. */
 const ITENS = [
   { id: 'leads',     nome: 'Leads',   icon: Search },
   { id: 'crm',       nome: 'Funil',   icon: Kanban },
   { id: 'editor',    nome: 'Criar',   icon: PlusCircle },
-  { id: 'engine',    nome: 'Motor',   icon: Cpu },
+  { id: 'projetos',  nome: 'Sites',   icon: Globe },
 ];
 
 /**

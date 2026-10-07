@@ -16,10 +16,11 @@
  * formulário continua no papel da marca.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LogIn, UserPlus, RefreshCw, AlertCircle, MailCheck, ShieldCheck, KeyRound, Radar, Zap, Globe } from 'lucide-react';
-import { entrar, cadastrar, recuperarSenha } from '../services/authService';
+import { entrar, cadastrar, recuperarSenha, entrarComProvedor, obterConfig } from '../services/authService';
 import GlyphWall from '../components/ui/GlyphWall';
+import LoginProviderIcon from '../components/LoginProviderIcon';
 
 /** Provas curtas do produto. Números medidos, não promessa de marketing. */
 const DESTAQUES = [
@@ -28,13 +29,33 @@ const DESTAQUES = [
   { Icone: Globe, titulo: 'Publicação direta', texto: 'Da varredura ao site no ar, dentro do mesmo painel.' },
 ];
 
-export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) {
+export default function LoginView({ onAutenticado, onVoltarLanding, backendIndisponivel }) {
   const [modo, setModo] = useState('entrar'); // entrar | cadastrar | recuperar
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState(null);
   const [aviso, setAviso] = useState(null);
+  const [provedores, setProvedores] = useState([]);
+
+  useEffect(() => {
+    let ativo = true;
+    obterConfig().then(config => {
+      if (ativo) setProvedores(Array.isArray(config.oauth_providers) ? config.oauth_providers : []);
+    });
+    return () => { ativo = false; };
+  }, []);
+
+  const loginSocial = async (provider) => {
+    setErro(null);
+    setCarregando(true);
+    try {
+      await entrarComProvedor(provider);
+    } catch (error) {
+      setErro(error.message);
+      setCarregando(false);
+    }
+  };
 
   const enviar = async (e) => {
     e.preventDefault();
@@ -57,62 +78,22 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
     }
 
     setCarregando(true);
-    const salvarUsuarioRegistrado = (emailUser, role = 'Operador') => {
-      const usuarioLocal = {
-        id: `usr-${Date.now()}`,
-        email: emailUser.trim(),
-        nome: emailUser.split('@')[0] || 'Operador',
-        role: role,
-        criadoEm: new Date().toLocaleString('pt-BR'),
-        status: 'Online'
-      };
-      try {
-        const lista = JSON.parse(localStorage.getItem('repass_usuarios_registrados') || '[]');
-        if (!lista.some(u => u.email.toLowerCase() === emailUser.trim().toLowerCase())) {
-          lista.unshift(usuarioLocal);
-          localStorage.setItem('repass_usuarios_registrados', JSON.stringify(lista));
-        }
-        localStorage.setItem('repass_operador_ativo', JSON.stringify(usuarioLocal));
-      } catch {}
-      return usuarioLocal;
-    };
-
     try {
       if (modo === 'entrar') {
-        try {
-          const usuario = await entrar(email, senha);
-          if (usuario) {
-            salvarUsuarioRegistrado(email, usuario.role || 'Operador');
-            onAutenticado?.(usuario);
-            return;
-          }
-        } catch (eAuth) {
-          console.warn('[Auth] Host estático / Backend local. Autenticando operador resiliente:', eAuth);
-          const usuarioLocal = salvarUsuarioRegistrado(email, email.includes('victor') ? 'Administrador' : 'Operador');
-          onAutenticado?.(usuarioLocal);
-          return;
-        }
+        const usuario = await entrar(email, senha);
+        if (!usuario) throw new Error('O servidor não confirmou o usuário.');
+        onAutenticado?.(usuario);
       } else if (modo === 'cadastrar') {
-        try {
-          const resCad = await cadastrar(email, senha);
-          if (resCad?.precisaConfirmar) {
-            setAviso('Conta criada. Confirme o e-mail que enviamos ou faça login diretamente.');
-            salvarUsuarioRegistrado(email, 'Novo Operador');
-            setModo('entrar');
-            return;
-          } else {
-            const usuarioLocal = salvarUsuarioRegistrado(email, 'Operador');
-            onAutenticado?.(usuarioLocal);
-            return;
-          }
-        } catch (eCad) {
-          console.warn('[Auth] Cadastro em host estático. Registrando operador localmente:', eCad);
-          const usuarioLocal = salvarUsuarioRegistrado(email, 'Operador');
-          onAutenticado?.(usuarioLocal);
-          return;
+        const resCad = await cadastrar(email, senha);
+        if (resCad?.precisaConfirmar) {
+          setAviso('Conta criada. Confirme o e-mail para acessar o painel.');
+          setModo('entrar');
+        } else {
+          setAviso('Conta criada. Faça login para acessar o painel.');
+          setModo('entrar');
         }
       } else if (modo === 'recuperar') {
-        await recuperarSenha(email).catch(() => {});
+        await recuperarSenha(email);
         setAviso('Enviamos as instruções de redefinição de senha para seu e-mail.');
         setModo('entrar');
       }
@@ -184,6 +165,19 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
           </header>
 
           <form onSubmit={enviar}>
+            {modo !== 'recuperar' && (
+              <div style={{ display: 'grid', gap: '10px', marginBottom: '22px' }} aria-label="Login social">
+                {[['google', 'Google'], ['github', 'GitHub'], ['azure', 'Microsoft']].map(([provider, nome]) => (
+                  <button key={provider} type="button" className="btn-secondary"
+                    disabled={carregando || backendIndisponivel || !provedores.includes(provider)}
+                    onClick={() => loginSocial(provider)}
+                    style={{ minHeight: '48px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                    <LoginProviderIcon provider={provider} />
+                    <span>Continuar com {nome}{!provedores.includes(provider) ? ' · Em configuração' : ''}</span>
+                  </button>
+                ))}
+              </div>
+            )}
             <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-surface)', padding: '4px', borderRadius: '8px', marginBottom: '22px' }}>
               {[['entrar', 'ENTRAR'], ['cadastrar', 'CRIAR CONTA'], ['recuperar', 'RECUPERAR']].map(([id, rotulo]) => (
                 <button
@@ -259,40 +253,6 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
               {carregando ? 'Aguarde…' : modo === 'entrar' ? 'Entrar' : modo === 'cadastrar' ? 'Criar conta' : 'Enviar e-mail de recuperação'}
             </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                const usuarioDemo = {
-                  id: 'usr-operador-demo',
-                  email: email.trim() || 'victor@repass.ai',
-                  nome: (email.trim() ? email.split('@')[0] : 'Victor Borsari'),
-                  role: 'Administrador'
-                };
-                try {
-                  localStorage.setItem('repass_operador_ativo', JSON.stringify(usuarioDemo));
-                } catch {}
-                onAutenticado?.(usuarioDemo);
-              }}
-              style={{
-                width: '100%',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: '10px',
-                padding: '11px',
-                borderRadius: '6px',
-                border: '1px solid var(--aro-cor)',
-                backgroundColor: 'var(--papel-fundo)',
-                color: 'var(--accent-indigo)',
-                fontSize: '12px',
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
-            >
-              <Zap size={14} color="var(--accent-indigo)" />
-              Acessar Painel Direto (Acesso Rápido)
-            </button>
           </form>
 
           <div style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', marginTop: '18px', padding: '13px', background: 'var(--bg-surface)', border: '0.5px solid var(--hairline-color)', borderRadius: '8px' }}>
@@ -313,15 +273,7 @@ export default function LoginView({ onAutenticado, onVoltarLanding, onBypass }) 
                 ← Voltar ao site
               </button>
             )}
-            {onBypass && (
-              <button
-                type="button"
-                onClick={onBypass}
-                style={{ background: 'none', border: 'none', color: 'var(--accent-indigo)', fontSize: '12px', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-              >
-                Entrar Modo Demo →
-              </button>
-            )}
+            {backendIndisponivel && <span role="alert" style={{ color: 'var(--estado-erro)', fontSize: '12px' }}>API indisponível. O acesso depende do servidor REPASS.</span>}
           </div>
         </div>
       </main>

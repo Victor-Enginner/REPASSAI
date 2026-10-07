@@ -8,88 +8,8 @@ import MUNICIPIOS_POR_UF from '../data/municipiosBR.json';
 import { apiUrl } from '../config';
 import { fetchAutenticado } from '../services/authService';
 import LeadCard from '../components/LeadCard';
-
-/**
- * Ordem de prioridade comercial, da melhor oportunidade para a pior.
- *
- * Espelha `places_engine.FAIXA_*` no backend. A ordenação de verdade acontece
- * lá — esta cópia serve só para a amostra de demonstração, que nunca passa
- * pelo servidor. Se mudar a ordem lá, mude aqui: uma demonstração que ordena
- * diferente do produto real ensina o operador a esperar a coisa errada.
- */
-const FAIXA_DE_OPORTUNIDADE = {
-  sem_site: 0,
-  so_rede_social: 1,
-  site_inseguro: 2,
-  tem_site: 3,
-};
-
-function gerarLeadsLocalmente(cidade, estado, nichosStr, qtd = 20) {
-  const nichos = (nichosStr || 'Serviços').split(',').map(n => n.trim()).filter(Boolean);
-  const sufixos = ['Especializada', 'VIP', 'Prime', 'Express', 'Gourmet', 'Imperial', 'Master', 'Studio', 'Centro', 'Premium'];
-  
-  const resultados = [];
-  const total = Math.min(qtd || 20, 30);
-  
-  for (let i = 0; i < total; i++) {
-    const nicho = nichos[i % nichos.length] || 'Serviços';
-    const sufixo = sufixos[i % sufixos.length];
-    const nichoCap = nicho.charAt(0).toUpperCase() + nicho.slice(1);
-    const nome = `${nichoCap} ${sufixo} ${cidade}`;
-
-    // Quatro presenças digitais, como na varredura real. A demonstração tinha
-    // só duas — sem site ou com site —, então a tela de exemplo não mostrava
-    // "só rede social", que é a segunda melhor oportunidade e existe de fato
-    // nos dados verdadeiros. Amostra que esconde uma categoria ensina errado.
-    const presencas = ['sem_site', 'so_rede_social', 'tem_site', 'sem_site', 'site_inseguro', 'tem_site'];
-    const presenca = presencas[i % presencas.length];
-    const dominio = nome.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const siteFalso = {
-      sem_site: null,
-      so_rede_social: `https://instagram.com/${dominio}`,
-      site_inseguro: `http://${dominio}.com.br`,
-      tem_site: `https://${dominio}.com.br`,
-    }[presenca];
-    const pontos = { sem_site: 100, so_rede_social: 70, site_inseguro: 55, tem_site: 40 }[presenca];
-    const ddd = estado === 'SP' ? '16' : (estado === 'GO' ? '62' : (estado === 'RJ' ? '21' : '31'));
-
-    resultados.push({
-      id: `scanned-${Date.now()}-${i}`,
-      nome: nome,
-      categoria: nichoCap,
-      cidade: cidade,
-      estado: estado,
-      bairro: 'Centro',
-      // NUNCA inventar contato. O código anterior sorteava os dígitos do
-      // telefone, e um número sorteado pertence a alguém — o operador
-      // mandaria mensagem comercial para um estranho achando que era o lead.
-      is_demo: true,
-      telefone: null,
-      whatsapp: null,
-      site: siteFalso,
-      status_site: presenca,
-      score: pontos,
-      temperatura: 'Quente',
-      avaliacao: (4.2 + Math.random() * 0.7).toFixed(1),
-      reviewsCount: Math.floor(20 + Math.random() * 500),
-      endereco: `Av. Principal, ${100 + i * 25} - Centro, ${cidade} - ${estado}`,
-      orientacao: 'Exemplo de layout — rode a varredura real para dados verdadeiros.',
-      // 'Base' é o mesmo valor que o backend usa para lead recém-varrido.
-      // Com 'Leads em Aberto' eles caíam direto na primeira coluna do funil
-      // sem ninguém ter enviado nada, esvaziando o sentido do botão.
-      status_crm: 'Base',
-      criado_em: new Date().toISOString()
-    });
-  }
-  
-  // Mesma regra do backend: faixa primeiro, score dentro da faixa.
-  resultados.sort((a, b) => {
-    const faixa = FAIXA_DE_OPORTUNIDADE[a.status_site] - FAIXA_DE_OPORTUNIDADE[b.status_site];
-    return faixa !== 0 ? faixa : b.score - a.score;
-  });
-
-  return resultados;
-}
+import ModuleScope from '../components/ModuleScope';
+import './SiteWorkspace.css';
 
 export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenerateSite }) {
   const [selectedEstado, setSelectedEstado] = useState('SP');
@@ -428,14 +348,10 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
           : diagnostico
             ? diagnostico
             : `a busca real nao respondeu (HTTP ${res.status})`;
-      const localLeads = gerarLeadsLocalmente(selectedCidade, selectedEstado, selectedNicho, quantidade);
-      onLeadsScanned(localLeads);
-      setLogStream(prev => [...prev.slice(-49), `[OSINT AVISO] Varredura real indisponivel: ${motivo}. Exibindo ${localLeads.length} exemplos de layout — NAO sao negocios reais.`]);
+      setLogStream(prev => [...prev.slice(-49), `[OSINT ERRO] Varredura indisponível: ${motivo}. Nenhum lead foi adicionado.`]);
     } catch (err) {
-      console.warn("API de varredura offline. Exibindo exemplos de layout.", err);
-      const localLeads = gerarLeadsLocalmente(selectedCidade, selectedEstado, selectedNicho, quantidade);
-      onLeadsScanned(localLeads);
-      setLogStream(prev => [...prev.slice(-49), `[OSINT AVISO] Backend fora do ar. Exibindo ${localLeads.length} exemplos de layout — NAO sao negocios reais.`]);
+      console.warn('API de varredura indisponível.', err);
+      setLogStream(prev => [...prev.slice(-49), '[OSINT ERRO] Backend indisponível. Nenhum lead foi adicionado.']);
     } finally {
       setIsScanning(false);
     }
@@ -506,8 +422,9 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
   };
 
   return (
-    <div style={{ position: 'relative', padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', minHeight: '100vh' }}>
+    <div className="prospector-workspace" style={{ position: 'relative', padding: '32px 40px', maxWidth: '1400px', margin: '0 auto', minHeight: '100vh' }}>
       <div style={{ position: 'relative', zIndex: 10 }}>
+        <ModuleScope module="prospector"/>
         
         {/* Header Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
@@ -517,13 +434,13 @@ export default function LeadsView({ leads, onLeadsScanned, onSendToCRM, onGenera
               SCANNER DE LEADS OSINT
             </h1>
             <p style={{ fontSize: '13.5px', color: 'var(--fg-muted)', marginTop: '4px' }}>
-              Varredura ilimitada por seleção de estado, cidade e nichos com pontuação de oportunidade
+              Pesquisa por estado, cidade e nicho para identificar oportunidades de criação de sites
             </p>
           </div>
 
           <div style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--sobre-12)', padding: '12px 18px', textAlign: 'right', borderRadius: '4px' }}>
             <div className="font-mono" style={{ fontSize: '12px', color: 'var(--fg-white)' }}>
-              MOTOR OSINT // 100% OPERACIONAL
+              {isScanning ? 'PESQUISA EM ANDAMENTO' : 'MOTOR OSINT // PRONTO PARA SOLICITAR'}
             </div>
             <div style={{ width: '140px', height: '4px', background: 'var(--sobre-10)', marginTop: '8px', overflow: 'hidden', borderRadius: '2px' }}>
               <div style={{ width: '100%', height: '100%', background: 'var(--accent-indigo)' }} />

@@ -35,10 +35,16 @@ const COM_CREDENCIAIS = { credentials: 'include' };
 export async function obterConfig() {
   if (configCache) return configCache;
   try {
-    const res = await fetch(apiUrl('/api/auth/status'), COM_CREDENCIAIS);
+    const res = await fetch(apiUrl('/api/auth/status'), { ...COM_CREDENCIAIS, cache: 'no-store' });
+    if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+      throw new Error('Resposta inválida da API de autenticação');
+    }
     configCache = await res.json();
+    if (typeof configCache?.auth_ativo !== 'boolean') {
+      throw new Error('Configuração de autenticação inválida');
+    }
   } catch {
-    configCache = { configurado: false, auth_ativo: false, modo: 'single_user', usuario: null };
+    configCache = { configurado: false, auth_ativo: false, modo: 'indisponivel', usuario: null, erroBackend: true };
   }
   return configCache;
 }
@@ -84,6 +90,9 @@ async function postAuth(caminho, corpo) {
     body: JSON.stringify(corpo || {}),
   });
   const dados = await res.json().catch(() => ({}));
+  if (!res.headers.get('content-type')?.includes('application/json')) {
+    throw new Error('Servidor REPASS indisponível: a rota de autenticação não retornou JSON.');
+  }
   if (!res.ok || dados.sucesso === false) {
     throw new Error(dados.erro || dados.mensagem || `HTTP ${res.status}`);
   }
@@ -102,6 +111,16 @@ export async function entrar(email, senha) {
   });
   limparCacheConfig();
   return dados.usuario || null;
+}
+
+export async function entrarComProvedor(provider) {
+  if (!['google', 'github', 'azure'].includes(provider)) throw new Error('Provedor inválido.');
+  const dados = await postAuth('/api/auth/oauth/start', { provider });
+  const destino = new URL(dados.url);
+  if (destino.protocol !== 'https:' || !destino.hostname.endsWith('.supabase.co') || destino.pathname !== '/auth/v1/authorize') {
+    throw new Error('Destino de autenticação inválido.');
+  }
+  window.location.assign(destino.href);
 }
 
 /**
@@ -171,11 +190,7 @@ export async function recuperarSenha(email) {
 
 /** Encerra a sessão (apaga cookies no servidor). */
 export async function sair() {
-  try {
-    await postAuth('/api/auth/logout', {});
-  } catch {
-    // Mesmo se a rede falhar, limpa cache local.
-  }
+  await postAuth('/api/auth/logout', {});
   limparSessaoLegada();
   limparCacheConfig();
 }

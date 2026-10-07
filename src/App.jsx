@@ -6,8 +6,7 @@ import DockMobile from './components/DockMobile';
 import CursorPersonalizado from './components/CursorPersonalizado';
 import AgenticChatbotWidget from './components/AgenticChatbotWidget';
 import { useEhMobile } from './hooks/useMediaQuery';
-import { INITIAL_LEADS } from './mock/leadsData';
-import { obterConfig, limparCacheConfig, capturarSessaoUrlHash, limparSessaoLegada, fetchAutenticado } from './services/authService';
+import { obterConfig, limparCacheConfig, capturarSessaoUrlHash, limparSessaoLegada, fetchAutenticado, sair } from './services/authService';
 import { ThemeProvider } from './theme/ThemeContext';
 import FundoDaAba from './components/backgrounds/FundoDaAba';
 
@@ -60,7 +59,6 @@ const CreateSiteWizardView = lazy(VIEW_LOADERS.wizard);
 const LandingPage = lazy(VIEW_LOADERS.landing);
 const LoginView = lazy(() => import('./views/LoginView'));
 const AtendimentosView = lazy(() => import('./views/AtendimentosView'));
-const FluxosView = lazy(() => import('./views/FluxosView'));
 const CanaisView = lazy(() => import('./views/CanaisView'));
 const BaseConhecimentoView = lazy(() => import('./views/BaseConhecimentoView'));
 const RelatoriosView = lazy(() => import('./views/RelatoriosView'));
@@ -129,7 +127,7 @@ function AppMain() {
       && new URLSearchParams(window.location.search).get('audit') === 'leads';
     return telaDeAuditoria ? 'leads' : 'landing';
   });
-  const [leads, setLeads] = useState(INITIAL_LEADS);
+  const [leads, setLeads] = useState([]);
   const [selectedLeadForEditor, setSelectedLeadForEditor] = useState(null);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
@@ -193,35 +191,6 @@ function AppMain() {
   const montarLeve = (id) => id === currentTab || visitadasLeves.has(id);
 
   /**
-   * Aquece os chunks das demais views quando o navegador está ocioso.
-   *
-   * Roda depois da primeira pintura, então não atrasa o carregamento
-   * inicial — e garante clique instantâneo em qualquer aba depois disso.
-   */
-  useEffect(() => {
-    let cancelado = false;
-
-    const aquecer = () => {
-      if (cancelado) return;
-      Object.entries(VIEW_LOADERS).forEach(([id, carregar]) => {
-        if (id !== currentTab) carregar().catch(() => {});
-      });
-    };
-
-    const agendar = window.requestIdleCallback
-      ? window.requestIdleCallback(aquecer, { timeout: 3000 })
-      : window.setTimeout(aquecer, 1200);
-
-    return () => {
-      cancelado = true;
-      if (window.cancelIdleCallback) window.cancelIdleCallback(agendar);
-      else window.clearTimeout(agendar);
-    };
-    // Só precisa aquecer uma vez, no início da sessão.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
    * Estado da autenticação.
    *
    * `null` enquanto verifica. Com o Supabase desligado no backend,
@@ -229,14 +198,49 @@ function AppMain() {
    */
   const [authConfig, setAuthConfig] = useState(null);
 
+  const encerrarConta = useCallback(async () => {
+    await sair();
+    try { localStorage.setItem('repass_logout', String(Date.now())); } catch { /* storage bloqueado */ }
+    setLeads([]);
+    setSelectedLeadForEditor(null);
+    setAuthConfig(null);
+    window.location.replace('/');
+  }, []);
+
+  useEffect(() => {
+    const restaurar = (event) => { if (event.persisted) window.location.reload(); };
+    const outraAba = (event) => { if (event.key === 'repass_logout') window.location.reload(); };
+    window.addEventListener('pageshow', restaurar);
+    window.addEventListener('storage', outraAba);
+    return () => {
+      window.removeEventListener('pageshow', restaurar);
+      window.removeEventListener('storage', outraAba);
+    };
+  }, []);
+
   const recarregarAuth = useCallback(async () => {
     limparCacheConfig();
     setAuthConfig(await obterConfig());
   }, []);
 
   useEffect(() => {
-    obterConfig().then(setAuthConfig);
+    obterConfig().then(config => {
+      setAuthConfig(config);
+      const retorno = new URL(window.location.href);
+      if (retorno.searchParams.get('auth') === 'complete') {
+        retorno.searchParams.delete('auth');
+        window.history.replaceState(null, '', retorno.pathname + retorno.search + retorno.hash);
+        setCurrentTab(config.usuario ? 'dashboard' : 'login');
+      } else if (config.usuario) {
+        setCurrentTab('dashboard');
+      }
+    });
   }, []);
+
+  useEffect(() => {
+    if (!import.meta.env.PROD || !authConfig || authConfig.usuario) return;
+    if (currentTab !== 'landing' && currentTab !== 'login') setCurrentTab('login');
+  }, [authConfig, currentTab]);
 
   // Ao entrar ou recarregar, o funil volta do servidor. Leads pertencem ao
   // usuário do cookie HttpOnly; o cliente nunca envia nem escolhe user_id.
@@ -351,7 +355,7 @@ function AppMain() {
       abas, medido a 768px. Pequeno, mas suficiente para a página tremer na
       horizontal. `100%` respeita o espaço real do pai.
     */
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', overflowX: 'hidden', position: 'relative', background: 'transparent' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', overflowX: currentTab === 'landing' ? 'clip' : 'hidden', position: 'relative', background: 'transparent' }}>
 
       {/*
         Fundo da aba atual.
@@ -368,6 +372,7 @@ function AppMain() {
           currentTab={currentTab}
           setCurrentTab={setCurrentTab}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onLogout={authConfig?.usuario ? encerrarConta : undefined}
         />
       )}
 
@@ -375,7 +380,7 @@ function AppMain() {
         flex: 1,
         minWidth: 0,
         marginLeft: (currentTab !== 'landing' && currentTab !== 'login' && !ehMobile) ? '260px' : 0,
-        overflowY: currentTab === 'atendimentos' ? 'hidden' : 'auto',
+        overflowY: currentTab === 'landing' ? 'visible' : currentTab === 'atendimentos' ? 'hidden' : 'auto',
         height: currentTab === 'atendimentos' ? '100vh' : 'auto',
         position: 'relative',
         zIndex: 10,
@@ -406,7 +411,7 @@ function AppMain() {
                     setCurrentTab('dashboard');
                   }}
                   onVoltarLanding={() => setCurrentTab('landing')}
-                  onBypass={() => setCurrentTab('dashboard')}
+                  backendIndisponivel={Boolean(authConfig?.erroBackend)}
                 />
               </PainelSimples>
             )}
@@ -517,7 +522,7 @@ function AppMain() {
 
             {montarLeve('agendamentos') && (
               <PainelKeepAlive ativo={currentTab === 'agendamentos'}>
-                <AppointmentsView leads={leads} />
+                <AppointmentsView key={authConfig?.usuario?.id || 'visitante'} leads={leads} userId={authConfig?.usuario?.id} />
               </PainelKeepAlive>
             )}
 
@@ -539,12 +544,6 @@ function AppMain() {
               </PainelSimples>
             )}
 
-            {currentTab === 'fluxos' && (
-              <PainelSimples>
-                <FluxosView />
-              </PainelSimples>
-            )}
-
             {currentTab === 'canais' && (
               <PainelSimples>
                 <CanaisView />
@@ -553,7 +552,7 @@ function AppMain() {
 
             {currentTab === 'conhecimento' && (
               <PainelSimples>
-                <BaseConhecimentoView onNavigate={setCurrentTab} />
+                <BaseConhecimentoView key={authConfig?.usuario?.id || 'visitante'} userId={authConfig?.usuario?.id} onNavigate={setCurrentTab} />
               </PainelSimples>
             )}
 
@@ -577,13 +576,13 @@ function AppMain() {
 
             {currentTab === 'formularios' && (
               <PainelSimples>
-                <FormulariosView leads={leads} setLeads={setLeads} onNavigate={setCurrentTab} />
+                <FormulariosView key={authConfig?.usuario?.id || 'visitante'} userId={authConfig?.usuario?.id} leads={leads} setLeads={setLeads} onNavigate={setCurrentTab} />
               </PainelSimples>
             )}
 
             {currentTab === 'automacoes' && (
               <PainelSimples>
-                <AutomacoesView leads={leads} setLeads={setLeads} onNavigate={setCurrentTab} />
+                <AutomacoesView key={authConfig?.usuario?.id || 'visitante'} userId={authConfig?.usuario?.id} onNavigate={setCurrentTab} />
               </PainelSimples>
             )}
 
@@ -612,7 +611,9 @@ function AppMain() {
       />
 
       {/* Atalho para as 4 telas do fluxo principal. Só no celular. */}
-      <DockMobile currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      {currentTab !== 'landing' && currentTab !== 'login' && (
+        <DockMobile currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      )}
 
       {/* Cursor de alvo. Só em desktop com mouse e sem reduced-motion. */}
       <CursorPersonalizado />
