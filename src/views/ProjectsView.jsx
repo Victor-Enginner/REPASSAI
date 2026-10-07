@@ -16,7 +16,6 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
     let ativo = true;
     (async () => {
       try {
-        await DocumentDatabase.migrarDoLocalStorage();
         const lista = await DocumentDatabase.listDocuments();
         if (ativo) setDocuments(lista);
       } catch (e) {
@@ -28,27 +27,8 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
     return () => { ativo = false; };
   }, []);
 
-  // Exemplos no formato antigo para demonstração de portfólio completo
-  const SITES_FORMATO_ANTIGO = [
-    {
-      id: "matheus-rosaria-bar",
-      nome: "Matheus & Rosaria Bar",
-      categoria: "Restaurante",
-      cidade: "Franca",
-      estado: "SP",
-      formato: "antigo",
-      status: "Não publicado"
-    },
-    {
-      id: "cozinha-fazenda",
-      nome: "Restaurante Cozinha da Fazenda",
-      categoria: "Restaurante",
-      cidade: "Franca",
-      estado: "SP",
-      formato: "antigo",
-      status: "Não publicado"
-    }
-  ];
+  // Projetos reais vêm da API; exemplos não podem parecer documentos da conta.
+  const SITES_FORMATO_ANTIGO = [];
 
   return (
     <div style={{
@@ -125,7 +105,9 @@ export default function ProjectsView({ onEditSite, onNavigateWizard }) {
               {documents.map(doc => {
                 const meta = doc.meta || {};
                 const leadObj = {
-                  id: doc.projectId.replace('site_', ''),
+                  projectId: doc.projectId,
+                  existingProject: true,
+                  id: doc.projectId.replace(/^site_/, ''),
                   nome: meta.title || doc.projectId,
                   categoria: meta.nicho || 'Geral',
                   cidade: meta.cidade || 'Brasil'

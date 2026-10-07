@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {compileDocumentToStandaloneHTML} from '../src/services/siteDeployer.js';
+const schema = {meta:{title:'<script>alert(1)</script>',cidade:'<img onerror=attack()>'},components:[{type:'HeroAnimated',props:{ctaColor:'red;}body{display:none',ctaLink:'javascript:alert(1)'}},{type:'BentoGridOriginKit',props:{items:[{title:'<svg onload=attack()>',desc:'Texto & real'}]}}]};
+const html = compileDocumentToStandaloneHTML(schema);
+assert.ok(!html.includes('<script>'));
+assert.ok(!html.includes('<svg'));
+assert.ok(!html.includes('<img'));
+assert.ok(!html.includes('javascript:'));
+assert.ok(!html.includes('5500000000000'));
+assert.ok(!html.includes('display:none'));
+assert.ok(html.includes('Texto &amp; real'));
+assert.ok(html.includes('Contato ainda não configurado'));
+schema.components[0].props.ctaLink = 'https://wa.me/5511999999999';
+assert.ok(compileDocumentToStandaloneHTML(schema).includes('href="https://wa.me/5511999999999"'));
+console.log('PASS: escape de conteúdo, cor validada e contato real ou ausente.');

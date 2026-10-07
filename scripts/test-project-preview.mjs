@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { resolveProjectId, classifyProjectPreview } from '../src/services/projectPreview.js';
+assert.equal(resolveProjectId({projectId:'original',id:'other'}),'original');
+assert.equal(resolveProjectId({id:'42'}),'site_42');
+assert.equal(resolveProjectId(null),null);
+assert.equal(classifyProjectPreview(null),'missing');
+assert.equal(classifyProjectPreview({htmlContent:'<h1>Salvo</h1>'}),'html');
+assert.equal(classifyProjectPreview({blocos:[{componenteId:'hero'}]}),'blocks');
+assert.equal(classifyProjectPreview({outputFileName:'generated_empresa.html'}),'file');
+assert.equal(classifyProjectPreview({outputFileName:'../../secret.html'}),'unsupported');
+assert.equal(classifyProjectPreview({components:[{type:'HeroAnimated'}]}),'legacy');
+console.log('PASS: identidade exata e classificação de documentos salvos.');

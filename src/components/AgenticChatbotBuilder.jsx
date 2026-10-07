@@ -13,6 +13,7 @@ import {
 import { apiUrl } from '../config';
 import { executeAgenticLoop } from '../services/agenticPlanner';
 import { DocumentDatabase } from '../services/documentDB';
+import { resolveProjectId } from '../services/projectPreview';
 import { fetchAutenticado } from '../services/authService';
 import PixelTetris from './ui/PixelTetris';
 
@@ -236,7 +237,7 @@ export default function AgenticChatbotBuilder({ lead, onSchemaGenerated }) {
       generatedSchema.systemista = SYSTEMISTA_PROMPT_TEMPLATE;
     }
 
-    const projectId = `site_${targetLead.id || 'default'}`;
+    const projectId = resolveProjectId(targetLead);
     let savedDoc = generatedSchema;
     try {
       savedDoc = await DocumentDatabase.saveDocument(projectId, generatedSchema);

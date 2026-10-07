@@ -5,12 +5,13 @@ import { gerarLandingPage } from '../services/agenticGenerator';
 import SchemaRenderer from '../components/SchemaRenderer';
 import { DocumentDatabase } from '../services/documentDB';
 import { fetchAutenticado } from '../services/authService';
-import { downloadStandaloneHTML } from '../services/siteDeployer';
+import { downloadStandaloneHTML, compileDocumentToStandaloneHTML } from '../services/siteDeployer';
 import AgenticChatbotBuilder from '../components/AgenticChatbotBuilder';
 import ReactBitsCanvas from '../components/ui/ReactBitsCanvas';
 import GlowBorder from '../components/ui/GlowBorder';
 import { OriginKitBentoGrid } from '../components/ui/OriginKitComponents';
 import { urlPublicaDoSite, apiUrl } from '../config';
+import { resolveProjectId, classifyProjectPreview } from '../services/projectPreview';
 
 export default function SiteEditorView({ lead, onBack }) {
   const targetLead = lead || {
@@ -31,7 +32,9 @@ export default function SiteEditorView({ lead, onBack }) {
   const [gerando, setGerando] = useState(false);
   const [traceGeracao, setTraceGeracao] = useState([]);
 
-  const projectId = `site_${targetLead.id || 'default'}`;
+  const projectId = resolveProjectId(lead);
+  const [carregandoProjeto, setCarregandoProjeto] = useState(true);
+  const previewKind = classifyProjectPreview(docSchema);
 
   const [erroPersistencia, setErroPersistencia] = useState('');
 
@@ -40,20 +43,27 @@ export default function SiteEditorView({ lead, onBack }) {
   // que abria o editor vazio — a "tela cinza").
   useEffect(() => {
     let ativo = true;
+    setDocSchema(null);
+    setErroPersistencia('');
+    setCarregandoProjeto(true);
     (async () => {
       try {
+        if (!projectId) throw new Error('Selecione um projeto para abrir o editor.');
         const existingDoc = await DocumentDatabase.getDocument(projectId);
         if (!ativo) return;
-        if (existingDoc && (existingDoc.htmlContent || existingDoc.outputFileName)) {
+        if (existingDoc) {
           setDocSchema(existingDoc);
           return;
         }
+        if (lead?.existingProject) throw new Error('Este projeto não foi encontrado. Volte à lista e atualize seus projetos.');
+        await initAgenticPipeline();
       } catch (e) {
         if (!ativo) return;
         setErroPersistencia(e.message || 'Nao foi possivel abrir este site.');
         return;
+      } finally {
+        if (ativo) setCarregandoProjeto(false);
       }
-      initAgenticPipeline();
     })();
     return () => { ativo = false; };
   }, [projectId]);
@@ -276,10 +286,12 @@ export default function SiteEditorView({ lead, onBack }) {
                 overflow: 'hidden',
                 position: 'relative'
               }}>
-                <iframe
+                {carregandoProjeto ? <p role="status" style={{ padding: '24px' }}>Abrindo projeto…</p> : erroPersistencia && !docSchema ? <p role="alert" style={{ padding: '24px' }}>{erroPersistencia}</p> : previewKind === 'blocks' ? <SchemaRenderer schema={docSchema} lead={targetLead} /> : ['html', 'file', 'legacy'].includes(previewKind) ? <iframe
                   key={targetLead.id || targetLead.nome}
-                  src={docSchema?.previewUrl ? apiUrl(docSchema.previewUrl) : apiUrl(`/api/site/preview_html?file=generated_${targetLead.nome.toLowerCase().replace(/[^a-z0-9]/g, '_')}.html`)}
-                  srcDoc={docSchema?.htmlContent || undefined}
+                  src={previewKind === 'file' ? apiUrl(`/api/site/preview_html?file=${encodeURIComponent(docSchema.outputFileName)}`) : undefined}
+                  srcDoc={previewKind === 'legacy' ? compileDocumentToStandaloneHTML(docSchema) : docSchema?.htmlContent || undefined}
+                  sandbox="allow-scripts"
+                  referrerPolicy="no-referrer"
                   title={`Preview de ${targetLead.nome}`}
                   style={{
                     width: '100%',
@@ -287,7 +299,7 @@ export default function SiteEditorView({ lead, onBack }) {
                     border: 'none',
                     background: 'var(--papel-cartao)'
                   }}
-                />
+                /> : <p role="status" style={{ padding: '24px' }}>Este projeto foi preservado, mas seu formato antigo ainda precisa de conversão para exibir o preview. Nenhuma nova geração foi executada ao abri-lo.</p>}
               </div>
             </GlowBorder>
           </div>
