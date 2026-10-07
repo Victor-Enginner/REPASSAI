@@ -12,6 +12,7 @@ import GlowBorder from '../components/ui/GlowBorder';
 import { OriginKitBentoGrid } from '../components/ui/OriginKitComponents';
 import { urlPublicaDoSite, apiUrl } from '../config';
 import { resolveProjectId, classifyProjectPreview } from '../services/projectPreview';
+import SiteTextEditor from '../components/SiteTextEditor';
 
 export default function SiteEditorView({ lead, onBack }) {
   const targetLead = lead || {
@@ -26,6 +27,7 @@ export default function SiteEditorView({ lead, onBack }) {
 
   const [docSchema, setDocSchema] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [salvandoVisual, setSalvandoVisual] = useState(false);
 
   // Schema do motor agêntico novo (retrieval -> LLM -> validação).
   const [schemaAgentico, setSchemaAgentico] = useState(null);
@@ -236,10 +238,23 @@ export default function SiteEditorView({ lead, onBack }) {
       }}>
         
         {/* Left Side: Agentic Chatbot Builder Interactive Panel */}
+        <div>
+        {docSchema && ['html', 'legacy'].includes(previewKind) && <SiteTextEditor
+          key={projectId}
+          html={docSchema.htmlContent || compileDocumentToStandaloneHTML(docSchema)}
+          saving={salvandoVisual}
+          onChange={htmlContent => setDocSchema(previous => ({...previous, htmlContent}))}
+          onSave={async () => {
+            setSalvandoVisual(true);
+            try { const saved = await DocumentDatabase.saveDocument(projectId, docSchema); setDocSchema(saved); }
+            finally { setSalvandoVisual(false); }
+          }}
+        />}
         <AgenticChatbotBuilder 
           lead={targetLead} 
           onSchemaGenerated={(updatedSchema) => setDocSchema(updatedSchema)} 
         />
+        </div>
 
         {/* Right Side: Full Live Interactive Iframe Preview (Estilo Emergent / Lovable) */}
         <div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'var(--bg-black)', padding: '20px', boxSizing: 'border-box' }}>
