@@ -1,23 +1,28 @@
 import React, { useMemo, useState } from 'react';
+import { inspectTemplateStructure, applyTemplateTextEdits } from '../services/templateStructure';
 
 const FONTS = ['Arial', 'Georgia', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Courier New'];
-const SELECTOR = 'h1,h2,h3,h4,h5,h6,p,a,button,li,label,blockquote,figcaption';
 
 // Documento inerte: scripts e manipuladores do template nunca executam no painel.
-function parseEditable(html) {
+function parseEditable(html, slots) {
   const document = new DOMParser().parseFromString(html, 'text/html');
-  const elements = [...document.body.querySelectorAll(SELECTOR)].filter(element =>
-    !element.querySelector(SELECTOR)
-    && !element.closest('script,style,template,noscript,svg'));
+  const elements = slots.map(slot => {
+    let element = document.body;
+    for (const index of slot.path) element = element?.children[index];
+    const node = element?.childNodes[slot.childIndex];
+    return node?.nodeType === Node.TEXT_NODE && !element.closest('script,style,template,noscript,svg') ? {slot, element, node} : null;
+  });
   return { document, elements };
 }
 
 export default function SiteTextEditor({ html, onChange, onSave, saving }) {
+  const [slots] = useState(() => inspectTemplateStructure(html).textSlots);
   const [selected, setSelected] = useState(0);
   const [history, setHistory] = useState([]);
   const [notice, setNotice] = useState('');
-  const parsed = useMemo(() => parseEditable(html), [html]);
-  const element = parsed.elements[selected];
+  const parsed = useMemo(() => parseEditable(html, slots), [html, slots]);
+  const record = parsed.elements[selected];
+  const element = record?.element;
   function edit(change) {
     if (!element) return;
     setHistory(previous => [...previous.slice(-19), html]);
@@ -35,22 +40,23 @@ export default function SiteTextEditor({ html, onChange, onSave, saving }) {
     <h2 style={{fontSize:18}}>Textos e fontes</h2>
     <p>Edite o conteúdo sem gastar tokens. O preview muda imediatamente.</p>
     <label>Elemento do site
-      <select aria-label="Elemento do site" value={selected} onChange={event=>setSelected(Number(event.target.value))} style={{width:'100%',margin:'8px 0'}}>
-        {parsed.elements.map((item,index)=><option key={index} value={index}>{item.tagName.toLowerCase()} — {item.textContent.trim().slice(0,80)}</option>)}
+      <select aria-label="Elemento do site" disabled={saving} value={selected} onChange={event=>setSelected(Number(event.target.value))} style={{width:'100%',margin:'8px 0'}}>
+        {parsed.elements.map((item,index)=>item && <option key={index} value={index}>{item.element.tagName.toLowerCase()} — {item.node.textContent.trim().slice(0,80) || '(texto vazio)'}</option>)}
       </select>
     </label>
     {element ? <>
       <label>Texto
-        <textarea aria-label="Texto do elemento" value={element.textContent} maxLength={10000} style={{width:'100%',minHeight:110,margin:'8px 0'}} onChange={event=>edit(item=>{
-          const walker = parsed.document.createTreeWalker(item, NodeFilter.SHOW_TEXT);
-          const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
-          const editable = nodes.filter(node=>!node.parentElement.closest('svg,script,style'));
-          if (editable.length) { editable[0].textContent = event.target.value; editable.slice(1).forEach(node=>{node.textContent='';}); }
-          else item.appendChild(parsed.document.createTextNode(event.target.value));
-        })}/>
+        <textarea aria-label="Texto do elemento" disabled={saving} value={record.node.textContent === '\u200B' ? '' : record.node.textContent} maxLength={10000} style={{width:'100%',minHeight:110,margin:'8px 0',boxSizing:'border-box'}} onChange={event=>{
+          try {
+            const next = applyTemplateTextEdits(html,[{...record.slot,expected:record.node.textContent.trim(),value:event.target.value}]);
+            setHistory(previous => [...previous.slice(-19), html]);
+            onChange(next);
+            setNotice('Alterações no preview. Salve para gravar na conta.');
+          } catch (error) { setNotice(error.message); }
+        }}/>
       </label>
       <label>Fonte do elemento
-        <select aria-label="Fonte do elemento" value={FONTS.includes(element.style.fontFamily.replaceAll('"','')) ? element.style.fontFamily.replaceAll('"','') : ''} onChange={event=>edit(item=>{item.style.fontFamily=event.target.value;})} style={{width:'100%',margin:'8px 0'}}>
+        <select aria-label="Fonte do elemento" disabled={saving} value={FONTS.includes(element.style.fontFamily.replaceAll('"','')) ? element.style.fontFamily.replaceAll('"','') : ''} onChange={event=>edit(item=>{item.style.fontFamily=event.target.value;})} style={{width:'100%',margin:'8px 0'}}>
           <option value="">Fonte original do template</option>
           {FONTS.map(font=><option key={font} value={font}>{font}</option>)}
         </select>

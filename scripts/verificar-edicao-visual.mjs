@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 const browser = await chromium.launch();
 try {
  const page = await browser.newPage({viewport:{width:1360,height:768}});
- let saved = {projectId:'site_visual',meta:{title:'Visual QA'},htmlContent:'<!doctype html><html><body><h1>Título inicial</h1><p>Descrição original</p></body></html>'};
+ let saved = {projectId:'site_visual',meta:{title:'Visual QA'},htmlContent:'<!doctype html><html><body><h1>Título inicial</h1><p>Descrição <span>original</span><svg aria-label="Ícone preservado"><circle r="4"></circle></svg></p></body></html>'};
  let writes=0; let failSave=false;
  await page.route('**/api/**', async route=>{
   const request=route.request(), path=new URL(request.url()).pathname;
@@ -38,5 +38,15 @@ try {
  await page.getByText('Falha simulada ao salvar',{exact:false}).waitFor();
  assert.equal(await page.getByLabel('Texto do elemento').inputValue(),'Rascunho preservado');
  assert.equal(writes,2);
- console.log('PASS: texto literal, fonte, salvar/reabrir e falha sem perder rascunho; API simulada, sem chamada de IA.');
+ await page.getByLabel('Elemento do site').selectOption({label:'span — original'});
+ await page.getByLabel('Texto do elemento').fill('');
+ assert.equal(await page.getByLabel('Texto do elemento').inputValue(),'');
+ await page.getByLabel('Texto do elemento').fill('alterada no span');
+ await frame.getByText('Descrição alterada no span',{exact:true}).waitFor();
+ assert.equal(await frame.locator('svg circle').count(),1);
+ await page.getByRole('button',{name:'Desfazer edição',exact:true}).click();
+ assert.equal(await page.getByLabel('Texto do elemento').inputValue(),'');
+ await page.getByRole('button',{name:'Desfazer edição',exact:true}).click();
+ assert.equal(await page.getByLabel('Texto do elemento').inputValue(),'original');
+ console.log('PASS: texto literal, fonte, salvar/reabrir, falha sem perda, span/SVG preservados e apagar/desfazer; API simulada, sem IA.');
 }finally{await browser.close();}

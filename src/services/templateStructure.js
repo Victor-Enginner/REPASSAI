@@ -50,7 +50,9 @@ export function applyTemplateTextEdits(html, edits) {
     const node=element?.childNodes[edit.childIndex];
     if(!node || node.nodeType!==Node.TEXT_NODE || element.closest('script,style,template,noscript,svg')) throw new Error('O campo não é um texto editável.');
     if(typeof edit.expected==='string' && node.textContent.trim()!==edit.expected) throw new Error('O template mudou. Atualize o mapa antes de editar.');
-    node.textContent=edit.value;
+    // Mantém o endereço do nó ao serializar texto vazio; sem isso o parser
+    // remove o nó e a próxima edição pode atingir um irmão diferente.
+    node.textContent=edit.value || '\u200B';
   }
   return '<!DOCTYPE html>\n'+doc.documentElement.outerHTML;
 }
