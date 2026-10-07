@@ -127,17 +127,17 @@ function gerarSchemaVisualLocal(leadData) {
  *
  * O gerador com retrieval, validação e autocorreção é agenticGenerator.js.
  */
-export async function executeAgenticLoop(leadData, userPrompt = '') {
+export async function executeAgenticLoop(leadData, userPrompt = '', opcoes = {}) {
   // Passo 1: a única chamada de IA vai ao backend REPASS. Nenhuma chave,
   // provedor ou configuração privada é lida do navegador.
   const promptSeguro = userPrompt.trim()
     || `Crie uma apresentação comercial para ${leadData.nome}, do nicho ${leadData.categoria}, em ${leadData.cidade}.`;
-  const llmResult = await executePromptWithFallback(
+  const llmResult = opcoes.usarIA === true ? await executePromptWithFallback(
     `${promptSeguro}\n\nCliente: ${leadData.nome} | Nicho: ${leadData.categoria} | Cidade: ${leadData.cidade}`,
     'copy_comercial',
     null,
     { temperature: 0 }
-  );
+  ) : { output: '', provider: 'Motor local determinístico', model: 'rules', logs: ['IA não solicitada; zero chamadas de modelo.'] };
 
   // Passo 2: Expansão de contexto e planejamento (Planner Mode)
   const plan = expandNichePrompt(leadData, userPrompt);

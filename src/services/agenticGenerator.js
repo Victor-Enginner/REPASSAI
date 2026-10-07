@@ -172,7 +172,7 @@ export function gerarSchemaLocal(preparo) {
  *          tentativas:number, trace:string[], avisos:string[]}>}
  */
 export async function gerarLandingPage(promptUsuario, lead = {}, opcoes = {}) {
-  const maxTentativas = opcoes.maxTentativas ?? MAX_TENTATIVAS;
+  const maxTentativas = opcoes.usarIA === true ? (opcoes.maxTentativas ?? MAX_TENTATIVAS) : 0;
   const trace = [];
 
   const preparo = prepararGeracao(promptUsuario, lead);
