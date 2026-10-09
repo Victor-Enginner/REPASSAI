@@ -5,3 +5,12 @@ python-dotenv>=1.0.0,<2.0.0
 
 # Armazenamento de mídia Cloudflare R2 (S3-Compatible)
 boto3>=1.35.0,<2.0.0
+
+# Coleta do Google Maps (scrapling_maps_engine.py): navegador e fallback HTTP
+# Depois de instalar: python -m playwright install chromium
+requests>=2.32,<3.0
+playwright>=1.60,<2.0
+scrapling>=0.4.15,<0.5
+
+# Opcional: execução remota no Modal (modal_engine.py)
+# modal>=1.5,<2.0
