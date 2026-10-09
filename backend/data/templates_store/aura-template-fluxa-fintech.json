@@ -1,0 +1,107 @@
+{
+  "slug": "aura-template-fluxa-fintech",
+  "titulo": "Fluxa AI Finance Landing Page Template",
+  "descricao": "A high-performance landing page template for AI-driven finance and lending platforms, featuring automated underwriting and repayment tracking workflows. Fonte: https://www.aura.build/templates/fluxa-fintech",
+  "arquivo": "77lib/aura-template-fluxa-fintech.html",
+  "tamanho_html": 184753,
+  "paleta": [
+    {
+      "cor": "#06145b",
+      "usos": 24
+    },
+    {
+      "cor": "rgba(255,255,255,0.32)",
+      "usos": 18
+    },
+    {
+      "cor": "rgba(15,23,42,0.08)",
+      "usos": 11
+    },
+    {
+      "cor": "rgba(255,255,255,1)",
+      "usos": 10
+    },
+    {
+      "cor": "#2f6bff",
+      "usos": 9
+    },
+    {
+      "cor": "#2454f4",
+      "usos": 9
+    },
+    {
+      "cor": "#1237d8",
+      "usos": 9
+    },
+    {
+      "cor": "rgba(37,84,244,0.36)",
+      "usos": 9
+    },
+    {
+      "cor": "rgba(255,255,255,0.38)",
+      "usos": 9
+    },
+    {
+      "cor": "rgba(37,84,244,0.28)",
+      "usos": 9
+    },
+    {
+      "cor": "rgba(15,23,42,0.07)",
+      "usos": 9
+    },
+    {
+      "cor": "rgba(255,255,255,0.9)",
+      "usos": 8
+    },
+    {
+      "cor": "rgba(15,23,42,0.06)",
+      "usos": 8
+    },
+    {
+      "cor": "rgba(37,99,235,0.22)",
+      "usos": 7
+    },
+    {
+      "cor": "rgba(29,78,216,0.22)",
+      "usos": 6
+    },
+    {
+      "cor": "#d8e1f3",
+      "usos": 5
+    }
+  ],
+  "fontes": [
+    "Inter"
+  ],
+  "secoes": [
+    "Capital for modern businesses, from approval to payout.",
+    "Everything you need, built to perform.",
+    "From approval to payout, fully orchestrated.",
+    "Trusted by lending teams moving faster.",
+    "Pricing designed to scale with lending.",
+    "Frequently asked questions.",
+    "Deploy smarter lending operations with Fluxa.",
+    "FLUXA"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "GSAP",
+    "CSS Animations"
+  ],
+  "imagens": 26,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-fluxa-fintech?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Fluxa AI Finance Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-fluxa-fintech`\n\n## Objetivo\nA high-performance landing page template for AI-driven finance and lending platforms, featuring automated underwriting and repayment tracking workflows. Fonte: https://www.aura.build/templates/fluxa-fintech\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #06145b  (24x)\n- rgba(255,255,255,0.32)  (18x)\n- rgba(15,23,42,0.08)  (11x)\n- rgba(255,255,255,1)  (10x)\n- #2f6bff  (9x)\n- #2454f4  (9x)\n- #1237d8  (9x)\n- rgba(37,84,244,0.36)  (9x)\n- rgba(255,255,255,0.38)  (9x)\n- rgba(37,84,244,0.28)  (9x)\n- rgba(15,23,42,0.07)  (9x)\n- rgba(255,255,255,0.9)  (8x)\n- rgba(15,23,42,0.06)  (8x)\n- rgba(37,99,235,0.22)  (7x)\n- rgba(29,78,216,0.22)  (6x)\n- #d8e1f3  (5x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- Capital for modern businesses, from approval to payout.\n- Everything you need, built to perform.\n- From approval to payout, fully orchestrated.\n- Trusted by lending teams moving faster.\n- Pricing designed to scale with lending.\n- Frequently asked questions.\n- Deploy smarter lending operations with Fluxa.\n- FLUXA\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Fluxa AI Finance Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Fluxa AI Finance Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-fluxa-fintech`\n\n## Objetivo\nA high-performance landing page template for AI-driven finance and lending platforms, featuring automated underwriting and repayment tracking workflows. Fonte: https://www.aura.build/templates/fluxa-fintech\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #06145b  (24x)\n- rgba(255,255,255,0.32)  (18x)\n- rgba(15,23,42,0.08)  (11x)\n- rgba(255,255,255,1)  (10x)\n- #2f6bff  (9x)\n- #2454f4  (9x)\n- #1237d8  (9x)\n- rgba(37,84,244,0.36)  (9x)\n- rgba(255,255,255,0.38)  (9x)\n- rgba(37,84,244,0.28)  (9x)\n- rgba(15,23,42,0.07)  (9x)\n- rgba(255,255,255,0.9)  (8x)\n- rgba(15,23,42,0.06)  (8x)\n- rgba(37,99,235,0.22)  (7x)\n- rgba(29,78,216,0.22)  (6x)\n- #d8e1f3  (5x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- Capital for modern businesses, from approval to payout.\n- Everything you need, built to perform.\n- From approval to payout, fully orchestrated.\n- Trusted by lending teams moving faster.\n- Pricing designed to scale with lending.\n- Frequently asked questions.\n- Deploy smarter lending operations with Fluxa.\n- FLUXA\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:31"
+}

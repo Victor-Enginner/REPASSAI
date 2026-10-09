@@ -1,0 +1,1322 @@
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="antialiased selection:bg-[var(--accent)]/30 selection:text-[var(--fg)]"><head><script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trace0 / Cybersecurity Advisory</title>
+<!-- External Dependencies -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600&amp;family=Sarpanch:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #030303;
+--fg: #fafafa;
+--muted: #a3a3a3;
+--border: #1e1e1e;
+/* Primary Brand Color - Update this hex to match your logo */
+--accent: #FF5F1F;
+--panel: rgba(20, 20, 20, 0.4);
+}
+body {
+font-family: "Sarpanch", ui-sans-serif, system-ui, -apple-system, sans-serif;
+background-color: var(--bg);
+color: var(--fg);
+overflow-x: hidden;
+margin: 0;
+padding: 0;
+overscroll-behavior: none;
+line-height: 1.6;
+transition: background-color 0.8s ease, color 0.8s ease;
+}
+/* Hero ONLY Font */
+.font-display {
+font-family: "Orbitron", sans-serif;
+letter-spacing: -0.02em;
+}
+/* Core Resets */
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+/* Typography Mask Reveal Utility */
+.line-wrapper {
+display: block;
+overflow: hidden;
+line-height: 1.06;
+height: 1.32em;
+clip-path: inset(0 0 0 0);
+padding: 0;
+margin: 0;
+}
+.line-content {
+display: block;
+will-change: transform;
+}
+.will-change-transform {
+will-change: transform, opacity, filter;
+}
+.bg-noise {
+background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+opacity: 0.015;
+pointer-events: none;
+}
+/* Nav active state */
+.nav-link.is-active {
+color: var(--accent);
+}
+.nav-link::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 1px;
+background-color: var(--accent);
+transform: scaleX(0);
+transition: transform 0.3s ease;
+transform-origin: right;
+}
+.nav-link:hover::after,
+.nav-link.is-active::after {
+transform: scaleX(1);
+transform-origin: left;
+}
+/*
+* ==========================================
+* CLEARER GLASS SLAB
+* ==========================================
+*/
+.section-slab {
+max-width: 1320px;
+margin: 0 auto;
+position: relative;
+}
+.section-slab::before {
+content: "";
+position: absolute;
+inset: -18px;
+background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.00) 46%), rgba(8, 10, 14, 0.16);
+border: 1px solid rgba(255, 255, 255, 0.08);
+backdrop-filter: blur(14px);
+-webkit-backdrop-filter: blur(14px);
+box-shadow: 0 18px 70px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+border-radius: 10px;
+pointer-events: none;
+z-index: 0;
+transition: background 0.8s ease;
+}
+.section-slab::after {
+content: "";
+position: absolute;
+inset: -18px;
+/* Updated radial gradient to match brand color (rgba of FF5F1F) */
+background: radial-gradient(900px 320px at 50% 0%, rgba(255, 95, 31, 0.08) 0%, rgba(0, 0, 0, 0.00) 62%), linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.12) 100%);
+opacity: 0.16;
+border-radius: 10px;
+pointer-events: none;
+z-index: 0;
+}
+@media (max-width: 768px) {
+.section-slab::before, .section-slab::after {
+inset: 0;
+}
+}
+.section-inner {
+position: relative;
+z-index: 1;
+padding: 88px 28px;
+}
+@media (min-width: 768px) {
+.section-inner {
+padding: 120px 52px;
+}
+}
+/*
+* ==========================================
+* PHASE 2 GRID & SCANLINE
+* ==========================================
+*/
+#phase-2-grid {
+opacity: 0.035;
+background:
+repeating-linear-gradient(
+to right,
+rgba(255,255,255,0.18) 0px,
+rgba(255,255,255,0.18) 1px,
+rgba(255,255,255,0.00) 1px,
+rgba(255,255,255,0.00) calc(100%/12)
+),
+repeating-linear-gradient(
+to bottom,
+rgba(255,255,255,0.10) 0px,
+rgba(255,255,255,0.10) 1px,
+rgba(255,255,255,0.00) 1px,
+rgba(255,255,255,0.00) 56px
+);
+mix-blend-mode: screen;
+}
+#phase-2-scanline {
+top: -10%;
+/* Updated scanline to match brand color (rgba of FF5F1F) */
+background: rgba(255, 95, 31, 0.55);
+opacity: 0.0;
+filter: blur(0.2px);
+}
+</style>
+<script>
+// Configure Tailwind to include our custom 3D transform utilities
+tailwind.config = {
+theme: {
+extend: {
+// Add any custom theme extensions here if needed
+}
+},
+plugins: [
+function({ addUtilities }) {
+const rotateXUtilities = {};
+const rotateValues = [0, 5, 6, 10, 15, 20, 30, 45, 75];
+// Generate rotate-x utilities
+rotateValues.forEach((value) => {
+rotateXUtilities[`.rotate-x-${value}`] = {
+'--tw-rotate-x': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateXUtilities[`.-rotate-x-${value}`] = {
+'--tw-rotate-x': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+const perspectiveUtilities = {
+".perspective-[1000px]": { perspective: "1000px" },
+};
+addUtilities({
+...rotateXUtilities,
+...perspectiveUtilities,
+});
+}
+]
+};
+</script>
+<style>
+/* 3D Transform utilities */
+</style><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+<body class="m-0 p-0 overflow-x-hidden">
+
+    <!-- Global Header / Nav -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-[var(--bg)]/60 border-b border-[var(--border)] transition-colors duration-700 pointer-events-none">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
+            <div class="flex-1 pointer-events-auto flex items-center">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Brand Logo" class="h-6 w-auto object-contain cursor-pointer" onclick="lenis.scrollTo('#pinned-stage')">
+            </div>
+            <div class="flex-none hidden lg:flex gap-8 items-center pointer-events-auto">
+                <a href="#manifesto" class="nav-link text-xs uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-colors relative pb-1">About</a>
+                <a href="#overview" class="nav-link text-xs uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-colors relative pb-1">Process</a>
+                <a href="#interface" class="nav-link text-xs uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-colors relative pb-1">Deliverables</a>
+                <a href="#modules" class="nav-link text-xs uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-colors relative pb-1">Services</a>
+                <a href="#pricing" class="nav-link text-xs uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)] transition-colors relative pb-1">Models</a>
+            </div>
+            <div class="flex-1 flex justify-end items-center gap-6 pointer-events-auto">
+                <div class="hidden xl:flex flex-col items-end text-[10px] tracking-widest uppercase text-[var(--muted)]">
+                    <span class="text-[var(--accent)] flex items-center gap-2">
+                        <span class="w-1 h-1 bg-[var(--accent)] block rounded-none animate-pulse"></span>
+                        System.Online
+                    </span>
+                    <span>Latency: 12ms</span>
+                </div>
+                <button class="text-xs uppercase tracking-widest border border-[var(--border)] bg-transparent px-6 py-2.5 hover:bg-[var(--fg)] hover:text-[var(--bg)] transition-colors font-medium rounded-none focus:outline-none text-[var(--fg)]" onclick="lenis.scrollTo('#access')">
+                    Schedule Call
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LAYER 1: WebGL Canvas Background -->
+    <div id="webgl-container" class="fixed inset-0 z-0 pointer-events-none w-full h-full">
+        <div class="absolute inset-0 bg-noise z-10"></div>
+    </div>
+
+    <!-- LAYER 2: DOM Content -->
+    <main id="app-wrapper" class="relative z-10 w-full pb-24">
+        
+        <!-- SECTION 1: THE PINNED STAGE -->
+        <section id="pinned-stage" class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-transparent">
+            
+            <div class="absolute inset-0 z-30 pointer-events-none flex flex-col justify-between p-6 md:px-12 md:py-8 mt-16">
+                <div class="flex justify-between items-center opacity-0 translate-y-[-10px]" id="ui-top">
+                    <div class="text-[10px] font-medium tracking-widest uppercase flex items-center gap-3">
+                        <span class="text-[var(--muted)]">SYS.01</span>
+                    </div>
+                    <div class="text-[10px] uppercase tracking-widest text-[var(--muted)] font-medium">
+                        Index / 00
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end opacity-0 translate-y-[10px]" id="ui-bottom">
+                    <div class="flex flex-col gap-1 text-[10px] text-[var(--muted)] font-medium tracking-widest uppercase">
+                        <span>Status: Nominal</span>
+                        <span>Render: Native</span>
+                    </div>
+                    <div class="flex flex-col items-end gap-3 text-[10px] uppercase tracking-widest text-[var(--muted)] font-medium">
+                        <span>Depth Mapping</span>
+                        <div class="w-[1px] h-12 bg-[var(--border)] relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-full h-full bg-[var(--accent)] transform origin-top scale-y-0 will-change-transform" id="scroll-progress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex w-full z-20 px-6 absolute inset-0 items-center justify-center perspective-[1000px]">
+                
+                <!-- Phase 1: Arrival -->
+                <div id="phase-1-content" class="absolute flex flex-col items-center justify-center text-center w-full pointer-events-auto px-4">
+                    <div class="w-full max-w-[980px] mx-auto flex flex-col items-center">
+                        <h2 class="text-3xl md:text-5xl lg:text-7xl tracking-tight font-medium flex flex-col items-center mb-6 drop-shadow-2xl">
+                            <span class="line-wrapper">
+                                <span class="line-content whitespace-nowrap text-[var(--fg)] font-display opacity-1" style="transform: translateY(125%);">
+                                    Trace threats
+                                </span>
+                            </span>
+                            <span class="line-wrapper">
+                                <span class="line-content whitespace-nowrap text-[var(--muted)] font-display opacity-1" style="transform: translateY(125%);">
+                                    to their origin.
+                                </span>
+                            </span>
+                        </h2>
+                        
+                        <div class="flex flex-col items-center gap-4 mt-2 opacity-0 translate-y-[15px]" id="hero-descriptor">
+                            <span class="text-[10px] md:text-xs tracking-[0.2em] uppercase text-[var(--accent)] font-medium">
+                                FUZZ · TRACE · EXPLOIT · REMEDIATE
+                            </span>
+                            <p class="text-sm md:text-base text-[var(--muted)] font-normal max-w-xl">
+                                Vulnerability research, adversarial assessments, and strategic cyber risk advisory — for organizations that treat threats as existential.
+                            </p>
+                        </div>
+                        
+                        <div class="flex gap-4 mt-10 opacity-0 translate-y-[15px]" id="hero-ctas">
+                            <button class="px-8 py-4 text-xs tracking-widest uppercase font-medium bg-[var(--accent)] text-black hover:bg-white transition-colors duration-300 rounded-none focus:outline-none" onclick="lenis.scrollTo('#access')">
+                                Start Engagement
+                            </button>
+                            <button class="px-8 py-4 text-xs tracking-widest uppercase font-medium border border-[var(--border)] bg-black/50 backdrop-blur-md text-[var(--fg)] hover:bg-[var(--fg)] hover:text-black transition-colors duration-300 rounded-none focus:outline-none hidden sm:block" onclick="lenis.scrollTo('#modules')">
+                                View Services
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Forward Push -->
+                <div id="phase-2-content" class="absolute inset-0 w-full flex flex-col items-center justify-center text-center opacity-0 pointer-events-none blur-[6px] scale-[0.98] px-4 overflow-hidden">
+                    <div id="phase-2-grid" class="absolute inset-0 pointer-events-none"></div>
+                    <div id="phase-2-scanline" class="absolute left-0 right-0 h-px pointer-events-none"></div>
+                    <div class="w-full max-w-[980px] mx-auto flex flex-col items-center py-12 md:py-16 relative z-10">
+                        <h3 class="text-2xl md:text-4xl tracking-tight font-normal leading-relaxed text-[var(--fg)] drop-shadow-2xl">
+                            Elite advisory for
+                            <br>
+                            <span class="text-[var(--muted)]">organizations under threat.</span>
+                        </h3>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Content Emergence with Context -->
+                <div id="phase-3-content" class="absolute w-full flex flex-col items-center justify-center opacity-0 pointer-events-none px-4">
+                    
+                    <div id="phase-3-intro" class="w-full max-w-[980px] mx-auto text-center mb-6 px-6 opacity-0 translate-y-[20px]">
+                        <div class="text-[10px] text-[var(--muted)] font-medium tracking-widest mb-3 uppercase">SYS.02 / OFFENSIVE MINDSET</div>
+                        <h3 class="text-2xl md:text-3xl tracking-tight text-[var(--fg)] font-medium mb-2">We approach security the way attackers do.</h3>
+                        <p class="text-sm md:text-base text-[var(--muted)] font-normal max-w-xl mx-auto">Finding gaps before they're exploited, with zero collateral.</p>
+                    </div>
+
+                    <!-- Grid Cards -->
+                    <div class="w-full max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+                        
+                        <!-- Card 1 -->
+                        <div class="feature-card aspect-[3/4] bg-[rgba(15,15,15,0.4)] backdrop-blur-xl border border-[var(--border)] flex flex-col rounded-none group relative overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:border-[var(--muted)]">
+                            <div class="aspect-video w-full border-b border-[var(--border)] bg-[var(--panel)] flex flex-col relative z-20 group-hover:bg-[rgba(25,25,25,0.5)] transition-colors duration-500">
+                                <div class="h-5 border-b border-[var(--border)] flex items-center px-2 gap-1.5 bg-black/40">
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                </div>
+                                <div class="flex-1 flex items-center justify-center w-full h-full">
+                                    <iconify-icon icon="solar:target-linear" width="46" class="text-[var(--accent)] opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"></iconify-icon>
+                                </div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col justify-end z-20">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="text-[10px] tracking-widest text-[var(--muted)] uppercase font-medium">01</span>
+                                </div>
+                                <h4 class="text-lg tracking-tight font-medium text-[var(--fg)] mb-2 group-hover:text-white transition-colors">Offensive Mindset</h4>
+                                <p class="text-[11px] text-[var(--muted)] leading-relaxed font-normal">We approach security the way attackers do — finding gaps before they're exploited.</p>
+                            </div>
+                            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="feature-card aspect-[3/4] bg-[rgba(15,15,15,0.4)] backdrop-blur-xl border border-[var(--border)] flex flex-col rounded-none group relative overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:border-[var(--muted)]">
+                            <div class="aspect-video w-full border-b border-[var(--border)] bg-[var(--panel)] flex flex-col relative z-20 group-hover:bg-[rgba(25,25,25,0.5)] transition-colors duration-500">
+                                <div class="h-5 border-b border-[var(--border)] flex items-center px-2 gap-1.5 bg-black/40">
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                </div>
+                                <div class="flex-1 flex items-center justify-center w-full h-full">
+                                    <iconify-icon icon="solar:test-tube-linear" width="46" class="text-[var(--accent)] opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"></iconify-icon>
+                                </div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col justify-end z-20">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="text-[10px] tracking-widest text-[var(--muted)] uppercase font-medium">02</span>
+                                </div>
+                                <h4 class="text-lg tracking-tight font-medium text-[var(--fg)] mb-2 group-hover:text-white transition-colors">Research-Led</h4>
+                                <p class="text-[11px] text-[var(--muted)] leading-relaxed font-normal">Deep vulnerability research drives every engagement, not simple compliance checklists.</p>
+                            </div>
+                            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="feature-card aspect-[3/4] bg-[rgba(15,15,15,0.4)] backdrop-blur-xl border border-[var(--border)] flex flex-col rounded-none group relative overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:border-[var(--muted)]">
+                            <div class="aspect-video w-full border-b border-[var(--border)] bg-[var(--panel)] flex flex-col relative z-20 group-hover:bg-[rgba(25,25,25,0.5)] transition-colors duration-500">
+                                <div class="h-5 border-b border-[var(--border)] flex items-center px-2 gap-1.5 bg-black/40">
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                </div>
+                                <div class="flex-1 flex items-center justify-center w-full h-full">
+                                    <iconify-icon icon="solar:map-arrow-up-linear" width="46" class="text-[var(--accent)] opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"></iconify-icon>
+                                </div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col justify-end z-20">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="text-[10px] tracking-widest text-[var(--muted)] uppercase font-medium">03</span>
+                                </div>
+                                <h4 class="text-lg tracking-tight font-medium text-[var(--fg)] mb-2 group-hover:text-white transition-colors">Strategic Clarity</h4>
+                                <p class="text-[11px] text-[var(--muted)] leading-relaxed font-normal">Every finding is translated into actionable risk remediation guidance and impact.</p>
+                            </div>
+                            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="feature-card aspect-[3/4] bg-[rgba(15,15,15,0.4)] backdrop-blur-xl border border-[var(--border)] flex flex-col rounded-none group relative overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:border-[var(--muted)]">
+                            <div class="aspect-video w-full border-b border-[var(--border)] bg-[var(--panel)] flex flex-col relative z-20 group-hover:bg-[rgba(25,25,25,0.5)] transition-colors duration-500">
+                                <div class="h-5 border-b border-[var(--border)] flex items-center px-2 gap-1.5 bg-black/40">
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                    <div class="w-1 h-1 bg-[var(--border)]"></div>
+                                </div>
+                                <div class="flex-1 flex items-center justify-center w-full h-full">
+                                    <iconify-icon icon="solar:crosshair-linear" width="46" class="text-[var(--accent)] opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"></iconify-icon>
+                                </div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col justify-end z-20">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="text-[10px] tracking-widest text-[var(--muted)] uppercase font-medium">04</span>
+                                </div>
+                                <h4 class="text-lg tracking-tight font-medium text-[var(--fg)] mb-2 group-hover:text-white transition-colors">Precision Execution</h4>
+                                <p class="text-[11px] text-[var(--muted)] leading-relaxed font-normal">Scoped, contained, and documented engagements with zero collateral damage.</p>
+                            </div>
+                            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4: Bridge Moment -->
+                <div id="bridge-content" class="absolute flex flex-col items-center justify-center text-center w-full opacity-0 pointer-events-none blur-[10px] translate-y-[20px] px-4">
+                    <div class="w-full max-w-[980px] mx-auto flex flex-col items-center py-12 md:py-16">
+                        <div class="bridge-stagger text-[10px] text-[var(--accent)] font-medium tracking-widest mb-6 uppercase flex items-center gap-3 drop-shadow-xl opacity-0 translate-y-[12px]">
+                            <div class="w-1.5 h-1.5 bg-[var(--accent)] rounded-none"></div>
+                            [ ENGAGEMENT_LOCKED ]
+                        </div>
+                        <h2 class="bridge-stagger text-4xl md:text-5xl lg:text-6xl tracking-tight text-[var(--fg)] font-medium drop-shadow-2xl mb-4 opacity-0 translate-y-[12px]">
+                            We don't just find problems.
+                        </h2>
+                        <p class="bridge-stagger text-sm md:text-base text-[var(--muted)] font-normal max-w-[680px] mx-auto mb-2 opacity-0 translate-y-[12px]">
+                            We trace them to their origin, understand their blast radius,
+                        </p>
+                        <p class="bridge-stagger text-sm md:text-base text-[var(--fg)] font-medium max-w-[680px] mx-auto opacity-0 translate-y-[12px]">
+                            and help organizations <span class="text-[var(--accent)]">build durable defenses.</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEC: Manifesto -> About -->
+        <section id="manifesto" class="relative py-32 px-4 md:px-8 z-10 w-full reveal-block">
+            <div class="section-slab">
+                <div class="section-inner max-w-7xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+                        
+                        <!-- Left: Header & Mission -->
+                        <div class="lg:col-span-5 flex flex-col justify-start">
+                            <div class="text-[10px] text-[var(--accent)] font-medium tracking-widest mb-6 uppercase flex items-center gap-3 reveal-item">
+                                <div class="w-1.5 h-1.5 bg-[var(--accent)] animate-pulse"></div>
+                                [ ABOUT_US ]
+                            </div>
+                            <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-[var(--fg)] mb-6 reveal-item">
+                                We exist to eliminate structural risk.
+                            </h2>
+                            <p class="text-sm text-[var(--muted)] leading-relaxed font-normal mb-8 reveal-item">
+                                Trace0 is a next-generation cybersecurity advisory built around deep offensive expertise. We specialize in vulnerability research, adversarial security assessments, and strategic cyber risk advisory for organizations that treat threats as existential.
+                            </p>
+                        </div>
+
+                        <!-- Right: Philosophy / Stats -->
+                        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8 reveal-item">
+                            <div class="flex flex-col gap-3 border-t border-[var(--border)] pt-4">
+                                <iconify-icon icon="solar:shield-keyhole-linear" width="24" class="text-[var(--accent)]"></iconify-icon>
+                                <h3 class="text-sm font-medium text-[var(--fg)] tracking-tight">Adversarial Perspective</h3>
+                                <p class="text-xs text-[var(--muted)] leading-relaxed">We don't rely on automated scanners. We emulate sophisticated threat actors to find the logical flaws that standard tools miss.</p>
+                            </div>
+                            <div class="flex flex-col gap-3 border-t border-[var(--border)] pt-4">
+                                <iconify-icon icon="solar:code-scan-linear" width="24" class="text-[var(--accent)]"></iconify-icon>
+                                <h3 class="text-sm font-medium text-[var(--fg)] tracking-tight">Research-Driven</h3>
+                                <p class="text-xs text-[var(--muted)] leading-relaxed">Our methodologies are rooted in continuous zero-day research and reverse engineering, keeping you ahead of the threat curve.</p>
+                            </div>
+                            <div class="flex flex-col gap-3 border-t border-[var(--border)] pt-4">
+                                <iconify-icon icon="solar:graph-up-linear" width="24" class="text-[var(--accent)]"></iconify-icon>
+                                <h3 class="text-sm font-medium text-[var(--fg)] tracking-tight">Strategic Impact</h3>
+                                <p class="text-xs text-[var(--muted)] leading-relaxed">Technical findings are useless without context. We translate vulnerabilities into business risk to drive meaningful remediation.</p>
+                            </div>
+                            <div class="flex flex-col gap-3 border-t border-[var(--border)] pt-4">
+                                <iconify-icon icon="solar:ghost-smile-linear" width="24" class="text-[var(--accent)]"></iconify-icon>
+                                <h3 class="text-sm font-medium text-[var(--fg)] tracking-tight">Zero Collateral</h3>
+                                <p class="text-xs text-[var(--muted)] leading-relaxed">Aggressive testing shouldn't break production. Our operations are highly scoped, controlled, and executed with extreme precision.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEC: Overview -> How We Work -->
+        <section id="overview" class="relative py-16 px-4 md:px-8 z-10 w-full reveal-block">
+            <div class="section-slab">
+                <div class="section-inner max-w-4xl mx-auto text-center flex flex-col items-center">
+                    <h2 class="text-3xl md:text-5xl font-medium tracking-tight text-[var(--fg)] mb-8 flex flex-col items-center">
+                        <span class="overflow-hidden pb-2 block">
+                            <span class="block reveal-text">Engagement Process</span>
+                        </span>
+                        <span class="overflow-hidden pb-2 block text-[var(--muted)] text-2xl md:text-3xl mt-2">
+                            <span class="block reveal-text">Controlled adversarial activity.</span>
+                        </span>
+                    </h2>
+                    
+                    <p class="text-sm text-[var(--muted)] mb-10 max-w-2xl leading-relaxed reveal-item">
+                        From scoping to remediation, our engagements are executed with precision, full transparency, and zero collateral impact to your operations.
+                    </p>
+
+                    <div class="flex flex-col md:flex-row gap-6 md:gap-12 justify-center items-center text-xs text-[var(--muted)] mb-12 font-mono uppercase tracking-widest reveal-item">
+                        <div class="flex items-center gap-3">
+                            <span class="text-[var(--accent)]">01</span>
+                            Scoping
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[var(--accent)]">02</span>
+                            Reconnaissance
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[var(--accent)]">03</span>
+                            Exploitation
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[var(--accent)]">04</span>
+                            Reporting
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center w-full reveal-item">
+                        <button class="w-full sm:w-auto px-8 py-4 text-xs tracking-widest uppercase font-medium bg-[var(--accent)] text-black hover:bg-white transition-colors duration-300 focus:outline-none" onclick="lenis.scrollTo('#access')">
+                            Schedule Call
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-4 text-xs tracking-widest uppercase font-medium border border-[var(--border)] text-[var(--fg)] hover:bg-[var(--fg)] hover:text-black transition-colors duration-300 focus:outline-none" onclick="lenis.scrollTo('#modules')">
+                            View Services
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEC: Interface -> Deliverables -->
+        <section id="interface" class="relative py-16 px-4 md:px-8 z-10 w-full reveal-block">
+            <div class="section-slab">
+                <div class="section-inner max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    
+                    <div class="reveal-item">
+                        <div class="flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-8 bg-[var(--bg)] p-3 border border-[var(--border)] w-max">
+                            <span class="text-[var(--accent)]">Assess</span>
+                            <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
+                            <span>Exploit</span>
+                            <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
+                            <span>Document</span>
+                            <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
+                            <span class="text-[var(--fg)]">Remediate</span>
+                        </div>
+
+                        <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-[var(--fg)] mb-6 flex flex-col">
+                            <span class="overflow-hidden pb-1 block">
+                                <span class="block reveal-text">Deliverables &amp; Artifacts.</span>
+                            </span>
+                        </h2>
+                        <p class="text-sm text-[var(--muted)] mb-10 leading-relaxed font-normal reveal-item">
+                            Every engagement concludes with comprehensive documentation designed for both technical teams and organizational leadership.
+                        </p>
+                        <ul class="space-y-6 text-xs text-[var(--fg)] font-normal reveal-item grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+                            <li class="flex items-start gap-4">
+                                <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-[var(--accent)] mt-0.5 flex-shrink-0"></iconify-icon>
+                                <span class="leading-relaxed"><strong class="font-medium text-[var(--fg)]">Technical Report:</strong> Full exploit chain documentation with CVSS, PoC code, and remediation guidance.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-[var(--accent)] mt-0.5 flex-shrink-0"></iconify-icon>
+                                <span class="leading-relaxed"><strong class="font-medium text-[var(--fg)]">Executive Brief:</strong> Board-ready risk summary translating technical findings into business impact.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-[var(--accent)] mt-0.5 flex-shrink-0"></iconify-icon>
+                                <span class="leading-relaxed"><strong class="font-medium text-[var(--fg)]">Attack Timeline:</strong> Step-by-step reconstruction of simulated attack paths with mapped detections.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-[var(--accent)] mt-0.5 flex-shrink-0"></iconify-icon>
+                                <span class="leading-relaxed"><strong class="font-medium text-[var(--fg)]">Remediation Roadmap:</strong> Prioritized fix plan with effort estimates and long-term hardening strategies.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-[var(--accent)] mt-0.5 flex-shrink-0"></iconify-icon>
+                                <span class="leading-relaxed"><strong class="font-medium text-[var(--fg)]">Retest Validation:</strong> Post-remediation verification that all critical findings are addressed.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-[var(--accent)] mt-0.5 flex-shrink-0"></iconify-icon>
+                                <span class="leading-relaxed"><strong class="font-medium text-[var(--fg)]">Threat Model Artifact:</strong> Living document capturing attack surfaces and trust boundaries.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="aspect-square md:aspect-[4/3] w-full bg-[var(--bg)] flex flex-col border border-[var(--border)] overflow-hidden relative shadow-2xl rounded-none reveal-item">
+                        <div class="h-8 border-b border-[var(--border)] flex items-center justify-between px-4 bg-[var(--panel)]">
+                            <div class="flex gap-2">
+                                <div class="w-2 h-2 bg-[var(--border)] rounded-none"></div>
+                                <div class="w-2 h-2 bg-[var(--border)] rounded-none"></div>
+                                <div class="w-2 h-2 bg-[var(--border)] rounded-none"></div>
+                            </div>
+                            <div class="text-[10px] text-[var(--muted)] font-mono uppercase tracking-widest">Artifact / Timeline</div>
+                        </div>
+                        <div class="flex-1 p-4 md:p-6 flex items-center justify-center bg-[var(--bg)]">
+                            <div class="flex flex-col items-center justify-center gap-6 text-center group">
+                                <div class="relative flex items-center justify-center w-24 h-24 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/20 group-hover:border-[var(--accent)]/50 transition-colors duration-500">
+                                    <iconify-icon icon="solar:document-text-linear" width="48" class="text-[var(--accent)] opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"></iconify-icon>
+                                </div>
+                                <div class="space-y-2">
+                                    <h4 class="text-base text-[var(--fg)] font-medium">Technical Report &amp; Action Plan</h4>
+                                    <p class="text-xs text-[var(--muted)] max-w-[200px]">Comprehensive vulnerability breakdown, CVSS scores, and remediation code.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEC: Modules -> Scope of Advisory Services -->
+        <section id="modules" class="relative py-16 px-4 md:px-8 z-10 w-full reveal-block">
+            <div class="section-slab">
+                <div class="section-inner max-w-7xl mx-auto">
+                    
+                    <div class="mb-12 text-center reveal-item">
+                        <div class="text-[10px] text-[var(--muted)] font-medium tracking-widest mb-4 uppercase">SYS.03 / SERVICES</div>
+                        <h2 class="text-3xl font-medium tracking-tight text-[var(--fg)] mb-4">Scope of Advisory Services</h2>
+                        <p class="text-sm text-[var(--muted)] max-w-2xl mx-auto leading-relaxed">
+                            From exploit development to board-level risk briefings — our capabilities span the full threat lifecycle.
+                        </p>
+                    </div>
+
+                    <!-- Mini Pipeline Row -->
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-16 text-[10px] md:text-xs uppercase tracking-widest text-[var(--muted)] font-medium reveal-item">
+                        <span class="text-[var(--fg)]">Research</span>
+                        <iconify-icon icon="solar:arrow-right-linear" class="hidden md:block text-[var(--accent)]" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:arrow-down-linear" class="md:hidden text-[var(--accent)]" width="16"></iconify-icon>
+                        <span class="text-[var(--fg)]">Simulation</span>
+                        <iconify-icon icon="solar:arrow-right-linear" class="hidden md:block text-[var(--accent)]" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:arrow-down-linear" class="md:hidden text-[var(--accent)]" width="16"></iconify-icon>
+                        <span class="text-[var(--fg)]">Exploitation</span>
+                        <iconify-icon icon="solar:arrow-right-linear" class="hidden md:block text-[var(--accent)]" width="16"></iconify-icon>
+                        <iconify-icon icon="solar:arrow-down-linear" class="md:hidden text-[var(--accent)]" width="16"></iconify-icon>
+                        <span class="text-[var(--accent)]">Advisory</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 reveal-item">
+                        
+                        <!-- Card 1 -->
+                        <div class="border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 flex flex-col hover:border-[var(--accent)] transition-colors duration-500 rounded-none group relative overflow-hidden">
+                            <iconify-icon icon="solar:bug-minimalistic-linear" width="24" class="text-[var(--accent)] mb-6"></iconify-icon>
+                            <h3 class="text-base text-[var(--fg)] font-medium mb-2 group-hover:text-white transition-colors">Vulnerability Research</h3>
+                            <p class="text-xs text-[var(--muted)] leading-relaxed flex-1 mb-6">Deep-dive research into target systems, protocols, and software to uncover novel vulnerabilities before adversaries do.</p>
+                            <div class="mt-auto pt-4 border-t border-[var(--border)] text-[10px] uppercase tracking-widest text-[var(--muted)] flex justify-between gap-2">
+                                <span>0-Day</span><span class="opacity-30">•</span><span>CVE</span><span class="opacity-30">•</span><span>Bug Bounty</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 flex flex-col hover:border-[var(--accent)] transition-colors duration-500 rounded-none group relative overflow-hidden">
+                            <iconify-icon icon="solar:shield-warning-linear" width="24" class="text-[var(--accent)] mb-6"></iconify-icon>
+                            <h3 class="text-base text-[var(--fg)] font-medium mb-2 group-hover:text-white transition-colors">Red Team Operations</h3>
+                            <p class="text-xs text-[var(--muted)] leading-relaxed flex-1 mb-6">Full-scope adversarial simulation targeting people, process, and technology to test real-world detection and response.</p>
+                            <div class="mt-auto pt-4 border-t border-[var(--border)] text-[10px] uppercase tracking-widest text-[var(--muted)] flex justify-between gap-2">
+                                <span>APT Sim</span><span class="opacity-30">•</span><span>Social Eng</span><span class="opacity-30">•</span><span>Persistence</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 flex flex-col hover:border-[var(--accent)] transition-colors duration-500 rounded-none group relative overflow-hidden">
+                            <iconify-icon icon="solar:shield-cross-linear" width="24" class="text-[var(--accent)] mb-6"></iconify-icon>
+                            <h3 class="text-base text-[var(--fg)] font-medium mb-2 group-hover:text-white transition-colors">Penetration Testing</h3>
+                            <p class="text-xs text-[var(--muted)] leading-relaxed flex-1 mb-6">Targeted, scoped assessments across web, mobile, network, and cloud environments with actionable remediation.</p>
+                            <div class="mt-auto pt-4 border-t border-[var(--border)] text-[10px] uppercase tracking-widest text-[var(--muted)] flex justify-between gap-2">
+                                <span>Web / Mobile</span><span class="opacity-30">•</span><span>Cloud</span><span class="opacity-30">•</span><span>Network</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 flex flex-col hover:border-[var(--accent)] transition-colors duration-500 rounded-none group relative overflow-hidden">
+                            <iconify-icon icon="solar:radar-linear" width="24" class="text-[var(--accent)] mb-6"></iconify-icon>
+                            <h3 class="text-base text-[var(--fg)] font-medium mb-2 group-hover:text-white transition-colors">Threat Modeling</h3>
+                            <p class="text-xs text-[var(--muted)] leading-relaxed flex-1 mb-6">Systematic identification of threat vectors and attack surfaces before code ships or architecture is finalized.</p>
+                            <div class="mt-auto pt-4 border-t border-[var(--border)] text-[10px] uppercase tracking-widest text-[var(--muted)] flex justify-between gap-2">
+                                <span>STRIDE</span><span class="opacity-30">•</span><span>PASTA</span><span class="opacity-30">•</span><span>Architecture</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 flex flex-col hover:border-[var(--accent)] transition-colors duration-500 rounded-none group relative overflow-hidden">
+                            <iconify-icon icon="solar:siren-linear" width="24" class="text-[var(--accent)] mb-6"></iconify-icon>
+                            <h3 class="text-base text-[var(--fg)] font-medium mb-2 group-hover:text-white transition-colors">Incident Response</h3>
+                            <p class="text-xs text-[var(--muted)] leading-relaxed flex-1 mb-6">Rapid forensic investigation, containment, and remediation advisory when active breaches occur.</p>
+                            <div class="mt-auto pt-4 border-t border-[var(--border)] text-[10px] uppercase tracking-widest text-[var(--muted)] flex justify-between gap-2">
+                                <span>Forensics</span><span class="opacity-30">•</span><span>Containment</span><span class="opacity-30">•</span><span>Recovery</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 6 -->
+                        <div class="border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 flex flex-col hover:border-[var(--accent)] transition-colors duration-500 rounded-none group relative overflow-hidden">
+                            <iconify-icon icon="solar:users-group-two-rounded-linear" width="24" class="text-[var(--accent)] mb-6"></iconify-icon>
+                            <h3 class="text-base text-[var(--fg)] font-medium mb-2 group-hover:text-white transition-colors">Security Advisory</h3>
+                            <p class="text-xs text-[var(--muted)] leading-relaxed flex-1 mb-6">Strategic cyber risk guidance for boards, CISOs, and engineering leaders navigating complex threat landscapes.</p>
+                            <div class="mt-auto pt-4 border-t border-[var(--border)] text-[10px] uppercase tracking-widest text-[var(--muted)] flex justify-between gap-2">
+                                <span>CISO</span><span class="opacity-30">•</span><span>Risk</span><span class="opacity-30">•</span><span>Strategy</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SEC: Pricing -> Engagement Models -->
+        <section id="pricing" class="relative py-16 px-4 md:px-8 z-10 w-full reveal-block">
+            <div class="section-slab">
+                <div class="section-inner max-w-7xl mx-auto">
+                    
+                    <div class="mb-12 text-center reveal-item">
+                        <h2 class="text-3xl font-medium tracking-tight text-[var(--fg)] mb-4">Engagement Models</h2>
+                        <p class="text-sm text-[var(--muted)]">Flexible advisory structures tailored to organizational risk and cadence.</p>
+                    </div>
+
+                    <!-- Credential Strip -->
+                    <div class="mb-10 border-b border-[var(--border)] pb-4 flex justify-between items-center text-[10px] uppercase tracking-widest text-[var(--muted)] font-medium reveal-item">
+                        <span>Commercials</span>
+                        <span>Scope / Cadence Matrix</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal-item relative z-10">
+                        
+                        <!-- Fixed Scope Plan -->
+                        <div class="border border-[var(--border)] bg-[var(--bg)] p-8 flex flex-col hover:border-[var(--muted)] transition-colors duration-500 rounded-none shadow-xl">
+                            <div class="text-[10px] uppercase tracking-widest text-[var(--muted)] font-medium mb-3">Project-Based</div>
+                            <div class="text-2xl font-medium text-[var(--fg)] mb-8">Fixed Scope</div>
+                            
+                            <div class="flex-1">
+                                <ul class="text-xs text-[var(--muted)] space-y-4 font-normal">
+                                    <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Defined scope, timeline, and deliverables</li>
+                                    <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Ideal for targeted pen tests and point-in-time assessments</li>
+                                    <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Comprehensive post-engagement reporting</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Retainer Plan (Wow/Focus) -->
+                        <div class="border border-[var(--accent)]/50 bg-[var(--accent)]/5 p-8 flex flex-col relative rounded-none shadow-[0_0_40px_rgba(255,95,31,0.1)] hover:shadow-[0_0_60px_rgba(255,95,31,0.15)] transition-shadow duration-700 overflow-hidden scale-[1.02] lg:z-10 bg-[var(--bg)]">
+                            <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--accent)] shadow-[0_0_15px_var(--accent)]"></div>
+                            
+                            <div class="text-[10px] uppercase tracking-widest text-[var(--accent)] font-medium mb-3">Monthly</div>
+                            <div class="text-2xl font-medium text-[var(--fg)] mb-8">Retainer</div>
+                            
+                            <div class="flex-1 space-y-6">
+                                <div>
+                                    <ul class="text-xs text-[var(--muted)] space-y-3 font-normal">
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--accent)] mt-0.5" width="16"></iconify-icon>Ongoing advisory and deep research access</li>
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--accent)] mt-0.5" width="16"></iconify-icon>Priority scheduling and active response capacity</li>
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--accent)] mt-0.5" width="16"></iconify-icon>Continuous threat modeling for agile teams</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Plan -->
+                        <div class="border border-[var(--border)] bg-[var(--bg)] p-8 flex flex-col hover:border-[var(--muted)] transition-colors duration-500 rounded-none shadow-xl">
+                            <div class="text-[10px] uppercase tracking-widest text-[var(--muted)] font-medium mb-3">Custom</div>
+                            <div class="text-2xl font-medium text-[var(--fg)] mb-8">Embedded</div>
+                            
+                            <div class="flex-1 space-y-6">
+                                <div>
+                                    <ul class="text-xs text-[var(--muted)] space-y-3 font-normal">
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Researchers directly embedded in your team</li>
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Deep, sustained vulnerability hunting</li>
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Direct integration with engineering life-cycles</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- On-Demand Plan -->
+                        <div class="border border-[var(--border)] bg-[var(--bg)] p-8 flex flex-col hover:border-[var(--muted)] transition-colors duration-500 rounded-none shadow-xl">
+                            <div class="text-[10px] uppercase tracking-widest text-[var(--muted)] font-medium mb-3 flex justify-between items-center">
+                                <span>On-Demand</span>
+                            </div>
+                            <div class="text-2xl font-medium text-[var(--fg)] mb-8">Incident Response</div>
+                            
+                            <div class="flex-1 space-y-6">
+                                <div>
+                                    <ul class="text-xs text-[var(--muted)] space-y-3 font-normal">
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Rapid deployment for active incidents</li>
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Forensic investigation and threat containment</li>
+                                        <li class="flex items-start gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-[var(--border)] mt-0.5" width="16"></iconify-icon>Post-breach remediation and advisory</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEC: Access (Final CTA) & FOOTER -->
+        <section id="access" class="relative py-16 px-4 md:px-8 z-10 w-full reveal-block">
+            <div class="section-slab">
+                <div class="section-inner w-full flex flex-col items-center text-center">
+                    
+                    <div class="text-[10px] text-[var(--accent)] font-medium tracking-widest mb-6 uppercase reveal-item">
+                        System / Ready
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-medium tracking-tight text-[var(--fg)] mb-6 flex flex-col reveal-item">
+                        <span class="overflow-hidden pb-1 block">
+                            <span class="block reveal-text">Ready to discuss your security needs?</span>
+                        </span>
+                    </h2>
+                    <p class="text-sm text-[var(--muted)] mb-12 max-w-lg leading-relaxed font-normal reveal-item">
+                        Cybersecurity demands foresight. Let's build yours. Whether you're assessing risk, responding to an incident, or building a long-term security program — we are ready to engage.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-6 reveal-item">
+                        <button class="group inline-flex items-center justify-center px-8 py-4 text-xs tracking-widest font-medium text-black uppercase bg-[var(--accent)] hover:bg-white hover:text-black transition-all duration-300 rounded-none focus:outline-none">
+                            <span>contact@advisory.io</span>
+                            <iconify-icon icon="solar:arrow-right-linear" class="ml-3 group-hover:translate-x-1 transition-transform" width="16"></iconify-icon>
+                        </button>
+                        <a href="#" class="text-xs text-[var(--muted)] hover:text-[var(--fg)] uppercase tracking-widest transition-colors font-medium border-b border-[var(--border)] pb-1 hover:border-[var(--fg)]">
+                            Schedule a Call
+                        </a>
+                    </div>
+
+                    <footer class="mt-32 pt-8 w-full border-t border-[var(--border)] flex flex-col md:flex-row justify-between items-center text-[10px] text-[var(--muted)] uppercase tracking-widest font-medium gap-4 reveal-item">
+                        <span>Advisory Index: 01</span>
+                        <span class="hidden md:inline text-[var(--border)]">•</span>
+                        <span>Offensive Security Operations</span>
+                    </footer>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Application Logic -->
+    <script type="module">
+        import * as THREE from 'https://esm.sh/three@0.160.0';
+
+        /*
+         * ==========================================
+         * 1. THEME / CONSTANTS CONFIGURATION
+         * ==========================================
+         */
+        const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const CONFIG = {
+            scrollDistance: "+=3800",
+            scrubSmoothing: 1,        
+            particleCount: 12000,     
+            particleSize: 1.5,
+            spread: 2500,             
+            orbRadius: 280,           
+            cameraZStart: 600,
+            cameraZEnd: 150,
+            idleRotationSpeed: isReducedMotion ? 0.0001 : 0.0008,
+            scrollRotationFactor: isReducedMotion ? 0 : 0.5
+        };
+
+        const state = {
+            scrollProgress: 0,
+            targetProgress: 0
+        };
+
+        // Custom Brand Color Set - Update these hex codes to match your logo variations
+        const THEMES = [
+            { id: '#pinned-stage', bg: '#030303', accent: '#FF5F1F', border: '#1e1e1e', panel: 'rgba(20, 20, 20, 0.4)' },
+            { id: '#manifesto',    bg: '#050508', accent: '#E6551C', border: '#1a1c23', panel: 'rgba(15, 20, 30, 0.4)' },
+            { id: '#overview',     bg: '#02040a', accent: '#FF5F1F', border: '#161b22', panel: 'rgba(10, 15, 25, 0.4)' },
+            { id: '#interface',    bg: '#000000', accent: '#CC4C18', border: '#171717', panel: 'rgba(15, 15, 15, 0.4)' },
+            { id: '#modules',      bg: '#05030a', accent: '#FF5F1F', border: '#201633', panel: 'rgba(20, 15, 35, 0.4)' },
+            { id: '#pricing',      bg: '#020202', accent: '#FF5F1F', border: '#111111', panel: 'rgba(10, 10, 10, 0.4)' },
+            { id: '#access',       bg: '#000000', accent: '#FF5F1F', border: '#1a1a1a', panel: 'rgba(15, 15, 15, 0.4)' }
+        ];
+
+        /*
+         * ==========================================
+         * 2. WEBGL SUBSYSTEM (Three.js)
+         * ==========================================
+         */
+        let scene, camera, renderer, particles;
+        const webglState = {
+            fieldPositions: null,
+            orbPositions: null
+        };
+
+        const themeProxy = {
+            bg: new THREE.Color(THEMES[0].bg),
+            accent: new THREE.Color(THEMES[0].accent)
+        };
+
+        function initWebGL() {
+            const container = document.getElementById('webgl-container');
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(themeProxy.bg.getHex(), 0.0015);
+            scene.background = themeProxy.bg;
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 3000);
+            camera.position.z = CONFIG.cameraZStart;
+
+            renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            initParticles();
+            window.addEventListener('resize', resizeWebGL);
+            renderWebGL();
+        }
+
+        function initParticles() {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = new Float32Array(CONFIG.particleCount * 3);
+            
+            webglState.fieldPositions = new Float32Array(CONFIG.particleCount * 3);
+            webglState.orbPositions = new Float32Array(CONFIG.particleCount * 3);
+
+            for (let i = 0; i < CONFIG.particleCount; i++) {
+                webglState.fieldPositions[i*3] = (Math.random() - 0.5) * CONFIG.spread;
+                webglState.fieldPositions[i*3+1] = (Math.random() - 0.5) * CONFIG.spread;
+                webglState.fieldPositions[i*3+2] = (Math.random() - 0.5) * CONFIG.spread;
+
+                const u = Math.random();
+                const v = Math.random();
+                const theta = 2 * Math.PI * u;
+                const phi = Math.acos(2 * v - 1);
+                const r = CONFIG.orbRadius * Math.cbrt(Math.random()); 
+                
+                webglState.orbPositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+                webglState.orbPositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+                webglState.orbPositions[i*3+2] = r * Math.cos(phi);
+
+                vertices[i*3] = webglState.orbPositions[i*3];
+                vertices[i*3+1] = webglState.orbPositions[i*3+1];
+                vertices[i*3+2] = webglState.orbPositions[i*3+2];
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: themeProxy.accent,
+                size: CONFIG.particleSize,
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+        }
+
+        function resizeWebGL() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function renderWebGL() {
+            requestAnimationFrame(renderWebGL);
+
+            state.scrollProgress += (state.targetProgress - state.scrollProgress) * 0.05;
+
+            const p = state.scrollProgress;
+            const t = Math.max(0, Math.min(1, (p - 0.15) / (0.75 - 0.15)));
+            const smooth = t * t * (3 - 2 * t);
+            
+            let orbMix = 0.8 * (1 - smooth);
+            orbMix = Math.max(orbMix, 0.12); 
+
+            const positions = particles.geometry.attributes.position.array;
+            const field = webglState.fieldPositions;
+            const orb = webglState.orbPositions;
+
+            for (let i = 0; i < positions.length; i++) {
+                positions[i] = field[i] + (orb[i] - field[i]) * orbMix;
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            if (!isReducedMotion) {
+                camera.position.z = CONFIG.cameraZStart - ((CONFIG.cameraZStart - CONFIG.cameraZEnd) * state.scrollProgress);
+                scene.fog.density = 0.0015 + (state.scrollProgress * 0.0005);
+                
+                const dynamicRotation = CONFIG.idleRotationSpeed + (p * 0.001);
+                particles.rotation.y += dynamicRotation;
+                particles.rotation.x = state.scrollProgress * CONFIG.scrollRotationFactor;
+            } else {
+                particles.rotation.y += CONFIG.idleRotationSpeed;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        /*
+         * ==========================================
+         * 3. SCROLL, NAVIGATION & THEME CONTROLLER
+         * ==========================================
+         */
+        let lenis;
+
+        function initScroll() {
+            lenis = new Lenis({
+                duration: 2.1,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: !isReducedMotion,
+                smoothTouch: false,
+                touchMultiplier: 1.05,
+                wheelMultiplier: 0.75
+            });
+
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+            gsap.ticker.lagSmoothing(0);
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    lenis.scrollTo(this.getAttribute('href'), { offset: 0, duration: 1.8 });
+                });
+            });
+        }
+
+        function applyTheme(theme) {
+            gsap.to(document.documentElement, {
+                '--bg': theme.bg,
+                '--accent': theme.accent,
+                '--border': theme.border,
+                '--panel': theme.panel,
+                duration: 1.2,
+                ease: "power2.out"
+            });
+
+            const targetBg = new THREE.Color(theme.bg);
+            const targetAccent = new THREE.Color(theme.accent);
+
+            gsap.to(themeProxy.bg, {
+                r: targetBg.r, g: targetBg.g, b: targetBg.b,
+                duration: 1.2,
+                onUpdate: () => {
+                    scene.background.copy(themeProxy.bg);
+                    scene.fog.color.copy(themeProxy.bg);
+                }
+            });
+
+            gsap.to(themeProxy.accent, {
+                r: targetAccent.r, g: targetAccent.g, b: targetAccent.b,
+                duration: 1.2,
+                onUpdate: () => {
+                    particles.material.color.copy(themeProxy.accent);
+                }
+            });
+        }
+
+        function initThemesAndNav() {
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            THEMES.forEach((theme, index) => {
+                ScrollTrigger.create({
+                    trigger: theme.id,
+                    start: "top 50%",
+                    end: "bottom 50%",
+                    onEnter: () => applyTheme(theme),
+                    onEnterBack: () => applyTheme(theme),
+                });
+
+                if(index > 0) {
+                    ScrollTrigger.create({
+                        trigger: theme.id,
+                        start: "top center",
+                        end: "bottom center",
+                        onToggle: (self) => {
+                            if (self.isActive && navLinks[index - 1]) {
+                                navLinks.forEach(l => l.classList.remove('is-active'));
+                                navLinks[index - 1].classList.add('is-active');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function initHeroLoad() {
+            gsap.to('#phase-1-content .line-content', { yPercent: 0, duration: 1.1, stagger: 0.15, ease: 'power3.out', delay: 0.2 });
+            gsap.to('#ui-top, #ui-bottom', { opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: 0.5 });
+            gsap.to('#hero-descriptor, #hero-ctas', { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: 'power2.out', delay: 0.8 });
+        }
+
+        function initScrollTimeline() {
+            gsap.set('.feature-card', { opacity: 0 });
+
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#pinned-stage",
+                    start: "top top",
+                    end: CONFIG.scrollDistance,
+                    pin: true,
+                    scrub: isReducedMotion ? true : CONFIG.scrubSmoothing,
+                    onUpdate: (self) => {
+                        state.targetProgress = self.progress;
+                        gsap.set('#scroll-progress', { scaleY: self.progress });
+                    }
+                }
+            });
+
+            // PHASE 2: Forward Push (Initiates fading out Phase 1 gracefully on scroll)
+            tl.to('#phase-1-content', { opacity: 0, y: -40, filter: 'blur(8px)', duration: 1, ease: 'power2.inOut', pointerEvents: 'none' }, 0.1)
+              .to('#phase-2-content', { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power2.out', pointerEvents: 'auto' }, 0.5)
+              .to('#phase-2-scanline', { opacity: 0.35, duration: 0.2, ease: 'power1.inOut' }, 0.6)
+              .to('#phase-2-scanline', { top: '110%', duration: 1.2, ease: 'linear' }, 0.6)
+              .to('#phase-2-scanline', { opacity: 0, duration: 0.2, ease: 'power1.inOut' }, 1.6);
+
+            // PHASE 3: Content Emergence
+            tl.to('#phase-2-content', { opacity: 0, y: -40, filter: 'blur(8px)', duration: 1, ease: 'power2.inOut', pointerEvents: 'none' }, 1.7)
+              .to('#phase-3-content', { opacity: 1, duration: 0.8, ease: 'power2.out', pointerEvents: 'auto' }, 1.8)
+              .to('#phase-3-intro', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1.9)
+              .fromTo('.feature-card', 
+                  { opacity: 0, y: 30, scale: 0.94, filter: 'blur(12px)', rotateX: 6 },
+                  { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotateX: 0, stagger: 0.18, duration: 1.2, ease: 'power3.out' }, 
+                  2.1
+              );
+
+            // Hold Cards
+            tl.to('.feature-card', { y: -15, duration: 1.8, ease: 'none' }, 3.3);
+            
+            // Extra Hold
+            tl.to({}, { duration: 0.4 }, 5.1);
+
+            // PHASE 4: Bridge Moment
+            tl.to('#phase-3-content', { opacity: 0, y: -40, filter: 'blur(8px)', duration: 1, ease: 'power2.inOut', pointerEvents: 'none' }, 5.5)
+              .to('#bridge-content', { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out', pointerEvents: 'auto' }, 5.8)
+              .to('.bridge-stagger', { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: 'power3.out' }, 5.9);
+
+            // PHASE 5: Exit
+            tl.to('#bridge-content, #ui-top, #ui-bottom', {
+                opacity: 0,
+                y: -20,
+                filter: 'blur(4px)',
+                duration: 1,
+                ease: 'power2.inOut'
+            }, 7.6);
+        }
+
+        function initTypographyReveals() {
+            document.querySelectorAll('.reveal-text').forEach(text => {
+                gsap.fromTo(text,
+                    { yPercent: 120, opacity: 0 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.9,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: text.closest('.reveal-block'),
+                            start: 'top 85%'
+                        }
+                    }
+                );
+            });
+
+            document.querySelectorAll('.reveal-block').forEach(block => {
+                gsap.fromTo(block.querySelectorAll('.reveal-item'),
+                    { y: 30, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.9,
+                        stagger: 0.15,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: block,
+                            start: 'top 80%'
+                        }
+                    }
+                );
+            });
+        }
+
+        /*
+         * ==========================================
+         * 4. BOOTSTRAP
+         * ==========================================
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            initWebGL();
+            initScroll();
+            initThemesAndNav();
+            initHeroLoad();
+            initScrollTimeline();
+            initTypographyReveals();
+        });
+    </script>
+
+</body></html>

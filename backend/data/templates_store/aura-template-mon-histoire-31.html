@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="fr"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sacha D'Houwer — Régulation du système nerveux du cheval | Stress &amp; anxiété équine</title>
+<meta name="description" content="Le stress de ton cheval est un signal, pas un défaut. J'aide les cavalières à réguler le système nerveux de leur cheval — et le leur. Une approche rare en francophonie.">
+<meta name="keywords" content="stress cheval, anxiété équine, système nerveux cheval, régulation cheval cavalier">
+<meta name="author" content="Sacha D'Houwer">
+<link rel="canonical" href="https://sachadhouwer.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Le stress de ton cheval, c'est un signal. Apprends à le lire.">
+<meta property="og:description" content="Régulation du système nerveux du cheval et du cavalier. Une approche rare en francophonie.">
+<meta property="og:url" content="https://sachadhouwer.com/">
+<meta property="og:image" content="https://sachadhouwer.com/images/og-cover.jpg">
+<meta property="og:locale" content="fr_BE">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Sacha D'Houwer","url":"https://sachadhouwer.com","jobTitle":"Spécialiste en régulation du système nerveux équin","knowsAbout":["stress du cheval","anxiété équine","système nerveux du cheval"],"sameAs":["https://www.instagram.com/equimed.be"]}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+--bone: #FAF6EF;
+--bone-deep: #F2EBDF;
+--ink: #2B3A2C;
+--ink-soft: #4A5A48;
+--sage: #8DA081;
+--sage-pale: #C5CFBC;
+--clay: #C06B45;
+--clay-deep: #A8552F;
+--ochre: #CC9A5B;
+--line: #DED4C4;
+--shadow: 18px 24px 60px -28px rgba(43, 58, 44, .35);
+--maxw: 1120px
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box
+}
+html {
+scroll-behavior: smooth;
+-webkit-text-size-adjust: 100%
+}
+body {
+font-family: "Hanken Grotesk", system-ui, sans-serif;
+background: var(--bone);
+color: var(--ink);
+font-size: 18px;
+line-height: 1.7;
+font-weight: 400;
+overflow-x: hidden
+}
+h1,
+h2,
+h3,
+.display {
+font-family: "Fraunces", Georgia, serif;
+font-weight: 500;
+line-height: 1.12;
+letter-spacing: -.01em
+}
+img {
+max-width: 100%;
+display: block
+}
+a {
+color: inherit
+}
+.wrap {
+max-width: var(--maxw);
+margin: 0 auto;
+padding: 0 26px
+}
+.eyebrow {
+font-size: .78rem;
+letter-spacing: .18em;
+text-transform: uppercase;
+font-weight: 600;
+color: var(--clay);
+margin-bottom: 1.1rem
+}
+.lead {
+font-size: 1.18rem;
+color: var(--ink-soft)
+}
+section {
+padding: 92px 0;
+position: relative
+}
+.btn {
+display: inline-flex;
+align-items: center;
+gap: .6em;
+background: var(--clay);
+color: var(--bone);
+font-family: "Hanken Grotesk", sans-serif;
+font-weight: 600;
+font-size: 1.02rem;
+padding: 18px 32px;
+border-radius: 40px;
+border: none;
+cursor: pointer;
+text-decoration: none;
+transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+box-shadow: 0 12px 24px -12px rgba(168, 85, 47, .6)
+}
+.btn:hover {
+background: var(--clay-deep);
+transform: translateY(-2px);
+box-shadow: 0 18px 30px -12px rgba(168, 85, 47, .65)
+}
+.btn .arrow {
+transition: transform .25s ease
+}
+.btn:hover .arrow {
+transform: translateX(4px)
+}
+.btn-ghost {
+background: transparent;
+color: var(--ink);
+border: 1.5px solid var(--line);
+box-shadow: none
+}
+.btn-ghost:hover {
+background: transparent;
+border-color: var(--sage);
+color: var(--ink);
+box-shadow: none
+}
+.micro {
+font-size: .92rem;
+color: var(--ink-soft);
+margin-top: .9rem
+}
+.photo {
+position: relative;
+border-radius: 22px;
+overflow: hidden;
+background: linear-gradient(135deg, #B9C4AC, #8DA081 55%, #6E8064);
+box-shadow: var(--shadow);
+display: flex;
+align-items: center;
+justify-content: center;
+min-height: 420px
+}
+.photo img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+position: absolute;
+inset: 0
+}
+.photo .ph-label {
+position: relative;
+z-index: 1;
+color: rgba(255, 255, 255, .92);
+font-size: .85rem;
+letter-spacing: .06em;
+text-align: center;
+padding: 1rem 1.4rem;
+border: 1px dashed rgba(255, 255, 255, .55);
+border-radius: 12px;
+backdrop-filter: blur(2px)
+}
+.reveal {
+opacity: 0;
+transform: translateY(26px);
+transition: opacity .8s ease, transform .8s ease
+}
+.reveal.in {
+opacity: 1;
+transform: none
+}
+header.nav {
+position: sticky;
+top: 0;
+z-index: 50;
+background: rgba(250, 246, 239, .86);
+backdrop-filter: blur(10px);
+border-bottom: 1px solid var(--line)
+}
+.nav-in {
+display: flex;
+align-items: center;
+justify-content: space-between;
+height: 68px
+}
+.brand {
+font-family: "Fraunces", serif;
+font-size: 1.32rem;
+font-weight: 600;
+letter-spacing: -.01em;
+text-decoration: none
+}
+.brand span {
+color: var(--clay)
+}
+.nav-links {
+display: flex;
+gap: 30px;
+align-items: center
+}
+.nav-links a {
+text-decoration: none;
+font-size: .96rem;
+font-weight: 500;
+color: var(--ink-soft);
+transition: color .2s
+}
+.nav-links a:hover,
+.nav-links a.active {
+color: var(--clay)
+}
+.nav-cta {
+background: var(--ink);
+color: var(--bone) !important;
+padding: 10px 20px;
+border-radius: 30px;
+font-weight: 600 !important
+}
+.nav-cta:hover {
+background: var(--clay) !important
+}
+.burger {
+display: none;
+background: none;
+border: none;
+cursor: pointer;
+font-size: 1.6rem;
+color: var(--ink)
+}
+.hero {
+padding: 70px 0 90px;
+position: relative
+}
+.hero::before {
+content: "";
+position: absolute;
+top: -120px;
+right: -160px;
+width: 520px;
+height: 520px;
+background: radial-gradient(circle, rgba(141, 160, 129, .40), transparent 65%);
+border-radius: 50%;
+z-index: 0;
+animation: breathe 9s ease-in-out infinite
+}
+@keyframes breathe {
+0%,
+100% {
+transform: scale(.92);
+opacity: .7
+}
+50% {
+transform: scale(1.08);
+opacity: 1
+}
+}
+.hero-grid {
+display: grid;
+grid-template-columns: 1.05fr .95fr;
+gap: 60px;
+align-items: center;
+position: relative;
+z-index: 1
+}
+.hero h1 {
+font-size: clamp(2.4rem, 5.2vw, 4rem);
+margin-bottom: 1.4rem
+}
+.hero h1 em {
+font-style: italic;
+color: var(--clay)
+}
+.hero .lead {
+margin-bottom: 2rem;
+max-width: 30em
+}
+.hero-cta-row {
+display: flex;
+flex-wrap: wrap;
+gap: 14px;
+align-items: center
+}
+.hero .photo {
+min-height: 520px
+}
+.page-hero {
+padding: 64px 0 56px;
+text-align: center;
+position: relative;
+overflow: hidden
+}
+.page-hero::before {
+content: "";
+position: absolute;
+top: -160px;
+left: 50%;
+transform: translateX(-50%);
+width: 560px;
+height: 560px;
+background: radial-gradient(circle, rgba(141, 160, 129, .30), transparent 65%);
+border-radius: 50%;
+animation: breathe 9s ease-in-out infinite;
+z-index: 0
+}
+.page-hero .wrap {
+position: relative;
+z-index: 1;
+max-width: 760px
+}
+.page-hero h1 {
+font-size: clamp(2.2rem, 5vw, 3.4rem);
+margin-bottom: 1.3rem
+}
+.page-hero h1 em {
+font-style: italic;
+color: var(--clay)
+}
+.page-hero .lead {
+margin: 0 auto 2rem;
+max-width: 34em
+}
+.split {
+display: grid;
+grid-template-columns: .9fr 1.1fr;
+gap: 60px;
+align-items: center
+}
+.split.rev {
+grid-template-columns: 1.1fr .9fr
+}
+.split .photo {
+min-height: 540px
+}
+.bloc h2 {
+font-size: clamp(2rem, 4vw, 2.9rem);
+margin-bottom: 1.6rem
+}
+.bloc p {
+margin-bottom: 1.05rem;
+color: var(--ink-soft)
+}
+.bloc p strong {
+color: var(--ink);
+font-weight: 600
+}
+.handw {
+display: inline-block;
+margin-top: .6rem;
+font-family: "Fraunces", serif;
+font-style: italic;
+font-size: 1.15rem;
+color: var(--ink)
+}
+.alt {
+background: var(--bone-deep)
+}
+.cols2 {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 48px;
+margin-top: .5rem
+}
+.cols2 p {
+margin-bottom: 1.05rem;
+color: var(--ink-soft)
+}
+.cols2 p strong {
+color: var(--ink);
+font-weight: 600
+}
+.obj {
+font-family: "Fraunces", serif;
+font-style: italic;
+color: var(--ink);
+font-size: 1.08rem
+}
+.signature {
+margin: 70px auto 0;
+max-width: 860px;
+text-align: center;
+position: relative;
+padding: 0 10px
+}
+.elastic {
+width: 100%;
+height: 40px;
+margin: 0 auto 26px;
+display: block
+}
+.elastic line {
+stroke: var(--sage);
+stroke-width: 2.5;
+stroke-linecap: round;
+animation: stretch 7s ease-in-out infinite alternate;
+transform-origin: center
+}
+.elastic circle {
+fill: var(--clay)
+}
+@keyframes stretch {
+0% {
+transform: scaleX(.55)
+}
+100% {
+transform: scaleX(1)
+}
+}
+.signature blockquote {
+font-family: "Fraunces", serif;
+font-size: clamp(1.4rem, 3vw, 2rem);
+line-height: 1.32;
+font-weight: 500;
+color: var(--ink)
+}
+.signature blockquote em {
+color: var(--clay);
+font-style: italic
+}
+.signature cite {
+display: block;
+margin-top: 1.4rem;
+font-style: normal;
+font-size: .95rem;
+color: var(--ink-soft);
+letter-spacing: .04em
+}
+.doors {
+display: grid;
+grid-template-columns: 1.15fr .85fr;
+gap: 26px;
+margin-top: 14px
+}
+.door {
+border-radius: 22px;
+padding: 46px 40px;
+display: flex;
+flex-direction: column;
+min-height: 340px;
+text-decoration: none;
+transition: transform .3s ease, box-shadow .3s ease;
+border: 1px solid var(--line)
+}
+.door:hover {
+transform: translateY(-5px);
+box-shadow: var(--shadow)
+}
+.door .k {
+font-size: .78rem;
+letter-spacing: .16em;
+text-transform: uppercase;
+font-weight: 600;
+margin-bottom: 1rem
+}
+.door h3 {
+font-size: 1.9rem;
+margin-bottom: 1rem
+}
+.door p {
+flex-grow: 1;
+margin-bottom: 1.4rem
+}
+.door .go {
+font-weight: 600;
+display: inline-flex;
+gap: .4em;
+align-items: center
+}
+.door-h {
+background: var(--ink);
+color: var(--bone)
+}
+.door-h .k {
+color: var(--sage-pale)
+}
+.door-h p {
+color: rgba(250, 246, 239, .82)
+}
+.door-h .go {
+color: var(--clay)
+}
+.door-b {
+background: var(--bone)
+}
+.door-b .k {
+color: var(--clay)
+}
+.door-b p {
+color: var(--ink-soft)
+}
+.door-b .go {
+color: var(--clay)
+}
+.cards {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 26px;
+align-items: stretch
+}
+.cards.two {
+grid-template-columns: repeat(2, 1fr);
+max-width: 760px;
+margin: 0 auto
+}
+.card {
+background: var(--bone);
+border: 1px solid var(--line);
+border-radius: 22px;
+padding: 38px 32px;
+display: flex;
+flex-direction: column;
+transition: transform .3s ease, box-shadow .3s ease
+}
+.card:hover {
+transform: translateY(-5px);
+box-shadow: var(--shadow)
+}
+.card.feature {
+background: var(--ink);
+color: var(--bone);
+border-color: var(--ink)
+}
+.card.feature .card-num,
+.card.feature h3 {
+color: var(--bone)
+}
+.card.feature p {
+color: rgba(250, 246, 239, .8)
+}
+.card-num {
+font-family: "Fraunces", serif;
+font-size: 1rem;
+color: var(--clay);
+margin-bottom: 1rem
+}
+.card .badge {
+display: inline-block;
+align-self: flex-start;
+font-size: .72rem;
+letter-spacing: .1em;
+text-transform: uppercase;
+font-weight: 600;
+color: var(--clay);
+background: rgba(192, 107, 69, .12);
+padding: 5px 12px;
+border-radius: 20px;
+margin-bottom: 1rem
+}
+.card h3 {
+font-size: 1.45rem;
+margin-bottom: .9rem
+}
+.card p {
+color: var(--ink-soft);
+margin-bottom: 1.4rem;
+flex-grow: 1
+}
+.card .btn {
+align-self: flex-start;
+font-size: .95rem;
+padding: 14px 26px
+}
+.card.feature .btn {
+background: var(--clay)
+}
+.card.feature .btn:hover {
+background: var(--clay-deep)
+}
+.card .soon {
+align-self: flex-start;
+font-weight: 600;
+color: var(--ink-soft);
+font-size: .95rem
+}
+.section-head {
+text-align: center;
+max-width: 32em;
+margin: 0 auto 56px
+}
+.section-head h2 {
+font-size: clamp(2rem, 4vw, 2.9rem);
+margin-bottom: 1rem
+}
+.note {
+max-width: 680px;
+margin: 40px auto 0;
+text-align: center;
+font-size: .98rem;
+color: var(--ink-soft);
+font-style: italic
+}
+.bonus {
+max-width: 860px;
+margin: 52px auto 0;
+background: var(--bone);
+border: 1px solid var(--line);
+border-left: 4px solid var(--clay);
+border-radius: 18px;
+padding: 36px 38px
+}
+.bonus .b-tag {
+font-size: .72rem;
+letter-spacing: .14em;
+text-transform: uppercase;
+font-weight: 600;
+color: var(--clay);
+display: block;
+margin-bottom: .9rem
+}
+.bonus h3 {
+font-size: 1.5rem;
+margin-bottom: .8rem
+}
+.bonus p {
+color: var(--ink-soft);
+margin-bottom: 1.4rem
+}
+.forwho-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 30px;
+margin-top: 48px
+}
+.forwho-box {
+background: var(--bone-deep);
+border-radius: 22px;
+padding: 40px 36px;
+border: 1px solid var(--line)
+}
+.forwho-box.no {
+background: transparent
+}
+.forwho-box h3 {
+font-size: 1.3rem;
+margin-bottom: 1.4rem
+}
+.forwho-box ul {
+list-style: none
+}
+.forwho-box li {
+padding: 11px 0 11px 32px;
+position: relative;
+color: var(--ink-soft);
+border-bottom: 1px solid var(--line)
+}
+.forwho-box li:last-child {
+border-bottom: none
+}
+.forwho-box.yes li::before {
+content: "›";
+position: absolute;
+left: 6px;
+top: 9px;
+color: var(--sage);
+font-size: 1.3rem;
+font-family: "Fraunces", serif
+}
+.forwho-box.no li::before {
+content: "×";
+position: absolute;
+left: 8px;
+top: 11px;
+color: var(--clay);
+font-weight: 600
+}
+.aside {
+text-align: center;
+margin-top: 30px;
+font-family: "Fraunces", serif;
+font-style: italic;
+color: var(--ink-soft)
+}
+.center-title {
+font-size: clamp(2rem, 4vw, 2.9rem);
+text-align: center;
+max-width: 18em;
+margin: 0 auto
+}
+.final {
+background: var(--ink);
+color: var(--bone);
+text-align: center;
+overflow: hidden;
+position: relative
+}
+.final::before {
+content: "";
+position: absolute;
+bottom: -180px;
+left: 50%;
+transform: translateX(-50%);
+width: 600px;
+height: 600px;
+background: radial-gradient(circle, rgba(141, 160, 129, .28), transparent 65%);
+border-radius: 50%;
+animation: breathe 9s ease-in-out infinite
+}
+.final .wrap {
+position: relative;
+z-index: 1;
+max-width: 720px
+}
+.final h2 {
+font-size: clamp(2.1rem, 4.5vw, 3.2rem);
+margin-bottom: 1.4rem
+}
+.final p {
+color: rgba(250, 246, 239, .82);
+font-size: 1.15rem;
+margin-bottom: 2.2rem;
+max-width: 30em;
+margin-left: auto;
+margin-right: auto
+}
+.final .btn {
+background: var(--clay);
+font-size: 1.08rem;
+padding: 20px 38px
+}
+.final .btn:hover {
+background: var(--clay-deep)
+}
+.final .micro {
+color: rgba(250, 246, 239, .6)
+}
+footer {
+background: var(--bone);
+padding: 54px 0 40px;
+border-top: 1px solid var(--line)
+}
+.foot-in {
+display: flex;
+flex-wrap: wrap;
+gap: 24px;
+justify-content: space-between;
+align-items: center
+}
+.foot-brand {
+font-family: "Fraunces", serif;
+font-size: 1.3rem;
+font-weight: 600
+}
+.foot-brand span {
+color: var(--clay)
+}
+.foot-links {
+display: flex;
+gap: 24px;
+flex-wrap: wrap
+}
+.foot-links a {
+text-decoration: none;
+color: var(--ink-soft);
+font-size: .95rem;
+transition: color .2s
+}
+.foot-links a:hover {
+color: var(--clay)
+}
+.foot-legal {
+width: 100%;
+margin-top: 26px;
+padding-top: 22px;
+border-top: 1px solid var(--line);
+font-size: .85rem;
+color: var(--ink-soft)
+}
+@media (max-width: 900px) {
+.nav-links {
+position: absolute;
+top: 68px;
+left: 0;
+right: 0;
+background: var(--bone);
+flex-direction: column;
+gap: 0;
+padding: 8px 26px 22px;
+border-bottom: 1px solid var(--line);
+display: none
+}
+.nav-links.open {
+display: flex
+}
+.nav-links a {
+padding: 14px 0;
+width: 100%;
+border-bottom: 1px solid var(--line)
+}
+.nav-cta {
+text-align: center;
+margin-top: 10px
+}
+.burger {
+display: block
+}
+.hero-grid,
+.split,
+.split.rev,
+.doors {
+grid-template-columns: 1fr;
+gap: 38px
+}
+.split .photo,
+.split.rev .photo {
+order: -1
+}
+.cols2 {
+grid-template-columns: 1fr;
+gap: 6px
+}
+.cards,
+.cards.two,
+.forwho-grid {
+grid-template-columns: 1fr
+}
+section {
+padding: 64px 0
+}
+.hero .photo {
+min-height: 420px
+}
+body {
+font-size: 17px
+}
+}
+@media (max-width: 520px) {
+.wrap {
+padding: 0 20px
+}
+.btn {
+padding: 16px 26px;
+font-size: .98rem
+}
+.hero-cta-row {
+flex-direction: column;
+align-items: stretch
+}
+.hero-cta-row .btn {
+justify-content: center
+}
+.door {
+padding: 36px 28px
+}
+.bonus {
+padding: 30px 26px
+}
+}
+</style>
+<script src="https://cdn.tailwindcss.com"></script><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+
+<body class="">
+
+  <!-- ⚙️ À PERSONNALISER : LIEN_SKOOL (communauté gratuite) · LIEN_APPEL (RDV) · images/ -->
+
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a href="index.html" class="brand">
+        Sacha
+        <span class="">D'Houwer</span>
+      </a>
+      <nav class="nav-links" id="navlinks">
+        <a href="/home" class="active">Accueil</a>
+        <a href="/chevaux" class="">Les chevaux</a>
+        <a href="/business" class="">Entreprendre</a>
+        <a href="/mon-histoire" class="">Mon histoire</a>
+        <a href="https://www.skool.com/le-cercle-des-chevaux-apaises-6626" class="nav-cta">Communauté gratuite</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO — Intention : CAPTER (message 100% cheval, CTA unique = gratuit) -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="reveal">
+        <p class="eyebrow">Système nerveux · chevaux &amp; cavalières</p>
+        <h1 class="">
+          Le stress de ton cheval, ce n'est pas un défaut.
+          <em class="">C'est un signal.</em>
+        </h1>
+        <p class="lead">J'aide les cavalières à lire ce signal. Chez leur cheval. Et chez elles. Parce que les deux systèmes nerveux se parlent, tout le temps.</p>
+        <div class="hero-cta-row">
+          <a href="https://www.skool.com/le-cercle-des-chevaux-apaises-6626" class="btn">
+            Rejoindre la communauté gratuite
+            <span class="arrow">→</span>
+          </a>
+        </div>
+        <p class="micro">Gratuit. Un mini-programme offert pour commencer dès aujourd'hui.</p>
+      </div>
+      <div class="reveal photo bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9ebff4c5-b41f-4a2e-80b4-e099e48f1da7_1600w.png)] bg-cover bg-center">
+        <!-- 📷 images/hero.jpg — toi avec ton cheval, plan large, lumineux -->
+        <!-- <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Sacha D'Houwer avec son cheval"> -->
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE — Intention : ANCRER LA MARQUE (élastique qui respire) -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="signature reveal">
+        <svg class="elastic" viewBox="0 0 600 40" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <line x1="40" y1="20" x2="560" y2="20"></line>
+          <circle cx="40" cy="20" r="6"></circle>
+          <circle cx="560" cy="20" r="6"></circle>
+        </svg>
+        <blockquote class="">
+          L'objectif n'est pas d'être moins stressé —
+          
+          L'objectif, c'est que ton système nerveux apprenne à se tendre et se détendre comme un élastique, sans
+          difficulté.
+        </blockquote>
+        <cite class="">Sacha D'Houwer</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- LES DEUX PORTES — Intention : ORIENTER (cheval dominant, business discret) -->
+  <section class="">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Par où entrer</p>
+        <h2 class="">Je transmets deux choses. Elles se ressemblent plus qu'on ne croit.</h2>
+      </div>
+      <div class="doors">
+        <a href="chevaux.html" class="door door-h reveal">
+          <span class="k">Le point de départ</span>
+          <h3>Les chevaux</h3>
+          <p class="">Apprendre à réguler le système nerveux de ton cheval, et le tien. Comprendre son stress au lieu de le subir. C'est par là que presque tout le monde commence.</p>
+          <span class="go cursor-pointer" onclick="window.location.href='/chevaux'" role="button">Découvrir l'approche cheval →</span>
+        </a>
+        <a href="entreprendre.html" class="door door-b reveal">
+          <span class="k">L'autre chemin</span>
+          <h3 class="">Entreprendre autrement</h3>
+          <p class="">Pour celles qui veulent construire un revenu qui rend libre. Et se révéler en chemin.</p>
+          <span class="go" onclick="window.location.href='/business'" role="button">Voir cette voie →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEASER HISTOIRE — Intention : CONFIANCE -->
+  <section class="alt">
+    <div class="wrap split rev">
+      <div class="bloc reveal">
+        <p class="eyebrow">Qui je suis</p>
+        <h2 class="">Enseignante de métier. Cavalière de toujours.</h2>
+        <p class="">Philosophie le jour, chevaux le reste du temps. J'ai cherché longtemps - nutrition, énergétique, communication animale - avant de comprendre que <strong class="">le stress était la cause, pas le symptôme.</strong></p>
+        <p class="">Alors je suis allée chercher au Canada la formation qui n'existait pas chez nous. Aujourd'hui, c'est mon expertise.</p>
+        <span class="handw">On m'appelle un peu la Mary Poppins des chevaux. Je le prends bien.</span>
+        <div style="margin-top:1.8rem" class="">
+          <a href="/mon-histoire" class="btn btn-ghost">
+            Lire mon histoire
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div class="reveal photo bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/78d449dc-7aa9-45a2-8bee-27379090595d_1600w.jpg)] bg-cover bg-center">
+        <!-- 📷 images/portrait.jpg — portrait chaleureux -->
+        <!-- <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" alt="Portrait de Sacha D'Houwer"> -->
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL — Intention : CONVERTIR -->
+  <section class="final">
+    <div class="wrap reveal">
+      <h2 class="">On commence par le plus simple ?</h2>
+      <p class="">La communauté gratuite. Tu y entres, tu testes, tu repars avec un premier outil pour ton cheval. Pas de pression : juste un début.</p>
+      <a href="https://www.skool.com/le-cercle-des-chevaux-apaises-6626" class="btn">
+        Rejoindre la communauté gratuite
+        <span class="arrow">→</span>
+      </a>
+      <p class="micro">Gratuit · mini-programme offert · tu pars quand tu veux.</p>
+    </div>
+  </section>
+
+  <footer class="">
+    <div class="wrap">
+      <div class="foot-in">
+        <div class="foot-brand">
+          Sacha
+          <span>D'Houwer</span>
+        </div>
+        <nav class="foot-links">
+          <a href="/chevaux" class="">Les chevaux</a>
+          <a href="/business" class="">Entreprendre</a>
+          <a href="/mon-histoire" class="">Mon histoire</a>
+          <a href="https://www.instagram.com/sacha.dhouwer" target="_blank" rel="noopener" class="">Instagram</a>
+        </nav>
+      </div>
+      <p class="foot-legal">© <span id="year">2026</span> Sacha D'Houwer — Régulation du système nerveux équin · Province de Liège, Belgique </p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var b = document.getElementById('burger'),
+            l = document.getElementById('navlinks');
+        if (b && l) {
+            b.addEventListener('click', function() {
+                l.classList.toggle('open')
+            });
+            l.querySelectorAll('a').forEach(function(a) {
+                a.addEventListener('click', function() {
+                    l.classList.remove('open')
+                })
+            });
+        }
+        var y = document.getElementById('year');
+        if (y)
+            y.textContent = new Date().getFullYear();
+        var io = new IntersectionObserver(function(e) {
+            e.forEach(function(x) {
+                if (x.isIntersecting) {
+                    x.target.classList.add('in');
+                    io.unobserve(x.target)
+                }
+            })
+        }, {
+            threshold: .12
+        });
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            io.observe(el)
+        });
+    });
+  </script>
+
+
+</body></html>

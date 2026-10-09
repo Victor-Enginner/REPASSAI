@@ -1,0 +1,109 @@
+{
+  "slug": "aura-template-pixelcraft-dj",
+  "titulo": "PixelCraft Professional DJ Services Landing Page Template",
+  "descricao": "A high-fidelity, professional DJ and music service template featuring animated performance systems, visual curation, and dark-mode aesthetic. Fonte: https://www.aura.build/templates/pixelcraft-dj",
+  "arquivo": "77lib/aura-template-pixelcraft-dj.html",
+  "tamanho_html": 64117,
+  "paleta": [
+    {
+      "cor": "#07100b",
+      "usos": 19
+    },
+    {
+      "cor": "#09090b",
+      "usos": 7
+    },
+    {
+      "cor": "#070708",
+      "usos": 4
+    },
+    {
+      "cor": "#050505",
+      "usos": 3
+    },
+    {
+      "cor": "#0a0a0c",
+      "usos": 2
+    },
+    {
+      "cor": "#047857",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255, 255, 255, 0.015)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,255,255,0.12)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(0,0,0,0.8)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,255,255,1)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,255,255,0.02)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(0,0,0,1)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,255,255,0.2)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(0,0,0,0.5)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,255,255,0.06)",
+      "usos": 2
+    },
+    {
+      "cor": "#000",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Anton",
+    "DM Sans"
+  ],
+  "secoes": [
+    "Curate audio sets with absolute precision.",
+    "Curated audio, expressive beats.",
+    "Sets with a measurable pulse.",
+    "A clean sequence from booking to stage.",
+    "“The sets completely transformed the energy of the room.”",
+    "Bring your next DJ set into focus."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "GSAP",
+    "Canvas",
+    "IntersectionObserver",
+    "Backdrop Filter"
+  ],
+  "imagens": 9,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-pixelcraft-dj?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — PixelCraft Professional DJ Services Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-pixelcraft-dj`\n\n## Objetivo\nA high-fidelity, professional DJ and music service template featuring animated performance systems, visual curation, and dark-mode aesthetic. Fonte: https://www.aura.build/templates/pixelcraft-dj\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #07100b  (19x)\n- #09090b  (7x)\n- #070708  (4x)\n- #050505  (3x)\n- #0a0a0c  (2x)\n- #047857  (2x)\n- rgba(255, 255, 255, 0.015)  (2x)\n- rgba(255,255,255,0.12)  (2x)\n- rgba(0,0,0,0.8)  (2x)\n- rgba(255,255,255,1)  (2x)\n- rgba(255,255,255,0.02)  (2x)\n- rgba(0,0,0,1)  (2x)\n- rgba(255,255,255,0.2)  (2x)\n- rgba(0,0,0,0.5)  (2x)\n- rgba(255,255,255,0.06)  (2x)\n- #000  (1x)\n\n## Tipografia detectada\n- Inter\n- Anton\n- DM Sans\n\n## Estrutura de seções\n- Curate audio sets with absolute precision.\n- Curated audio, expressive beats.\n- Sets with a measurable pulse.\n- A clean sequence from booking to stage.\n- “The sets completely transformed the energy of the room.”\n- Bring your next DJ set into focus.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"PixelCraft Professional DJ Services Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — PixelCraft Professional DJ Services Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-pixelcraft-dj`\n\n## Objetivo\nA high-fidelity, professional DJ and music service template featuring animated performance systems, visual curation, and dark-mode aesthetic. Fonte: https://www.aura.build/templates/pixelcraft-dj\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #07100b  (19x)\n- #09090b  (7x)\n- #070708  (4x)\n- #050505  (3x)\n- #0a0a0c  (2x)\n- #047857  (2x)\n- rgba(255, 255, 255, 0.015)  (2x)\n- rgba(255,255,255,0.12)  (2x)\n- rgba(0,0,0,0.8)  (2x)\n- rgba(255,255,255,1)  (2x)\n- rgba(255,255,255,0.02)  (2x)\n- rgba(0,0,0,1)  (2x)\n- rgba(255,255,255,0.2)  (2x)\n- rgba(0,0,0,0.5)  (2x)\n- rgba(255,255,255,0.06)  (2x)\n- #000  (1x)\n\n## Tipografia detectada\n- Inter\n- Anton\n- DM Sans\n\n## Estrutura de seções\n- Curate audio sets with absolute precision.\n- Curated audio, expressive beats.\n- Sets with a measurable pulse.\n- A clean sequence from booking to stage.\n- “The sets completely transformed the energy of the room.”\n- Bring your next DJ set into focus.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:16"
+}

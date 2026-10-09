@@ -72,3 +72,8 @@ scratch/
 
 # Local Netlify folder
 .netlify
+backups/
+
+# pacotes de templates de terceiros e worktrees locais (ficam no backup zip)
+Site Pack Assets/
+.release-worktrees/

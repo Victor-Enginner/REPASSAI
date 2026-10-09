@@ -1,0 +1,105 @@
+{
+  "slug": "aura-template-mon-histoire-31",
+  "titulo": "Sacha D'Houwer - Système nerveux équin  entreprenariat",
+  "descricao": "A sophisticated, brand-focused storytelling template designed for professionals in equine therapy, coaching, and nature-based services. Fonte: https://www.aura.build/templates/mon-histoire-31",
+  "arquivo": "77lib/aura-template-mon-histoire-31.html",
+  "tamanho_html": 26808,
+  "paleta": [
+    {
+      "cor": "#8da081",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(250, 246, 239, .82)",
+      "usos": 2
+    },
+    {
+      "cor": "#faf6ef",
+      "usos": 1
+    },
+    {
+      "cor": "#f2ebdf",
+      "usos": 1
+    },
+    {
+      "cor": "#2b3a2c",
+      "usos": 1
+    },
+    {
+      "cor": "#4a5a48",
+      "usos": 1
+    },
+    {
+      "cor": "#c5cfbc",
+      "usos": 1
+    },
+    {
+      "cor": "#c06b45",
+      "usos": 1
+    },
+    {
+      "cor": "#a8552f",
+      "usos": 1
+    },
+    {
+      "cor": "#cc9a5b",
+      "usos": 1
+    },
+    {
+      "cor": "#ded4c4",
+      "usos": 1
+    },
+    {
+      "cor": "#b9c4ac",
+      "usos": 1
+    },
+    {
+      "cor": "#6e8064",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(43, 58, 44, .35)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(168, 85, 47, .6)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(168, 85, 47, .65)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Fraunces",
+    "Hanken Grotesk"
+  ],
+  "secoes": [
+    "Le stress de ton cheval, ce n'est pas un défaut. C'est un signal.",
+    "Je transmets deux choses. Elles se ressemblent plus qu'on ne croit.",
+    "Enseignante de métier. Cavalière de toujours.",
+    "On commence par le plus simple ?"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations",
+    "IntersectionObserver",
+    "Backdrop Filter"
+  ],
+  "imagens": 2,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-mon-histoire-31?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Sacha D'Houwer - Système nerveux équin  entreprenariat\n\nOrigem: registry privado 77lib\nSlug: `aura-template-mon-histoire-31`\n\n## Objetivo\nA sophisticated, brand-focused storytelling template designed for professionals in equine therapy, coaching, and nature-based services. Fonte: https://www.aura.build/templates/mon-histoire-31\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #8da081  (2x)\n- rgba(250, 246, 239, .82)  (2x)\n- #faf6ef  (1x)\n- #f2ebdf  (1x)\n- #2b3a2c  (1x)\n- #4a5a48  (1x)\n- #c5cfbc  (1x)\n- #c06b45  (1x)\n- #a8552f  (1x)\n- #cc9a5b  (1x)\n- #ded4c4  (1x)\n- #b9c4ac  (1x)\n- #6e8064  (1x)\n- rgba(43, 58, 44, .35)  (1x)\n- rgba(168, 85, 47, .6)  (1x)\n- rgba(168, 85, 47, .65)  (1x)\n\n## Tipografia detectada\n- Fraunces\n- Hanken Grotesk\n\n## Estrutura de seções\n- Le stress de ton cheval, ce n'est pas un défaut. C'est un signal.\n- Je transmets deux choses. Elles se ressemblent plus qu'on ne croit.\n- Enseignante de métier. Cavalière de toujours.\n- On commence par le plus simple ?\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Sacha D'Houwer - Système nerveux équin  entreprenariat\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Sacha D'Houwer - Système nerveux équin  entreprenariat\n\nOrigem: registry privado 77lib\nSlug: `aura-template-mon-histoire-31`\n\n## Objetivo\nA sophisticated, brand-focused storytelling template designed for professionals in equine therapy, coaching, and nature-based services. Fonte: https://www.aura.build/templates/mon-histoire-31\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #8da081  (2x)\n- rgba(250, 246, 239, .82)  (2x)\n- #faf6ef  (1x)\n- #f2ebdf  (1x)\n- #2b3a2c  (1x)\n- #4a5a48  (1x)\n- #c5cfbc  (1x)\n- #c06b45  (1x)\n- #a8552f  (1x)\n- #cc9a5b  (1x)\n- #ded4c4  (1x)\n- #b9c4ac  (1x)\n- #6e8064  (1x)\n- rgba(43, 58, 44, .35)  (1x)\n- rgba(168, 85, 47, .6)  (1x)\n- rgba(168, 85, 47, .65)  (1x)\n\n## Tipografia detectada\n- Fraunces\n- Hanken Grotesk\n\n## Estrutura de seções\n- Le stress de ton cheval, ce n'est pas un défaut. C'est un signal.\n- Je transmets deux choses. Elles se ressemblent plus qu'on ne croit.\n- Enseignante de métier. Cavalière de toujours.\n- On commence par le plus simple ?\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:12"
+}

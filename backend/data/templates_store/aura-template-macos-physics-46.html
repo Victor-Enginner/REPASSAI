@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>macOS Physics Box</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Inter', sans-serif; }
+/* Hide scrollbars but keep functionality */
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+</style><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body id="body-container" class="bg-gradient-to-br from-indigo-900 via-slate-800 to-purple-950 h-screen w-screen overflow-hidden text-slate-100 select-none touch-none transition-colors duration-500">
+    <!-- Menu Bar -->
+    <nav id="menubar" class="fixed top-0 inset-x-0 h-7 bg-white/10 backdrop-blur-xl border-b border-white/10 z-50 flex items-center justify-between px-4 text-xs font-medium shadow-sm">
+      <div class="flex items-center gap-4">
+        <span class="font-semibold tracking-tight text-white flex items-center gap-1">
+          <iconify-icon icon="solar:apple-linear" class="text-base"></iconify-icon>
+          macOS
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors font-semibold">
+          Finder
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors">
+          File
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors">
+          Edit
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors">
+          View
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors">
+          Go
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors">
+          Window
+        </span>
+        <span class="hidden sm:block cursor-default hover:text-white/70 transition-colors">
+          Help
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <iconify-icon icon="solar:cloud-linear" class="text-sm"></iconify-icon>
+        <iconify-icon icon="solar:wi-fi-linear" class="text-sm"></iconify-icon>
+        <iconify-icon icon="solar:battery-charge-linear" class="text-sm"></iconify-icon>
+        <span>Mon 9:41 AM</span>
+      </div>
+    </nav>
+
+    <!-- Settings Window Modal -->
+    <div id="settings-window" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] bg-slate-900/80 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-2xl shadow-black/50 z-[100] hidden flex-col overflow-hidden text-slate-200 pointer-events-auto">
+      <!-- Header -->
+      <div class="h-12 bg-white/5 border-b border-white/10 flex items-center px-4 relative">
+        <div class="flex gap-2 absolute left-4">
+          <button id="close-settings" class="w-3.5 h-3.5 rounded-full bg-red-400 hover:bg-red-500 border border-black/10 transition-colors"></button>
+          <button class="w-3.5 h-3.5 rounded-full bg-yellow-400 hover:bg-yellow-500 border border-black/10 transition-colors"></button>
+          <button class="w-3.5 h-3.5 rounded-full bg-green-400 hover:bg-green-500 border border-black/10 transition-colors"></button>
+        </div>
+        <span class="w-full text-center text-xs font-semibold tracking-tight text-white/80">System Settings</span>
+      </div>
+      
+      <!-- Content -->
+      <div class="p-5 flex flex-col gap-6">
+        <!-- Wallpaper Selection -->
+        <div class="flex flex-col gap-2.5">
+          <span class="text-xs font-semibold tracking-tight text-white/60 uppercase">Wallpaper</span>
+          <div class="flex gap-2.5">
+            <button class="wallpaper-btn w-9 h-9 rounded-full border border-white/20 hover:scale-110 active:scale-95 transition-all bg-gradient-to-br from-indigo-900 via-slate-800 to-purple-950 shadow-sm" data-bg="bg-gradient-to-br from-indigo-900 via-slate-800 to-purple-950"></button>
+            <button class="wallpaper-btn w-9 h-9 rounded-full border border-white/20 hover:scale-110 active:scale-95 transition-all bg-gradient-to-br from-fuchsia-900 via-purple-800 to-blue-900 shadow-sm" data-bg="bg-gradient-to-br from-fuchsia-900 via-purple-800 to-blue-900"></button>
+            <button class="wallpaper-btn w-9 h-9 rounded-full border border-white/20 hover:scale-110 active:scale-95 transition-all bg-gradient-to-br from-orange-600 via-red-700 to-rose-900 shadow-sm" data-bg="bg-gradient-to-br from-orange-600 via-red-700 to-rose-900"></button>
+            <button class="wallpaper-btn w-9 h-9 rounded-full border border-white/20 hover:scale-110 active:scale-95 transition-all bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 shadow-sm" data-bg="bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900"></button>
+            <button class="wallpaper-btn w-9 h-9 rounded-full border border-white/20 hover:scale-110 active:scale-95 transition-all bg-gradient-to-br from-slate-900 via-zinc-900 to-neutral-950 shadow-sm" data-bg="bg-gradient-to-br from-slate-900 via-zinc-900 to-neutral-950"></button>
+          </div>
+        </div>
+
+        <!-- Cleanup Actions -->
+        <div class="flex flex-col gap-2.5">
+           <span class="text-xs font-semibold tracking-tight text-white/60 uppercase">Cleanup Playground</span>
+           <div class="flex flex-col gap-2">
+             <button id="clear-files" class="group flex items-center justify-between px-3.5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-medium transition-all active:scale-[0.98]">
+               <span class="text-white/80 group-hover:text-white transition-colors">Clear Spawned Files</span>
+               <iconify-icon icon="solar:file-remove-linear" class="text-lg text-slate-400 group-hover:text-red-400 transition-colors"></iconify-icon>
+             </button>
+             <button id="clear-water" class="group flex items-center justify-between px-3.5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-medium transition-all active:scale-[0.98]">
+               <span class="text-white/80 group-hover:text-white transition-colors">Clear Water Drops</span>
+               <iconify-icon icon="solar:waterdrop-linear" class="text-lg text-slate-400 group-hover:text-cyan-400 transition-colors"></iconify-icon>
+             </button>
+             <button id="clear-bombs" class="group flex items-center justify-between px-3.5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-medium transition-all active:scale-[0.98]">
+               <span class="text-white/80 group-hover:text-white transition-colors">Clear Bombs</span>
+               <iconify-icon icon="solar:bomb-minimalistic-linear" class="text-lg text-slate-400 group-hover:text-orange-400 transition-colors"></iconify-icon>
+             </button>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Area (Physics Container) -->
+    <div id="desktop" class="absolute inset-0 pt-7 pb-24 overflow-hidden pointer-events-none">
+      <!-- Original Physics Items (Apps/Files) -->
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="1.2">
+        <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg shadow-black/20 group-hover:bg-white/20 transition-colors duration-200">
+          <iconify-icon icon="solar:folder-with-files-linear" class="text-3xl text-blue-400" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          Projects
+        </span>
+      </div>
+
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="1">
+        <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg shadow-black/20 group-hover:bg-white/20 transition-colors duration-200">
+          <iconify-icon icon="solar:folder-linear" class="text-3xl text-blue-300" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          Assets
+        </span>
+      </div>
+
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="0.8">
+        <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-900/40 border border-white/20 group-hover:brightness-110 transition-all duration-200">
+          <iconify-icon icon="solar:global-linear" class="text-3xl text-white" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          Safari
+        </span>
+      </div>
+
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="0.8">
+        <div class="w-14 h-14 bg-gradient-to-br from-slate-700 to-slate-900 rounded-2xl flex items-center justify-center shadow-lg shadow-black/40 border border-white/20 group-hover:brightness-110 transition-all duration-200">
+          <iconify-icon icon="solar:code-square-linear" class="text-3xl text-green-400" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          Terminal
+        </span>
+      </div>
+
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="0.9">
+        <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-900/30 border border-white/20 group-hover:brightness-110 transition-all duration-200">
+          <iconify-icon icon="solar:music-notes-linear" class="text-3xl text-white" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          Music
+        </span>
+      </div>
+
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="1.1">
+        <div class="w-14 h-14 bg-gradient-to-br from-yellow-100 to-yellow-300 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-900/20 border border-white/40 group-hover:brightness-105 transition-all duration-200">
+          <iconify-icon icon="solar:document-text-linear" class="text-3xl text-yellow-800" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          Notes
+        </span>
+      </div>
+
+      <div class="physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group" data-mass="0.7">
+        <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg shadow-black/20 group-hover:bg-white/20 transition-colors duration-200">
+          <iconify-icon icon="solar:gallery-linear" class="text-3xl text-pink-300" stroke-width="1.5"></iconify-icon>
+        </div>
+        <span class="text-xs font-medium drop-shadow-md text-center leading-tight">
+          image.png
+        </span>
+      </div>
+
+      <!-- A larger physics body to simulate a small widget/window -->
+      <div class="physics-item absolute top-0 left-0 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto" data-mass="2.5" data-radius="60">
+        <div class="w-32 h-32 bg-slate-900/60 backdrop-blur-2xl rounded-3xl flex flex-col p-4 border border-white/10 shadow-2xl shadow-black/50">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-white/80 tracking-tight">
+              Weather
+            </span>
+            <iconify-icon icon="solar:cloud-sun-linear" class="text-lg text-yellow-400"></iconify-icon>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <span class="text-3xl font-medium tracking-tighter text-white">
+              72°
+            </span>
+            <span class="text-xs text-white/50 mt-1">Cupertino</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dock -->
+    <div id="dock" class="fixed bottom-3 left-1/2 -translate-x-1/2 h-16 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl px-3 flex items-center gap-2 z-50 shadow-2xl shadow-black/40 pointer-events-auto">
+      <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:monitor-smartphone-linear" class="text-2xl text-slate-200 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:letter-linear" class="text-2xl text-blue-300 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:calendar-linear" class="text-2xl text-red-400 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div id="spawner-app" class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:add-square-linear" class="text-2xl text-green-400 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div id="spawner-bomb" class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:bomb-minimalistic-linear" class="text-2xl text-orange-400 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div id="spawner-water" class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:waterdrop-linear" class="text-2xl text-cyan-400 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div id="app-settings" class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:settings-linear" class="text-2xl text-slate-300 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+      <div class="w-px h-8 bg-white/20 mx-1"></div>
+      <!-- Separator -->
+      <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:-translate-y-2 transition-transform cursor-pointer shadow-sm border border-white/10 group">
+        <iconify-icon icon="solar:trash-bin-trash-linear" class="text-2xl text-slate-400 group-hover:scale-110 transition-transform" stroke-width="1.5"></iconify-icon>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const container = document.getElementById('desktop');
+          const items = document.querySelectorAll('.physics-item');
+          const dock = document.getElementById('dock');
+          const menubar = document.getElementById('menubar');
+
+          // Physics settings
+          const gravity = 0.4;
+          const friction = 0.98;
+          const groundFriction = 0.92;
+          const bounce = 0.65;
+
+          let bounds = { top: 0, bottom: 0, left: 0, right: 0 };
+
+          function updateBounds() {
+              const dockRect = dock.getBoundingClientRect();
+              bounds = {
+                  top: menubar.offsetHeight,
+                  bottom: dockRect.top - 10,
+                  left: 0,
+                  right: window.innerWidth
+              };
+          }
+
+          window.addEventListener('resize', updateBounds);
+          updateBounds();
+
+          const bodies = [];
+
+          function initBody(el, isNew = false) {
+              const customRadius = el.getAttribute('data-radius');
+              const radius = customRadius ? parseFloat(customRadius) : 32;
+              const mass = parseFloat(el.getAttribute('data-mass') || 1);
+
+              const body = {
+                  el,
+                  x: isNew ? (bounds.right / 2) + (Math.random() * 40 - 20) : Math.random() * (bounds.right - radius * 2) + radius,
+                  y: isNew ? bounds.top + 40 : Math.random() * (bounds.bottom - bounds.top - 200) + bounds.top + 50,
+                  vx: isNew ? (Math.random() - 0.5) * 10 : (Math.random() - 0.5) * 15,
+                  vy: isNew ? Math.random() * 5 : (Math.random() - 0.5) * 5,
+                  radius,
+                  mass,
+                  isDragging: false,
+                  dragOffsetX: 0,
+                  dragOffsetY: 0
+              };
+              bodies.push(body);
+              return body;
+          }
+
+          Array.from(items).forEach(el => initBody(el, false));
+
+          // Clear function for settings
+          function clearItems(type) {
+              for (let i = bodies.length - 1; i >= 0; i--) {
+                  if (bodies[i].el.getAttribute('data-type') === type) {
+                      bodies[i].el.remove();
+                      bodies.splice(i, 1);
+                  }
+              }
+          }
+
+          const spawner = document.getElementById('spawner-app');
+          if (spawner) {
+              spawner.addEventListener('click', () => {
+                  const isVirus = Math.random() < 0.2;
+
+                  const newItem = document.createElement('div');
+                  newItem.className = 'physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group';
+
+                  if (isVirus) {
+                      newItem.setAttribute('data-mass', '1.5');
+                      newItem.setAttribute('data-type', 'virus');
+                      newItem.innerHTML = '<div class="w-14 h-14 bg-red-900/80 backdrop-blur-md rounded-2xl flex items-center justify-center border border-red-500 shadow-lg shadow-red-500/50 group-hover:bg-red-800 transition-colors duration-200 animate-pulse"><iconify-icon icon="solar:danger-triangle-linear" class="text-3xl text-red-200" stroke-width="1.5"></iconify-icon></div><span class="text-xs font-bold text-red-400 drop-shadow-md text-center leading-tight">VIRUS.exe</span>';
+                      const toast = document.createElement('div');
+                      toast.className = 'fixed top-12 left-1/2 -translate-x-1/2 bg-red-500/90 backdrop-blur-md text-white px-5 py-2 rounded-full font-bold shadow-lg z-[200] transition-opacity duration-500 pointer-events-none flex items-center gap-2 border border-red-400';
+                      toast.innerHTML = '<iconify-icon icon="solar:danger-triangle-bold" class="text-lg"></iconify-icon> Virus Spawned!';
+                      document.body.appendChild(toast);
+                      setTimeout(() => {
+                          toast.style.opacity = '0';
+                          setTimeout(() => toast.remove(), 500);
+                      }, 2500);
+                  } else {
+                      newItem.setAttribute('data-mass', '1');
+                      newItem.setAttribute('data-type', 'file');
+                      newItem.innerHTML = '<div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg shadow-black/20 group-hover:bg-white/20 transition-colors duration-200"><iconify-icon icon="solar:file-text-linear" class="text-3xl text-emerald-300" stroke-width="1.5"></iconify-icon></div><span class="text-xs font-medium drop-shadow-md text-center leading-tight">File_' + Math.floor(Math.random()*1000) + '</span>';
+                  }
+
+                  container.appendChild(newItem);
+                  initBody(newItem, true);
+              });
+          }
+
+          const bombSpawner = document.getElementById('spawner-bomb');
+          if (bombSpawner) {
+              bombSpawner.addEventListener('click', () => {
+                  const bombItem = document.createElement('div');
+                  bombItem.className = 'physics-item absolute top-0 left-0 w-16 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group';
+                  bombItem.setAttribute('data-mass', '2');
+                  bombItem.setAttribute('data-type', 'bomb');
+                  bombItem.innerHTML = '<div class="w-14 h-14 bg-orange-900/80 backdrop-blur-md rounded-2xl flex items-center justify-center border border-orange-500 shadow-lg shadow-orange-500/50 group-hover:bg-orange-800 transition-colors duration-200 animate-pulse"><iconify-icon icon="solar:bomb-minimalistic-bold" class="text-3xl text-orange-200"></iconify-icon></div><span class="text-xs font-bold text-orange-400 drop-shadow-md text-center leading-tight">BOMB</span>';
+                  container.appendChild(bombItem);
+                  const bombBody = initBody(bombItem, true);
+
+                  setTimeout(() => {
+                      if (!bombItem.parentNode) return; // In case it was cleared via settings
+                      
+                      const explosion = document.createElement('div');
+                      explosion.className = 'absolute rounded-full bg-orange-500/80 blur-xl transition-all duration-300 pointer-events-none z-[200]';
+                      explosion.style.left = (bombBody.x - 150) + 'px';
+                      explosion.style.top = (bombBody.y - 150) + 'px';
+                      explosion.style.width = '300px';
+                      explosion.style.height = '300px';
+                      explosion.style.transform = 'scale(0.1)';
+                      container.appendChild(explosion);
+
+                      explosion.getBoundingClientRect();
+                      explosion.style.transform = 'scale(2.5)';
+                      explosion.style.opacity = '0';
+                      setTimeout(() => explosion.remove(), 300);
+
+                      const forceMultiplier = 1500;
+                      bodies.forEach(b => {
+                          if (b !== bombBody) {
+                              const dx = b.x - bombBody.x;
+                              const dy = b.y - bombBody.y;
+                              const dist = Math.sqrt(dx * dx + dy * dy);
+                              if (dist < 600 && dist > 0) {
+                                  const force = forceMultiplier / (dist * 0.5);
+                                  b.vx += (dx / dist) * force;
+                                  b.vy += (dy / dist) * force - 25;
+                              }
+                          }
+                      });
+
+                      bombItem.remove();
+                      const index = bodies.indexOf(bombBody);
+                      if (index > -1) bodies.splice(index, 1);
+                  }, 2000);
+              });
+          }
+
+          const waterSpawner = document.getElementById('spawner-water');
+          if (waterSpawner) {
+              waterSpawner.addEventListener('click', () => {
+                  for (let i = 0; i < 40; i++) {
+                      setTimeout(() => {
+                          const drop = document.createElement('div');
+                          drop.className = 'physics-item absolute top-0 left-0 w-8 flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing pointer-events-auto group';
+                          drop.setAttribute('data-mass', '0.4');
+                          drop.setAttribute('data-radius', '12');
+                          drop.setAttribute('data-type', 'water');
+                          drop.innerHTML = '<div class="w-6 h-6 bg-cyan-400/60 backdrop-blur-md rounded-full flex items-center justify-center border border-cyan-200 shadow-md shadow-cyan-500/40"></div>';
+                          container.appendChild(drop);
+                          const dropBody = initBody(drop, true);
+                          dropBody.x = bounds.left + 20;
+                          dropBody.y = bounds.top + 50 + Math.random() * 150;
+                          dropBody.vx = 20 + Math.random() * 15;
+                          dropBody.vy = -5 + Math.random() * 10;
+                      }, i * 20);
+                  }
+
+                  bodies.forEach(b => {
+                      b.vx += 15 + Math.random() * 10;
+                      b.vy -= 10 + Math.random() * 5;
+                  });
+              });
+          }
+
+          let activeBody = null;
+          let mouseX = 0;
+          let mouseY = 0;
+          let lastMouseX = 0;
+          let lastMouseY = 0;
+
+          document.addEventListener('pointerdown', (e) => {
+              const target = e.target.closest('.physics-item');
+              if (target) {
+                  activeBody = bodies.find(b => b.el === target);
+                  if (activeBody) {
+                      activeBody.isDragging = true;
+                      activeBody.vx = 0;
+                      activeBody.vy = 0;
+
+                      activeBody.dragOffsetX = e.clientX - activeBody.x;
+                      activeBody.dragOffsetY = e.clientY - activeBody.y;
+
+                      activeBody.el.style.zIndex = 100;
+                      target.setPointerCapture(e.pointerId);
+
+                      mouseX = e.clientX;
+                      mouseY = e.clientY;
+                      lastMouseX = e.clientX;
+                      lastMouseY = e.clientY;
+                  }
+              }
+          });
+
+          document.addEventListener('pointermove', (e) => {
+              mouseX = e.clientX;
+              mouseY = e.clientY;
+
+              if (activeBody) {
+                  activeBody.x = mouseX - activeBody.dragOffsetX;
+                  activeBody.y = mouseY - activeBody.dragOffsetY;
+
+                  activeBody.vx = mouseX - lastMouseX;
+                  activeBody.vy = mouseY - lastMouseY;
+
+                  lastMouseX = mouseX;
+                  lastMouseY = mouseY;
+              }
+          });
+
+          document.addEventListener('pointerup', (e) => {
+              if (activeBody) {
+                  activeBody.isDragging = false;
+                  activeBody.el.style.zIndex = '';
+                  try { activeBody.el.releasePointerCapture(e.pointerId); } catch(err){}
+                  activeBody = null;
+              }
+          });
+
+          document.addEventListener('touchstart', (e) => {
+              if (e.target.closest('.physics-item')) e.preventDefault();
+          }, { passive: false });
+
+          // Settings App Logic
+          const settingsWindow = document.getElementById('settings-window');
+          
+          document.getElementById('app-settings').addEventListener('click', () => {
+              settingsWindow.classList.remove('hidden');
+              settingsWindow.classList.add('flex');
+          });
+
+          document.getElementById('close-settings').addEventListener('click', () => {
+              settingsWindow.classList.add('hidden');
+              settingsWindow.classList.remove('flex');
+          });
+
+          // Wallpaper Change Logic
+          const baseBodyClasses = 'h-screen w-screen overflow-hidden text-slate-100 select-none touch-none transition-colors duration-500';
+          document.querySelectorAll('.wallpaper-btn').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                  const bg = e.target.getAttribute('data-bg');
+                  document.getElementById('body-container').className = `${bg} ${baseBodyClasses}`;
+              });
+          });
+
+          // Cleanup Button Actions
+          document.getElementById('clear-files').addEventListener('click', () => {
+              clearItems('file');
+              clearItems('virus');
+          });
+          document.getElementById('clear-water').addEventListener('click', () => clearItems('water'));
+          document.getElementById('clear-bombs').addEventListener('click', () => clearItems('bomb'));
+
+          function resolveCollision(b1, b2) {
+              const dx = b2.x - b1.x;
+              const dy = b2.y - b1.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              const minDistance = b1.radius + b2.radius;
+
+              if (distance < minDistance) {
+                  const overlap = minDistance - distance;
+                  const nx = distance === 0 ? 1 : dx / distance;
+                  const ny = distance === 0 ? 0 : dy / distance;
+
+                  const sepX = nx * (overlap / 2.05);
+                  const sepY = ny * (overlap / 2.05);
+
+                  if (!b1.isDragging) { b1.x -= sepX; b1.y -= sepY; }
+                  if (!b2.isDragging) { b2.x += sepX; b2.y += sepY; }
+
+                  const kx = (b1.vx - b2.vx);
+                  const ky = (b1.vy - b2.vy);
+                  const p = 2.0 * (nx * kx + ny * ky) / (b1.mass + b2.mass);
+
+                  if (!b1.isDragging) {
+                      b1.vx = b1.vx - p * b2.mass * nx * bounce;
+                      b1.vy = b1.vy - p * b2.mass * ny * bounce;
+                  }
+                  if (!b2.isDragging) {
+                      b2.vx = b2.vx + p * b1.mass * nx * bounce;
+                      b2.vy = b2.vy + p * b1.mass * ny * bounce;
+                  }
+              }
+          }
+
+          function update() {
+              for (let i = 0; i < bodies.length; i++) {
+                  const b = bodies[i];
+
+                  if (!b.isDragging) {
+                      b.vy += gravity;
+
+                      b.x += b.vx;
+                      b.y += b.vy;
+
+                      b.vx *= friction;
+                      b.vy *= friction;
+
+                      if (b.y + b.radius > bounds.bottom) {
+                          b.y = bounds.bottom - b.radius;
+                          b.vy *= -bounce;
+                          b.vx *= groundFriction;
+                      } else if (b.y - b.radius < bounds.top) {
+                          b.y = bounds.top + b.radius;
+                          b.vy *= -bounce;
+                      }
+
+                      if (b.x + b.radius > bounds.right) {
+                          b.x = bounds.right - b.radius;
+                          b.vx *= -bounce;
+                      } else if (b.x - b.radius < bounds.left) {
+                          b.x = bounds.left + b.radius;
+                          b.vx *= -bounce;
+                      }
+                  }
+
+                  for (let j = i + 1; j < bodies.length; j++) {
+                      resolveCollision(b, bodies[j]);
+                  }
+
+                  b.el.style.transform = 'translate3d(' + (b.x - b.radius) + 'px, ' + (b.y - b.radius) + 'px, 0)';
+              }
+
+              requestAnimationFrame(update);
+          }
+
+          update();
+      });
+    </script>
+  
+</body></html>

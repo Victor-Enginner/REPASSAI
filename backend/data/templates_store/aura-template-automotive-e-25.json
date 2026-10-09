@@ -1,0 +1,49 @@
+{
+  "slug": "aura-template-automotive-e-25",
+  "titulo": "Automotive Parts E-commerce Landing Page Template",
+  "descricao": "A high-performance automotive parts e-commerce template specializing in engine and gearbox components with a bold, technical aesthetic. Fonte: https://www.aura.build/templates/automotive-e-25",
+  "arquivo": "77lib/aura-template-automotive-e-25.html",
+  "tamanho_html": 42590,
+  "paleta": [
+    {
+      "cor": "#c7cdc9",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(163,230,53,0.35)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Archivo",
+    "Inter"
+  ],
+  "secoes": [
+    "ENGINE & GEARBOX",
+    "PREMIUM BRANDS",
+    "ENGINE PARTS",
+    "GEARBOX",
+    "THE TRUST",
+    "Catalog"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations"
+  ],
+  "imagens": 0,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-automotive-e-25?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Automotive Parts E-commerce Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-automotive-e-25`\n\n## Objetivo\nA high-performance automotive parts e-commerce template specializing in engine and gearbox components with a bold, technical aesthetic. Fonte: https://www.aura.build/templates/automotive-e-25\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #c7cdc9  (1x)\n- rgba(163,230,53,0.35)  (1x)\n\n## Tipografia detectada\n- Archivo\n- Inter\n\n## Estrutura de seções\n- ENGINE & GEARBOX\n- PREMIUM BRANDS\n- ENGINE PARTS\n- GEARBOX\n- THE TRUST\n- Catalog\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Automotive Parts E-commerce Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Automotive Parts E-commerce Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-automotive-e-25`\n\n## Objetivo\nA high-performance automotive parts e-commerce template specializing in engine and gearbox components with a bold, technical aesthetic. Fonte: https://www.aura.build/templates/automotive-e-25\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #c7cdc9  (1x)\n- rgba(163,230,53,0.35)  (1x)\n\n## Tipografia detectada\n- Archivo\n- Inter\n\n## Estrutura de seções\n- ENGINE & GEARBOX\n- PREMIUM BRANDS\n- ENGINE PARTS\n- GEARBOX\n- THE TRUST\n- Catalog\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:28"
+}

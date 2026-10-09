@@ -1,0 +1,75 @@
+{
+  "slug": "aura-template-holistic-physiother-13",
+  "titulo": "Holistic Health  Physiotherapy Landing Page Template",
+  "descricao": "A serene and professional landing page template designed for holistic therapists, physiotherapists, and wellness practitioners seeking a sophisticated dark-themed presence. Fonte: https://www.aura.build/templates/holistic-physiother-13",
+  "arquivo": "77lib/aura-template-holistic-physiother-13.html",
+  "tamanho_html": 45244,
+  "paleta": [
+    {
+      "cor": "#a2b5b1",
+      "usos": 99
+    },
+    {
+      "cor": "#4ec3a6",
+      "usos": 50
+    },
+    {
+      "cor": "#404040",
+      "usos": 40
+    },
+    {
+      "cor": "#262626",
+      "usos": 16
+    },
+    {
+      "cor": "#1a1a1a",
+      "usos": 3
+    },
+    {
+      "cor": "rgba(78,195,166,0.12)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(38,38,38,0)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(38,38,38,0.8)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(78,195,166,0.05)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter"
+  ],
+  "secoes": [
+    "FizjoKOliber",
+    "O mnie",
+    "Jak wygląda współpraca ze mną?",
+    "Oferta",
+    "Cennik",
+    "Rozpocznijmy"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 2,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-holistic-physiother-13?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Holistic Health  Physiotherapy Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-holistic-physiother-13`\n\n## Objetivo\nA serene and professional landing page template designed for holistic therapists, physiotherapists, and wellness practitioners seeking a sophisticated dark-themed presence. Fonte: https://www.aura.build/templates/holistic-physiother-13\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #a2b5b1  (99x)\n- #4ec3a6  (50x)\n- #404040  (40x)\n- #262626  (16x)\n- #1a1a1a  (3x)\n- rgba(78,195,166,0.12)  (1x)\n- rgba(38,38,38,0)  (1x)\n- rgba(38,38,38,0.8)  (1x)\n- rgba(78,195,166,0.05)  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- FizjoKOliber\n- O mnie\n- Jak wygląda współpraca ze mną?\n- Oferta\n- Cennik\n- Rozpocznijmy\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Holistic Health  Physiotherapy Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Holistic Health  Physiotherapy Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-holistic-physiother-13`\n\n## Objetivo\nA serene and professional landing page template designed for holistic therapists, physiotherapists, and wellness practitioners seeking a sophisticated dark-themed presence. Fonte: https://www.aura.build/templates/holistic-physiother-13\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #a2b5b1  (99x)\n- #4ec3a6  (50x)\n- #404040  (40x)\n- #262626  (16x)\n- #1a1a1a  (3x)\n- rgba(78,195,166,0.12)  (1x)\n- rgba(38,38,38,0)  (1x)\n- rgba(38,38,38,0.8)  (1x)\n- rgba(78,195,166,0.05)  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- FizjoKOliber\n- O mnie\n- Jak wygląda współpraca ze mną?\n- Oferta\n- Cennik\n- Rozpocznijmy\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:30:59"
+}

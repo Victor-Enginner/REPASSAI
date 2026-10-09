@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="scroll-smooth">
+  <head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FJ TECH | Fine Renovation &amp; Construction</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;display=swap"
+rel="stylesheet"
+/>
+<style>
+body {
+font-family: 'Inter', sans-serif;
+background-color: #fcfcfc;
+color: #171717;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+::selection {
+background-color: #e5e5e5;
+color: #000;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+width: 6px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: #d4d4d4;
+border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #a3a3a3;
+}
+/* Subtle glow effect for video player */
+.video-glow {
+box-shadow: 0 0 40px -10px rgba(0,0,0,0.5);
+}
+</style>
+<link
+href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;display=swap"
+rel="stylesheet"
+/><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body class="flex flex-col min-h-screen">
+    <!-- Navigation -->
+    <nav
+      class="fixed top-0 w-full z-50 bg-[#fcfcfc]/80 backdrop-blur-md border-b border-neutral-200/60 transition-all duration-300"
+    >
+      <div
+        class="max-w-screen-2xl mx-auto px-6 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-2">
+          <!-- Logo -->
+          <a
+            href="#"
+            class="text-lg font-medium tracking-tighter text-neutral-900 flex items-center gap-2"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a6d9dcb7-b842-4ad1-84e3-828a6c5c6c8d_320w.jpg"
+              alt="FJ Logo"
+              class="h-6 w-auto object-contain rounded-sm"
+            />
+            FJ TECH
+          </a>
+        </div>
+
+        <div
+          class="hidden md:flex items-center gap-8 text-sm font-light text-neutral-500"
+        >
+          <a
+            href="home.html"
+            class="text-neutral-900 transition-colors"
+            target="_blank"
+          >
+            Home
+          </a>
+          <a
+            href="service.html"
+            class="hover:text-neutral-900 transition-colors"
+            target="_blank"
+          >
+            Service
+          </a>
+          <a
+            href="project.html"
+            class="hover:text-neutral-900 transition-colors"
+            target="_blank"
+          >
+            Project
+          </a>
+          <a
+            href="contact.html"
+            class="hover:text-neutral-900 transition-colors"
+            target="_blank"
+          >
+            Contact
+          </a>
+        </div>
+
+        <button class="md:hidden text-neutral-600">
+          <iconify-icon
+            icon="solar:hamburger-menu-linear"
+            width="24"
+          ></iconify-icon>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section (Showcasing Main Video/Image) -->
+    <header
+      class="relative h-[90vh] w-full mt-16 flex flex-col justify-center overflow-hidden bg-neutral-900 border-b border-neutral-800"
+    >
+      <div class="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&amp;fit=crop&amp;q=80&amp;w=2400"
+          class="w-full h-full object-cover opacity-50 object-center mix-blend-overlay"
+          alt="Luxury Interior"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10"
+        ></div>
+        <div
+          class="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style="background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 64px 64px;"
+        ></div>
+      </div>
+
+      <div class="relative z-10 max-w-screen-2xl mx-auto px-6 w-full">
+        <div class="max-w-4xl">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 backdrop-blur-md text-white/80 text-[0.65rem] font-medium mb-8 tracking-widest uppercase"
+          >
+            <span class="w-1.5 h-1.5 bg-white animate-pulse"></span>
+            FJ Tech Architecture
+          </div>
+          <h1
+            class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-white leading-[1.05] mb-6"
+          >
+            Building
+            <br />
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 to-neutral-500"
+            >
+              Tomorrow's
+            </span>
+            <br />
+            Heritage.
+          </h1>
+          <p
+            class="text-lg md:text-xl text-neutral-400 font-light max-w-xl mb-10 leading-relaxed"
+          >
+            Elevating spaces through meticulous renovation and construction. We
+            transform visions into tangible, enduring environments with
+            uncompromising precision.
+          </p>
+          <div class="flex flex-wrap items-center gap-4">
+            <a
+              href="#portfolio"
+              class="px-8 py-4 bg-white text-black font-medium text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2"
+            >
+              View Portfolio
+              <iconify-icon
+                icon="solar:arrow-right-linear"
+                class="text-lg"
+              ></iconify-icon>
+            </a>
+            <button
+              class="px-8 py-4 bg-white/10 text-white font-medium text-sm hover:bg-white/20 backdrop-blur-sm transition-colors flex items-center gap-2 border border-white/10"
+            >
+              <iconify-icon
+                icon="solar:play-circle-linear"
+                class="text-xl"
+              ></iconify-icon>
+              Watch Showreel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="absolute bottom-0 left-0 w-full border-t border-white/10 bg-black/20 backdrop-blur-md hidden md:block"
+      >
+        <div
+          class="max-w-screen-2xl mx-auto px-6 grid grid-cols-3 divide-x divide-white/10"
+        >
+          <div class="py-6 pr-8">
+            <p class="text-white text-3xl font-medium tracking-tighter mb-1">
+              150+
+            </p>
+            <p class="text-neutral-400 text-xs uppercase tracking-widest">
+              Projects Completed
+            </p>
+          </div>
+          <div class="py-6 px-8">
+            <p class="text-white text-3xl font-medium tracking-tighter mb-1">
+              12 Yrs
+            </p>
+            <p class="text-neutral-400 text-xs uppercase tracking-widest">
+              Industry Experience
+            </p>
+          </div>
+          <div class="py-6 px-8">
+            <p class="text-white text-3xl font-medium tracking-tighter mb-1">
+              98%
+            </p>
+            <p class="text-neutral-400 text-xs uppercase tracking-widest">
+              Client Satisfaction
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Portfolio Index Section -->
+    <main
+      id="portfolio"
+      class="flex-grow w-full max-w-screen-2xl mx-auto px-6 py-24"
+    >
+      <!-- Header & Filters -->
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 border-b border-neutral-200 pb-6"
+      >
+        <div>
+          <h2
+            class="text-3xl md:text-4xl font-medium tracking-tighter text-neutral-900 mb-2"
+          >
+            Selected Projects
+          </h2>
+          <p class="text-sm text-neutral-500 font-light">
+            An archive of our structural and aesthetic transformations.
+          </p>
+        </div>
+
+        <div
+          class="flex flex-col items-start md:items-end gap-6 w-full md:w-auto"
+        >
+          <div class="flex items-center gap-6">
+            <button
+              class="pb-2 text-sm font-medium text-neutral-900 border-b-2 border-neutral-900"
+            >
+              All Projects
+            </button>
+            <button
+              class="pb-2 text-sm font-light text-neutral-500 hover:text-neutral-900 transition-colors border-b-2 border-transparent hover:border-neutral-300"
+            >
+              Residential
+            </button>
+            <button
+              class="pb-2 text-sm font-light text-neutral-500 hover:text-neutral-900 transition-colors border-b-2 border-transparent hover:border-neutral-300"
+            >
+              Commercial
+            </button>
+            <button
+              class="pb-2 text-sm font-light text-neutral-500 hover:text-neutral-900 transition-colors border-b-2 border-transparent hover:border-neutral-300"
+            >
+              Exterior
+            </button>
+          </div>
+
+          <div
+            class="flex items-center gap-4 text-xs font-light text-neutral-400"
+          >
+            <span
+              class="uppercase tracking-widest text-[0.65rem] font-medium text-neutral-300"
+            >
+              Filter by Year:
+            </span>
+            <button class="text-neutral-900 font-medium">2024</button>
+            <button class="hover:text-neutral-900 transition-colors">
+              2023
+            </button>
+            <button class="hover:text-neutral-900 transition-colors">
+              2022
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Project Case Study 1 (Outdoor/Exterior Focus) -->
+      <article class="mb-32">
+        <!-- Project Meta -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="md:col-span-3">
+            <h3
+              class="text-3xl md:text-4xl font-medium tracking-tighter text-neutral-900"
+            >
+              Modernist Coastal Estate
+            </h3>
+            <p
+              class="text-sm text-neutral-500 mt-2 font-light max-w-2xl leading-relaxed"
+            >
+              Complete exterior hardscaping, structural facade renovation, and
+              integration of modern outdoor living spaces into a heritage
+              property.
+            </p>
+          </div>
+          <div
+            class="flex flex-row md:flex-col gap-6 md:gap-4 md:items-end text-right"
+          >
+            <div>
+              <span
+                class="block text-[0.65rem] uppercase tracking-widest text-neutral-400 mb-1"
+              >
+                Category
+              </span>
+              <span class="text-sm font-light text-neutral-800">
+                Residential Exterior
+              </span>
+            </div>
+            <div>
+              <span
+                class="block text-[0.65rem] uppercase tracking-widest text-neutral-400 mb-1"
+              >
+                Timeline
+              </span>
+              <span class="text-sm font-light text-neutral-800">
+                2023 - 2024
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Before & After Contrast Slider (Custom UI) -->
+        <div class="mb-12">
+          <div class="flex items-center justify-between mb-4">
+            <h4
+              class="text-sm font-medium text-neutral-900 flex items-center gap-2"
+            >
+              <iconify-icon
+                icon="solar:slider-minimalistic-linear"
+                class="text-neutral-400"
+              ></iconify-icon>
+              Transformation Contrast
+            </h4>
+            <span class="text-xs font-light text-neutral-400">
+              Drag to compare
+            </span>
+          </div>
+
+          <div
+            class="relative w-full aspect-[16/7] md:aspect-[21/9] bg-neutral-200 rounded-sm overflow-hidden group select-none"
+          >
+            <!-- After Image (Base) -->
+            <img
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&amp;fit=crop&amp;q=80&amp;w=2000"
+              class="absolute inset-0 w-full h-full object-cover"
+              alt="After Renovation"
+            />
+
+            <!-- Before Image (Clipped overlay) -->
+            <div
+              class="absolute inset-0 w-[45%] overflow-hidden border-r border-white/50 bg-neutral-900"
+            >
+              <!-- Note: In reality, you'd use exactly matching photos. Here using a slightly different one for visual contrast demonstration -->
+              <img
+                src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&amp;fit=crop&amp;q=80&amp;w=2000"
+                class="absolute inset-0 w-[222%] h-full object-cover opacity-80 sepia-[.3] contrast-75"
+                alt="Before Renovation"
+              />
+              <div
+                class="absolute top-4 left-4 bg-black/40 backdrop-blur-md text-white text-xs font-light px-3 py-1.5 rounded-sm border border-white/10"
+              >
+                Before
+              </div>
+            </div>
+
+            <div
+              class="absolute top-4 right-4 bg-white/80 backdrop-blur-md text-neutral-900 text-xs font-medium px-3 py-1.5 rounded-sm border border-black/5 shadow-sm"
+            >
+              After
+            </div>
+
+            <!-- Slider Handle Line -->
+            <div
+              class="absolute top-0 bottom-0 left-[45%] w-px bg-white/80 shadow-[0_0_10px_rgba(0,0,0,0.3)]"
+            ></div>
+
+            <!-- Slider Button -->
+            <div
+              class="absolute left-[45%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-neutral-100 cursor-ew-resize transition-transform group-hover:scale-105"
+            >
+              <iconify-icon
+                icon="solar:round-alt-arrow-left-linear"
+                class="text-neutral-400 text-lg -mr-1"
+              ></iconify-icon>
+              <iconify-icon
+                icon="solar:round-alt-arrow-right-linear"
+                class="text-neutral-400 text-lg -ml-1"
+              ></iconify-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid Layout for 3D/Drone content -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- 2. 3D Storyboard / Renders -->
+          <div class="md:col-span-1 flex flex-col gap-4">
+            <h4
+              class="text-sm font-medium text-neutral-900 flex items-center gap-2 mb-1"
+            >
+              <iconify-icon
+                icon="solar:box-minimalistic-linear"
+                class="text-neutral-400"
+              ></iconify-icon>
+              3D Concepts
+            </h4>
+            <div class="grid grid-cols-2 gap-3">
+              <div
+                class="aspect-square bg-neutral-100 rounded-sm overflow-hidden border border-neutral-200/50"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&amp;fit=crop&amp;q=80&amp;w=600"
+                  class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500"
+                  alt="3D Render 1"
+                />
+              </div>
+              <div
+                class="aspect-square bg-neutral-100 rounded-sm overflow-hidden border border-neutral-200/50"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&amp;fit=crop&amp;q=80&amp;w=600"
+                  class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500"
+                  alt="3D Render 2"
+                />
+              </div>
+              <div
+                class="aspect-square bg-neutral-100 rounded-sm overflow-hidden border border-neutral-200/50"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&amp;fit=crop&amp;q=80&amp;w=600"
+                  class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500"
+                  alt="3D Render 3"
+                />
+              </div>
+              <div
+                class="aspect-square bg-neutral-50 rounded-sm overflow-hidden border border-neutral-200/50 flex flex-col items-center justify-center text-neutral-400 hover:bg-neutral-100 transition-colors cursor-pointer"
+              >
+                <iconify-icon
+                  icon="solar:gallery-wide-linear"
+                  class="text-xl mb-1"
+                ></iconify-icon>
+                <span
+                  class="text-[0.65rem] uppercase tracking-wider font-medium"
+                >
+                  View All (12)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Drone / Aerial Video Section -->
+          <div class="md:col-span-2 flex flex-col">
+            <h4
+              class="text-sm font-medium text-neutral-900 flex items-center gap-2 mb-5"
+            >
+              <iconify-icon
+                icon="solar:video-frame-linear"
+                class="text-neutral-400"
+              ></iconify-icon>
+              Aerial Survey
+            </h4>
+            <div
+              class="relative flex-grow bg-neutral-900 rounded-sm overflow-hidden group video-glow"
+            >
+              <img
+                src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"
+                class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-700 group-hover:scale-105"
+                alt="Drone view"
+              />
+
+              <!-- Play Button Overlay -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <button
+                  class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-md flex items-center justify-center border border-white/20 hover:scale-105 hover:bg-white/20 transition-all duration-300 shadow-xl group-hover:shadow-2xl"
+                >
+                  <iconify-icon
+                    icon="solar:play-bold"
+                    class="text-white text-2xl ml-1"
+                  ></iconify-icon>
+                </button>
+              </div>
+
+              <!-- Video Meta -->
+              <div
+                class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-end"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-2 h-2 rounded-full bg-red-500 animate-pulse"
+                  ></div>
+                  <span class="text-white text-xs font-light tracking-wide">
+                    4K Drone Footage
+                  </span>
+                </div>
+                <span class="text-white/60 text-xs font-mono">02:14</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Divider -->
+      <div class="w-full h-px bg-neutral-200/60 mb-24"></div>
+
+      <!-- Project Grid (Showing how standard interiors might look) -->
+      <div>
+        <h3
+          class="text-2xl md:text-3xl font-medium tracking-tighter text-neutral-900 mb-8"
+        >
+          More from 2023
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+          <!-- Project Card A -->
+          <a href="#" class="group block cursor-pointer">
+            <div
+              class="w-full aspect-[4/3] bg-neutral-100 rounded-sm overflow-hidden mb-4 relative"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&amp;fit=crop&amp;q=80&amp;w=1200"
+                class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                alt="Interior"
+              />
+              <div
+                class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-neutral-900 text-[0.65rem] uppercase tracking-widest font-medium px-2 py-1 rounded shadow-sm"
+              >
+                Interior
+              </div>
+            </div>
+            <div class="flex justify-between items-start">
+              <div>
+                <h4
+                  class="text-base font-medium text-neutral-900 group-hover:text-neutral-500 transition-colors"
+                >
+                  Minimalist Penthouse
+                </h4>
+                <p class="text-sm text-neutral-500 font-light mt-1">
+                  Full structural gut and rebuild.
+                </p>
+              </div>
+              <iconify-icon
+                icon="solar:arrow-right-up-linear"
+                class="text-neutral-400 group-hover:text-neutral-900 transition-colors text-lg opacity-0 group-hover:opacity-100 -translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 duration-300"
+              ></iconify-icon>
+            </div>
+          </a>
+
+          <!-- Project Card B -->
+          <a href="#" class="group block cursor-pointer">
+            <div
+              class="w-full aspect-[4/3] bg-neutral-100 rounded-sm overflow-hidden mb-4 relative"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&amp;fit=crop&amp;q=80&amp;w=1200"
+                class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                alt="Commercial"
+              />
+              <div
+                class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-neutral-900 text-[0.65rem] uppercase tracking-widest font-medium px-2 py-1 rounded shadow-sm"
+              >
+                Commercial
+              </div>
+            </div>
+            <div class="flex justify-between items-start">
+              <div>
+                <h4
+                  class="text-base font-medium text-neutral-900 group-hover:text-neutral-500 transition-colors"
+                >
+                  Tech Hub Headquarters
+                </h4>
+                <p class="text-sm text-neutral-500 font-light mt-1">
+                  Adaptive reuse of industrial space.
+                </p>
+              </div>
+              <iconify-icon
+                icon="solar:arrow-right-up-linear"
+                class="text-neutral-400 group-hover:text-neutral-900 transition-colors text-lg opacity-0 group-hover:opacity-100 -translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 duration-300"
+              ></iconify-icon>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <section
+      id="capital-overview"
+      class="bg-[#0E0E10] text-white py-24 px-6 border-t border-[#27272A]"
+    >
+      <div class="max-w-screen-2xl mx-auto">
+        <!-- Header -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12"
+        >
+          <div class="max-w-2xl">
+            <h2 class="text-3xl md:text-5xl font-medium tracking-tighter mb-4">
+              Executive Financial Summary
+            </h2>
+            <p
+              class="text-[#A1A1AA] text-sm md:text-base font-light leading-relaxed"
+            >
+              Monitor overall operational liquidity, structural outflow streams,
+              and global aggregated metrics across enterprise accounts.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <button
+              class="px-6 py-3 rounded-lg bg-[#18181C] border border-[#27272A] text-sm font-medium hover:bg-[#27272A] transition-colors flex items-center gap-2"
+            >
+              <iconify-icon
+                icon="solar:download-square-linear"
+                class="text-lg"
+              ></iconify-icon>
+              Export Report
+            </button>
+            <button
+              class="px-6 py-3 rounded-lg bg-[#818CF8] text-white text-sm font-medium hover:bg-[#818CF8]/90 transition-colors flex items-center gap-2 shadow-[0_0_20px_rgba(129,140,248,0.3)]"
+            >
+              <iconify-icon
+                icon="solar:chart-square-linear"
+                class="text-lg"
+              ></iconify-icon>
+              Overview
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <!-- Main Chart Panel -->
+          <div
+            class="md:col-span-8 bg-[#18181C] rounded-2xl border border-[#27272A] p-6 flex flex-col min-h-[400px]"
+          >
+            <div class="flex justify-between items-center mb-8">
+              <div>
+                <h3 class="text-lg font-medium">Capital Overview</h3>
+                <p
+                  class="text-xs text-[#A1A1AA] font-mono mt-1 uppercase tracking-wider"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  Metrics Workspace
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <span
+                  class="px-3 py-1 bg-[#0E0E10] rounded text-xs font-mono text-[#818CF8] border border-[#27272A]"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  YTD
+                </span>
+                <span
+                  class="px-3 py-1 bg-transparent rounded text-xs font-mono text-[#A1A1AA] hover:text-white cursor-pointer"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  ALL
+                </span>
+              </div>
+            </div>
+
+            <div class="flex-grow flex items-end gap-2 mt-auto">
+              <!-- Mock Chart Bars -->
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[20%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  1.2M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[35%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  2.4M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[25%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  1.8M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[55%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  3.8M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[40%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  2.9M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#818CF8] rounded-t-sm h-[80%] relative shadow-[0_0_20px_rgba(129,140,248,0.4)] group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  5.2M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[65%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  4.5M
+                </div>
+              </div>
+              <div
+                class="flex-1 bg-[#27272A] rounded-t-sm h-[90%] hover:bg-[#818CF8] transition-colors relative group"
+              >
+                <div
+                  class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[10px] py-1 px-2 rounded font-mono"
+                  style="font-family: 'JetBrains Mono', monospace;"
+                >
+                  6.1M
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex justify-between text-[#A1A1AA] text-[10px] font-mono mt-4 pt-4 border-t border-[#27272A]"
+              style="font-family: 'JetBrains Mono', monospace;"
+            >
+              <span>JAN</span>
+              <span>FEB</span>
+              <span>MAR</span>
+              <span>APR</span>
+              <span>MAY</span>
+              <span>JUN</span>
+              <span>JUL</span>
+              <span>AUG</span>
+            </div>
+          </div>
+
+          <!-- Side Panels -->
+          <div class="md:col-span-4 flex flex-col gap-6">
+            <!-- Wallets & Funding -->
+            <div
+              class="bg-[#18181C] rounded-2xl border border-[#27272A] p-6 flex-1"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <div>
+                  <h3 class="text-sm font-medium text-[#A1A1AA]">
+                    Total Liquidity
+                  </h3>
+                  <p class="text-3xl font-medium mt-1 tracking-tighter">
+                    $24.8M
+                  </p>
+                </div>
+                <div class="p-2 bg-[#F472B6]/10 rounded-lg text-[#F472B6]">
+                  <iconify-icon
+                    icon="solar:wallet-money-linear"
+                    class="text-xl"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-[#A1A1AA] flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#818CF8]"></span>
+                    Revenue Sources
+                  </span>
+                  <span
+                    class="font-mono"
+                    style="font-family: 'JetBrains Mono', monospace;"
+                  >
+                    68%
+                  </span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-[#A1A1AA] flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#F472B6]"></span>
+                    Funding Metrics
+                  </span>
+                  <span
+                    class="font-mono"
+                    style="font-family: 'JetBrains Mono', monospace;"
+                  >
+                    32%
+                  </span>
+                </div>
+              </div>
+              <div
+                class="w-full h-2 bg-[#0E0E10] rounded-full mt-6 flex overflow-hidden"
+              >
+                <div class="h-full bg-[#818CF8] w-[68%]"></div>
+                <div class="h-full bg-[#F472B6] w-[32%]"></div>
+              </div>
+            </div>
+
+            <!-- Cost Breakdown -->
+            <div
+              class="bg-[#18181C] rounded-2xl border border-[#27272A] p-6 flex-1"
+            >
+              <h3 class="text-sm font-medium text-[#A1A1AA] mb-4">
+                Cost Breakdown
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 rounded bg-[#27272A] flex items-center justify-center text-[#A1A1AA]"
+                  >
+                    <iconify-icon icon="solar:buildings-linear"></iconify-icon>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>Infrastructure</span>
+                      <span
+                        class="font-mono"
+                        style="font-family: 'JetBrains Mono', monospace;"
+                      >
+                        $8.2M
+                      </span>
+                    </div>
+                    <div class="w-full h-1 bg-[#0E0E10] rounded-full">
+                      <div class="h-full bg-white w-[45%] rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 rounded bg-[#27272A] flex items-center justify-center text-[#A1A1AA]"
+                  >
+                    <iconify-icon
+                      icon="solar:users-group-two-rounded-linear"
+                    ></iconify-icon>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>Operations</span>
+                      <span
+                        class="font-mono"
+                        style="font-family: 'JetBrains Mono', monospace;"
+                      >
+                        $4.5M
+                      </span>
+                    </div>
+                    <div class="w-full h-1 bg-[#0E0E10] rounded-full">
+                      <div class="h-full bg-white w-[25%] rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bg-neutral-900 pt-20 pb-10 px-6 border-t border-neutral-800">
+      <div
+        class="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-12"
+      >
+        <div>
+          <div
+            class="flex items-center gap-2 text-xl font-medium tracking-tighter text-white mb-4"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a6d9dcb7-b842-4ad1-84e3-828a6c5c6c8d_320w.jpg"
+              class="h-8 w-auto object-contain rounded-sm"
+              alt="FJ Logo"
+            />
+            FJ TECH
+          </div>
+          <p class="text-sm text-neutral-400 font-light max-w-xs">
+            Elevating industry standards through precise execution and
+            uncompromising quality.
+          </p>
+        </div>
+
+        <div class="flex gap-12 text-sm font-light">
+          <div class="flex flex-col gap-3">
+            <span class="text-white font-medium mb-1 tracking-tight">
+              Company
+            </span>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-white transition-colors"
+            >
+              About Us
+            </a>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-white transition-colors"
+            >
+              Services
+            </a>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-white transition-colors"
+            >
+              Careers
+            </a>
+          </div>
+          <div class="flex flex-col gap-3">
+            <span class="text-white font-medium mb-1 tracking-tight">
+              Social
+            </span>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-white transition-colors"
+            >
+              Instagram
+            </a>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-white transition-colors"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="max-w-screen-2xl mx-auto mt-16 pt-8 border-t border-neutral-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500 font-light"
+      >
+        <p>© 2024 FJ TECH Construction. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-white transition-colors">
+            Privacy Policy
+          </a>
+          <a href="#" class="hover:text-white transition-colors">
+            Terms of Service
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

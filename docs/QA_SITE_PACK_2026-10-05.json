@@ -1,0 +1,39 @@
+{
+  "api": "simulada; não valida produção",
+  "projetos_listados": 14,
+  "nextjs_pendentes": 13,
+  "preview_html": [
+    {
+      "dispositivo": "Mobile",
+      "width": 390,
+      "height": 844,
+      "canvas": 1,
+      "overflow": false,
+      "observado": "Preview experimental; aprovação visual pendente"
+    },
+    {
+      "dispositivo": "Tablet",
+      "width": 768,
+      "height": 1024,
+      "canvas": 1,
+      "overflow": false,
+      "observado": "Preview experimental; aprovação visual pendente"
+    },
+    {
+      "dispositivo": "Notebook",
+      "width": 1360,
+      "height": 768,
+      "canvas": 1,
+      "overflow": false,
+      "observado": "Preview experimental; aprovação visual pendente"
+    },
+    {
+      "dispositivo": "Desktop",
+      "width": 1920,
+      "height": 1080,
+      "canvas": 1,
+      "overflow": false,
+      "observado": "Preview experimental; aprovação visual pendente"
+    }
+  ]
+}

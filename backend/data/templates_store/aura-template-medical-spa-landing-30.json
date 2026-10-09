@@ -1,0 +1,79 @@
+{
+  "slug": "aura-template-medical-spa-landing-30",
+  "titulo": "Medical Aesthetics  Wellness Landing Page Template",
+  "descricao": "A high-end, brand-forward landing page template designed for medical spas, wellness clinics, and aesthetic practitioners to showcase services and book appointments. Fonte: https://www.aura.build/templates/medical-spa-landing-30",
+  "arquivo": "77lib/aura-template-medical-spa-landing-30.html",
+  "tamanho_html": 39436,
+  "paleta": [
+    {
+      "cor": "#e3c15e",
+      "usos": 69
+    },
+    {
+      "cor": "#d1dde8",
+      "usos": 9
+    },
+    {
+      "cor": "#2c2c2c",
+      "usos": 6
+    },
+    {
+      "cor": "#31353d",
+      "usos": 2
+    },
+    {
+      "cor": "#f1f1f1",
+      "usos": 1
+    },
+    {
+      "cor": "#d1d5db",
+      "usos": 1
+    },
+    {
+      "cor": "#9ca3af",
+      "usos": 1
+    },
+    {
+      "cor": "#d4b04c",
+      "usos": 1
+    },
+    {
+      "cor": "#fdfcfb",
+      "usos": 1
+    },
+    {
+      "cor": "#f8f9fa",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Playfair Display"
+  ],
+  "secoes": [
+    "VIJAYAWADA Ultimate Med Spa",
+    "Meet Dr. Walid Elkhalili",
+    "Curated Aesthetic Treatments",
+    "Request Appointment",
+    "Cloud La Med Spa"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 3,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-medical-spa-landing-30?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Medical Aesthetics  Wellness Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-medical-spa-landing-30`\n\n## Objetivo\nA high-end, brand-forward landing page template designed for medical spas, wellness clinics, and aesthetic practitioners to showcase services and book appointments. Fonte: https://www.aura.build/templates/medical-spa-landing-30\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e3c15e  (69x)\n- #d1dde8  (9x)\n- #2c2c2c  (6x)\n- #31353d  (2x)\n- #f1f1f1  (1x)\n- #d1d5db  (1x)\n- #9ca3af  (1x)\n- #d4b04c  (1x)\n- #fdfcfb  (1x)\n- #f8f9fa  (1x)\n\n## Tipografia detectada\n- Inter\n- Playfair Display\n\n## Estrutura de seções\n- VIJAYAWADA Ultimate Med Spa\n- Meet Dr. Walid Elkhalili\n- Curated Aesthetic Treatments\n- Request Appointment\n- Cloud La Med Spa\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Medical Aesthetics  Wellness Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Medical Aesthetics  Wellness Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-medical-spa-landing-30`\n\n## Objetivo\nA high-end, brand-forward landing page template designed for medical spas, wellness clinics, and aesthetic practitioners to showcase services and book appointments. Fonte: https://www.aura.build/templates/medical-spa-landing-30\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #e3c15e  (69x)\n- #d1dde8  (9x)\n- #2c2c2c  (6x)\n- #31353d  (2x)\n- #f1f1f1  (1x)\n- #d1d5db  (1x)\n- #9ca3af  (1x)\n- #d4b04c  (1x)\n- #fdfcfb  (1x)\n- #f8f9fa  (1x)\n\n## Tipografia detectada\n- Inter\n- Playfair Display\n\n## Estrutura de seções\n- VIJAYAWADA Ultimate Med Spa\n- Meet Dr. Walid Elkhalili\n- Curated Aesthetic Treatments\n- Request Appointment\n- Cloud La Med Spa\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:22"
+}

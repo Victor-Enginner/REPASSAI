@@ -1,0 +1,74 @@
+{
+  "slug": "aura-template-artisan-burger-23",
+  "titulo": "Artisan Burger Restaurant Landing Page Template",
+  "descricao": "A high-energy, bold restaurant landing page template designed for smashed burger brands and artisanal food services. Fonte: https://www.aura.build/templates/artisan-burger-23",
+  "arquivo": "77lib/aura-template-artisan-burger-23.html",
+  "tamanho_html": 29912,
+  "paleta": [
+    {
+      "cor": "#f91814",
+      "usos": 34
+    },
+    {
+      "cor": "#f4ebe1",
+      "usos": 4
+    },
+    {
+      "cor": "#40220d",
+      "usos": 3
+    },
+    {
+      "cor": "#f4a804",
+      "usos": 2
+    },
+    {
+      "cor": "#fafafa",
+      "usos": 1
+    },
+    {
+      "cor": "#f9cd25",
+      "usos": 1
+    },
+    {
+      "cor": "#2c1608",
+      "usos": 1
+    },
+    {
+      "cor": "#583115",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Modak",
+    "Mouse Memoirs"
+  ],
+  "secoes": [
+    "THE BURGER",
+    "JUTEUX ET FROMAGER BIEN GARNI",
+    "UNE NOURRITURE QUI FAIT DU BIEN",
+    "QUALITÉ PURE",
+    "LA QUALITÉ QUI VOYAGE AVEC VOUS",
+    "SENTEZ LA DIFFÉRENCE",
+    "CRAV"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS"
+  ],
+  "imagens": 15,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-artisan-burger-23?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Artisan Burger Restaurant Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-artisan-burger-23`\n\n## Objetivo\nA high-energy, bold restaurant landing page template designed for smashed burger brands and artisanal food services. Fonte: https://www.aura.build/templates/artisan-burger-23\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f91814  (34x)\n- #f4ebe1  (4x)\n- #40220d  (3x)\n- #f4a804  (2x)\n- #fafafa  (1x)\n- #f9cd25  (1x)\n- #2c1608  (1x)\n- #583115  (1x)\n\n## Tipografia detectada\n- Inter\n- Modak\n- Mouse Memoirs\n\n## Estrutura de seções\n- THE BURGER\n- JUTEUX ET FROMAGER BIEN GARNI\n- UNE NOURRITURE QUI FAIT DU BIEN\n- QUALITÉ PURE\n- LA QUALITÉ QUI VOYAGE AVEC VOUS\n- SENTEZ LA DIFFÉRENCE\n- CRAV\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Artisan Burger Restaurant Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Artisan Burger Restaurant Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-artisan-burger-23`\n\n## Objetivo\nA high-energy, bold restaurant landing page template designed for smashed burger brands and artisanal food services. Fonte: https://www.aura.build/templates/artisan-burger-23\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f91814  (34x)\n- #f4ebe1  (4x)\n- #40220d  (3x)\n- #f4a804  (2x)\n- #fafafa  (1x)\n- #f9cd25  (1x)\n- #2c1608  (1x)\n- #583115  (1x)\n\n## Tipografia detectada\n- Inter\n- Modak\n- Mouse Memoirs\n\n## Estrutura de seções\n- THE BURGER\n- JUTEUX ET FROMAGER BIEN GARNI\n- UNE NOURRITURE QUI FAIT DU BIEN\n- QUALITÉ PURE\n- LA QUALITÉ QUI VOYAGE AVEC VOUS\n- SENTEZ LA DIFFÉRENCE\n- CRAV\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:36"
+}

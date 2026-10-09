@@ -1,0 +1,106 @@
+{
+  "slug": "aura-template-contractor-landing-58",
+  "titulo": "Handy Prime Contractor Landing Page Template",
+  "descricao": "A professional home services and general contractor template designed for renovation businesses, featuring service grids, galleries, and trust signals. Fonte: https://www.aura.build/templates/contractor-landing-58",
+  "arquivo": "77lib/aura-template-contractor-landing-58.html",
+  "tamanho_html": 66304,
+  "paleta": [
+    {
+      "cor": "#132347",
+      "usos": 81
+    },
+    {
+      "cor": "#f5b82e",
+      "usos": 69
+    },
+    {
+      "cor": "#f8f9fc",
+      "usos": 17
+    },
+    {
+      "cor": "#e0a628",
+      "usos": 11
+    },
+    {
+      "cor": "#4285f4",
+      "usos": 4
+    },
+    {
+      "cor": "#34a853",
+      "usos": 4
+    },
+    {
+      "cor": "#fbbc05",
+      "usos": 4
+    },
+    {
+      "cor": "#ea4335",
+      "usos": 4
+    },
+    {
+      "cor": "#fff",
+      "usos": 1
+    },
+    {
+      "cor": "#0d1832",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(19,35,71,.92)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(19,35,71,.18)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(245,184,46,.22)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(59,130,246,.16)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(255,255,255,.16)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(245,184,46,.08)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Bricolage Grotesque"
+  ],
+  "secoes": [
+    "Renovations &amp; General Contracting Done Right",
+    "Licensed Duncan general contractor for clean, reliable home improvements.",
+    "Complete Home Renovation &amp; Repair Services",
+    "Bathroom Renovations, Custom Finishing &amp; Home Upgrades",
+    "5 out of 5 from Duncan homeowners",
+    "Handy Prime in Duncan",
+    "Ready for a cleaner, more professional renovation experience?"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations"
+  ],
+  "imagens": 8,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-contractor-landing-58?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Handy Prime Contractor Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-contractor-landing-58`\n\n## Objetivo\nA professional home services and general contractor template designed for renovation businesses, featuring service grids, galleries, and trust signals. Fonte: https://www.aura.build/templates/contractor-landing-58\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #132347  (81x)\n- #f5b82e  (69x)\n- #f8f9fc  (17x)\n- #e0a628  (11x)\n- #4285f4  (4x)\n- #34a853  (4x)\n- #fbbc05  (4x)\n- #ea4335  (4x)\n- #fff  (1x)\n- #0d1832  (1x)\n- rgba(19,35,71,.92)  (1x)\n- rgba(19,35,71,.18)  (1x)\n- rgba(245,184,46,.22)  (1x)\n- rgba(59,130,246,.16)  (1x)\n- rgba(255,255,255,.16)  (1x)\n- rgba(245,184,46,.08)  (1x)\n\n## Tipografia detectada\n- Inter\n- Bricolage Grotesque\n\n## Estrutura de seções\n- Renovations &amp; General Contracting Done Right\n- Licensed Duncan general contractor for clean, reliable home improvements.\n- Complete Home Renovation &amp; Repair Services\n- Bathroom Renovations, Custom Finishing &amp; Home Upgrades\n- 5 out of 5 from Duncan homeowners\n- Handy Prime in Duncan\n- Ready for a cleaner, more professional renovation experience?\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Handy Prime Contractor Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Handy Prime Contractor Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-contractor-landing-58`\n\n## Objetivo\nA professional home services and general contractor template designed for renovation businesses, featuring service grids, galleries, and trust signals. Fonte: https://www.aura.build/templates/contractor-landing-58\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #132347  (81x)\n- #f5b82e  (69x)\n- #f8f9fc  (17x)\n- #e0a628  (11x)\n- #4285f4  (4x)\n- #34a853  (4x)\n- #fbbc05  (4x)\n- #ea4335  (4x)\n- #fff  (1x)\n- #0d1832  (1x)\n- rgba(19,35,71,.92)  (1x)\n- rgba(19,35,71,.18)  (1x)\n- rgba(245,184,46,.22)  (1x)\n- rgba(59,130,246,.16)  (1x)\n- rgba(255,255,255,.16)  (1x)\n- rgba(245,184,46,.08)  (1x)\n\n## Tipografia detectada\n- Inter\n- Bricolage Grotesque\n\n## Estrutura de seções\n- Renovations &amp; General Contracting Done Right\n- Licensed Duncan general contractor for clean, reliable home improvements.\n- Complete Home Renovation &amp; Repair Services\n- Bathroom Renovations, Custom Finishing &amp; Home Upgrades\n- 5 out of 5 from Duncan homeowners\n- Handy Prime in Duncan\n- Ready for a cleaner, more professional renovation experience?\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:49"
+}

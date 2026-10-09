@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en">
+  <head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CRAV | Artisan Smashed Burgers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Modak&amp;family=Mouse+Memoirs&amp;display=swap"
+rel="stylesheet"
+/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body
+    class="text-zinc-800 antialiased selection:bg-[#f91814] selection:text-white min-h-screen flex flex-col overflow-x-hidden bg-[#F4EBE1]"
+    style="font-family: 'Inter', sans-serif;"
+  >
+    <!-- Navigation -->
+    <nav class="fixed top-0 inset-x-0 z-50 bg-transparent">
+      <div
+        class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between"
+      >
+        <a
+          href="/"
+          class="uppercase text-4xl text-[#f91814]"
+          style='font-family: "Modak", system-ui;'
+        >
+          CRAV
+        </a>
+
+        <div class="flex items-center gap-6">
+          <div class="hidden md:flex items-center gap-6">
+            <a
+              href="/"
+              class="text-xs font-medium tracking-tight text-zinc-500 hover:text-zinc-900 transition-colors uppercase"
+            >
+              Accueil
+            </a>
+            <a
+              href="#about"
+              class="text-xs font-medium tracking-tight text-zinc-500 hover:text-zinc-900 transition-colors uppercase"
+            >
+              À Propos
+            </a>
+            <a
+              href="#ingredients"
+              class="text-xs font-medium tracking-tight text-zinc-500 hover:text-zinc-900 transition-colors uppercase"
+            >
+              Ingrédients
+            </a>
+            <a
+              href="#locations"
+              class="text-xs font-medium tracking-tight text-zinc-500 hover:text-zinc-900 transition-colors uppercase"
+            >
+              Adresses
+            </a>
+          </div>
+
+          <a
+            href="/menu"
+            class="hidden md:inline-flex items-center justify-center text-xs uppercase tracking-tight font-medium text-white bg-[#f91814] hover:bg-red-700 px-5 py-2 rounded-full transition-all shadow-sm"
+          >
+            Les Burgers
+          </a>
+
+          <button
+            aria-label="Menu"
+            class="inline-flex items-center justify-center p-2 rounded-full hover:bg-zinc-100 transition-colors text-zinc-700 md:hidden"
+          >
+            <iconify-icon
+              icon="solar:hamburger-menu-linear"
+              style="stroke-width: 1.5;"
+            ></iconify-icon>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="relative pt-32 pb-20 md:pt-40 md:pb-32 flex flex-col items-center text-center px-6 overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 flex items-center justify-center -z-10 opacity-5 pointer-events-none select-none"
+      >
+        <span
+          class="text-[25vw] leading-none text-[#F4A804]"
+          style="font-family: 'Modak', system-ui;"
+        >
+          CRAV
+        </span>
+      </div>
+
+      <h1
+        class="text-6xl md:text-[10vw] leading-none text-[#f91814] tracking-tighter max-w-5xl mx-auto drop-shadow-sm"
+        style="font-family: 'Modak', system-ui;"
+      >
+        THE BURGER
+      </h1>
+
+      <div class="flex items-center justify-center gap-4 mt-6 text-[#F4A804]">
+        <p
+          class="text-xl md:text-3xl tracking-tight uppercase"
+          style="font-family: 'Mouse Memoirs', sans-serif;"
+        >
+          Écrasé Frais
+        </p>
+        <span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>
+        <p
+          class="text-xl md:text-3xl tracking-tight uppercase"
+          style="font-family: 'Mouse Memoirs', sans-serif;"
+        >
+          Goût Audacieux
+        </p>
+      </div>
+
+      <div class="relative w-full max-w-4xl mt-12 mb-8 z-10">
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent z-10 top-1/2"
+        ></div>
+        <img
+          src="https://www.cravburgers.shop/img-webp/burgerH.webp"
+          alt="CRAV Artisan Smashed Burger"
+          class="w-full h-auto drop-shadow-2xl hover:scale-[1.02] transition-transform duration-700 object-contain"
+        />
+      </div>
+
+      <div
+        class="flex flex-col md:flex-row justify-between w-full max-w-4xl gap-8 text-sm font-medium text-zinc-500 text-left px-6 relative z-20"
+      >
+        <p class="max-w-xs tracking-tight">
+          Écrasés chauds sur la plaque, nos steaks hachés conservent une
+          jutosité ultime sous une croûte caramélisée.
+        </p>
+        <p class="max-w-xs md:text-right tracking-tight">
+          Garnis de cheddar fondu et de notre sauce secrète, créés pour
+          satisfaire vos envies depuis 1997.
+        </p>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 md:py-32 bg-[#F4EBE1]">
+      <div
+        class="max-w-7xl mx-auto px-6 flex flex-col items-center text-center"
+      >
+        <p
+          class="text-2xl tracking-tight mb-4 uppercase text-[#f91814]"
+          style="font-family: 'Mouse Memoirs', sans-serif;"
+        >
+          Le Grand Classique
+        </p>
+        <h2
+          class="text-4xl md:text-6xl tracking-tighter leading-tight mb-8 text-[#f91814]"
+          style="font-family: 'Modak', system-ui;"
+        >
+          JUTEUX ET FROMAGER
+          <br />
+          BIEN GARNI
+        </h2>
+        <p
+          class="max-w-xl mx-auto text-zinc-500 mb-10 text-sm font-medium tracking-tight leading-relaxed"
+        >
+          CRAV est de retour et plus audacieux que jamais. L'ultime expérience
+          du burger écrasé, généreux, chaud et préparé à la commande.
+        </p>
+        <a
+          href="/menu"
+          class="inline-flex items-center gap-2 text-white px-7 py-3 rounded-full font-medium text-xs uppercase tracking-tight transition-colors shadow-sm bg-[#f91814] hover:bg-red-700"
+        >
+          Commander
+          <iconify-icon
+            icon="solar:arrow-right-linear"
+            style="stroke-width: 1.5;"
+          ></iconify-icon>
+        </a>
+
+        <!-- Bento Images -->
+        <div
+          class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 w-full max-w-5xl"
+        >
+          <div
+            class="rounded-3xl overflow-hidden h-72 md:h-96 w-full shadow-sm border border-zinc-100 group"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/about-1.webp"
+              alt="Chef preparing"
+              class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <div
+            class="rounded-3xl overflow-hidden h-72 md:h-96 w-full shadow-sm border border-zinc-100 md:-mt-8 group relative z-10"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/about-2.webp"
+              alt="Melted cheese"
+              class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <div
+            class="rounded-3xl overflow-hidden h-72 md:h-96 w-full shadow-sm border border-zinc-100 group"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/about-3.webp"
+              alt="Restaurant atmosphere"
+              class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience / Feature Section -->
+    <section class="py-24 md:py-32 relative overflow-hidden bg-[#f91814]">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <p
+            class="text-xl md:text-2xl tracking-tight mb-4 uppercase text-white"
+            style="font-family: 'Mouse Memoirs', sans-serif;"
+          >
+            L'Expérience
+          </p>
+          <h2
+            class="text-4xl md:text-5xl tracking-tighter leading-tight text-white"
+            style="font-family: 'Modak', system-ui;"
+          >
+            UNE NOURRITURE QUI FAIT DU BIEN
+          </h2>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row items-center justify-between gap-12 mt-12 relative bg-transparent p-0"
+        >
+          <div
+            class="flex flex-col gap-6 text-xs uppercase tracking-tight font-medium md:w-1/4 text-white"
+          >
+            <div class="flex items-center gap-3">
+              <iconify-icon
+                icon="solar:fire-linear"
+                class="text-lg text-white"
+                style="stroke-width: 1.5;"
+              ></iconify-icon>
+              <span>450 kcal</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <iconify-icon
+                icon="solar:dumbbell-linear"
+                class="text-lg text-white"
+                style="stroke-width: 1.5;"
+              ></iconify-icon>
+              <span>Riche en Protéines</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <iconify-icon
+                icon="solar:leaf-linear"
+                class="text-lg text-white"
+                style="stroke-width: 1.5;"
+              ></iconify-icon>
+              <span>Ingrédients Frais</span>
+            </div>
+          </div>
+
+          <div class="md:w-2/4 relative flex justify-center z-10">
+            <img
+              src="https://www.cravburgers.shop/img-webp/burgerwithhands.webp"
+              alt="Burger with hands"
+              class="w-full max-w-[280px] md:max-w-[400px] drop-shadow-xl"
+            />
+          </div>
+
+          <div
+            class="flex flex-col gap-6 text-xs uppercase tracking-tight font-medium md:w-1/4 md:items-end text-white"
+          >
+            <div class="flex items-center gap-3 flex-row-reverse md:flex-row">
+              <span>100% Bio</span>
+              <iconify-icon
+                icon="solar:shield-check-linear"
+                class="text-lg text-white"
+                style="stroke-width: 1.5;"
+              ></iconify-icon>
+            </div>
+            <div class="flex items-center gap-3 flex-row-reverse md:flex-row">
+              <span>Zéro Culpabilité</span>
+              <iconify-icon
+                icon="solar:heart-linear"
+                class="text-lg text-white"
+                style="stroke-width: 1.5;"
+              ></iconify-icon>
+            </div>
+            <div class="flex items-center gap-3 flex-row-reverse md:flex-row">
+              <span>Goût Authentique</span>
+              <iconify-icon
+                icon="solar:star-linear"
+                class="text-lg text-white"
+                style="stroke-width: 1.5;"
+              ></iconify-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredients Bento Grid -->
+    <section id="ingredients" class="py-24 md:py-32 bg-[#F4EBE1]">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2
+            class="text-4xl md:text-5xl tracking-tighter mb-4 text-[#f91814]"
+            style="font-family: 'Modak', system-ui;"
+          >
+            QUALITÉ PURE
+          </h2>
+          <h3
+            class="text-xl md:text-2xl font-medium tracking-tight text-[#f91814]"
+          >
+            Chaque couche remplie de notre saveur signature
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12">
+          <div
+            class="rounded-3xl p-8 flex flex-col items-center text-center transition-colors bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/tomato.webp"
+              alt="Fresh Tomato"
+              class="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md mb-6 hover:scale-110 transition-transform duration-500"
+            />
+            <h4 class="tracking-tight text-[#f91814] font-bold text-lg">
+              Tomate Fraîche
+            </h4>
+          </div>
+
+          <div
+            class="rounded-3xl p-8 flex flex-col items-center text-center transition-colors md:translate-y-4 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/cheese.webp"
+              alt="Premium Cheese"
+              class="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md mb-6 hover:scale-110 transition-transform duration-500"
+            />
+            <h4 class="tracking-tight text-[#f91814] font-bold text-lg">
+              Cheddar Premium
+            </h4>
+          </div>
+
+          <div
+            class="rounded-3xl p-8 flex flex-col items-center text-center transition-colors bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/meat.webp"
+              alt="Smashed Beef"
+              class="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md mb-6 hover:scale-110 transition-transform duration-500"
+            />
+            <h4 class="tracking-tight text-[#f91814] font-bold text-lg">
+              Bœuf Écrasé Artisanal
+            </h4>
+          </div>
+
+          <div
+            class="rounded-3xl p-8 flex flex-col items-center text-center transition-colors md:translate-y-4 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/lettuce.webp"
+              alt="Crispy Lettuce"
+              class="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md mb-6 hover:scale-110 transition-transform duration-500"
+            />
+            <h4 class="tracking-tight text-[#f91814] font-bold text-lg">
+              Laitue du Jardin
+            </h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map / Locations Section -->
+    <section id="locations" class="py-24 md:py-32 bg-[#F9CD25]">
+      <div
+        class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-16 md:gap-8 items-start"
+      >
+        <div class="md:w-1/3 sticky top-32">
+          <p
+            class="text-2xl uppercase tracking-tight mb-4 text-white"
+            style="font-family: 'Mouse Memoirs', sans-serif;"
+          >
+            À Emporter
+          </p>
+          <h2
+            class="text-4xl md:text-5xl tracking-tighter mb-6 leading-tight text-white"
+            style="font-family: 'Modak', system-ui;"
+          >
+            LA QUALITÉ QUI VOYAGE AVEC VOUS
+          </h2>
+          <p
+            class="text-sm font-medium leading-relaxed max-w-sm text-white font-semibold"
+          >
+            Des smash burgers fraîchement emballés, prêts à vous suivre partout.
+            De notre plaque chauffante à n'importe quel coin du globe.
+          </p>
+        </div>
+
+        <div
+          class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div
+            class="rounded-[2rem] hover:-translate-y-1 transition-transform duration-300 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/berlin.webp"
+              alt="Berlin"
+              class="rounded-3xl w-full aspect-[4/5] object-cover mb-4 shadow-sm"
+            />
+            <p
+              class="text-center text-xl tracking-tight pb-2 text-[#f91814]"
+              style="font-family: 'Modak', system-ui;"
+            >
+              BERLIN
+            </p>
+          </div>
+
+          <div
+            class="rounded-[2rem] hover:-translate-y-1 transition-transform duration-300 md:mt-8 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/london.webp"
+              alt="London"
+              class="rounded-3xl w-full aspect-[4/5] object-cover mb-4 shadow-sm"
+            />
+            <p
+              class="text-center text-xl tracking-tight pb-2 text-[#f91814]"
+              style="font-family: 'Modak', system-ui;"
+            >
+              LONDRES
+            </p>
+          </div>
+
+          <div
+            class="rounded-[2rem] hover:-translate-y-1 transition-transform duration-300 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/newyork.webp"
+              alt="New York"
+              class="rounded-3xl w-full aspect-[4/5] object-cover mb-4 shadow-sm"
+            />
+            <p
+              class="text-center text-xl tracking-tight pb-2 text-[#f91814]"
+              style="font-family: 'Modak', system-ui;"
+            >
+              NEW YORK
+            </p>
+          </div>
+
+          <div
+            class="rounded-[2rem] hover:-translate-y-1 transition-transform duration-300 md:-mt-8 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/sydney.webp"
+              alt="Sydney"
+              class="rounded-3xl w-full aspect-[4/5] object-cover mb-4 shadow-sm"
+            />
+            <p
+              class="text-center text-xl tracking-tight pb-2 text-[#f91814]"
+              style="font-family: 'Modak', system-ui;"
+            >
+              SYDNEY
+            </p>
+          </div>
+
+          <div
+            class="rounded-[2rem] hover:-translate-y-1 transition-transform duration-300 bg-transparent"
+          >
+            <img
+              src="https://www.cravburgers.shop/img-webp/tokyo.webp"
+              alt="Tokyo"
+              class="rounded-3xl w-full aspect-[4/5] object-cover mb-4 shadow-sm"
+            />
+            <p
+              class="text-center text-xl tracking-tight pb-2 text-[#f91814]"
+              style="font-family: 'Modak', system-ui;"
+            >
+              TOKYO
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 md:py-32 relative overflow-hidden bg-[#F4EBE1]">
+      <div
+        class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12 md:gap-20"
+      >
+        <div
+          class="md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left"
+        >
+          <p
+            class="text-xl md:text-2xl tracking-tight mb-4 uppercase text-[#f91814]"
+            style="font-family: 'Mouse Memoirs', sans-serif;"
+          >
+            Ressentez-le
+          </p>
+          <h2
+            class="text-5xl md:text-7xl tracking-tighter text-[#f91814] leading-none mb-8"
+            style="font-family: 'Modak', system-ui;"
+          >
+            SENTEZ LA
+            <br />
+            DIFFÉRENCE
+          </h2>
+          <p
+            class="text-sm text-zinc-500 mb-10 font-medium leading-relaxed max-w-sm"
+          >
+            Écrasé pour les audacieux, conçu pour les affamés. Plongez dans une
+            expérience légendaire où chaque bord croustillant et chaque couche
+            juteuse règnent en maître.
+          </p>
+          <a
+            href="/menu"
+            class="inline-flex items-center gap-2 bg-[#f91814] text-white px-8 py-3.5 rounded-full font-medium text-xs uppercase tracking-tight hover:bg-red-700 transition-colors shadow-md shadow-red-500/20"
+          >
+            Commander
+            <iconify-icon
+              icon="solar:arrow-right-linear"
+              style="stroke-width: 1.5;"
+            ></iconify-icon>
+          </a>
+        </div>
+
+        <div class="md:w-1/2 w-full relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-tr from-zinc-100 to-transparent rounded-[2rem] -z-10 translate-x-4 translate-y-4"
+          ></div>
+          <img
+            src="https://www.cravburgers.shop/img-webp/cta.webp"
+            alt="Premium smashed burger"
+            class="rounded-[2rem] shadow-xl object-cover aspect-[4/5] w-full border border-zinc-100"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="pt-20 pb-12 mt-auto text-white border-t bg-[#2c1608] border-[#40220d]"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <!-- Brand -->
+          <div class="col-span-1 md:col-span-1">
+            <a
+              href="/"
+              class="uppercase text-5xl text-[#f91814] block mb-6 drop-shadow-sm"
+              style="font-family: 'Modak', system-ui;"
+            >
+              CRAV
+            </a>
+            <p
+              class="text-sm text-zinc-400 font-medium leading-relaxed tracking-tight mb-6"
+            >
+              L'ultime expérience du burger écrasé, généreux, chaud et préparé à
+              la commande depuis 1997.
+            </p>
+            <div class="flex items-center gap-4 text-zinc-400">
+              <a
+                href="#"
+                aria-label="Instagram"
+                class="hover:text-white transition-colors"
+              >
+                <iconify-icon
+                  icon="mdi:instagram"
+                  class="text-2xl"
+                ></iconify-icon>
+              </a>
+              <a
+                href="#"
+                aria-label="Facebook"
+                class="hover:text-white transition-colors"
+              >
+                <iconify-icon
+                  icon="mdi:facebook"
+                  class="text-2xl"
+                ></iconify-icon>
+              </a>
+              <a
+                href="#"
+                aria-label="Twitter"
+                class="hover:text-white transition-colors"
+              >
+                <iconify-icon
+                  icon="mdi:twitter"
+                  class="text-2xl"
+                ></iconify-icon>
+              </a>
+            </div>
+          </div>
+
+          <!-- Links 1 -->
+          <div class="col-span-1 md:pl-8">
+            <h4
+              class="text-white font-bold tracking-tight mb-6 uppercase text-sm"
+            >
+              Navigation
+            </h4>
+            <div class="flex flex-col gap-4">
+              <a
+                href="/"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                Accueil
+              </a>
+              <a
+                href="#about"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                À Propos
+              </a>
+              <a
+                href="#ingredients"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                Ingrédients
+              </a>
+              <a
+                href="#locations"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                Adresses
+              </a>
+            </div>
+          </div>
+
+          <!-- Links 2 -->
+          <div class="col-span-1">
+            <h4
+              class="text-white font-bold tracking-tight mb-6 uppercase text-sm"
+            >
+              Informations
+            </h4>
+            <div class="flex flex-col gap-4">
+              <a
+                href="/menu"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                Notre Carte
+              </a>
+              <a
+                href="/faq"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                FAQ
+              </a>
+              <a
+                href="/contact"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                Contact
+              </a>
+              <a
+                href="/jobs"
+                class="text-sm text-zinc-400 hover:text-[#f91814] transition-colors tracking-tight font-medium"
+              >
+                Recrutement
+              </a>
+            </div>
+          </div>
+
+          <!-- Newsletter -->
+          <div class="col-span-1">
+            <h4
+              class="text-white font-bold tracking-tight mb-6 uppercase text-sm"
+            >
+              La lettre CRAV
+            </h4>
+            <p
+              class="text-sm text-zinc-400 font-medium leading-relaxed tracking-tight mb-4"
+            >
+              Rejoignez le club pour des offres exclusives et les nouveautés.
+            </p>
+            <form
+              class="flex flex-col gap-3"
+              onsubmit="event.preventDefault();"
+            >
+              <input
+                type="email"
+                placeholder="Votre email"
+                class="w-full border rounded-full px-5 py-3 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#f91814] transition-colors bg-[#40220d] border-[#583115]"
+                required=""
+              />
+              <button
+                type="submit"
+                class="w-full bg-[#f91814] text-white px-5 py-3 rounded-full font-semibold text-xs uppercase tracking-tight hover:bg-red-700 transition-colors shadow-sm"
+              >
+                S'inscrire
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bottom -->
+        <div
+          class="pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 border-[#40220d]"
+        >
+          <p class="text-xs font-medium tracking-tight text-zinc-500">
+            © 2026 CRAV — Tous droits réservés.
+          </p>
+          <div class="flex gap-4">
+            <a
+              href="/privacy"
+              class="text-xs font-medium tracking-tight text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Confidentialité
+            </a>
+            <a
+              href="/terms"
+              class="text-xs font-medium tracking-tight text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              CGV
+            </a>
+          </div>
+        </div>
+
+        <!-- Big Logo -->
+        <div class="mt-16 flex justify-center overflow-hidden">
+          <h2
+            class="text-[25vw] md:text-[15vw] leading-none tracking-tighter select-none text-[#f91814]"
+            style="font-family: 'Modak', system-ui;"
+          >
+            CRAV
+          </h2>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

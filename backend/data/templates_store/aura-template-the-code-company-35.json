@@ -1,0 +1,68 @@
+{
+  "slug": "aura-template-the-code-company-35",
+  "titulo": "TheCodeCompany",
+  "descricao": "Template gratuito importado da Aura. Fonte: https://www.aura.build/templates/the-code-company-35",
+  "arquivo": "77lib/aura-template-the-code-company-35.html",
+  "tamanho_html": 32706,
+  "paleta": [
+    {
+      "cor": "#f5f4e8",
+      "usos": 4
+    },
+    {
+      "cor": "#e4e4e7",
+      "usos": 2
+    },
+    {
+      "cor": "#f2f2f2",
+      "usos": 2
+    },
+    {
+      "cor": "#0a0a0a",
+      "usos": 2
+    },
+    {
+      "cor": "#f5f5f5",
+      "usos": 2
+    },
+    {
+      "cor": "rgb(255, 255, 255)",
+      "usos": 2
+    },
+    {
+      "cor": "#000000",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(0,0,0,0.5)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter"
+  ],
+  "secoes": [
+    "CODIGO. SONIDO. EMOCIÓN.",
+    "Stiven&nbsp;Castillo"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "IntersectionObserver"
+  ],
+  "imagens": 10,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-the-code-company-35?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — TheCodeCompany\n\nOrigem: registry privado 77lib\nSlug: `aura-template-the-code-company-35`\n\n## Objetivo\nTemplate gratuito importado da Aura. Fonte: https://www.aura.build/templates/the-code-company-35\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f5f4e8  (4x)\n- #e4e4e7  (2x)\n- #f2f2f2  (2x)\n- #0a0a0a  (2x)\n- #f5f5f5  (2x)\n- rgb(255, 255, 255)  (2x)\n- #000000  (1x)\n- rgba(0,0,0,0.5)  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- CODIGO. SONIDO. EMOCIÓN.\n- Stiven&nbsp;Castillo\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"TheCodeCompany\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — TheCodeCompany\n\nOrigem: registry privado 77lib\nSlug: `aura-template-the-code-company-35`\n\n## Objetivo\nTemplate gratuito importado da Aura. Fonte: https://www.aura.build/templates/the-code-company-35\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f5f4e8  (4x)\n- #e4e4e7  (2x)\n- #f2f2f2  (2x)\n- #0a0a0a  (2x)\n- #f5f5f5  (2x)\n- rgb(255, 255, 255)  (2x)\n- #000000  (1x)\n- rgba(0,0,0,0.5)  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- CODIGO. SONIDO. EMOCIÓN.\n- Stiven&nbsp;Castillo\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:14"
+}

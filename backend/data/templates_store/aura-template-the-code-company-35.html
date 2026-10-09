@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="es" class="scroll-smooth">
+
+<head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Code Company Corp</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body {
+font-family: 'Inter', sans-serif;
+}
+.barcode {
+background: repeating-linear-gradient(to right,
+black,
+black 2px,
+transparent 2px,
+transparent 4px,
+black 4px,
+black 5px,
+transparent 5px,
+transparent 8px);
+}
+.waveform-bg {
+background-image: repeating-linear-gradient(to right,
+#e4e4e7 0%,
+#e4e4e7 1px,
+transparent 1px,
+transparent 4px);
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+
+<body class="bg-[#f2f2f2] text-zinc-950 antialiased overflow-x-hidden selection:bg-black selection:text-white">
+  <!-- Navigation -->
+  <nav class="fixed w-full top-0 z-50 bg-[#f2f2f2]/90 backdrop-blur-md border-b border-zinc-200/50">
+    <div class="max-w-[95%] xl:max-w-[1800px] mx-auto px-6 h-24 flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <a href="#inicio" class="flex items-center">
+          <img src="https://i.ibb.co/zTyKTFdf/LOGO-CODE-COMPANY-NEGRO.png" alt="The Code Company Corp" class="h-28 sm:h-36 md:h-48 w-auto object-contain drop-shadow-sm">
+        </a>
+      </div>
+
+      <!-- Links -->
+      <div class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide">
+        <a href="#musica" class="flex flex-col items-center group cursor-pointer text-black">
+          <span class="">INICIO</span>
+          <div class="h-0.5 w-full bg-black mt-1"></div>
+          <div class="w-1 h-1 bg-black rounded-full mt-1"></div>
+        </a>
+        <a href="#servicios" class="text-zinc-500 hover:text-black transition-colors">
+          MÚSICA
+        </a>
+        <a href="#sobre-mi" class="text-zinc-500 hover:text-black transition-colors">
+          SERVICIOS
+        </a>
+        <a href="#contacto" class="text-zinc-500 hover:text-black transition-colors">
+          SOBRE MÍ
+        </a>
+        <a href="#" class="text-zinc-500 hover:text-black transition-colors">
+          CONTACTO
+        </a>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-6">
+        <div class="hidden md:flex items-center gap-4 text-zinc-600">
+          <a href="#" class="hover:text-black transition-colors">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="Spotify" class="h-5 w-5 object-cover grayscale opacity-70 hover:opacity-100 hover:grayscale-0 transition-all">
+          </a>
+          <a href="#" class="hover:text-black transition-colors">
+            <i data-lucide="apple" stroke-width="1.5" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="hover:text-black transition-colors">
+            <i data-lucide="youtube" stroke-width="1.5" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="hover:text-black transition-colors">
+            <i data-lucide="instagram" stroke-width="1.5" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="hover:text-black transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+            </svg>
+          </a>
+        </div>
+        <a href="#musica"
+          class="border border-black px-6 py-2.5 text-sm font-semibold tracking-wide hover:bg-black hover:text-white transition-colors">
+          ESCUCHAR AHORA
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="relative pt-32 pb-20 overflow-hidden min-h-screen flex items-center" id="inicio">
+    <!-- Background Decorative Lines -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+      <div class="absolute left-[10%] top-0 w-px h-full bg-zinc-400"></div>
+      <div class="absolute right-[25%] top-0 w-px h-full bg-zinc-400"></div>
+      <div class="absolute top-[30%] left-0 w-full h-px bg-zinc-400"></div>
+    </div>
+
+    <div
+      class="max-w-[95%] xl:max-w-[1800px] mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+      <!-- Left Content -->
+      <div class="lg:col-span-4 flex flex-col justify-center">
+        <span class="text-xs font-semibold tracking-widest uppercase text-zinc-600 mb-6 flex items-center gap-2">
+            PRODUCTOR
+            <span class="w-1 h-1 bg-zinc-400 rounded-full"></span>
+        CANTANTE
+        <span class="w-1 h-1 bg-zinc-400 rounded-full"></span>
+        COMPOSITOR
+        </span>
+
+        <h1 class="text-6xl sm:text-7xl lg:text-8xl font-semibold tracking-tight uppercase leading-[0.9] mb-8">
+          CODIGO.
+          <br>
+            SONIDO.
+          <br>
+            EMOCIÓN.
+        </h1>
+
+        <p class="text-lg text-zinc-600 max-w-md mb-10 leading-relaxed font-medium">
+          Creo música que conecta. Produzco, compongo e interpreto cada
+          proyecto desde la esencia.
+          <br>
+            Bienvenido a The Code Company Corp.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-6">
+          <a href="#musica"
+            class="bg-black text-white px-8 py-4 text-sm font-semibold tracking-wide flex items-center gap-3 hover:bg-zinc-800 transition-colors">
+            ESCUCHAR MI MÚSICA
+            <i data-lucide="play" stroke-width="2" class="w-4 h-4 fill-white"></i>
+          </a>
+          <a href="#contacto" class="text-sm font-semibold tracking-wide flex items-center gap-2 group">
+            TRABAJEMOS JUNTOS
+            <i data-lucide="arrow-right" stroke-width="1.5" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Center Graphic -->
+      <div class="lg:col-span-5 relative h-[600px] lg:h-[700px] flex justify-center items-end">
+        <!-- Circular Elements -->
+        <div
+          class="absolute inset-0 m-auto w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] rounded-full border border-zinc-300 pulse-circle">
+        </div>
+        <div
+          class="absolute inset-0 m-auto w-[340px] h-[340px] sm:w-[510px] sm:h-[510px] rounded-full border border-dashed border-zinc-300 pulse-circle">
+        </div>
+        <div
+          class="absolute inset-0 m-auto w-[260px] h-[260px] sm:w-[390px] sm:h-[390px] rounded-full bg-gradient-to-tr from-zinc-400 via-zinc-200 to-zinc-400 pulse-circle">
+        </div>
+
+        <!-- Graphic Badges & Details -->
+        <div
+          class="absolute top-[20%] -right-10 w-24 h-24 rounded-full bg-black text-white flex items-center justify-center rotate-12 z-20">
+          <div class="absolute inset-2 border border-white/20 rounded-full"></div>
+          <i data-lucide="audio-lines" stroke-width="1.5" class="w-8 h-8"></i>
+          <svg viewBox="0 0 100 100" class="absolute inset-0 animate-spin-slow w-[95px] h-[95px]"
+            style="animation-duration: 20s; width: 95px; height: 95px; color: rgb(255, 255, 255);" stroke-width="2"
+            data-icon-replaced="true">
+            <path id="curve" fill="transparent" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" class="">
+            </path>
+            <text class="text-[9px] font-semibold tracking-widest uppercase fill-white">
+              <textPath href="#curve" startOffset="0%" class="">
+                THE CODE COMPANY CORP • MUSIC IS THE CODE •
+              </textPath>
+            </text>
+          </svg>
+        </div>
+
+        <div class="absolute bottom-[40%] -left-12 flex flex-col gap-1">
+          <div class="barcode w-24 h-8 opacity-40"></div>
+          <span class="text-[8px] font-mono tracking-widest text-zinc-500">
+              83910219C 07U9E4
+            </span>
+        </div>
+
+        <div class="absolute bottom-10 -right-20 flex flex-col items-center gap-1">
+          <div class="w-px h-24 waveform-bg"></div>
+        </div>
+
+        <div class="absolute top-10 right-0 flex gap-2">
+          <div class="w-1.5 h-1.5 bg-black"></div>
+          <div class="w-1.5 h-1.5 bg-black"></div>
+          <div class="w-1.5 h-1.5 border border-black"></div>
+        </div>
+
+        <!-- Artist Image -->
+        <img src="https://i.ibb.co/JjKCSHbj/05e836e2-4cb8-47c5-ba65-4573f065a656-Photoroom.png" alt="Artist Profile" class="relative z-10 w-full max-w-[600px] object-cover object-top h-[95%] drop-shadow-2xl lg:scale-110" style="mask-image: linear-gradient(to bottom, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
+      </div>
+
+      <!-- Right Content Box -->
+      <div class="lg:col-span-3 flex justify-end" id="sobre-mi">
+        <div class="w-full max-w-sm relative mt-12 lg:mt-32">
+          <!-- Corner decorations -->
+
+          <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-black"></div>
+
+          <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-black"></div>
+
+          <h3 class="text-sm font-semibold tracking-widest uppercase mb-6 leading-relaxed">
+            'MÚSICA QUE NACE
+            <br>
+              DE LA REALIDAD
+          </h3>
+          <p class="text-base text-zinc-600 mb-8 font-medium leading-relaxed">
+            Cada beat, cada letra y cada voz llevan un código. Mi misión es
+            transformar ideas en sonido y emociones en experiencias.
+          </p>
+
+          <!-- Signature placeholder -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Services Banner -->
+  <section class="bg-[#0a0a0a] text-white py-14 border-y border-zinc-800" id="servicios">
+    <div class="max-w-[95%] xl:max-w-[1800px] mx-auto px-6">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-800">
+        <!-- Service 1 -->
+        <div class="flex items-start gap-5 pt-8 lg:pt-0 lg:pr-8">
+          <div class="relative w-12 h-12 flex-shrink-0">
+            <div
+              class="absolute inset-0 rounded-full border border-zinc-700 bg-zinc-900 flex items-center justify-center">
+              <div class="w-4 h-4 bg-white rounded-full"></div>
+            </div>
+            <div class="absolute inset-1 rounded-full border border-zinc-800"></div>
+          </div>
+          <div class="">
+            <h4 class="text-sm font-semibold tracking-widest uppercase mb-2">
+              PRODUCCIÓN
+            </h4>
+            <p class="text-base text-zinc-400 font-medium leading-relaxed">
+              Beats, instrumentales y arreglos profesionales para artistas y
+              marcas.
+            </p>
+          </div>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="flex items-start gap-5 pt-8 lg:pt-0 lg:px-8">
+          <i data-lucide="audio-lines" stroke-width="1.5" class="w-10 h-10 flex-shrink-0 text-zinc-300"></i>
+          <div>
+            <h4 class="text-sm font-semibold tracking-widest uppercase mb-2">
+              COMPOSICIÓN
+            </h4>
+            <p class="text-base text-zinc-400 font-medium leading-relaxed">
+              Letras y melodías originales que cuentan historias reales.
+            </p>
+          </div>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="flex items-start gap-5 pt-8 lg:pt-0 lg:px-8">
+          <i data-lucide="mic-2" stroke-width="1.5" class="w-10 h-10 flex-shrink-0 text-zinc-300"></i>
+          <div class="">
+            <h4 class="text-sm font-semibold tracking-widest uppercase mb-2">
+              INTERPRETACIÓN
+            </h4>
+            <p class="text-base text-zinc-400 font-medium leading-relaxed">
+              Voz, flow y sentimiento para conectar con tu audiencia.
+            </p>
+          </div>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="flex items-start gap-5 pt-8 lg:pt-0 lg:px-8">
+          <i data-lucide="sliders-vertical" stroke-width="1.5" class="w-10 h-10 flex-shrink-0 text-zinc-300"></i>
+          <div>
+            <h4 class="text-sm font-semibold tracking-widest uppercase mb-2">
+              MEZCLA &amp; MASTER
+            </h4>
+            <p class="text-base text-zinc-400 font-medium leading-relaxed">
+              Calidad, equilibrio y potencia en cada detalle sonoro.
+            </p>
+          </div>
+        </div>
+
+        <!-- Platforms -->
+        <div class="flex flex-col justify-center pt-8 lg:pt-0 lg:pl-8">
+          <h4 class="text-[10px] font-semibold tracking-widest uppercase text-zinc-500 mb-4">
+            DISPONIBLE EN
+          </h4>
+          <div class="flex items-center gap-4 text-zinc-300 mb-3">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="Spotify" class="h-6 w-auto grayscale brightness-200">
+            <i data-lucide="apple" stroke-width="1.5" class="w-5 h-5"></i>
+            <i data-lucide="youtube" stroke-width="1.5" class="w-5 h-5"></i>
+            <i data-lucide="cloud" stroke-width="1.5" class="w-5 h-5"></i>
+          </div>
+          <span class="text-[10px] font-semibold tracking-widest uppercase text-zinc-500">
+              Y MÁS PLATAFORMAS
+            </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Section -->
+  <section class="bg-[#f5f5f5] py-20 relative overflow-hidden" id="musica">
+    <!-- Abstract wave background -->
+    <div
+      class="absolute right-0 bottom-0 w-[500px] h-[500px] border border-zinc-200 rounded-full translate-x-1/3 translate-y-1/3 pointer-events-none">
+    </div>
+    <div
+      class="absolute right-0 bottom-0 w-[600px] h-[600px] border border-zinc-200 rounded-full translate-x-1/3 translate-y-1/3 pointer-events-none">
+    </div>
+
+    <div
+      class="max-w-[95%] xl:max-w-[1800px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.5fr_3fr_2fr] gap-16 relative z-10">
+      <!-- Stats -->
+      <div class="">
+        <h4 class="text-xs font-semibold tracking-widest uppercase mb-8">
+          EN NÚMEROS
+        </h4>
+        <div class="flex flex-col gap-6">
+          <div class="flex items-center gap-6">
+            <i data-lucide="music" stroke-width="1.5" class="w-5 h-5 text-zinc-800"></i>
+            <span class="text-2xl font-semibold tracking-tight w-16">
+                +120
+              </span>
+            <span class="text-xs font-semibold tracking-widest uppercase text-zinc-500">
+                CANCIONES PRODUCIDAS
+              </span>
+          </div>
+          <div class="flex items-center gap-6">
+            <i data-lucide="user" stroke-width="1.5" class="w-5 h-5 text-zinc-800"></i>
+            <span class="text-2xl font-semibold tracking-tight w-16">
+                +35
+              </span>
+            <span class="text-xs font-semibold tracking-widest uppercase text-zinc-500">
+                ARTISTAS COLABORADOS
+              </span>
+          </div>
+          <div class="flex items-center gap-6">
+            <i data-lucide="headphones" stroke-width="1.5" class="w-5 h-5 text-zinc-800"></i>
+            <span class="text-2xl font-semibold tracking-tight w-16">
+                +2M
+              </span>
+            <span class="text-xs font-semibold tracking-widest uppercase text-zinc-500">
+                STREAMS TOTALES
+              </span>
+          </div>
+          <div class="flex items-center gap-6">
+            <i data-lucide="trophy" stroke-width="1.5" class="w-5 h-5 text-zinc-800"></i>
+            <span class="text-2xl font-semibold tracking-tight w-16">+8</span>
+            <span class="text-xs font-semibold tracking-widest uppercase text-zinc-500">
+                AÑOS DE EXPERIENCIA
+              </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Releases -->
+      <div class="">
+        <div class="flex items-center justify-between mb-8">
+          <h4 class="text-xs font-semibold tracking-widest uppercase">
+            ÚLTIMOS LANZAMIENTOS
+          </h4>
+          <a href="#"
+            class="text-xs font-semibold tracking-widest uppercase flex items-center gap-1 hover:text-zinc-600 transition-colors">
+            VER TODO
+            <i data-lucide="arrow-right" stroke-width="1.5" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 mb-4">
+          <!-- Album 1 -->
+          <div class="group relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" alt="Real" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity grayscale">
+            <div class="absolute inset-0 p-4 flex flex-col justify-end">
+              <h5 class="text-white font-semibold tracking-tight uppercase text-lg leading-none">
+                REAL
+              </h5>
+              <span class="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">
+                  THE CODE COMPANY CORP
+                </span>
+            </div>
+            <div
+              class="absolute bottom-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
+              <i data-lucide="play" stroke-width="2" class="w-3 h-3 fill-black text-black ml-0.5"></i>
+            </div>
+          </div>
+          <!-- Album 2 -->
+          <div class="group relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" alt="No Signal" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity grayscale">
+            <div class="absolute inset-0 p-4 flex flex-col justify-end">
+              <h5 class="text-white font-semibold tracking-tight uppercase text-lg leading-none">
+                NO SIGNAL
+              </h5>
+              <span class="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">
+                  THE CODE COMPANY CORP
+                </span>
+            </div>
+            <div
+              class="absolute bottom-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
+              <i data-lucide="play" stroke-width="2" class="w-3 h-3 fill-black text-black ml-0.5"></i>
+            </div>
+          </div>
+          <!-- Album 3 -->
+          <div class="group relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400&q=80" alt="En el Codigo" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity grayscale">
+            <div class="absolute inset-0 p-4 flex flex-col justify-end">
+              <h5 class="text-white font-semibold tracking-tight uppercase text-lg leading-none">
+                EN EL CÓDIGO
+              </h5>
+              <span class="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">
+                  THE CODE COMPANY CORP
+                </span>
+            </div>
+            <div
+              class="absolute bottom-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
+              <i data-lucide="play" stroke-width="2" class="w-3 h-3 fill-black text-black ml-0.5"></i>
+            </div>
+          </div>
+          <!-- Album 4 -->
+          <div class="group relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1619983081563-430f63602796?w=400&q=80" alt="Mentes" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity grayscale">
+            <div class="absolute inset-0 p-4 flex flex-col justify-end">
+              <h5 class="text-white font-semibold tracking-tight uppercase text-lg leading-none">
+                MENTES
+              </h5>
+              <span class="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">
+                  THE CODE COMPANY CORP
+                </span>
+            </div>
+            <div
+              class="absolute bottom-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
+              <i data-lucide="play" stroke-width="2" class="w-3 h-3 fill-black text-black ml-0.5"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Waveform representation -->
+        <div class="h-6 w-full waveform-bg opacity-30"></div>
+      </div>
+
+      <!-- Quote -->
+      <div class="relative flex flex-col justify-center pl-8 border-l border-zinc-200">
+        <i data-lucide="quote" stroke-width="1" class="w-12 h-12 text-zinc-300 mb-4 rotate-180"></i>
+        <p class="text-2xl font-medium tracking-tight leading-snug mb-8 relative z-10">
+          La música no es suerte,
+          <br>
+            es código, disciplina y alma.
+        </p>
+        <div class="flex items-center justify-between relative z-10">
+          <span class="text-[10px] font-semibold tracking-widest uppercase text-zinc-500">
+              — THE CODE COMPANY CORP
+            </span>
+          <i data-lucide="quote" stroke-width="1" class="w-6 h-6 text-zinc-300"></i>
+        </div>
+
+        <!-- Background Mic Image -->
+        <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600&q=80" alt="Microphone" class="absolute right-[-20%] top-1/2 -translate-y-1/2 w-64 h-64 object-cover object-right opacity-20 mix-blend-multiply grayscale" style="mask-image: radial-gradient(circle, black 30%, transparent 70%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#000000] text-white pt-28 md:pt-40 lg:pt-56 pb-12 relative mt-32 md:mt-48 lg:mt-64" id="contacto">
+    <div class="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none"
+        class="relative block md:h-[60px] lg:h-[80px] w-[1846px] h-[50px]" stroke-width="2" data-icon-replaced="true"
+        style="color: rgb(255, 255, 255); width: 1846px; height: 50px;">
+        <path
+          d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+          class="fill-[#f5f5f5]"></path>
+      </svg>
+    </div>
+    <div class="max-w-[95%] xl:max-w-[1800px] mx-auto px-6">
+      <div
+        class="absolute left-1/2 -top-[150px] md:-top-[225px] lg:-top-[300px] -translate-x-1/2 z-[40] pointer-events-none">
+        <img
+                    src="https://i.ibb.co/hFwh2wY3/image-Photoroom.png"
+                    alt="Stiven Castillo"
+                    class="h-[300px] md:h-[450px] lg:h-[600px] w-auto object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                  />
+      </div>
+
+      <script>
+        const initAnim = () => {
+            const textWrapper = document.querySelector('.stiven-text');
+            if(textWrapper && typeof anime !== 'undefined') {
+              textWrapper.innerHTML = textWrapper.textContent.trim().split('').map(char => {
+                return char === ' ' ? '&nbsp;' : `<span class="inline-block opacity-0 translate-y-12 letter">${char}</span>`;
+              }).join('');
+              const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                    anime({
+                      targets: '.stiven-text .letter',
+                      translateY: [80, 0],
+                      opacity: [0, 1],
+                      easing: 'easeOutExpo',
+                      duration: 1400,
+                      delay: (el, i) => 40 * i
+                    });
+                    observer.unobserve(entry.target);
+                  }
+                });
+              }, { threshold: 0.1 });
+              observer.observe(textWrapper);
+            }
+          };
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAnim);
+          } else {
+            initAnim();
+          }
+      </script>
+      <div
+        class="flex flex-col md:pt-24 overflow-hidden md:rounded-[3rem] bg-[#0a0a0a]/0 w-full rounded-[2rem] mt-10 pt-16 pb-6 relative justify-end"
+        style="min-height: 50vh">
+
+        <!-- Giant Text -->
+        <div class="relative z-10 w-full flex justify-center items-center my-auto px-4">
+          <h1
+            class="stiven-title-anim text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[11vw] font-serif italic tracking-tighter leading-[0.8] w-full text-center whitespace-nowrap text-[#F5F4E8] drop-shadow-2xl"
+            style="letter-spacing: -0.05em">
+            <span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">S</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">t</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">i</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">v</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">e</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">n</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">&nbsp;</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">C</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">a</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">s</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">t</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">i</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">l</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">l</span><span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity;">o</span>
+          </h1>
+        </div>
+
+        <!-- Footer Bottom Info -->
+        <div
+          class="relative z-10 w-full px-8 md:px-16 flex flex-col md:flex-row justify-between items-center text-[#F5F4E8]/60 text-sm md:text-base font-light mt-16 pb-2">
+          <p class="mb-4 md:mb-0">Copyright © Stiven Castillo</p>
+          <p class="flex items-center gap-2 mb-4 md:mb-0">
+            <i data-lucide="globe" stroke-width="1.5" class="w-4 h-4"></i> Bogotá D.C
+          </p>
+          <div class="flex gap-6">
+            <a href="#" class="hover:text-[#F5F4E8] transition-colors">Instagram</a>
+            <a href="#" class="hover:text-[#F5F4E8] transition-colors">LinkedIn</a>
+          </div>
+        </div>
+
+        <script type="module">
+          import { animate } from 'https://esm.sh/animejs';
+
+    const initFooterAnim = () => {
+      const title = document.querySelector('.stiven-title-anim');
+      if (!title) return;
+      
+      const text = title.textContent.trim();
+      title.innerHTML = text.split('').map(char => 
+        char === ' ' ? '&nbsp;' : `<span class="inline-block opacity-0 stiven-char-anim" style="will-change: transform, opacity">${char}</span>`
+      ).join('');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animate('.stiven-char-anim', {
+              translateY: [80, 0],
+              scale: [0.3, 1],
+              opacity: [0, 1],
+              delay: (el, i) => i * 40,
+              duration: 1400,
+              ease: 'outExpo'
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      observer.observe(title);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFooterAnim);
+    } else {
+      initFooterAnim();
+    }
+        </script>
+      </div>
+
+      <!-- Copyright -->
+
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (typeof anime !== 'undefined') {
+          anime({
+            targets: '.pulse-circle',
+            scale: [0.95, 1.1],
+            opacity: [0.6, 1],
+            easing: 'easeInOutSine',
+            duration: 2000,
+            loop: true,
+            direction: 'alternate',
+            delay: anime.stagger(150)
+          });
+        }
+      });
+  </script>
+
+</body>
+
+</html>

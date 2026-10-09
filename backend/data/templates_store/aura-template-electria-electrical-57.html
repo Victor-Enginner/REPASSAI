@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="scroll-smooth"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electria - Reliable Electrical Services</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Inter', sans-serif; }
+/* Custom Animation Classes */
+/* .reveal-element {
+opacity: 0;
+transform: translateY(30px);
+filter: blur(10px);
+transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-element.in-view {
+opacity: 1;
+transform: translateY(0);
+filter: blur(0);
+} */
+/* Stagger delays handled via inline styles in loop or manually for this static build */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #1a1a1a; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #444; }
+/* Dot pattern background utility */
+.bg-dot-pattern {
+background-image: radial-gradient(#333 1px, transparent 1px);
+background-size: 20px 20px;
+}
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+brand: {
+yellow: '#FACC15', // Matches the industrial yellow
+dark: '#0A0A0A',   // Deep black/gray
+gray: '#171717',   // Slightly lighter dark
+}
+},
+fontSize: {
+'xxs': '0.65rem',
+}
+}
+}
+}
+</script>
+<meta name="disabled-font-classes" content="font-roboto,font-montserrat,font-poppins,font-playfair,font-instrument-serif,font-merriweather,font-bricolage,font-jakarta,font-manrope,font-work-sans,font-pt-serif,font-geist-mono,font-space-mono,font-quicksand,font-nunito"><link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+<body class="antialiased text-lg text-gray-600 bg-white selection:bg-brand-yellow selection:text-black overflow-x-hidden">
+
+    <!-- Top Bar -->
+    <div class="bg-white border-b border-gray-100 py-3 hidden md:block" bis_size="{&quot;x&quot;:0,&quot;y&quot;:0,&quot;w&quot;:2293,&quot;h&quot;:45,&quot;abs_x&quot;:0,&quot;abs_y&quot;:43}">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center text-sm font-medium text-gray-500" bis_size="{&quot;x&quot;:506,&quot;y&quot;:12,&quot;w&quot;:1280,&quot;h&quot;:20,&quot;abs_x&quot;:506,&quot;abs_y&quot;:55}">
+            <div class="flex items-center gap-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:14,&quot;w&quot;:72,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:57}">
+                <div class="flex gap-3" bis_size="{&quot;x&quot;:530,&quot;y&quot;:14,&quot;w&quot;:72,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:57}">
+                    <a href="#" class="hover:text-brand-dark transition-colors" bis_size="{&quot;x&quot;:530,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:57}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="instagram" class="lucide lucide-instagram w-4 h-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:57}"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a>
+                    <a href="#" class="hover:text-brand-dark transition-colors" bis_size="{&quot;x&quot;:558,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:558,&quot;abs_y&quot;:57}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="youtube" class="lucide lucide-youtube w-4 h-4" bis_size="{&quot;x&quot;:558,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:558,&quot;abs_y&quot;:57}"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg></a>
+                    <a href="#" class="hover:text-brand-dark transition-colors" bis_size="{&quot;x&quot;:586,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:586,&quot;abs_y&quot;:57}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="music-2" aria-hidden="true" class="lucide lucide-music-2 w-4 h-4" bis_size="{&quot;x&quot;:586,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:586,&quot;abs_y&quot;:57}"><circle cx="8" cy="18" r="4"></circle><path d="M12 18V2l7 4"></path></svg></a>
+                </div>
+            </div>
+            <div class="flex items-center gap-6" bis_size="{&quot;x&quot;:1502,&quot;y&quot;:12,&quot;w&quot;:260,&quot;h&quot;:20,&quot;abs_x&quot;:1502,&quot;abs_y&quot;:55}">
+                <span class="flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:1502,&quot;y&quot;:12,&quot;w&quot;:117,&quot;h&quot;:20,&quot;abs_x&quot;:1502,&quot;abs_y&quot;:55}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="phone" aria-hidden="true" class="lucide lucide-phone w-4 h-4 text-brand-yellow" bis_size="{&quot;x&quot;:1502,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1502,&quot;abs_y&quot;:57}"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg> +91 83209 26181</span>
+                <span class="flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:1643,&quot;y&quot;:12,&quot;w&quot;:118,&quot;h&quot;:20,&quot;abs_x&quot;:1643,&quot;abs_y&quot;:55}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" aria-hidden="true" class="lucide lucide-clock w-4 h-4 text-brand-yellow" bis_size="{&quot;x&quot;:1643,&quot;y&quot;:14,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1643,&quot;abs_y&quot;:57}"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> Available 24/7</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:2293,&quot;h&quot;:81,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center" bis_size="{&quot;x&quot;:506,&quot;y&quot;:689,&quot;w&quot;:1280,&quot;h&quot;:80,&quot;abs_x&quot;:506,&quot;abs_y&quot;:732}">
+            <div class="flex items-center gap-2" bis_size="{&quot;x&quot;:530,&quot;y&quot;:715,&quot;w&quot;:118,&quot;h&quot;:28,&quot;abs_x&quot;:530,&quot;abs_y&quot;:758}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-5 h-5 fill-brand-yellow text-brand-yellow" bis_size="{&quot;x&quot;:530,&quot;y&quot;:719,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:530,&quot;abs_y&quot;:762}"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                <span class="text-brand-dark text-xl font-semibold tracking-tight font-geist" bis_size="{&quot;x&quot;:558,&quot;y&quot;:715,&quot;w&quot;:90,&quot;h&quot;:28,&quot;abs_x&quot;:558,&quot;abs_y&quot;:758}">ELECTRIA</span>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-600" bis_size="{&quot;x&quot;:973,&quot;y&quot;:719,&quot;w&quot;:321,&quot;h&quot;:20,&quot;abs_x&quot;:973,&quot;abs_y&quot;:762}">
+                <a href="#" class="hover:text-brand-dark transition-colors font-geist" bis_size="{&quot;x&quot;:973,&quot;y&quot;:719,&quot;w&quot;:39,&quot;h&quot;:20,&quot;abs_x&quot;:973,&quot;abs_y&quot;:762}">About</a>
+                <a href="#" class="hover:text-brand-dark transition-colors font-geist" bis_size="{&quot;x&quot;:1044,&quot;y&quot;:719,&quot;w&quot;:56,&quot;h&quot;:20,&quot;abs_x&quot;:1044,&quot;abs_y&quot;:762}">Services</a>
+                <a href="#" class="hover:text-brand-dark transition-colors font-geist" bis_size="{&quot;x&quot;:1133,&quot;y&quot;:719,&quot;w&quot;:26,&quot;h&quot;:20,&quot;abs_x&quot;:1133,&quot;abs_y&quot;:762}">FAQ</a>
+                <a href="#" class="hover:text-brand-dark transition-colors font-geist" bis_size="{&quot;x&quot;:1192,&quot;y&quot;:719,&quot;w&quot;:29,&quot;h&quot;:20,&quot;abs_x&quot;:1192,&quot;abs_y&quot;:762}">Blog</a>
+                <a href="#" class="hover:text-brand-dark transition-colors font-geist" bis_size="{&quot;x&quot;:1254,&quot;y&quot;:719,&quot;w&quot;:40,&quot;h&quot;:20,&quot;abs_x&quot;:1254,&quot;abs_y&quot;:762}">Pages</a>
+            </div>
+
+                    <button class="bg-brand-yellow text-brand-dark px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-yellow-400 transition-colors flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:1618,&quot;y&quot;:705,&quot;w&quot;:143,&quot;h&quot;:48,&quot;abs_x&quot;:1618,&quot;abs_y&quot;:748}">
+                        Get a Quote
+                    </button>
+            
+            <button class="lg:hidden text-brand-dark" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" aria-hidden="true" class="lucide lucide-menu w-6 h-6" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-brand-dark pt-20 pb-32 overflow-hidden" bis_size="{&quot;x&quot;:0,&quot;y&quot;:126,&quot;w&quot;:2293,&quot;h&quot;:808,&quot;abs_x&quot;:0,&quot;abs_y&quot;:169}">
+        <!-- Abstract Dot Pattern Side -->
+        <div class="absolute left-0 top-0 bottom-0 w-32 opacity-10 bg-dot-pattern hidden xl:block pointer-events-none" bis_size="{&quot;x&quot;:0,&quot;y&quot;:126,&quot;w&quot;:128,&quot;h&quot;:808,&quot;abs_x&quot;:0,&quot;abs_y&quot;:169}"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-32 opacity-10 bg-dot-pattern hidden xl:block pointer-events-none" bis_size="{&quot;x&quot;:2165,&quot;y&quot;:126,&quot;w&quot;:128,&quot;h&quot;:808,&quot;abs_x&quot;:2165,&quot;abs_y&quot;:169}"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10" bis_size="{&quot;x&quot;:506,&quot;y&quot;:206,&quot;w&quot;:1280,&quot;h&quot;:600,&quot;abs_x&quot;:506,&quot;abs_y&quot;:249}">
+            <div class="reveal-element in-view" bis_size="{&quot;x&quot;:530,&quot;y&quot;:244,&quot;w&quot;:584,&quot;h&quot;:522,&quot;abs_x&quot;:530,&quot;abs_y&quot;:287}">
+                <!-- <div class="flex items-center gap-3 mb-6" bis_size="{&quot;x&quot;:25,&quot;y&quot;:224,&quot;w&quot;:584,&quot;h&quot;:16,&quot;abs_x&quot;:505,&quot;abs_y&quot;:267}">
+                    <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:25,&quot;y&quot;:232,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:505,&quot;abs_y&quot;:275}"></span>
+                    <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:69,&quot;y&quot;:224,&quot;w&quot;:165,&quot;h&quot;:16,&quot;abs_x&quot;:549,&quot;abs_y&quot;:267}">Electrician New York</span>
+                </div> -->
+                <h1 class="text-4xl md:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1] mb-6 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:244,&quot;w&quot;:584,&quot;h&quot;:180,&quot;abs_x&quot;:530,&quot;abs_y&quot;:287}">
+                    RELIABLE ELECTRICAL SERVICES, WHENEVER YOU NEED THEM
+                </h1>
+                <p class="text-lg text-gray-400 mb-10 max-w-lg leading-relaxed font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:448,&quot;w&quot;:512,&quot;h&quot;:58,&quot;abs_x&quot;:530,&quot;abs_y&quot;:491}">
+                    Expert solutions for all your electrical needs - fast, safe, and efficient. We power your world with precision.
+                </p>
+                <div class="flex flex-wrap items-center gap-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:547,&quot;w&quot;:584,&quot;h&quot;:50,&quot;abs_x&quot;:530,&quot;abs_y&quot;:590}">
+                    <button class="bg-brand-yellow text-brand-dark px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-yellow-400 transition-colors flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:548,&quot;w&quot;:187,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:591}">
+                        +91 83209 26181 <div class="bg-white p-1 rounded-full" bis_size="{&quot;x&quot;:665,&quot;y&quot;:562,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:665,&quot;abs_y&quot;:605}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="phone" aria-hidden="true" class="lucide lucide-phone w-3 h-3" bis_size="{&quot;x&quot;:669,&quot;y&quot;:566,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:669,&quot;abs_y&quot;:609}"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg></div>
+                    </button>
+                    <button class="border border-gray-700 text-white px-8 py-3.5 rounded-full text-sm font-medium hover:border-gray-500 transition-colors font-geist" bis_size="{&quot;x&quot;:733,&quot;y&quot;:547,&quot;w&quot;:203,&quot;h&quot;:50,&quot;abs_x&quot;:733,&quot;abs_y&quot;:590}">
+                        Explore Our Services
+                    </button>
+                </div>
+
+                <div class="mt-16 pt-8 border-t border-gray-800 grid sm:grid-cols-2 gap-8" bis_size="{&quot;x&quot;:530,&quot;y&quot;:661,&quot;w&quot;:584,&quot;h&quot;:106,&quot;abs_x&quot;:530,&quot;abs_y&quot;:704}">
+                    <!-- Testimonial Tiny 1 -->
+                    <div class="flex gap-4 reveal-element delay-100 in-view" bis_size="{&quot;x&quot;:530,&quot;y&quot;:694,&quot;w&quot;:276,&quot;h&quot;:73,&quot;abs_x&quot;:530,&quot;abs_y&quot;:737}">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100&h=100" alt="Avatar" class="w-12 h-12 rounded-full object-cover grayscale opacity-80" bis_size="{&quot;x&quot;:530,&quot;y&quot;:694,&quot;w&quot;:48,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:737}">
+                        <div bis_size="{&quot;x&quot;:594,&quot;y&quot;:694,&quot;w&quot;:212,&quot;h&quot;:73,&quot;abs_x&quot;:594,&quot;abs_y&quot;:737}" class="">
+                            <div class="flex text-brand-yellow mb-1" bis_size="{&quot;x&quot;:594,&quot;y&quot;:694,&quot;w&quot;:212,&quot;h&quot;:12,&quot;abs_x&quot;:594,&quot;abs_y&quot;:737}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:594,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:594,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:606,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:606,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:618,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:618,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:630,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:630,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:642,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:642,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            </div>
+                            <h4 class="text-white text-sm font-medium mb-1 font-geist" bis_size="{&quot;x&quot;:594,&quot;y&quot;:710,&quot;w&quot;:212,&quot;h&quot;:20,&quot;abs_x&quot;:594,&quot;abs_y&quot;:753}">Electria helped me so fast!</h4>
+                            <p class="text-xs text-gray-500 leading-snug font-geist" bis_size="{&quot;x&quot;:594,&quot;y&quot;:734,&quot;w&quot;:212,&quot;h&quot;:33,&quot;abs_x&quot;:594,&quot;abs_y&quot;:777}">"Super friendly and got everything working perfectly."</p>
+                        </div>
+                    </div>
+                    <!-- Testimonial Tiny 2 -->
+                    <div class="flex gap-4 reveal-element delay-200" bis_size="{&quot;x&quot;:838,&quot;y&quot;:694,&quot;w&quot;:276,&quot;h&quot;:73,&quot;abs_x&quot;:838,&quot;abs_y&quot;:737}">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100" alt="Avatar" class="w-12 h-12 rounded-full object-cover grayscale opacity-80" bis_size="{&quot;x&quot;:838,&quot;y&quot;:694,&quot;w&quot;:48,&quot;h&quot;:48,&quot;abs_x&quot;:838,&quot;abs_y&quot;:737}">
+                        <div bis_size="{&quot;x&quot;:902,&quot;y&quot;:694,&quot;w&quot;:212,&quot;h&quot;:73,&quot;abs_x&quot;:902,&quot;abs_y&quot;:737}" class="">
+                            <div class="flex text-brand-yellow mb-1" bis_size="{&quot;x&quot;:902,&quot;y&quot;:694,&quot;w&quot;:212,&quot;h&quot;:12,&quot;abs_x&quot;:902,&quot;abs_y&quot;:737}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:902,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:902,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:914,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:914,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:926,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:926,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:938,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:938,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-3 h-3 fill-current" bis_size="{&quot;x&quot;:950,&quot;y&quot;:694,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:950,&quot;abs_y&quot;:737}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            </div>
+                            <h4 class="text-white text-sm font-medium mb-1 font-geist" bis_size="{&quot;x&quot;:902,&quot;y&quot;:710,&quot;w&quot;:212,&quot;h&quot;:20,&quot;abs_x&quot;:902,&quot;abs_y&quot;:753}">Top-notch service!</h4>
+                            <p class="text-xs text-gray-500 leading-snug font-geist" bis_size="{&quot;x&quot;:902,&quot;y&quot;:734,&quot;w&quot;:212,&quot;h&quot;:33,&quot;abs_x&quot;:902,&quot;abs_y&quot;:777}">"Team was professional, punctual, and got the job done."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative reveal-element delay-300" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:206,&quot;w&quot;:584,&quot;h&quot;:600,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:249}">
+                <div class="absolute inset-0 bg-brand-yellow/10 rounded-3xl transform translate-x-4 translate-y-4" bis_size="{&quot;x&quot;:1194,&quot;y&quot;:222,&quot;w&quot;:584,&quot;h&quot;:600,&quot;abs_x&quot;:1194,&quot;abs_y&quot;:265}"></div>
+                <div class="relative rounded-3xl overflow-hidden h-[600px] border border-gray-800" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:206,&quot;w&quot;:584,&quot;h&quot;:600,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:249}">
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover" alt="Electrician at work" bis_size="{&quot;x&quot;:1179,&quot;y&quot;:207,&quot;w&quot;:582,&quot;h&quot;:598,&quot;abs_x&quot;:1179,&quot;abs_y&quot;:250}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent" bis_size="{&quot;x&quot;:1179,&quot;y&quot;:207,&quot;w&quot;:582,&quot;h&quot;:598,&quot;abs_x&quot;:1179,&quot;abs_y&quot;:250}"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="bg-white pt-24 pb-24" bis_size="{&quot;x&quot;:0,&quot;y&quot;:934,&quot;w&quot;:2293,&quot;h&quot;:1024,&quot;abs_x&quot;:0,&quot;abs_y&quot;:977}">
+        <div class="max-w-7xl mx-auto px-6" bis_size="{&quot;x&quot;:506,&quot;y&quot;:1030,&quot;w&quot;:1280,&quot;h&quot;:832,&quot;abs_x&quot;:506,&quot;abs_y&quot;:1073}">
+            <div class="flex flex-col md:flex-row md:items-end gap-6 reveal-element mb-16 gap-x-6 gap-y-6 justify-between" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1030,&quot;w&quot;:1232,&quot;h&quot;:72,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1073}">
+                <div bis_size="{&quot;x&quot;:530,&quot;y&quot;:1030,&quot;w&quot;:205,&quot;h&quot;:72,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1073}" class="">
+                    <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1030,&quot;w&quot;:205,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1073}">
+                        <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1037,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1080}"></span>
+                        <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:574,&quot;y&quot;:1030,&quot;w&quot;:66,&quot;h&quot;:16,&quot;abs_x&quot;:574,&quot;abs_y&quot;:1073}">Services</span>
+                    </div>
+                    <h2 class="text-4xl text-brand-dark tracking-tight font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1062,&quot;w&quot;:205,&quot;h&quot;:40,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1105}">WHAT WE DO</h2>
+                </div>
+                <p class="max-w-md text-gray-500 text-base leading-relaxed font-geist" bis_size="{&quot;x&quot;:1314,&quot;y&quot;:1050,&quot;w&quot;:448,&quot;h&quot;:52,&quot;abs_x&quot;:1314,&quot;abs_y&quot;:1093}">
+                    Your trusted partner for all electrical needs – reliable, skilled, and timely solutions you can count on.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1166,&quot;w&quot;:1232,&quot;h&quot;:600,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1209}">
+                <!-- Service Card 1 -->
+                <div class="group relative rounded-2xl overflow-hidden h-72 reveal-element delay-100" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1209}">
+                    <img src="https://images.unsplash.com/photo-1595856898575-9d187bd32fd6?w=800&q=80" class="transition-transform duration-700 group-hover:scale-110 w-full h-full object-cover" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1209}">
+                    <div class="bg-gradient-to-t from-black/90 via-black/20 to-transparent absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1209}"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end border-t border-white/10 bg-white/5 backdrop-blur-sm" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1377,&quot;w&quot;:394,&quot;h&quot;:77,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1420}">
+                        <span class="text-white font-medium text-lg font-geist" bis_size="{&quot;x&quot;:554,&quot;y&quot;:1402,&quot;w&quot;:147,&quot;h&quot;:28,&quot;abs_x&quot;:554,&quot;abs_y&quot;:1445}">Electrical Repairs</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right text-brand-yellow w-5 h-5" bis_size="{&quot;x&quot;:881,&quot;y&quot;:1410,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:881,&quot;abs_y&quot;:1453}"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="group relative rounded-2xl overflow-hidden h-72 reveal-element delay-100" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1209}">
+                    <img src="https://images.unsplash.com/photo-1647260671826-0fde2e635067?w=800&q=80" class="transition-transform duration-700 group-hover:scale-110 w-full h-full object-cover" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1209}">
+                    <div class="bg-center bg-gradient-to-t from-black/90 via-black/20 to-transparent absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1209}"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end border-t border-white/10 bg-white/5 backdrop-blur-sm" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1377,&quot;w&quot;:394,&quot;h&quot;:77,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1420}">
+                        <span class="text-white font-medium text-lg font-geist" bis_size="{&quot;x&quot;:973,&quot;y&quot;:1402,&quot;w&quot;:166,&quot;h&quot;:28,&quot;abs_x&quot;:973,&quot;abs_y&quot;:1445}">Lighting Installation</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right text-brand-yellow w-5 h-5" bis_size="{&quot;x&quot;:1299,&quot;y&quot;:1410,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1299,&quot;abs_y&quot;:1453}"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="group relative rounded-2xl overflow-hidden h-72 reveal-element delay-100" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1209}">
+                    <img src="https://images.unsplash.com/photo-1754620906571-9ba64bd3ffb4?w=800&q=80" class="transition-transform duration-700 group-hover:scale-110 w-full h-full object-cover" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1209}">
+                    <div class="bg-center bg-gradient-to-t from-black/90 via-black/20 to-transparent absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1166,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1209}"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end border-t border-white/10 bg-white/5 backdrop-blur-sm" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1377,&quot;w&quot;:394,&quot;h&quot;:77,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1420}">
+                        <span class="text-white font-medium text-lg font-geist" bis_size="{&quot;x&quot;:1391,&quot;y&quot;:1402,&quot;w&quot;:149,&quot;h&quot;:28,&quot;abs_x&quot;:1391,&quot;abs_y&quot;:1445}">Wiring &amp; Rewiring</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right text-brand-yellow w-5 h-5" bis_size="{&quot;x&quot;:1718,&quot;y&quot;:1410,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1718,&quot;abs_y&quot;:1453}"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    </div>
+                </div>
+
+                 <!-- Service Card 4 -->
+                 <div class="group relative rounded-2xl overflow-hidden h-72 reveal-element delay-200" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1521}">
+                    <img src="https://images.unsplash.com/photo-1635335874521-7987db781153?w=800&q=80" class="transition-transform duration-700 group-hover:scale-110 w-full h-full object-cover" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1521}">
+                    <div class="bg-center bg-gradient-to-t from-black/90 via-black/20 to-transparent bg-[url(https://images.unsplash.com/photo-1607631697491-61972eecf928?w=800&amp;q=80)] bg-cover absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1521}"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end border-t border-white/10 bg-white/5 backdrop-blur-sm" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1689,&quot;w&quot;:394,&quot;h&quot;:77,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1732}">
+                        <span class="text-white font-medium text-lg font-geist" bis_size="{&quot;x&quot;:554,&quot;y&quot;:1714,&quot;w&quot;:133,&quot;h&quot;:28,&quot;abs_x&quot;:554,&quot;abs_y&quot;:1757}">Panel Upgrades</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right text-brand-yellow w-5 h-5" bis_size="{&quot;x&quot;:881,&quot;y&quot;:1722,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:881,&quot;abs_y&quot;:1765}"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Service Card 5 -->
+                <div class="group relative rounded-2xl overflow-hidden h-72 reveal-element delay-200" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1521}">
+                    <img src="https://images.unsplash.com/photo-1520234939602-6b957f8b9c1c?w=800&q=80" class="transition-transform duration-700 group-hover:scale-110 w-full h-full object-cover" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1521}">
+                    <div class="bg-center bg-gradient-to-t from-black/90 via-black/20 to-transparent bg-[url(https://images.unsplash.com/photo-1595830807118-aef995773265?w=800&amp;q=80)] bg-cover absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1521}"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end border-t border-white/10 bg-white/5 backdrop-blur-sm" bis_size="{&quot;x&quot;:949,&quot;y&quot;:1689,&quot;w&quot;:394,&quot;h&quot;:77,&quot;abs_x&quot;:949,&quot;abs_y&quot;:1732}">
+                        <span class="text-white font-medium text-lg font-geist" bis_size="{&quot;x&quot;:973,&quot;y&quot;:1714,&quot;w&quot;:141,&quot;h&quot;:28,&quot;abs_x&quot;:973,&quot;abs_y&quot;:1757}">Surge Protection</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right text-brand-yellow w-5 h-5" bis_size="{&quot;x&quot;:1299,&quot;y&quot;:1722,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1299,&quot;abs_y&quot;:1765}"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Service Card 6 -->
+                <div class="group relative rounded-2xl overflow-hidden h-72 reveal-element delay-200" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1521}">
+                    <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1521}">
+                    <div class="bg-gradient-to-t from-black/90 via-black/20 to-transparent bg-[url(https://images.unsplash.com/photo-1627570375109-aa27d594108c?w=800&amp;q=80)] bg-cover bg-center absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1478,&quot;w&quot;:394,&quot;h&quot;:288,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1521}"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end border-t border-white/10 bg-white/5 backdrop-blur-sm" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:1689,&quot;w&quot;:394,&quot;h&quot;:77,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:1732}">
+                        <span class="text-white font-medium text-lg font-geist" bis_size="{&quot;x&quot;:1391,&quot;y&quot;:1714,&quot;w&quot;:171,&quot;h&quot;:28,&quot;abs_x&quot;:1391,&quot;abs_y&quot;:1757}">Emergency Services</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-right" aria-hidden="true" class="lucide lucide-arrow-up-right text-brand-yellow w-5 h-5" bis_size="{&quot;x&quot;:1718,&quot;y&quot;:1722,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1718,&quot;abs_y&quot;:1765}"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1814,&quot;w&quot;:1232,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1857}">
+                <button class="bg-brand-yellow text-brand-dark px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-yellow-400 transition-colors inline-flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:1814,&quot;w&quot;:167,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:1857}">
+                    All Services <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:650,&quot;y&quot;:1830,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:650,&quot;abs_y&quot;:1873}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Area/Stats Section -->
+    <section class="py-24 bg-brand-dark text-white relative overflow-hidden" bis_size="{&quot;x&quot;:0,&quot;y&quot;:1958,&quot;w&quot;:2293,&quot;h&quot;:515,&quot;abs_x&quot;:0,&quot;abs_y&quot;:2001}">
+        <!-- Background Grid -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" bis_size="{&quot;x&quot;:0,&quot;y&quot;:1958,&quot;w&quot;:2293,&quot;h&quot;:515,&quot;abs_x&quot;:0,&quot;abs_y&quot;:2001}"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10" bis_size="{&quot;x&quot;:506,&quot;y&quot;:2054,&quot;w&quot;:1280,&quot;h&quot;:323,&quot;abs_x&quot;:506,&quot;abs_y&quot;:2097}">
+            <!-- Simulated Dot Map Graphic -->
+            <div class="relative h-[300px] w-full reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2065,&quot;w&quot;:584,&quot;h&quot;:300,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2108}">
+               <svg viewBox="0 0 400 250" class="w-full h-full text-gray-700 fill-current opacity-40" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2065,&quot;w&quot;:584,&quot;h&quot;:300,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2108}">
+                   <!-- Rough abstract representation of a map using circles -->
+                   <defs bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                       <pattern id="dotPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                           <circle cx="2" cy="2" r="1.5" fill="currentColor" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}"></circle>
+                       </pattern>
+                   </defs>
+                   <!-- Outline of generic landmass -->
+                   <path d="M20,50 Q50,20 100,30 T180,60 T250,40 T350,60 L380,150 Q300,200 200,180 T50,150 Z" fill="url(#dotPattern)" bis_size="{&quot;x&quot;:606,&quot;y&quot;:2094,&quot;w&quot;:432,&quot;h&quot;:194,&quot;abs_x&quot;:606,&quot;abs_y&quot;:2137}" class=""></path>
+                   <!-- Highlighted yellow dot -->
+                   <circle cx="280" cy="100" r="4" class="text-brand-yellow fill-current animate-ping" bis_size="{&quot;x&quot;:913,&quot;y&quot;:2180,&quot;w&quot;:9,&quot;h&quot;:9,&quot;abs_x&quot;:913,&quot;abs_y&quot;:2223}"></circle>
+                   <circle cx="280" cy="100" r="4" class="text-brand-yellow fill-current" bis_size="{&quot;x&quot;:913,&quot;y&quot;:2180,&quot;w&quot;:9,&quot;h&quot;:9,&quot;abs_x&quot;:913,&quot;abs_y&quot;:2223}"></circle>
+               </svg>
+            </div>
+
+            <div class="reveal-element" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2054,&quot;w&quot;:584,&quot;h&quot;:323,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2097}">
+                <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2054,&quot;w&quot;:584,&quot;h&quot;:16,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2097}">
+                    <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2061,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2104}"></span>
+                    <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:1222,&quot;y&quot;:2054,&quot;w&quot;:36,&quot;h&quot;:16,&quot;abs_x&quot;:1222,&quot;abs_y&quot;:2097}">Area</span>
+                </div>
+                <h2 class="text-4xl tracking-tight mb-6 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2086,&quot;w&quot;:584,&quot;h&quot;:40,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2129}">WHERE WE OPERATE</h2>
+                <p class="text-gray-400 mb-10 text-base leading-relaxed font-geist" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2150,&quot;w&quot;:584,&quot;h&quot;:78,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2193}">
+                    We provide expert electrical services across three states and over 100 cities. From small repairs to large projects, we deliver reliable solutions wherever you need us.
+                </p>
+
+                <div class="grid grid-cols-2 gap-8 pt-8 border-t border-gray-800" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2268,&quot;w&quot;:584,&quot;h&quot;:109,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2311}">
+                    <div bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2301,&quot;w&quot;:276,&quot;h&quot;:76,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2344}" class="">
+                        <span class="block text-4xl text-white mb-2 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2301,&quot;w&quot;:276,&quot;h&quot;:40,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2344}">3</span>
+                        <span class="text-sm text-gray-500 font-geist" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:2355,&quot;w&quot;:131,&quot;h&quot;:18,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:2398}">States we operate in</span>
+                    </div>
+                    <div bis_size="{&quot;x&quot;:1486,&quot;y&quot;:2301,&quot;w&quot;:276,&quot;h&quot;:76,&quot;abs_x&quot;:1486,&quot;abs_y&quot;:2344}">
+                        <span class="block text-4xl text-white mb-2 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1486,&quot;y&quot;:2301,&quot;w&quot;:276,&quot;h&quot;:40,&quot;abs_x&quot;:1486,&quot;abs_y&quot;:2344}">100+</span>
+                        <span class="text-sm text-gray-500 font-geist" bis_size="{&quot;x&quot;:1486,&quot;y&quot;:2355,&quot;w&quot;:157,&quot;h&quot;:18,&quot;abs_x&quot;:1486,&quot;abs_y&quot;:2398}">Cities in our service area</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-white pt-24 pb-24" bis_size="{&quot;x&quot;:0,&quot;y&quot;:2473,&quot;w&quot;:2293,&quot;h&quot;:874,&quot;abs_x&quot;:0,&quot;abs_y&quot;:2516}">
+        <div class="max-w-7xl mx-auto px-6" bis_size="{&quot;x&quot;:506,&quot;y&quot;:2569,&quot;w&quot;:1280,&quot;h&quot;:682,&quot;abs_x&quot;:506,&quot;abs_y&quot;:2612}">
+            <div class="flex flex-col md:flex-row justify-between mb-16 gap-10 reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2569,&quot;w&quot;:1232,&quot;h&quot;:78,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2612}">
+                <div class="max-w-md" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2569,&quot;w&quot;:392,&quot;h&quot;:78,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2612}">
+                    <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2569,&quot;w&quot;:392,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2612}">
+                        <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2576,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2619}"></span>
+                        <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:574,&quot;y&quot;:2569,&quot;w&quot;:60,&quot;h&quot;:16,&quot;abs_x&quot;:574,&quot;abs_y&quot;:2612}">Why Us?</span>
+                    </div>
+                    <h2 class="text-4xl text-brand-dark tracking-tight font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2601,&quot;w&quot;:392,&quot;h&quot;:40,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2644}">RELIABLE AND EFFICIENT</h2>
+                </div>
+                <p class="max-w-md text-gray-500 text-base leading-relaxed mt-auto font-geist" bis_size="{&quot;x&quot;:1314,&quot;y&quot;:2569,&quot;w&quot;:448,&quot;h&quot;:78,&quot;abs_x&quot;:1314,&quot;abs_y&quot;:2612}">
+                    We understand that when it comes to electrical issues, you need fast and effective solutions. Our skilled team delivers reliable service always.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2711,&quot;w&quot;:1232,&quot;h&quot;:540,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2754}">
+                <!-- Feature 1 -->
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 reveal-element delay-100 hover:border-brand-yellow/30 transition-colors" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2711,&quot;w&quot;:604,&quot;h&quot;:246,&quot;abs_x&quot;:530,&quot;abs_y&quot;:2754}">
+                    <div class="w-12 h-12 bg-brand-dark rounded-xl flex items-center justify-center mb-6" bis_size="{&quot;x&quot;:563,&quot;y&quot;:2744,&quot;w&quot;:48,&quot;h&quot;:48,&quot;abs_x&quot;:563,&quot;abs_y&quot;:2787}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" aria-hidden="true" class="lucide lucide-clock text-brand-yellow w-6 h-6" bis_size="{&quot;x&quot;:575,&quot;y&quot;:2756,&quot;w&quot;:24,&quot;h&quot;:24,&quot;abs_x&quot;:575,&quot;abs_y&quot;:2799}"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-brand-dark mb-3 font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:2816,&quot;w&quot;:538,&quot;h&quot;:28,&quot;abs_x&quot;:563,&quot;abs_y&quot;:2859}">Swift Response</h3>
+                    <p class="text-gray-500 text-base mb-6 font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:2856,&quot;w&quot;:538,&quot;h&quot;:24,&quot;abs_x&quot;:563,&quot;abs_y&quot;:2899}">Count on us for prompt service when you need it most.</p>
+                    <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:2904,&quot;w&quot;:538,&quot;h&quot;:20,&quot;abs_x&quot;:563,&quot;abs_y&quot;:2947}">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:645,&quot;y&quot;:2906,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:645,&quot;abs_y&quot;:2949}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                </div>
+                <!-- Feature 2 -->
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 reveal-element delay-200 hover:border-brand-yellow/30 transition-colors" bis_size="{&quot;x&quot;:1158,&quot;y&quot;:2711,&quot;w&quot;:604,&quot;h&quot;:246,&quot;abs_x&quot;:1158,&quot;abs_y&quot;:2754}">
+                    <div class="w-12 h-12 bg-brand-dark rounded-xl flex items-center justify-center mb-6" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:2744,&quot;w&quot;:48,&quot;h&quot;:48,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:2787}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users text-brand-yellow w-6 h-6" bis_size="{&quot;x&quot;:1203,&quot;y&quot;:2756,&quot;w&quot;:24,&quot;h&quot;:24,&quot;abs_x&quot;:1203,&quot;abs_y&quot;:2799}"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-brand-dark mb-3 font-geist" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:2816,&quot;w&quot;:538,&quot;h&quot;:28,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:2859}">Trusted Experts</h3>
+                    <p class="text-gray-500 text-base mb-6 font-geist" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:2856,&quot;w&quot;:538,&quot;h&quot;:24,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:2899}">Our electricians are certified and experienced, ensuring top quality.</p>
+                    <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:2904,&quot;w&quot;:538,&quot;h&quot;:20,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:2947}">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:1273,&quot;y&quot;:2906,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1273,&quot;abs_y&quot;:2949}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                </div>
+                <!-- Feature 3 -->
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 reveal-element delay-100 hover:border-brand-yellow/30 transition-colors" bis_size="{&quot;x&quot;:530,&quot;y&quot;:2981,&quot;w&quot;:604,&quot;h&quot;:270,&quot;abs_x&quot;:530,&quot;abs_y&quot;:3024}">
+                    <div class="w-12 h-12 bg-brand-dark rounded-xl flex items-center justify-center mb-6" bis_size="{&quot;x&quot;:563,&quot;y&quot;:3014,&quot;w&quot;:48,&quot;h&quot;:48,&quot;abs_x&quot;:563,&quot;abs_y&quot;:3057}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check text-brand-yellow w-6 h-6" bis_size="{&quot;x&quot;:575,&quot;y&quot;:3026,&quot;w&quot;:24,&quot;h&quot;:24,&quot;abs_x&quot;:575,&quot;abs_y&quot;:3069}"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-brand-dark mb-3 font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:3086,&quot;w&quot;:538,&quot;h&quot;:28,&quot;abs_x&quot;:563,&quot;abs_y&quot;:3129}">Safety First</h3>
+                    <p class="text-gray-500 text-base mb-6 font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:3126,&quot;w&quot;:538,&quot;h&quot;:48,&quot;abs_x&quot;:563,&quot;abs_y&quot;:3169}">We prioritize safety in every project, keeping your home or business secure.</p>
+                    <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:3198,&quot;w&quot;:538,&quot;h&quot;:20,&quot;abs_x&quot;:563,&quot;abs_y&quot;:3241}">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:645,&quot;y&quot;:3200,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:645,&quot;abs_y&quot;:3243}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                </div>
+                <!-- Feature 4 -->
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 reveal-element delay-200 hover:border-brand-yellow/30 transition-colors" bis_size="{&quot;x&quot;:1158,&quot;y&quot;:2981,&quot;w&quot;:604,&quot;h&quot;:270,&quot;abs_x&quot;:1158,&quot;abs_y&quot;:3024}">
+                    <div class="w-12 h-12 bg-brand-dark rounded-xl flex items-center justify-center mb-6" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:3014,&quot;w&quot;:48,&quot;h&quot;:48,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:3057}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" aria-hidden="true" class="lucide lucide-wallet text-brand-yellow w-6 h-6" bis_size="{&quot;x&quot;:1203,&quot;y&quot;:3026,&quot;w&quot;:24,&quot;h&quot;:24,&quot;abs_x&quot;:1203,&quot;abs_y&quot;:3069}"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-brand-dark mb-3 font-geist" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:3086,&quot;w&quot;:538,&quot;h&quot;:28,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:3129}">Affordable Solutions</h3>
+                    <p class="text-gray-500 text-base mb-6 font-geist" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:3126,&quot;w&quot;:538,&quot;h&quot;:24,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:3169}">High-quality service at prices that work for your budget.</p>
+                    <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:1191,&quot;y&quot;:3174,&quot;w&quot;:538,&quot;h&quot;:20,&quot;abs_x&quot;:1191,&quot;abs_y&quot;:3217}">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:1273,&quot;y&quot;:3176,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1273,&quot;abs_y&quot;:3219}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Stats Dark Section -->
+    <section class="py-24 bg-brand-dark relative" bis_size="{&quot;x&quot;:0,&quot;y&quot;:3347,&quot;w&quot;:2293,&quot;h&quot;:692,&quot;abs_x&quot;:0,&quot;abs_y&quot;:3390}">
+         <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center" bis_size="{&quot;x&quot;:506,&quot;y&quot;:3443,&quot;w&quot;:1280,&quot;h&quot;:500,&quot;abs_x&quot;:506,&quot;abs_y&quot;:3486}">
+            <div class="relative reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:3443,&quot;w&quot;:584,&quot;h&quot;:500,&quot;abs_x&quot;:530,&quot;abs_y&quot;:3486}">
+                <div class="relative rounded-3xl overflow-hidden h-[500px]" bis_size="{&quot;x&quot;:530,&quot;y&quot;:3443,&quot;w&quot;:584,&quot;h&quot;:500,&quot;abs_x&quot;:530,&quot;abs_y&quot;:3486}">
+                    <img src="https://images.unsplash.com/photo-1682345262055-8f95f3c513ea?w=1600&q=80" class="w-full h-full object-cover" bis_size="{&quot;x&quot;:530,&quot;y&quot;:3443,&quot;w&quot;:584,&quot;h&quot;:500,&quot;abs_x&quot;:530,&quot;abs_y&quot;:3486}">
+                    <!-- Overlay Card -->
+                    <div class="absolute bottom-8 right-8 bg-brand-yellow p-8 rounded-2xl max-w-xs shadow-2xl" bis_size="{&quot;x&quot;:810,&quot;y&quot;:3727,&quot;w&quot;:271,&quot;h&quot;:183,&quot;abs_x&quot;:810,&quot;abs_y&quot;:3770}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="award" aria-hidden="true" class="lucide lucide-award w-10 h-10 text-brand-dark mb-4" bis_size="{&quot;x&quot;:842,&quot;y&quot;:3759,&quot;w&quot;:40,&quot;h&quot;:40,&quot;abs_x&quot;:842,&quot;abs_y&quot;:3802}"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                        <div class="text-4xl text-brand-dark mb-1 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:842,&quot;y&quot;:3815,&quot;w&quot;:207,&quot;h&quot;:40,&quot;abs_x&quot;:842,&quot;abs_y&quot;:3858}">15 YEARS</div>
+                        <div class="text-sm font-medium text-brand-dark/80 leading-snug font-geist" bis_size="{&quot;x&quot;:842,&quot;y&quot;:3859,&quot;w&quot;:207,&quot;h&quot;:19,&quot;abs_x&quot;:842,&quot;abs_y&quot;:3902}">Of experience in electrical work</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal-element delay-200" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3457,&quot;w&quot;:584,&quot;h&quot;:471,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3500}">
+                <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3457,&quot;w&quot;:584,&quot;h&quot;:16,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3500}">
+                    <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3465,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3508}"></span>
+                    <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:1222,&quot;y&quot;:3457,&quot;w&quot;:68,&quot;h&quot;:16,&quot;abs_x&quot;:1222,&quot;abs_y&quot;:3500}">About Us</span>
+                </div>
+                <h2 class="text-4xl text-white tracking-tight mb-6 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3489,&quot;w&quot;:584,&quot;h&quot;:40,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3532}">PROVEN EXPERTISE YOU CAN TRUST</h2>
+                <p class="text-gray-400 text-base leading-relaxed mb-6 font-geist" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3553,&quot;w&quot;:584,&quot;h&quot;:78,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3596}">
+                    With over a decade and a half of hands-on experience, we've mastered the art of delivering top-quality electrical services that consistently exceed expectations.
+                </p>
+                <p class="text-gray-400 text-base leading-relaxed mb-8 font-geist" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3655,&quot;w&quot;:584,&quot;h&quot;:52,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3698}">
+                    From complex troubleshooting and minor repairs to comprehensive installations, we handle it all with precision and care.
+                </p>
+                <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 mb-16 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3739,&quot;w&quot;:584,&quot;h&quot;:20,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3782}">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:1260,&quot;y&quot;:3741,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1260,&quot;abs_y&quot;:3784}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+
+                <div class="grid grid-cols-3 gap-8 border-t border-gray-800 pt-8" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3823,&quot;w&quot;:584,&quot;h&quot;:105,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3866}">
+                    <div class="text-center lg:text-left" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3856,&quot;w&quot;:173,&quot;h&quot;:72,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3899}">
+                        <span class="block text-3xl text-white mb-2 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3856,&quot;w&quot;:173,&quot;h&quot;:36,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3899}">20+</span>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide font-geist" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:3908,&quot;w&quot;:96,&quot;h&quot;:16,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:3951}">Certifications</span>
+                    </div>
+                    <div class="text-center lg:text-left" bis_size="{&quot;x&quot;:1383,&quot;y&quot;:3856,&quot;w&quot;:173,&quot;h&quot;:72,&quot;abs_x&quot;:1383,&quot;abs_y&quot;:3899}">
+                        <span class="block text-3xl text-white mb-2 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1383,&quot;y&quot;:3856,&quot;w&quot;:173,&quot;h&quot;:36,&quot;abs_x&quot;:1383,&quot;abs_y&quot;:3899}">6,000+</span>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide font-geist" bis_size="{&quot;x&quot;:1383,&quot;y&quot;:3908,&quot;w&quot;:109,&quot;h&quot;:16,&quot;abs_x&quot;:1383,&quot;abs_y&quot;:3951}">Completed Jobs</span>
+                    </div>
+                    <div class="text-center lg:text-left" bis_size="{&quot;x&quot;:1589,&quot;y&quot;:3856,&quot;w&quot;:173,&quot;h&quot;:72,&quot;abs_x&quot;:1589,&quot;abs_y&quot;:3899}">
+                        <span class="block text-3xl text-white mb-2 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:1589,&quot;y&quot;:3856,&quot;w&quot;:173,&quot;h&quot;:36,&quot;abs_x&quot;:1589,&quot;abs_y&quot;:3899}">24/7</span>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide font-geist" bis_size="{&quot;x&quot;:1589,&quot;y&quot;:3908,&quot;w&quot;:154,&quot;h&quot;:16,&quot;abs_x&quot;:1589,&quot;abs_y&quot;:3951}">Emergency Availability</span>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-24 bg-white" bis_size="{&quot;x&quot;:0,&quot;y&quot;:4039,&quot;w&quot;:2293,&quot;h&quot;:692,&quot;abs_x&quot;:0,&quot;abs_y&quot;:4082}">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-start" bis_size="{&quot;x&quot;:506,&quot;y&quot;:4135,&quot;w&quot;:1280,&quot;h&quot;:500,&quot;abs_x&quot;:506,&quot;abs_y&quot;:4178}">
+            <div class="reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4135,&quot;w&quot;:584,&quot;h&quot;:496,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4178}">
+                <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4135,&quot;w&quot;:584,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4178}">
+                    <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4142,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4185}"></span>
+                    <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:574,&quot;y&quot;:4135,&quot;w&quot;:26,&quot;h&quot;:16,&quot;abs_x&quot;:574,&quot;abs_y&quot;:4178}">FAQ</span>
+                </div>
+                <h2 class="text-4xl text-brand-dark tracking-tight mb-10 font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4167,&quot;w&quot;:584,&quot;h&quot;:40,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4210}">FREQUENTLY ASKED QUESTIONS</h2>
+
+                <div class="space-y-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4247,&quot;w&quot;:584,&quot;h&quot;:296,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4290}">
+                    <details class="group p-4 bg-gray-50 rounded-xl cursor-pointer border border-transparent hover:border-gray-200 transition-colors open:bg-white open:shadow-lg open:shadow-gray-100" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4247,&quot;w&quot;:584,&quot;h&quot;:62,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4290}">
+                        <summary class="flex justify-between items-center font-medium text-brand-dark list-none font-geist" bis_size="{&quot;x&quot;:547,&quot;y&quot;:4264,&quot;w&quot;:550,&quot;h&quot;:28,&quot;abs_x&quot;:547,&quot;abs_y&quot;:4307}">
+                            What areas do you serve?
+                            <span class="transition group-open:rotate-180" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4268,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4311}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 text-gray-400" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4268,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4311}"><path d="m6 9 6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-500 text-base mt-4 leading-relaxed font-geist" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                            We serve the greater metropolitan area and surrounding suburbs, covering a 50-mile radius. Contact us to check your specific location.
+                        </p>
+                    </details>
+
+                    <details class="group p-4 bg-gray-50 rounded-xl cursor-pointer border border-transparent hover:border-gray-200 transition-colors open:bg-white open:shadow-lg open:shadow-gray-100" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4325,&quot;w&quot;:584,&quot;h&quot;:62,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4368}">
+                        <summary class="flex justify-between items-center font-medium text-brand-dark list-none font-geist" bis_size="{&quot;x&quot;:547,&quot;y&quot;:4342,&quot;w&quot;:550,&quot;h&quot;:28,&quot;abs_x&quot;:547,&quot;abs_y&quot;:4385}">
+                            Do you handle small jobs?
+                            <span class="transition group-open:rotate-180" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4346,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4389}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 text-gray-400" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4346,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4389}"><path d="m6 9 6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-500 text-base mt-4 leading-relaxed font-geist" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                            Yes! No job is too small. From changing a light switch to full rewiring, we handle it all.
+                        </p>
+                    </details>
+
+                    <details class="group p-4 bg-gray-50 rounded-xl cursor-pointer border border-transparent hover:border-gray-200 transition-colors open:bg-white open:shadow-lg open:shadow-gray-100" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4403,&quot;w&quot;:584,&quot;h&quot;:62,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4446}">
+                        <summary class="flex justify-between items-center font-medium text-brand-dark list-none font-geist" bis_size="{&quot;x&quot;:547,&quot;y&quot;:4420,&quot;w&quot;:550,&quot;h&quot;:28,&quot;abs_x&quot;:547,&quot;abs_y&quot;:4463}">
+                            How soon can you arrive?
+                            <span class="transition group-open:rotate-180" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4424,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4467}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 text-gray-400" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4424,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4467}"><path d="m6 9 6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-500 text-base mt-4 leading-relaxed font-geist" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                            For emergencies, we aim to be there within 2 hours. For regular appointments, we schedule at your earliest convenience.
+                        </p>
+                    </details>
+
+                    <details class="group p-4 bg-gray-50 rounded-xl cursor-pointer border border-transparent hover:border-gray-200 transition-colors open:bg-white open:shadow-lg open:shadow-gray-100" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4481,&quot;w&quot;:584,&quot;h&quot;:62,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4524}">
+                        <summary class="flex justify-between items-center font-medium text-brand-dark list-none font-geist" bis_size="{&quot;x&quot;:547,&quot;y&quot;:4498,&quot;w&quot;:550,&quot;h&quot;:28,&quot;abs_x&quot;:547,&quot;abs_y&quot;:4541}">
+                            Do you offer free estimates?
+                            <span class="transition group-open:rotate-180" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4502,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4545}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 text-gray-400" bis_size="{&quot;x&quot;:1077,&quot;y&quot;:4502,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:1077,&quot;abs_y&quot;:4545}"><path d="m6 9 6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-500 text-base mt-4 leading-relaxed font-geist" bis_size="{&quot;x&quot;:0,&quot;y&quot;:689,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:0,&quot;abs_y&quot;:732}">
+                            Yes, we provide free, no-obligation estimates for most major projects.
+                        </p>
+                    </details>
+                </div>
+
+                <div class="mt-10" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4583,&quot;w&quot;:584,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4626}">
+                    <button class="bg-brand-yellow text-brand-dark px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-yellow-400 transition-colors inline-flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4583,&quot;w&quot;:191,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4626}">
+                        More questions <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:674,&quot;y&quot;:4599,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:674,&quot;abs_y&quot;:4642}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative h-full min-h-[500px] rounded-3xl overflow-hidden reveal-element delay-200" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:4135,&quot;w&quot;:584,&quot;h&quot;:500,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:4178}">
+                <img src="https://images.unsplash.com/photo-1471871480126-59ab253c49e9?w=1600&q=80" class="w-full h-full object-cover absolute top-0 right-0 bottom-0 left-0" bis_size="{&quot;x&quot;:1178,&quot;y&quot;:4135,&quot;w&quot;:584,&quot;h&quot;:500,&quot;abs_x&quot;:1178,&quot;abs_y&quot;:4178}">
+            </div>
+        </div>
+    </section>
+
+    <!-- Decorative Strip -->
+    <div class="bg-brand-yellow h-12 flex items-center overflow-hidden whitespace-nowrap" bis_size="{&quot;x&quot;:0,&quot;y&quot;:4731,&quot;w&quot;:2293,&quot;h&quot;:48,&quot;abs_x&quot;:0,&quot;abs_y&quot;:4774}">
+        <!-- Using a simple text repeat for the marquee effect seen in image -->
+        <div class="animate-marquee flex gap-8 font-bold text-brand-dark text-lg uppercase tracking-wider opacity-80" bis_size="{&quot;x&quot;:0,&quot;y&quot;:4741,&quot;w&quot;:2815,&quot;h&quot;:28,&quot;abs_x&quot;:0,&quot;abs_y&quot;:4784}">
+            <span class="font-geist" bis_size="{&quot;x&quot;:0,&quot;y&quot;:4741,&quot;w&quot;:93,&quot;h&quot;:28,&quot;abs_x&quot;:0,&quot;abs_y&quot;:4784}">Electria</span> <span class="font-geist" bis_size="{&quot;x&quot;:125,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:125,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:165,&quot;y&quot;:4741,&quot;w&quot;:47,&quot;h&quot;:28,&quot;abs_x&quot;:165,&quot;abs_y&quot;:4784}">Fast</span> <span class="font-geist" bis_size="{&quot;x&quot;:245,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:245,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:284,&quot;y&quot;:4741,&quot;w&quot;:92,&quot;h&quot;:28,&quot;abs_x&quot;:284,&quot;abs_y&quot;:4784}">Reliable</span> <span class="font-geist" bis_size="{&quot;x&quot;:409,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:409,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:448,&quot;y&quot;:4741,&quot;w&quot;:49,&quot;h&quot;:28,&quot;abs_x&quot;:448,&quot;abs_y&quot;:4784}">Safe</span> <span class="font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4784}">•</span>
+            <span class="font-geist" bis_size="{&quot;x&quot;:569,&quot;y&quot;:4741,&quot;w&quot;:93,&quot;h&quot;:28,&quot;abs_x&quot;:569,&quot;abs_y&quot;:4784}">Electria</span> <span class="font-geist" bis_size="{&quot;x&quot;:695,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:695,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:734,&quot;y&quot;:4741,&quot;w&quot;:47,&quot;h&quot;:28,&quot;abs_x&quot;:734,&quot;abs_y&quot;:4784}">Fast</span> <span class="font-geist" bis_size="{&quot;x&quot;:814,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:814,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:854,&quot;y&quot;:4741,&quot;w&quot;:92,&quot;h&quot;:28,&quot;abs_x&quot;:854,&quot;abs_y&quot;:4784}">Reliable</span> <span class="font-geist" bis_size="{&quot;x&quot;:978,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:978,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:1018,&quot;y&quot;:4741,&quot;w&quot;:49,&quot;h&quot;:28,&quot;abs_x&quot;:1018,&quot;abs_y&quot;:4784}">Safe</span> <span class="font-geist" bis_size="{&quot;x&quot;:1099,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1099,&quot;abs_y&quot;:4784}">•</span>
+            <span class="font-geist" bis_size="{&quot;x&quot;:1139,&quot;y&quot;:4741,&quot;w&quot;:93,&quot;h&quot;:28,&quot;abs_x&quot;:1139,&quot;abs_y&quot;:4784}">Electria</span> <span class="font-geist" bis_size="{&quot;x&quot;:1265,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1265,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:1304,&quot;y&quot;:4741,&quot;w&quot;:47,&quot;h&quot;:28,&quot;abs_x&quot;:1304,&quot;abs_y&quot;:4784}">Fast</span> <span class="font-geist" bis_size="{&quot;x&quot;:1384,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1384,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:1423,&quot;y&quot;:4741,&quot;w&quot;:92,&quot;h&quot;:28,&quot;abs_x&quot;:1423,&quot;abs_y&quot;:4784}">Reliable</span> <span class="font-geist" bis_size="{&quot;x&quot;:1548,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1548,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:1587,&quot;y&quot;:4741,&quot;w&quot;:49,&quot;h&quot;:28,&quot;abs_x&quot;:1587,&quot;abs_y&quot;:4784}">Safe</span> <span class="font-geist" bis_size="{&quot;x&quot;:1669,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1669,&quot;abs_y&quot;:4784}">•</span>
+            <span class="font-geist" bis_size="{&quot;x&quot;:1708,&quot;y&quot;:4741,&quot;w&quot;:93,&quot;h&quot;:28,&quot;abs_x&quot;:1708,&quot;abs_y&quot;:4784}">Electria</span> <span class="font-geist" bis_size="{&quot;x&quot;:1834,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1834,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:1874,&quot;y&quot;:4741,&quot;w&quot;:47,&quot;h&quot;:28,&quot;abs_x&quot;:1874,&quot;abs_y&quot;:4784}">Fast</span> <span class="font-geist" bis_size="{&quot;x&quot;:1953,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:1953,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:1993,&quot;y&quot;:4741,&quot;w&quot;:92,&quot;h&quot;:28,&quot;abs_x&quot;:1993,&quot;abs_y&quot;:4784}">Reliable</span> <span class="font-geist" bis_size="{&quot;x&quot;:2117,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:2117,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:2157,&quot;y&quot;:4741,&quot;w&quot;:49,&quot;h&quot;:28,&quot;abs_x&quot;:2157,&quot;abs_y&quot;:4784}">Safe</span> <span class="font-geist" bis_size="{&quot;x&quot;:2238,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:2238,&quot;abs_y&quot;:4784}">•</span>
+            <span class="font-geist" bis_size="{&quot;x&quot;:2278,&quot;y&quot;:4741,&quot;w&quot;:93,&quot;h&quot;:28,&quot;abs_x&quot;:2278,&quot;abs_y&quot;:4784}">Electria</span> <span class="font-geist" bis_size="{&quot;x&quot;:2404,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:2404,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:2443,&quot;y&quot;:4741,&quot;w&quot;:47,&quot;h&quot;:28,&quot;abs_x&quot;:2443,&quot;abs_y&quot;:4784}">Fast</span> <span class="font-geist" bis_size="{&quot;x&quot;:2523,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:2523,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:2562,&quot;y&quot;:4741,&quot;w&quot;:92,&quot;h&quot;:28,&quot;abs_x&quot;:2562,&quot;abs_y&quot;:4784}">Reliable</span> <span class="font-geist" bis_size="{&quot;x&quot;:2687,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:2687,&quot;abs_y&quot;:4784}">•</span> <span class="font-geist" bis_size="{&quot;x&quot;:2726,&quot;y&quot;:4741,&quot;w&quot;:49,&quot;h&quot;:28,&quot;abs_x&quot;:2726,&quot;abs_y&quot;:4784}">Safe</span> <span class="font-geist" bis_size="{&quot;x&quot;:2808,&quot;y&quot;:4741,&quot;w&quot;:7,&quot;h&quot;:28,&quot;abs_x&quot;:2808,&quot;abs_y&quot;:4784}">•</span>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <section class="py-24 bg-brand-gray relative" bis_size="{&quot;x&quot;:0,&quot;y&quot;:4779,&quot;w&quot;:2293,&quot;h&quot;:678,&quot;abs_x&quot;:0,&quot;abs_y&quot;:4822}">
+        <div class="max-w-7xl mx-auto px-6" bis_size="{&quot;x&quot;:506,&quot;y&quot;:4875,&quot;w&quot;:1280,&quot;h&quot;:486,&quot;abs_x&quot;:506,&quot;abs_y&quot;:4918}">
+            <div class="mb-16 reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4875,&quot;w&quot;:1232,&quot;h&quot;:72,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4918}">
+                <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4875,&quot;w&quot;:1232,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4918}">
+                    <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4882,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4925}"></span>
+                    <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:574,&quot;y&quot;:4875,&quot;w&quot;:98,&quot;h&quot;:16,&quot;abs_x&quot;:574,&quot;abs_y&quot;:4918}">Testimonials</span>
+                </div>
+                <h2 class="text-4xl text-white tracking-tight font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:4907,&quot;w&quot;:1232,&quot;h&quot;:40,&quot;abs_x&quot;:530,&quot;abs_y&quot;:4950}">WE HELPED THESE CLIENTS</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5011,&quot;w&quot;:1232,&quot;h&quot;:254,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5054}">
+                <!-- Review 1 -->
+                <div class="bg-[#222] p-8 rounded-2xl border border-white/5 reveal-element delay-100 flex flex-col justify-between" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5011,&quot;w&quot;:394,&quot;h&quot;:254,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5054}">
+                    <div bis_size="{&quot;x&quot;:563,&quot;y&quot;:5044,&quot;w&quot;:328,&quot;h&quot;:124,&quot;abs_x&quot;:563,&quot;abs_y&quot;:5087}" class="">
+                        <div class="flex text-brand-yellow mb-4" bis_size="{&quot;x&quot;:563,&quot;y&quot;:5044,&quot;w&quot;:328,&quot;h&quot;:16,&quot;abs_x&quot;:563,&quot;abs_y&quot;:5087}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:563,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:563,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:579,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:579,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:595,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:595,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:611,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:611,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:627,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:627,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 font-geist" bis_size="{&quot;x&quot;:563,&quot;y&quot;:5076,&quot;w&quot;:328,&quot;h&quot;:68,&quot;abs_x&quot;:563,&quot;abs_y&quot;:5119}">"Fantastic service! The team was prompt, professional and fixed our wiring issue in no time. They even provided useful tips."</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white text-black p-3 rounded-xl max-w-[200px]" bis_size="{&quot;x&quot;:563,&quot;y&quot;:5168,&quot;w&quot;:200,&quot;h&quot;:64,&quot;abs_x&quot;:563,&quot;abs_y&quot;:5211}">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" class="w-10 h-10 rounded-full object-cover" bis_size="{&quot;x&quot;:575,&quot;y&quot;:5180,&quot;w&quot;:40,&quot;h&quot;:40,&quot;abs_x&quot;:575,&quot;abs_y&quot;:5223}">
+                        <div bis_size="{&quot;x&quot;:627,&quot;y&quot;:5182,&quot;w&quot;:60,&quot;h&quot;:36,&quot;abs_x&quot;:627,&quot;abs_y&quot;:5225}">
+                            <div class="font-semibold text-sm font-geist" bis_size="{&quot;x&quot;:627,&quot;y&quot;:5182,&quot;w&quot;:60,&quot;h&quot;:20,&quot;abs_x&quot;:627,&quot;abs_y&quot;:5225}">John R</div>
+                            <div class="text-xs text-gray-500 font-geist" bis_size="{&quot;x&quot;:627,&quot;y&quot;:5202,&quot;w&quot;:60,&quot;h&quot;:16,&quot;abs_x&quot;:627,&quot;abs_y&quot;:5245}">Barangaroo, NSW</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-[#222] p-8 rounded-2xl border border-white/5 reveal-element delay-200 flex flex-col justify-between" bis_size="{&quot;x&quot;:949,&quot;y&quot;:5011,&quot;w&quot;:394,&quot;h&quot;:254,&quot;abs_x&quot;:949,&quot;abs_y&quot;:5054}">
+                    <div bis_size="{&quot;x&quot;:982,&quot;y&quot;:5044,&quot;w&quot;:328,&quot;h&quot;:124,&quot;abs_x&quot;:982,&quot;abs_y&quot;:5087}">
+                        <div class="flex text-brand-yellow mb-4" bis_size="{&quot;x&quot;:982,&quot;y&quot;:5044,&quot;w&quot;:328,&quot;h&quot;:16,&quot;abs_x&quot;:982,&quot;abs_y&quot;:5087}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:982,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:982,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:998,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:998,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1014,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1014,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1030,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1030,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1046,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1046,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 font-geist" bis_size="{&quot;x&quot;:982,&quot;y&quot;:5076,&quot;w&quot;:328,&quot;h&quot;:68,&quot;abs_x&quot;:982,&quot;abs_y&quot;:5119}">"We had a full panel upgrade, and the electricians were amazing. Explained everything clearly, kept the area clean. Couldn't be happier."</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white text-black p-3 rounded-xl max-w-[200px]" bis_size="{&quot;x&quot;:982,&quot;y&quot;:5168,&quot;w&quot;:200,&quot;h&quot;:64,&quot;abs_x&quot;:982,&quot;abs_y&quot;:5211}">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100" class="w-10 h-10 rounded-full object-cover" bis_size="{&quot;x&quot;:994,&quot;y&quot;:5180,&quot;w&quot;:40,&quot;h&quot;:40,&quot;abs_x&quot;:994,&quot;abs_y&quot;:5223}">
+                        <div bis_size="{&quot;x&quot;:1046,&quot;y&quot;:5182,&quot;w&quot;:53,&quot;h&quot;:36,&quot;abs_x&quot;:1046,&quot;abs_y&quot;:5225}">
+                            <div class="font-semibold text-sm font-geist" bis_size="{&quot;x&quot;:1046,&quot;y&quot;:5182,&quot;w&quot;:53,&quot;h&quot;:20,&quot;abs_x&quot;:1046,&quot;abs_y&quot;:5225}">Emily S.</div>
+                            <div class="text-xs text-gray-500 font-geist" bis_size="{&quot;x&quot;:1046,&quot;y&quot;:5202,&quot;w&quot;:53,&quot;h&quot;:16,&quot;abs_x&quot;:1046,&quot;abs_y&quot;:5245}">Rockdale, NSW</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-[#222] p-8 rounded-2xl border border-white/5 reveal-element delay-300 flex flex-col justify-between" bis_size="{&quot;x&quot;:1367,&quot;y&quot;:5011,&quot;w&quot;:394,&quot;h&quot;:254,&quot;abs_x&quot;:1367,&quot;abs_y&quot;:5054}">
+                    <div bis_size="{&quot;x&quot;:1400,&quot;y&quot;:5044,&quot;w&quot;:328,&quot;h&quot;:124,&quot;abs_x&quot;:1400,&quot;abs_y&quot;:5087}">
+                        <div class="flex text-brand-yellow mb-4" bis_size="{&quot;x&quot;:1400,&quot;y&quot;:5044,&quot;w&quot;:328,&quot;h&quot;:16,&quot;abs_x&quot;:1400,&quot;abs_y&quot;:5087}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1400,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1400,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1416,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1416,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1432,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1432,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1448,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1448,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-4 h-4 fill-current" bis_size="{&quot;x&quot;:1464,&quot;y&quot;:5044,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1464,&quot;abs_y&quot;:5087}"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 font-geist" bis_size="{&quot;x&quot;:1400,&quot;y&quot;:5076,&quot;w&quot;:328,&quot;h&quot;:68,&quot;abs_x&quot;:1400,&quot;abs_y&quot;:5119}">"Called them for an emergency at night, and they arrived within 30 minutes. The issue was resolved quickly and efficiently."</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white text-black p-3 rounded-xl max-w-[200px]" bis_size="{&quot;x&quot;:1400,&quot;y&quot;:5168,&quot;w&quot;:200,&quot;h&quot;:64,&quot;abs_x&quot;:1400,&quot;abs_y&quot;:5211}">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100" class="w-10 h-10 rounded-full object-cover" bis_size="{&quot;x&quot;:1412,&quot;y&quot;:5180,&quot;w&quot;:40,&quot;h&quot;:40,&quot;abs_x&quot;:1412,&quot;abs_y&quot;:5223}">
+                        <div bis_size="{&quot;x&quot;:1464,&quot;y&quot;:5182,&quot;w&quot;:65,&quot;h&quot;:36,&quot;abs_x&quot;:1464,&quot;abs_y&quot;:5225}">
+                            <div class="font-semibold text-sm font-geist" bis_size="{&quot;x&quot;:1464,&quot;y&quot;:5182,&quot;w&quot;:65,&quot;h&quot;:20,&quot;abs_x&quot;:1464,&quot;abs_y&quot;:5225}">Michael T.</div>
+                            <div class="text-xs text-gray-500 font-geist" bis_size="{&quot;x&quot;:1464,&quot;y&quot;:5202,&quot;w&quot;:65,&quot;h&quot;:16,&quot;abs_x&quot;:1464,&quot;abs_y&quot;:5245}">Waterloo, NSW</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="mt-12 reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5313,&quot;w&quot;:1232,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5356}">
+                <button class="bg-brand-yellow text-brand-dark px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-yellow-400 transition-colors inline-flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5313,&quot;w&quot;:208,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5356}">
+                    More testimonials <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:691,&quot;y&quot;:5329,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:691,&quot;abs_y&quot;:5372}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="py-24 bg-gray-50" bis_size="{&quot;x&quot;:0,&quot;y&quot;:5457,&quot;w&quot;:2293,&quot;h&quot;:896,&quot;abs_x&quot;:0,&quot;abs_y&quot;:5500}">
+        <div class="max-w-7xl mx-auto px-6" bis_size="{&quot;x&quot;:506,&quot;y&quot;:5553,&quot;w&quot;:1280,&quot;h&quot;:704,&quot;abs_x&quot;:506,&quot;abs_y&quot;:5596}">
+            <div class="mb-16 reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5553,&quot;w&quot;:1232,&quot;h&quot;:72,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5596}">
+                <div class="flex items-center gap-3 mb-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5553,&quot;w&quot;:1232,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5596}">
+                    <span class="w-8 h-[1px] bg-brand-yellow" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5560,&quot;w&quot;:32,&quot;h&quot;:1,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5603}"></span>
+                    <span class="text-brand-yellow text-xs font-medium tracking-widest uppercase font-geist" bis_size="{&quot;x&quot;:574,&quot;y&quot;:5553,&quot;w&quot;:37,&quot;h&quot;:16,&quot;abs_x&quot;:574,&quot;abs_y&quot;:5596}">Blog</span>
+                </div>
+                <h2 class="text-4xl text-brand-dark tracking-tight font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5585,&quot;w&quot;:1232,&quot;h&quot;:40,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5628}">READ ABOUT ELECTRICITY</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5689,&quot;w&quot;:1232,&quot;h&quot;:472,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5732}">
+                <!-- Article 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 reveal-element delay-100" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5689,&quot;w&quot;:600,&quot;h&quot;:472,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5732}">
+                    <div class="h-64 overflow-hidden" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5689,&quot;w&quot;:600,&quot;h&quot;:256,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5732}">
+                        <img src="https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5689,&quot;w&quot;:600,&quot;h&quot;:256,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5732}">
+                    </div>
+                    <div class="p-8" bis_size="{&quot;x&quot;:530,&quot;y&quot;:5945,&quot;w&quot;:600,&quot;h&quot;:216,&quot;abs_x&quot;:530,&quot;abs_y&quot;:5988}">
+                        <div class="flex items-center gap-2 text-xs text-gray-500 mb-3 font-geist" bis_size="{&quot;x&quot;:562,&quot;y&quot;:5977,&quot;w&quot;:536,&quot;h&quot;:16,&quot;abs_x&quot;:562,&quot;abs_y&quot;:6020}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar" aria-hidden="true" class="lucide lucide-calendar w-3 h-3" bis_size="{&quot;x&quot;:562,&quot;y&quot;:5979,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:562,&quot;abs_y&quot;:6022}"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg> August 29, 2024
+                        </div>
+                        <h3 class="text-xl font-semibold text-brand-dark mb-3 font-geist" bis_size="{&quot;x&quot;:562,&quot;y&quot;:6005,&quot;w&quot;:536,&quot;h&quot;:28,&quot;abs_x&quot;:562,&quot;abs_y&quot;:6048}">How to Prepare for an Electrical Inspection</h3>
+                        <p class="text-gray-500 text-sm mb-6 line-clamp-2 font-geist" bis_size="{&quot;x&quot;:562,&quot;y&quot;:6045,&quot;w&quot;:536,&quot;h&quot;:40,&quot;abs_x&quot;:562,&quot;abs_y&quot;:6088}">Ensure your home passes an electrical inspection with these helpful preparation tips covering wiring, outlets, and panels.</p>
+                        <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:562,&quot;y&quot;:6109,&quot;w&quot;:536,&quot;h&quot;:20,&quot;abs_x&quot;:562,&quot;abs_y&quot;:6152}">Read more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:640,&quot;y&quot;:6111,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:640,&quot;abs_y&quot;:6154}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                    </div>
+                </div>
+
+                <!-- Article 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 reveal-element delay-200" bis_size="{&quot;x&quot;:1162,&quot;y&quot;:5689,&quot;w&quot;:600,&quot;h&quot;:472,&quot;abs_x&quot;:1162,&quot;abs_y&quot;:5732}">
+                    <div class="h-64 overflow-hidden" bis_size="{&quot;x&quot;:1162,&quot;y&quot;:5689,&quot;w&quot;:600,&quot;h&quot;:256,&quot;abs_x&quot;:1162,&quot;abs_y&quot;:5732}">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" bis_size="{&quot;x&quot;:1162,&quot;y&quot;:5689,&quot;w&quot;:600,&quot;h&quot;:256,&quot;abs_x&quot;:1162,&quot;abs_y&quot;:5732}">
+                    </div>
+                    <div class="p-8" bis_size="{&quot;x&quot;:1162,&quot;y&quot;:5945,&quot;w&quot;:600,&quot;h&quot;:216,&quot;abs_x&quot;:1162,&quot;abs_y&quot;:5988}">
+                        <div class="flex items-center gap-2 text-xs text-gray-500 mb-3 font-geist" bis_size="{&quot;x&quot;:1194,&quot;y&quot;:5977,&quot;w&quot;:536,&quot;h&quot;:16,&quot;abs_x&quot;:1194,&quot;abs_y&quot;:6020}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar" aria-hidden="true" class="lucide lucide-calendar w-3 h-3" bis_size="{&quot;x&quot;:1194,&quot;y&quot;:5979,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:1194,&quot;abs_y&quot;:6022}"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg> July 15, 2024
+                        </div>
+                        <h3 class="text-xl font-semibold text-brand-dark mb-3 font-geist" bis_size="{&quot;x&quot;:1194,&quot;y&quot;:6005,&quot;w&quot;:536,&quot;h&quot;:28,&quot;abs_x&quot;:1194,&quot;abs_y&quot;:6048}">The Benefits of Upgrading to LED Lighting</h3>
+                        <p class="text-gray-500 text-sm mb-6 line-clamp-2 font-geist" bis_size="{&quot;x&quot;:1194,&quot;y&quot;:6045,&quot;w&quot;:536,&quot;h&quot;:40,&quot;abs_x&quot;:1194,&quot;abs_y&quot;:6088}">Discover why upgrading to LED lighting is one of the best investments for your home's efficiency and longevity.</p>
+                        <a href="#" class="text-brand-yellow text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all font-geist" bis_size="{&quot;x&quot;:1194,&quot;y&quot;:6109,&quot;w&quot;:536,&quot;h&quot;:20,&quot;abs_x&quot;:1194,&quot;abs_y&quot;:6152}">Read more <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:1272,&quot;y&quot;:6111,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1272,&quot;abs_y&quot;:6154}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 reveal-element" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6209,&quot;w&quot;:1232,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6252}">
+                <button class="bg-brand-yellow text-brand-dark px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-yellow-400 transition-colors inline-flex items-center gap-2 font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6209,&quot;w&quot;:196,&quot;h&quot;:48,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6252}">
+                    More blog posts <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4" bis_size="{&quot;x&quot;:678,&quot;y&quot;:6225,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:678,&quot;abs_y&quot;:6268}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="border-gray-800 border-b pt-24 pb-24" bis_size="{&quot;x&quot;:0,&quot;y&quot;:6353,&quot;w&quot;:2293,&quot;h&quot;:289,&quot;abs_x&quot;:0,&quot;abs_y&quot;:6396}">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row justify-between items-center gap-8 reveal-element" bis_size="{&quot;x&quot;:506,&quot;y&quot;:6449,&quot;w&quot;:1280,&quot;h&quot;:96,&quot;abs_x&quot;:506,&quot;abs_y&quot;:6492}">
+            <h2 class="text-4xl lg:text-5xl text-white tracking-tight max-w-2xl font-space-grotesk font-semibold" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6449,&quot;w&quot;:672,&quot;h&quot;:96,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6492}">
+                LET US SOLVE YOUR ELECTRICAL PROBLEMS
+            </h2>
+            <button class="bg-brand-yellow text-brand-dark px-10 py-4 rounded-full text-base font-semibold hover:bg-yellow-400 transition-colors flex items-center gap-3 font-geist" bis_size="{&quot;x&quot;:1537,&quot;y&quot;:6469,&quot;w&quot;:224,&quot;h&quot;:56,&quot;abs_x&quot;:1537,&quot;abs_y&quot;:6512}">
+                +91 83209 26181 <div class="bg-white p-1 rounded-full" bis_size="{&quot;x&quot;:1698,&quot;y&quot;:6485,&quot;w&quot;:24,&quot;h&quot;:24,&quot;abs_x&quot;:1698,&quot;abs_y&quot;:6528}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="phone" aria-hidden="true" class="lucide lucide-phone w-4 h-4" bis_size="{&quot;x&quot;:1702,&quot;y&quot;:6489,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1702,&quot;abs_y&quot;:6532}"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg></div>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark pt-20 pb-10 border-t border-gray-900" bis_size="{&quot;x&quot;:0,&quot;y&quot;:6642,&quot;w&quot;:2293,&quot;h&quot;:486,&quot;abs_x&quot;:0,&quot;abs_y&quot;:6685}">
+        <div class="max-w-7xl mx-auto px-6" bis_size="{&quot;x&quot;:506,&quot;y&quot;:6723,&quot;w&quot;:1280,&quot;h&quot;:365,&quot;abs_x&quot;:506,&quot;abs_y&quot;:6766}">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6723,&quot;w&quot;:1232,&quot;h&quot;:252,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6766}">
+                <!-- Col 1 -->
+                <div bis_size="{&quot;x&quot;:530,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:252,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6766}">
+                    <div class="flex items-center gap-2 mb-6" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:28,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6766}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-5 h-5 fill-white text-white" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6727,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6770}"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                        <span class="text-lg font-semibold text-white tracking-tight font-geist" bis_size="{&quot;x&quot;:558,&quot;y&quot;:6723,&quot;w&quot;:81,&quot;h&quot;:28,&quot;abs_x&quot;:558,&quot;abs_y&quot;:6766}">ELECTRIA</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-6 font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6775,&quot;w&quot;:272,&quot;h&quot;:40,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6818}">Expert solutions for all your electrical needs - fast, safe, and efficient.</p>
+                    <div class="flex gap-4" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6839,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6882}">
+                        <a href="#" class="text-gray-400 hover:text-brand-yellow transition-colors" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6839,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6882}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="instagram" class="lucide lucide-instagram w-5 h-5" bis_size="{&quot;x&quot;:530,&quot;y&quot;:6839,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:530,&quot;abs_y&quot;:6882}"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-yellow transition-colors" bis_size="{&quot;x&quot;:566,&quot;y&quot;:6839,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:566,&quot;abs_y&quot;:6882}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="youtube" class="lucide lucide-youtube w-5 h-5" bis_size="{&quot;x&quot;:566,&quot;y&quot;:6839,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:566,&quot;abs_y&quot;:6882}"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-yellow transition-colors" bis_size="{&quot;x&quot;:602,&quot;y&quot;:6839,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:602,&quot;abs_y&quot;:6882}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="music-2" aria-hidden="true" class="lucide lucide-music-2 w-5 h-5" bis_size="{&quot;x&quot;:602,&quot;y&quot;:6839,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:602,&quot;abs_y&quot;:6882}"><circle cx="8" cy="18" r="4"></circle><path d="M12 18V2l7 4"></path></svg></a>
+                    </div>
+                </div>
+                
+                <!-- Col 2 -->
+                <div bis_size="{&quot;x&quot;:850,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:252,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6766}" class="">
+                    <h4 class="text-white font-medium mb-6 font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:28,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6766}">PAGES</h4>
+                    <ul class="space-y-4 text-sm text-gray-500" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6775,&quot;w&quot;:272,&quot;h&quot;:200,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6818}">
+                        <li bis_size="{&quot;x&quot;:850,&quot;y&quot;:6775,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6818}" class=""><a href="#" class="hover:text-brand-yellow transition-colors font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6776,&quot;w&quot;:38,&quot;h&quot;:18,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6819}">About</a></li>
+                        <li bis_size="{&quot;x&quot;:850,&quot;y&quot;:6811,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6854}" class=""><a href="#" class="hover:text-brand-yellow transition-colors font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6812,&quot;w&quot;:55,&quot;h&quot;:18,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6855}">Services</a></li>
+                        <li bis_size="{&quot;x&quot;:850,&quot;y&quot;:6847,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6890}"><a href="#" class="hover:text-brand-yellow transition-colors font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6848,&quot;w&quot;:26,&quot;h&quot;:18,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6891}">FAQ</a></li>
+                        <li bis_size="{&quot;x&quot;:850,&quot;y&quot;:6883,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6926}"><a href="#" class="hover:text-brand-yellow transition-colors font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6884,&quot;w&quot;:80,&quot;h&quot;:18,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6927}">Testimonials</a></li>
+                        <li bis_size="{&quot;x&quot;:850,&quot;y&quot;:6919,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6962}" class=""><a href="#" class="hover:text-brand-yellow transition-colors font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6920,&quot;w&quot;:29,&quot;h&quot;:18,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6963}">Blog</a></li>
+                        <li bis_size="{&quot;x&quot;:850,&quot;y&quot;:6955,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6998}" class=""><a href="#" class="hover:text-brand-yellow transition-colors font-geist" bis_size="{&quot;x&quot;:850,&quot;y&quot;:6956,&quot;w&quot;:50,&quot;h&quot;:18,&quot;abs_x&quot;:850,&quot;abs_y&quot;:6999}">Contact</a></li>
+                    </ul>
+                </div>
+
+                 <!-- Col 3 (Empty in mockup but good for balance) -->
+                 <div bis_size="{&quot;x&quot;:1170,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:252,&quot;abs_x&quot;:1170,&quot;abs_y&quot;:6766}" class=""></div>
+
+                <!-- Col 4 -->
+                <div bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:252,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6766}" class="">
+                    <h4 class="text-white font-medium mb-6 font-geist" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6723,&quot;w&quot;:272,&quot;h&quot;:28,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6766}">CONTACT</h4>
+                    <ul class="space-y-4 text-sm text-gray-500" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6775,&quot;w&quot;:272,&quot;h&quot;:128,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6818}">
+                        <li class="flex items-start gap-3 font-geist" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6775,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6818}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" aria-hidden="true" class="lucide lucide-map-pin w-4 h-4 mt-1 text-brand-yellow" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6779,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6822}"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            Vadodara, Gujarat
+                        </li>
+                        <li class="flex items-center gap-3 font-geist" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6811,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6854}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="phone" aria-hidden="true" class="lucide lucide-phone w-4 h-4 text-brand-yellow" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6813,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6856}"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
+                            +91 83209 26181
+                        </li>
+                        <li class="flex items-center gap-3 font-geist" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6847,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6890}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mail" aria-hidden="true" class="lucide lucide-mail w-4 h-4 text-brand-yellow" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6849,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6892}"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2" class=""></rect></svg>
+                            allharakhashaikh@gmail.com
+                        </li>
+                        <li class="flex items-center gap-3 font-geist" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6883,&quot;w&quot;:272,&quot;h&quot;:20,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6926}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" aria-hidden="true" class="lucide lucide-clock w-4 h-4 text-brand-yellow" bis_size="{&quot;x&quot;:1490,&quot;y&quot;:6885,&quot;w&quot;:16,&quot;h&quot;:16,&quot;abs_x&quot;:1490,&quot;abs_y&quot;:6928}"><circle cx="12" cy="12" r="10" class=""></circle><path d="M12 6v6l4 2"></path></svg>
+                            Available 24/7
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600" bis_size="{&quot;x&quot;:530,&quot;y&quot;:7039,&quot;w&quot;:1232,&quot;h&quot;:49,&quot;abs_x&quot;:530,&quot;abs_y&quot;:7082}">
+                <p class="font-geist" bis_size="{&quot;x&quot;:530,&quot;y&quot;:7072,&quot;w&quot;:132,&quot;h&quot;:16,&quot;abs_x&quot;:530,&quot;abs_y&quot;:7115}">© 2024 Nutria Template</p>
+                <div class="flex items-center gap-1" bis_size="{&quot;x&quot;:1552,&quot;y&quot;:7072,&quot;w&quot;:210,&quot;h&quot;:16,&quot;abs_x&quot;:1552,&quot;abs_y&quot;:7115}">
+                    <span class="font-geist" bis_size="{&quot;x&quot;:1552,&quot;y&quot;:7072,&quot;w&quot;:102,&quot;h&quot;:16,&quot;abs_x&quot;:1552,&quot;abs_y&quot;:7115}">Made by <span class="text-white font-geist" bis_size="{&quot;x&quot;:1602,&quot;y&quot;:7072,&quot;w&quot;:52,&quot;h&quot;:16,&quot;abs_x&quot;:1602,&quot;abs_y&quot;:7115}">Sebadam</span></span>
+                    <span class="mx-2 font-geist" bis_size="{&quot;x&quot;:1666,&quot;y&quot;:7072,&quot;w&quot;:3,&quot;h&quot;:16,&quot;abs_x&quot;:1666,&quot;abs_y&quot;:7115}">•</span>
+                    <span class="font-geist" bis_size="{&quot;x&quot;:1682,&quot;y&quot;:7072,&quot;w&quot;:80,&quot;h&quot;:16,&quot;abs_x&quot;:1682,&quot;abs_y&quot;:7115}">Built in <span class="text-white font-geist" bis_size="{&quot;x&quot;:1723,&quot;y&quot;:7072,&quot;w&quot;:38,&quot;h&quot;:16,&quot;abs_x&quot;:1723,&quot;abs_y&quot;:7115}">Framer</span></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fixed Floating Template Button -->
+    <!-- <div class="fixed bottom-6 right-6 z-50" bis_size="{&quot;x&quot;:2119,&quot;y&quot;:1887,&quot;w&quot;:149,&quot;h&quot;:36,&quot;abs_x&quot;:2119,&quot;abs_y&quot;:1930}">
+        <a href="#" class="bg-white text-black text-sm font-semibold px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors font-geist" bis_size="{&quot;x&quot;:2119,&quot;y&quot;:1887,&quot;w&quot;:149,&quot;h&quot;:36,&quot;abs_x&quot;:2119,&quot;abs_y&quot;:1930}">
+            Get Template <div class="bg-brand-yellow rounded-full p-1" bis_size="{&quot;x&quot;:2233,&quot;y&quot;:1895,&quot;w&quot;:20,&quot;h&quot;:20,&quot;abs_x&quot;:2233,&quot;abs_y&quot;:1938}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-3 h-3" bis_size="{&quot;x&quot;:2237,&quot;y&quot;:1899,&quot;w&quot;:12,&quot;h&quot;:12,&quot;abs_x&quot;:2237,&quot;abs_y&quot;:1942}"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></div>
+        </a>
+    </div> -->
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Intersection Observer for Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const elements = document.querySelectorAll('.reveal-element');
+            elements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body></html>

@@ -1,0 +1,74 @@
+{
+  "slug": "aura-template-auralis-neural-0",
+  "titulo": "Auralis Neural Audio Engine Landing Page Template",
+  "descricao": "An avant-garde audio synthesis software template featuring immersive neural engine controls and a high-fidelity cinematic aesthetic. Fonte: https://www.aura.build/templates/auralis-neural-0",
+  "arquivo": "77lib/aura-template-auralis-neural-0.html",
+  "tamanho_html": 48711,
+  "paleta": [
+    {
+      "cor": "#f5f1e8",
+      "usos": 128
+    },
+    {
+      "cor": "#ff7a1a",
+      "usos": 45
+    },
+    {
+      "cor": "#0a0a0b",
+      "usos": 16
+    },
+    {
+      "cor": "#7df9ff",
+      "usos": 12
+    },
+    {
+      "cor": "#0c0c0e",
+      "usos": 3
+    },
+    {
+      "cor": "#050506",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(255,255,255,0.3)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(125, 249, 255, 0.2)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(255, 122, 26, 0.35)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Cormorant Garamond",
+    "JetBrains Mono"
+  ],
+  "secoes": [
+    "Sound, before silence.",
+    "The Latent Console.",
+    "Architectural Licensing."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "Canvas"
+  ],
+  "imagens": 0,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-auralis-neural-0?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Auralis Neural Audio Engine Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-auralis-neural-0`\n\n## Objetivo\nAn avant-garde audio synthesis software template featuring immersive neural engine controls and a high-fidelity cinematic aesthetic. Fonte: https://www.aura.build/templates/auralis-neural-0\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f5f1e8  (128x)\n- #ff7a1a  (45x)\n- #0a0a0b  (16x)\n- #7df9ff  (12x)\n- #0c0c0e  (3x)\n- #050506  (1x)\n- rgba(255,255,255,0.3)  (1x)\n- rgba(125, 249, 255, 0.2)  (1x)\n- rgba(255, 122, 26, 0.35)  (1x)\n\n## Tipografia detectada\n- Cormorant Garamond\n- JetBrains Mono\n\n## Estrutura de seções\n- Sound, before silence.\n- The Latent Console.\n- Architectural Licensing.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Auralis Neural Audio Engine Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Auralis Neural Audio Engine Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-auralis-neural-0`\n\n## Objetivo\nAn avant-garde audio synthesis software template featuring immersive neural engine controls and a high-fidelity cinematic aesthetic. Fonte: https://www.aura.build/templates/auralis-neural-0\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #f5f1e8  (128x)\n- #ff7a1a  (45x)\n- #0a0a0b  (16x)\n- #7df9ff  (12x)\n- #0c0c0e  (3x)\n- #050506  (1x)\n- rgba(255,255,255,0.3)  (1x)\n- rgba(125, 249, 255, 0.2)  (1x)\n- rgba(255, 122, 26, 0.35)  (1x)\n\n## Tipografia detectada\n- Cormorant Garamond\n- JetBrains Mono\n\n## Estrutura de seções\n- Sound, before silence.\n- The Latent Console.\n- Architectural Licensing.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:30:58"
+}

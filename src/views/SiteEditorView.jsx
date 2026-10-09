@@ -15,6 +15,7 @@ import { resolveProjectId, classifyProjectPreview } from '../services/projectPre
 import SiteTextEditor from '../components/SiteTextEditor';
 import { rankTemplates } from '../services/templateSelection';
 import BusinessTemplateEditor from '../components/BusinessTemplateEditor';
+import TemplateImageEditor from '../components/TemplateImageEditor';
 
 export default function SiteEditorView({ lead, onBack }) {
   const targetLead = lead || {
@@ -261,6 +262,12 @@ export default function SiteEditorView({ lead, onBack }) {
         
         {/* Left Side: Agentic Chatbot Builder Interactive Panel */}
         <div>
+        {docSchema && ['html','legacy'].includes(previewKind) && <TemplateImageEditor
+          key={`images-${projectId}`}
+          html={docSchema.htmlContent || compileDocumentToStandaloneHTML(docSchema)}
+          disabled={salvandoVisual}
+          onApply={({htmlContent,imageRecord})=>setDocSchema(previous=>({...previous,htmlContent,imageProvenance:[...(previous.imageProvenance||[]).filter(item=>item.index!==imageRecord.index),imageRecord],requiresContentReview:true}))}
+        />}
         {docSchema && ['html','legacy'].includes(previewKind) && <BusinessTemplateEditor
           key={`business-${projectId}`}
           html={docSchema.htmlContent || compileDocumentToStandaloneHTML(docSchema)}

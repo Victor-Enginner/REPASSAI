@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en" class="scroll-smooth">
+  <head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YES! Women's Network</title>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link
+href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Raleway:wght@300;400;500;600&amp;display=swap"
+rel="stylesheet"
+/>
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Iconify -->
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+  <body
+    class="[font-family:'Raleway',sans-serif] text-[#2B2825] bg-[#FFFFFF] antialiased selection:bg-[#D3AD3B] selection:text-white"
+  >
+    <!-- Navigation -->
+    <nav
+      class="absolute top-0 left-0 w-full z-50 px-6 py-8 md:px-12 flex justify-between items-center text-white"
+    >
+      <a
+        href="#"
+        class="[font-family:'Playfair_Display',serif] text-lg tracking-tighter uppercase font-medium z-10 flex items-center gap-2"
+      >
+        YES! Women's Network
+      </a>
+
+      <!-- Desktop Nav -->
+      <div
+        class="hidden lg:flex items-center gap-10 text-sm tracking-wide font-light text-white/90"
+      >
+        <a href="#" class="hover:text-[#D3AD3B] transition-colors">Home</a>
+        <a href="#" class="hover:text-[#D3AD3B] transition-colors">About</a>
+        <a href="#" class="hover:text-[#D3AD3B] transition-colors">Podcast</a>
+        <a href="#" class="hover:text-[#D3AD3B] transition-colors">
+          The Four Pillars
+        </a>
+        <a href="#" class="hover:text-[#D3AD3B] transition-colors">Community</a>
+      </div>
+
+      <a
+        href="#newsletter"
+        class="hidden md:inline-flex bg-[#D3AD3B] text-white text-xs font-medium uppercase tracking-widest px-6 py-3 rounded-full hover:bg-[#CA9667] transition-all duration-300"
+      >
+        Join the Community
+      </a>
+
+      <!-- Mobile Menu Toggle (Visual only) -->
+      <button class="lg:hidden text-white z-10">
+        <iconify-icon
+          icon="solar:hamburger-menu-linear"
+          width="24"
+          stroke-width="1.5"
+        ></iconify-icon>
+      </button>
+    </nav>
+
+    <!-- SECTION 1: HERO -->
+    <section
+      class="relative bg-[#1A1A2E] w-full min-h-[90vh] flex items-center justify-center px-6 md:px-12 pt-32 pb-24 overflow-hidden"
+      data-answer="URL: https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fb64a44c-bebb-4634-82bb-fd65817067aa_3840w.png, Base Color: #1A1A2E, Gradient: from #1A1A2E/80 via #1A1A2E/50 to #1A1A2E, Overlay: opacity-30 mix-blend-luminosity"
+    >
+      <!-- Background Image -->
+      <div class="absolute inset-0 z-0">
+        <img
+          src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fb64a44c-bebb-4634-82bb-fd65817067aa_3840w.png"
+          alt="Women connecting"
+          class="w-full h-full object-cover object-top opacity-30 mix-blend-luminosity"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-[#1A1A2E]/80 via-[#1A1A2E]/50 to-[#1A1A2E]"
+        ></div>
+      </div>
+
+      <!-- Content -->
+      <div
+        class="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center"
+      >
+        <h1
+          class="[font-family:'Playfair_Display',serif] text-4xl md:text-6xl lg:text-7xl text-white font-medium tracking-tight leading-[1.1] mb-8"
+        >
+          You're doing so much.
+          <br />
+          <span class="italic text-[#FAFAF7]/90 font-normal">
+            And still, something's missing.
+          </span>
+        </h1>
+        <p
+          class="text-base md:text-xl text-[#FAFAF7]/80 font-light max-w-2xl leading-relaxed mb-12"
+        >
+          You are not navigating this alone. YES! Women's Network is the
+          community and the conversation you've been looking for.
+        </p>
+        <a
+          href="#newsletter"
+          class="inline-flex items-center justify-center bg-[#D3AD3B] text-white text-sm font-medium tracking-wide px-8 py-4 rounded-full hover:bg-[#CA9667] hover:-translate-y-0.5 transition-all duration-300 shadow-lg shadow-[#D3AD3B]/20"
+        >
+          Join the Community
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION 2: THE INVITATION -->
+    <section class="bg-[#FAFAF7] py-24 md:py-40 px-6">
+      <div class="max-w-3xl mx-auto text-center flex flex-col items-center">
+        <iconify-icon
+          icon="solar:leaf-linear"
+          class="text-[#CA9667] text-3xl mb-8"
+          stroke-width="1.5"
+        ></iconify-icon>
+        <h2
+          class="[font-family:'Playfair_Display',serif] text-3xl md:text-5xl text-[#1A1A2E] font-medium tracking-tight mb-8"
+        >
+          This space was built for exactly this.
+        </h2>
+        <p
+          class="text-lg md:text-xl text-[#2B2825]/80 font-light leading-loose"
+        >
+          Whether you're building a business, raising a family, rebuilding your
+          confidence, or searching for your next chapter — you belong here.
+          We're women growing stronger together, one real conversation at a
+          time.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: THE FOUR PILLARS -->
+    <section class="bg-[#FFFFFF] py-24 md:py-32 px-6 md:px-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-20">
+          <h2
+            class="[font-family:'Playfair_Display',serif] text-3xl md:text-4xl text-[#1A1A2E] font-medium tracking-tight mb-6"
+          >
+            Four pillars. One whole-woman conversation.
+          </h2>
+          <p class="text-base text-[#2B2825]/70 font-light leading-relaxed">
+            These aren't four separate conversations — they're one, held
+            together by community.
+          </p>
+        </div>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+        >
+          <!-- Card 1 -->
+          <div
+            class="bg-[#FAFAF7] p-10 rounded-2xl border border-[#1A1A2E]/5 hover:border-[#CA9667]/30 hover:bg-white hover:shadow-xl hover:shadow-[#1A1A2E]/5 transition-all duration-500 group flex flex-col items-start"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-[#CA9667]/10 flex items-center justify-center mb-8 group-hover:bg-[#CA9667] transition-colors duration-500"
+            >
+              <iconify-icon
+                icon="solar:stars-minimalistic-linear"
+                class="text-[#CA9667] group-hover:text-white text-2xl"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3
+              class="[font-family:'Playfair_Display',serif] text-xl text-[#1A1A2E] font-medium tracking-tight mb-4"
+            >
+              Faith
+            </h3>
+            <p class="text-sm text-[#2B2825]/70 font-light leading-relaxed">
+              Spiritual grounding, purpose, and resilience for values-aligned
+              living.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div
+            class="bg-[#FAFAF7] p-10 rounded-2xl border border-[#1A1A2E]/5 hover:border-[#CA9667]/30 hover:bg-white hover:shadow-xl hover:shadow-[#1A1A2E]/5 transition-all duration-500 group flex flex-col items-start"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-[#CA9667]/10 flex items-center justify-center mb-8 group-hover:bg-[#CA9667] transition-colors duration-500"
+            >
+              <iconify-icon
+                icon="solar:users-group-two-rounded-linear"
+                class="text-[#CA9667] group-hover:text-white text-2xl"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3
+              class="[font-family:'Playfair_Display',serif] text-xl text-[#1A1A2E] font-medium tracking-tight mb-4"
+            >
+              Relationships
+            </h3>
+            <p class="text-sm text-[#2B2825]/70 font-light leading-relaxed">
+              Marriages, friendships, and community — every connection that
+              matters.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            class="bg-[#FAFAF7] p-10 rounded-2xl border border-[#1A1A2E]/5 hover:border-[#CA9667]/30 hover:bg-white hover:shadow-xl hover:shadow-[#1A1A2E]/5 transition-all duration-500 group flex flex-col items-start"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-[#CA9667]/10 flex items-center justify-center mb-8 group-hover:bg-[#CA9667] transition-colors duration-500"
+            >
+              <iconify-icon
+                icon="solar:heart-angle-linear"
+                class="text-[#CA9667] group-hover:text-white text-2xl"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3
+              class="[font-family:'Playfair_Display',serif] text-xl text-[#1A1A2E] font-medium tracking-tight mb-4"
+            >
+              Well-being
+            </h3>
+            <p class="text-sm text-[#2B2825]/70 font-light leading-relaxed">
+              Whole-person health and the confidence that comes from being seen
+              and supported.
+            </p>
+          </div>
+
+          <!-- Card 4 -->
+          <div
+            class="bg-[#FAFAF7] p-10 rounded-2xl border border-[#1A1A2E]/5 hover:border-[#CA9667]/30 hover:bg-white hover:shadow-xl hover:shadow-[#1A1A2E]/5 transition-all duration-500 group flex flex-col items-start"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-[#CA9667]/10 flex items-center justify-center mb-8 group-hover:bg-[#CA9667] transition-colors duration-500"
+            >
+              <iconify-icon
+                icon="solar:wallet-money-linear"
+                class="text-[#CA9667] group-hover:text-white text-2xl"
+                stroke-width="1.5"
+              ></iconify-icon>
+            </div>
+            <h3
+              class="[font-family:'Playfair_Display',serif] text-xl text-[#1A1A2E] font-medium tracking-tight mb-4"
+            >
+              Finance
+            </h3>
+            <p class="text-sm text-[#2B2825]/70 font-light leading-relaxed">
+              Independence, security, and growth — on your terms.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MEET MICHELE -->
+    <section class="bg-[#FAFAF7] py-24 md:py-32 px-6 md:px-12">
+      <div
+        class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
+      >
+        <div class="w-full lg:w-1/2 relative">
+          <div
+            class="absolute inset-0 bg-[#CA9667]/10 rounded-[2rem] translate-x-4 translate-y-4"
+          ></div>
+          <img
+            src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/634656bb-7727-41fb-a6c2-4136eda31e8d_3840w.png"
+            alt="Michele Morley"
+            class="relative w-full aspect-[4/5] object-cover rounded-[2rem] grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+          />
+        </div>
+        <div class="w-full lg:w-1/2 flex flex-col items-start">
+          <span
+            class="text-[#CA9667] text-xs font-medium uppercase tracking-widest mb-6"
+          >
+            Your host
+          </span>
+          <h2
+            class="[font-family:'Playfair_Display',serif] text-3xl md:text-4xl lg:text-5xl text-[#1A1A2E] font-medium tracking-tight mb-8 leading-tight"
+          >
+            A peer who became a builder.
+          </h2>
+          <div
+            class="text-base text-[#2B2825]/80 font-light leading-relaxed space-y-6 mb-10"
+          >
+            <p>
+              Michele Morley has been in the middle of it — and built something
+              anyway. Real estate entrepreneur, community builder, and founder
+              of YES! Women's Network, she gathers women around a shared table,
+              not a stage.
+            </p>
+            <p>
+              She's not here to tell you she has it all figured out. She's here
+              to grow alongside you.
+            </p>
+          </div>
+          <a
+            href="#"
+            class="group inline-flex items-center gap-3 text-[#1A1A2E] font-medium text-sm border-b border-[#1A1A2E]/20 pb-1 hover:border-[#1A1A2E] transition-colors"
+          >
+            Read Michele's story
+            <iconify-icon
+              icon="solar:arrow-right-linear"
+              class="text-lg group-hover:translate-x-1 transition-transform"
+              stroke-width="1.5"
+            ></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: THE PODCAST -->
+    <section
+      class="bg-[#1A1A2E] py-24 md:py-32 px-6 md:px-12 text-white overflow-hidden"
+    >
+      <div
+        class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
+      >
+        <div class="w-full lg:w-1/2 flex flex-col items-start">
+          <span
+            class="text-[#CA9667] text-xs font-medium uppercase tracking-widest mb-6"
+          >
+            The podcast
+          </span>
+          <h2
+            class="[font-family:'Playfair_Display',serif] text-3xl md:text-5xl font-medium tracking-tight mb-8 leading-tight"
+          >
+            Real conversations, every week.
+          </h2>
+          <p
+            class="text-base md:text-lg text-[#FAFAF7]/70 font-light leading-relaxed mb-10"
+          >
+            The YES! Women's Network Podcast is where it all starts — honest
+            conversations on faith, relationships, well-being, and finance.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <a
+              href="#"
+              class="inline-flex items-center justify-center gap-3 bg-white text-[#1A1A2E] px-6 py-3.5 rounded-full text-sm font-medium hover:bg-[#FAFAF7] transition-colors"
+            >
+              <iconify-icon
+                icon="fa6-brands:apple"
+                class="text-lg"
+              ></iconify-icon>
+              Listen on Apple Podcasts
+            </a>
+            <a
+              href="#"
+              class="inline-flex items-center justify-center gap-3 bg-[#1A1A2E] text-white border border-white/20 px-6 py-3.5 rounded-full text-sm font-medium hover:bg-white/5 transition-colors"
+            >
+              <iconify-icon
+                icon="fa6-brands:spotify"
+                class="text-lg"
+              ></iconify-icon>
+              Listen on Spotify
+            </a>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 relative">
+          <!-- Podcast Player Mockup -->
+          <div
+            class="bg-white/5 border border-white/10 backdrop-blur-md p-6 md:p-8 rounded-[2rem] flex flex-col md:flex-row items-center md:items-start gap-6 w-full max-w-md mx-auto lg:ml-auto"
+          >
+            <img
+              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f7e671af-b324-4bd8-bebb-eb032a83ee64_3840w.png"
+              alt="Podcast Cover"
+              class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover shadow-2xl shadow-black/50"
+            />
+            <div
+              class="flex flex-col justify-center text-center md:text-left flex-1 w-full"
+            >
+              <span
+                class="text-[#D3AD3B] text-xs uppercase tracking-wider font-medium mb-2"
+              >
+                Latest Episode
+              </span>
+              <h4
+                class="[font-family:'Playfair_Display',serif] text-lg text-white font-medium mb-2 leading-tight"
+              >
+                Finding Clarity in the Messy Middle
+              </h4>
+              <p class="text-xs text-white/50 mb-6">Ep. 42 • 45 min</p>
+
+              <!-- Mock Controls -->
+              <div
+                class="flex items-center justify-center md:justify-start gap-6 text-white/70"
+              >
+                <button class="hover:text-white transition-colors">
+                  <iconify-icon
+                    icon="solar:rewind-15-seconds-back-linear"
+                    width="24"
+                    stroke-width="1.5"
+                  ></iconify-icon>
+                </button>
+                <button
+                  class="w-12 h-12 rounded-full bg-white text-[#1A1A2E] flex items-center justify-center hover:scale-105 transition-transform"
+                >
+                  <iconify-icon
+                    icon="solar:play-bold"
+                    width="20"
+                  ></iconify-icon>
+                </button>
+                <button class="hover:text-white transition-colors">
+                  <iconify-icon
+                    icon="solar:forward-15-seconds-linear"
+                    width="24"
+                    stroke-width="1.5"
+                  ></iconify-icon>
+                </button>
+              </div>
+
+              <!-- Progress Bar Mock -->
+              <div
+                class="w-full h-1 bg-white/10 rounded-full mt-6 overflow-hidden"
+              >
+                <div class="w-1/3 h-full bg-[#D3AD3B] rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: COMMUNITY -->
+    <section
+      class="relative bg-[#FAFAF7] py-24 md:py-32 px-6 md:px-12 overflow-hidden flex flex-col items-center justify-center min-h-[60vh]"
+    >
+      <!-- Decorative Quote Mark -->
+      <div
+        class="absolute top-0 left-4 md:left-24 text-[#CA9667] opacity-[0.03] [font-family:'Playfair_Display',serif] text-[20rem] md:text-[30rem] leading-none select-none pointer-events-none"
+      >
+        "
+      </div>
+
+      <div
+        class="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center"
+      >
+        <h2
+          class="[font-family:'Playfair_Display',serif] text-3xl md:text-5xl text-[#1A1A2E] font-medium tracking-tight mb-8"
+        >
+          A room full of women who get it.
+        </h2>
+        <p
+          class="text-lg md:text-xl text-[#2B2825]/80 font-light leading-relaxed max-w-2xl mb-12"
+        >
+          439+ women and growing — showing up for each other with clarity,
+          connection, and courage. Women who arrive here leave with more of all
+          three than they came with.
+        </p>
+
+        <div class="flex items-center justify-center gap-4 text-[#CA9667]">
+          <iconify-icon icon="solar:star-bold" class="text-sm"></iconify-icon>
+          <iconify-icon icon="solar:star-bold" class="text-sm"></iconify-icon>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

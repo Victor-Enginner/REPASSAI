@@ -1,0 +1,111 @@
+{
+  "slug": "aura-template-personal-trainer-97",
+  "titulo": "Personal Trainer Professional Template",
+  "descricao": "A high-performance landing page template designed for fitness professionals and personal trainers to showcase training methods and results. Fonte: https://www.aura.build/templates/personal-trainer-97",
+  "arquivo": "77lib/aura-template-personal-trainer-97.html",
+  "tamanho_html": 65570,
+  "paleta": [
+    {
+      "cor": "#2979ff",
+      "usos": 81
+    },
+    {
+      "cor": "#b0b0b0",
+      "usos": 32
+    },
+    {
+      "cor": "#050d1a",
+      "usos": 30
+    },
+    {
+      "cor": "#f2f2f2",
+      "usos": 26
+    },
+    {
+      "cor": "#0b1628",
+      "usos": 12
+    },
+    {
+      "cor": "#6b6b6b",
+      "usos": 11
+    },
+    {
+      "cor": "#1565c0",
+      "usos": 5
+    },
+    {
+      "cor": "#0b3d91",
+      "usos": 3
+    },
+    {
+      "cor": "#1a1a1a",
+      "usos": 3
+    },
+    {
+      "cor": "#ffffff",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(41,121,255,0.1)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(41,121,255,0.2)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(0,0,0,0.8)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(41, 121, 255, 0.35)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(242, 242, 242, 0.1)",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(11, 61, 145, 0.15)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Barlow Condensed",
+    "Inter",
+    "JetBrains Mono"
+  ],
+  "secoes": [
+    "LUCAS PRADO",
+    "SEM FRESCURA. SEM ENROLAÇÃO. SÓ RESULTADO.",
+    "VOCÊ NÃO PRECISA DE COMPLICAÇÃO.",
+    "UM MÉTODO SIMPLESQUE FUNCIONA DE VERDADE.",
+    "ALUNOS REAIS.RESULTADOS REAIS.",
+    "VOCÊ ESCOLHEONDE TREINAR.",
+    "PERSONAL TRAINER QUE ENTREGA O QUE PROMETE.",
+    "PERGUNTAS DIRETAS.",
+    "CHEGA DEESPERAR OMOMENTO CERTO."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations",
+    "IntersectionObserver",
+    "Backdrop Filter"
+  ],
+  "imagens": 16,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-personal-trainer-97?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Personal Trainer Professional Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-personal-trainer-97`\n\n## Objetivo\nA high-performance landing page template designed for fitness professionals and personal trainers to showcase training methods and results. Fonte: https://www.aura.build/templates/personal-trainer-97\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #2979ff  (81x)\n- #b0b0b0  (32x)\n- #050d1a  (30x)\n- #f2f2f2  (26x)\n- #0b1628  (12x)\n- #6b6b6b  (11x)\n- #1565c0  (5x)\n- #0b3d91  (3x)\n- #1a1a1a  (3x)\n- #ffffff  (2x)\n- rgba(41,121,255,0.1)  (2x)\n- rgba(41,121,255,0.2)  (2x)\n- rgba(0,0,0,0.8)  (2x)\n- rgba(41, 121, 255, 0.35)  (1x)\n- rgba(242, 242, 242, 0.1)  (1x)\n- rgba(11, 61, 145, 0.15)  (1x)\n\n## Tipografia detectada\n- Barlow Condensed\n- Inter\n- JetBrains Mono\n\n## Estrutura de seções\n- LUCAS PRADO\n- SEM FRESCURA. SEM ENROLAÇÃO. SÓ RESULTADO.\n- VOCÊ NÃO PRECISA DE COMPLICAÇÃO.\n- UM MÉTODO SIMPLESQUE FUNCIONA DE VERDADE.\n- ALUNOS REAIS.RESULTADOS REAIS.\n- VOCÊ ESCOLHEONDE TREINAR.\n- PERSONAL TRAINER QUE ENTREGA O QUE PROMETE.\n- PERGUNTAS DIRETAS.\n- CHEGA DEESPERAR OMOMENTO CERTO.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Personal Trainer Professional Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Personal Trainer Professional Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-personal-trainer-97`\n\n## Objetivo\nA high-performance landing page template designed for fitness professionals and personal trainers to showcase training methods and results. Fonte: https://www.aura.build/templates/personal-trainer-97\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #2979ff  (81x)\n- #b0b0b0  (32x)\n- #050d1a  (30x)\n- #f2f2f2  (26x)\n- #0b1628  (12x)\n- #6b6b6b  (11x)\n- #1565c0  (5x)\n- #0b3d91  (3x)\n- #1a1a1a  (3x)\n- #ffffff  (2x)\n- rgba(41,121,255,0.1)  (2x)\n- rgba(41,121,255,0.2)  (2x)\n- rgba(0,0,0,0.8)  (2x)\n- rgba(41, 121, 255, 0.35)  (1x)\n- rgba(242, 242, 242, 0.1)  (1x)\n- rgba(11, 61, 145, 0.15)  (1x)\n\n## Tipografia detectada\n- Barlow Condensed\n- Inter\n- JetBrains Mono\n\n## Estrutura de seções\n- LUCAS PRADO\n- SEM FRESCURA. SEM ENROLAÇÃO. SÓ RESULTADO.\n- VOCÊ NÃO PRECISA DE COMPLICAÇÃO.\n- UM MÉTODO SIMPLESQUE FUNCIONA DE VERDADE.\n- ALUNOS REAIS.RESULTADOS REAIS.\n- VOCÊ ESCOLHEONDE TREINAR.\n- PERSONAL TRAINER QUE ENTREGA O QUE PROMETE.\n- PERGUNTAS DIRETAS.\n- CHEGA DEESPERAR OMOMENTO CERTO.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:04"
+}

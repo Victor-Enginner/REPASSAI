@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<!-- 77lib lic:1d6166ae2853 -->
+<html lang="en">
+<head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auralis — Neural Audio Engine</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Iconify -->
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- Google Fonts: Cormorant Garamond for Editorial Luxury Serif & JetBrains Mono for Technical Precision -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+<style>
+.font-serif-editorial {
+font-family: 'Cormorant Garamond', serif;
+}
+.font-mono-precise {
+font-family: 'JetBrains Mono', monospace;
+}
+/* Custom clip-path reveal for luxury transitions */
+.reveal-text {
+clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Hide scrollbars but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+</style><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+<body class="antialiased bg-[#0A0A0B] text-[#F5F1E8] overflow-x-hidden selection:bg-[#FF7A1A] selection:text-[#0A0A0B] font-mono-precise">
+
+    <!-- Ambient Background Light Grid -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#f5f1e803_1px,transparent_1px),linear-gradient(to_bottom,#f5f1e803_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0"></div>
+
+    <!-- PERSISTENT RECORDING STATUS (Bottom-Left) -->
+    <div class="fixed bottom-6 left-6 z-50 flex items-center gap-3 bg-[#0A0A0B]/80 backdrop-blur-md border border-[#F5F1E8]/10 px-4 py-2 rounded-none text-xs tracking-widest uppercase">
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A1A] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#FF7A1A]"></span>
+        </span>
+        <span class="text-[#F5F1E8]/60 font-mono-precise">SYS // REC <span id="rec-time" class="text-[#F5F1E8]">00:00:00</span></span>
+    </div>
+
+    <!-- 1. HERO SECTION & HEADER -->
+    <section class="relative min-h-screen w-full flex flex-col justify-between border-b border-[#F5F1E8]/10 overflow-hidden px-4 md:px-12 py-6 z-10">
+        <!-- Faint Baseline Motif Grid Behind Hero Type -->
+        <div class="absolute inset-x-0 top-1/4 bottom-1/4 flex flex-col justify-between pointer-events-none opacity-20">
+            <div class="w-full h-[1px] bg-[#F5F1E8]/30"></div>
+            <div class="w-full h-[1px] bg-[#F5F1E8]/30"></div>
+            <div class="w-full h-[1px] bg-[#F5F1E8]/30"></div>
+            <div class="w-full h-[1px] bg-[#F5F1E8]/30"></div>
+        </div>
+
+        <!-- Generative Waveform Canvas Behind Content -->
+        <canvas id="hero-waveform" class="absolute inset-0 w-full h-full pointer-events-none opacity-40 mix-blend-screen z-0"></canvas>
+
+        <!-- Top Header Navigation -->
+        <header class="relative w-full flex items-center justify-between z-20">
+            <div class="text-xl font-medium tracking-tighter uppercase font-serif-editorial">
+                AURALIS
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-8 text-xs tracking-widest uppercase text-[#F5F1E8]/60">
+                <a href="#features" class="hover:text-[#FF7A1A] transition-colors duration-300">Engine</a>
+                <a href="#demo" class="hover:text-[#FF7A1A] transition-colors duration-300">Library</a>
+                <a href="#pricing" class="hover:text-[#FF7A1A] transition-colors duration-300">Studio</a>
+                <a href="#pricing" class="hover:text-[#FF7A1A] transition-colors duration-300">Pricing</a>
+            </nav>
+
+            <div>
+                <a href="#demo" class="inline-flex items-center justify-center border border-[#F5F1E8]/20 px-5 py-2.5 text-xs tracking-widest uppercase transition-all duration-300 hover:border-[#FF7A1A] hover:text-[#FF7A1A]">
+                    Console
+                </a>
+            </div>
+        </header>
+
+        <!-- Hero Mid-Block -->
+        <main class="relative my-auto py-16 flex flex-col justify-center items-start z-10 max-w-5xl">
+            <!-- Section Eyebrow -->
+            <div class="text-xs text-[#FF7A1A] uppercase tracking-[0.2em] mb-4 font-mono-precise">
+                // 01 — NEURAL SYNTHESIS ENGINE
+            </div>
+
+            <!-- Big Luxurious Headline -->
+            <div class="reveal-text overflow-hidden">
+                <h1 class="text-5xl md:text-8xl lg:text-9xl font-light tracking-tighter font-serif-editorial text-[#F5F1E8] leading-[0.9]">
+                    Sound,<br>
+                    <span class="italic text-[#F5F1E8]/90">before silence.</span>
+                </h1>
+            </div>
+
+            <!-- Meta & Core CTA -->
+            <div class="mt-8 flex flex-col md:flex-row md:items-center gap-8 md:gap-16 w-full">
+                <!-- Molten Amber CTA -->
+                <div>
+                    <a href="#demo" class="group relative inline-flex items-center justify-center bg-[#FF7A1A] text-[#0A0A0B] font-semibold text-xs tracking-widest uppercase px-8 py-4 overflow-hidden transition-all duration-300 hover:bg-[#FF7A1A]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
+                        Open the Engine
+                        <iconify-icon icon="solar:arrow-right-linear" class="ml-2 text-base transition-transform duration-300 group-hover:translate-x-1" stroke-width="1.5"></iconify-icon>
+                    </a>
+                </div>
+
+                <!-- Version Tag / Metadata description -->
+                <div class="max-w-md text-xs leading-relaxed text-[#F5F1E8]/60">
+                    <span class="text-[#F5F1E8] font-mono-precise block mb-1">v2.0 — Neural Audio, Realtime.</span>
+                    Synthesizing thoughts directly into spatialized cinematic audio vectors. Developed for composers, designers, and high-fidelity sound architects.
+                </div>
+            </div>
+        </main>
+
+        <!-- Hero Footer Metrics -->
+        <div class="relative w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-t border-[#F5F1E8]/10 pt-6 z-10 text-xs text-[#F5F1E8]/40 font-mono-precise">
+            <div class="flex items-center gap-6">
+                <div>LATENCY: <span class="text-[#7DF9FF]">1.4MS</span></div>
+                <div>TIMBRE SPACE: <span class="text-[#F5F1E8]">12-DIMENSIONAL</span></div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#7DF9FF] animate-pulse"></span>
+                CORE RECTIFIER LINKED
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. PROOF BAR (Studio Alliances) -->
+    <section class="border-b border-[#F5F1E8]/10 bg-[#0A0A0B]/50 py-10 px-4 md:px-12 z-10 relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <span class="text-[10px] tracking-[0.3em] uppercase text-[#F5F1E8]/30">// DEPLOYED BY GLOBAL HOUSES:</span>
+            <div class="flex flex-wrap items-center gap-8 md:gap-16">
+                <!-- A24 Sound Mockup -->
+                <div class="flex items-center gap-2 opacity-30 hover:opacity-80 transition-opacity duration-300">
+                    <span class="font-serif-editorial text-lg tracking-wider font-light">A24</span>
+                    <span class="text-[9px] font-mono-precise tracking-widest">SOUND LABS</span>
+                </div>
+                <!-- MUBI Audio Mockup -->
+                <div class="flex items-center gap-2 opacity-30 hover:opacity-80 transition-opacity duration-300">
+                    <span class="font-serif-editorial text-lg italic tracking-widest">MUBI</span>
+                    <span class="text-[9px] font-mono-precise tracking-widest">REPLICANT</span>
+                </div>
+                <!-- Boiler Room Labs Mockup -->
+                <div class="flex items-center gap-2 opacity-30 hover:opacity-80 transition-opacity duration-300">
+                    <span class="font-mono-precise text-xs font-semibold tracking-tighter">BOILER ROOM</span>
+                    <span class="text-[9px] font-mono-precise tracking-widest text-[#FF7A1A]">L.04</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. FEATURE TRIAD -->
+    <section id="features" class="border-b border-[#F5F1E8]/10 px-4 md:px-12 py-24 z-10 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-xs text-[#FF7A1A] uppercase tracking-[0.2em] mb-12">
+                // 02 — ARCHITECTURE OVERVIEW
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-[#F5F1E8]/10">
+                <!-- Column 01 -->
+                <div class="py-8 lg:py-0 lg:px-8 first:pl-0 last:pr-0 flex flex-col justify-between min-h-[280px]">
+                    <div>
+                        <div class="text-xs text-[#F5F1E8]/40 mb-6 font-mono-precise">01 // WAVE-GENERATIVE</div>
+                        <h3 class="text-xl font-light text-[#F5F1E8] font-serif-editorial mb-3 tracking-tight">Latent Timbre Synthesis</h3>
+                        <p class="text-xs text-[#F5F1E8]/60 leading-relaxed font-mono-precise">
+                            Bypass rigid oscillators. Construct multidimensional timbres seamlessly from neural network coordinate vectors instantly.
+                        </p>
+                    </div>
+                    <!-- Inline Minimal Diagram -->
+                    <div class="mt-8 pt-4 border-t border-[#F5F1E8]/5 flex items-center justify-between">
+                        <svg class="w-24 h-6 text-[#FF7A1A]" viewBox="0 0 100 30" fill="none">
+                            <path d="M0,15 Q15,0 30,15 T60,15 T90,5 T100,15" stroke="currentColor" stroke-width="1" fill="none"></path>
+                            <circle cx="60" cy="15" r="2" fill="#7DF9FF"></circle>
+                        </svg>
+                        <span class="text-[9px] text-[#F5F1E8]/30 font-mono-precise">SYS.OSC.012</span>
+                    </div>
+                </div>
+
+                <!-- Column 02 -->
+                <div class="py-8 lg:py-0 lg:px-8 flex flex-col justify-between min-h-[280px]">
+                    <div>
+                        <div class="text-xs text-[#F5F1E8]/40 mb-6 font-mono-precise">02 // FIELD-SPATIAL</div>
+                        <h3 class="text-xl font-light text-[#F5F1E8] font-serif-editorial mb-3 tracking-tight">Spatial Stems</h3>
+                        <p class="text-xs text-[#F5F1E8]/60 leading-relaxed font-mono-precise">
+                            Export standard spatial layouts instantly. Fully immersive atmospheres built with complex interactive vectors.
+                        </p>
+                    </div>
+                    <!-- Inline Minimal Diagram -->
+                    <div class="mt-8 pt-4 border-t border-[#F5F1E8]/5 flex items-center justify-between">
+                        <svg class="w-24 h-6 text-[#7DF9FF]" viewBox="0 0 100 30" fill="none">
+                            <circle cx="50" cy="15" r="12" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2"></circle>
+                            <circle cx="50" cy="15" r="4" fill="#FF7A1A"></circle>
+                        </svg>
+                        <span class="text-[9px] text-[#F5F1E8]/30 font-mono-precise">FIELD.360.MATRIX</span>
+                    </div>
+                </div>
+
+                <!-- Column 03 -->
+                <div class="py-8 lg:py-0 lg:px-8 flex flex-col justify-between min-h-[280px]">
+                    <div>
+                        <div class="text-xs text-[#F5F1E8]/40 mb-6 font-mono-precise">03 // COGNITIVE-LINK</div>
+                        <h3 class="text-xl font-light text-[#F5F1E8] font-serif-editorial mb-3 tracking-tight">Composer Co-pilot</h3>
+                        <p class="text-xs text-[#F5F1E8]/60 leading-relaxed font-mono-precise">
+                            Prompt directly with mood constraints or score context. Receive organic variations built for custom scoring layers.
+                        </p>
+                    </div>
+                    <!-- Inline Minimal Diagram -->
+                    <div class="mt-8 pt-4 border-t border-[#F5F1E8]/5 flex items-center justify-between">
+                        <svg class="w-24 h-6 text-[#F5F1E8]/40" viewBox="0 0 100 30" fill="none">
+                            <line x1="10" y1="5" x2="90" y2="25" stroke="currentColor" stroke-width="0.75"></line>
+                            <line x1="10" y1="25" x2="90" y2="5" stroke="currentColor" stroke-width="0.75" stroke-dasharray="1 3"></line>
+                        </svg>
+                        <span class="text-[9px] text-[#F5F1E8]/30 font-mono-precise">NEURO.LINK.V2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. INTERACTIVE DEMO BLOCK (Faux Waveform Editor) -->
+    <section id="demo" class="border-b border-[#F5F1E8]/10 px-4 md:px-12 py-24 z-10 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-xs text-[#FF7A1A] uppercase tracking-[0.2em] mb-4">
+                // 03 — INTERACTIVE SANDBOX
+            </div>
+            
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-12">
+                <h2 class="text-3xl md:text-5xl font-light text-[#F5F1E8] font-serif-editorial tracking-tight">
+                    The Latent Console.
+                </h2>
+                <p class="max-w-md text-xs text-[#F5F1E8]/60 leading-relaxed font-mono-precise">
+                    Scrub through timbral dimensions using the visual matrix below. Witness sound generation mapping instantly to vectors.
+                </p>
+            </div>
+
+            <!-- Faux Sequencer / Waveform Console Block with Crosshair Cursor -->
+            <div class="border border-[#F5F1E8]/10 bg-[#0C0C0E] p-4 md:p-8 relative overflow-hidden group cursor-crosshair">
+                <!-- Status Top Bar -->
+                <div class="flex items-center justify-between border-b border-[#F5F1E8]/10 pb-4 mb-6 text-[10px] text-[#F5F1E8]/40 uppercase tracking-wider">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[#FF7A1A]">ENGINE STATUS: ACTIVE</span>
+                        <span>GRID: 1/128 LATCHED</span>
+                    </div>
+                    <div class="hidden md:flex items-center gap-6">
+                        <span>LATENCY: 1.22 MS</span>
+                        <span>BUF_SIZE: 128 SPLS</span>
+                        <span>CLOCK: EXT (MTC)</span>
+                    </div>
+                </div>
+
+                <!-- Main Matrix Work Area -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <!-- Left Sidebar Controls -->
+                    <div class="md:col-span-1 space-y-6">
+                        <!-- Custom Sliders -->
+                        <div>
+                            <div class="flex justify-between text-[10px] text-[#F5F1E8]/50 uppercase mb-2">
+                                <span>Timbre Shift</span>
+                                <span class="text-[#FF7A1A]" id="timbre-val">0.42</span>
+                            </div>
+                            <!-- Custom Track Bar -->
+                            <div class="relative h-1 bg-[#F5F1E8]/10 w-full cursor-pointer group-hover:bg-[#F5F1E8]/20" id="timbre-slider-bg">
+                                <div class="absolute top-0 left-0 h-full bg-[#FF7A1A]" style="width: 42%" id="timbre-slider-bar"></div>
+                                <div class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#F5F1E8] border border-[#0A0A0B] rounded-none cursor-grab active:cursor-grabbing" style="left: calc(42% - 6px)" id="timbre-thumb"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[10px] text-[#F5F1E8]/50 uppercase mb-2">
+                                <span>Atmospheric Density</span>
+                                <span class="text-[#7DF9FF]" id="density-val">0.78</span>
+                            </div>
+                            <div class="relative h-1 bg-[#F5F1E8]/10 w-full cursor-pointer group-hover:bg-[#F5F1E8]/20" id="density-slider-bg">
+                                <div class="absolute top-0 left-0 h-full bg-[#7DF9FF]" style="width: 78%" id="density-slider-bar"></div>
+                                <div class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#F5F1E8] border border-[#0A0A0B] rounded-none cursor-grab active:cursor-grabbing" style="left: calc(78% - 6px)" id="density-thumb"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[10px] text-[#F5F1E8]/50 uppercase mb-2">
+                                <span>Resonator Vector</span>
+                                <span class="text-[#F5F1E8]" id="vector-val">0.15</span>
+                            </div>
+                            <div class="relative h-1 bg-[#F5F1E8]/10 w-full cursor-pointer group-hover:bg-[#F5F1E8]/20" id="vector-slider-bg">
+                                <div class="absolute top-0 left-0 h-full bg-[#F5F1E8]/40" style="width: 15%" id="vector-slider-bar"></div>
+                                <div class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#F5F1E8] border border-[#0A0A0B] rounded-none cursor-grab active:cursor-grabbing" style="left: calc(15% - 6px)" id="vector-thumb"></div>
+                            </div>
+                        </div>
+
+                        <!-- Macro Toggles -->
+                        <div class="pt-4 border-t border-[#F5F1E8]/10 space-y-4">
+                            <div class="flex items-center justify-between text-[10px]">
+                                <span class="text-[#F5F1E8]/60 uppercase">NEURAL BINAURAL DEPLOYMENT</span>
+                                <button id="binaural-toggle" class="relative inline-flex h-4 w-8 shrink-0 cursor-pointer rounded-none border border-[#F5F1E8]/20 bg-[#0A0A0B] transition-colors duration-200 ease-in-out">
+                                    <span id="binaural-dot" class="pointer-events-none inline-block h-3 w-3 transform bg-[#FF7A1A] transition duration-200 ease-in-out translate-x-0"></span>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between text-[10px]">
+                                <span class="text-[#F5F1E8]/60 uppercase">SPECTRAL DE-RESIDUE</span>
+                                <button id="residue-toggle" class="relative inline-flex h-4 w-8 shrink-0 cursor-pointer rounded-none border border-[#F5F1E8]/20 bg-[#0A0A0B] transition-colors duration-200 ease-in-out">
+                                    <span id="residue-dot" class="pointer-events-none inline-block h-3 w-3 transform bg-[#7DF9FF] transition duration-200 ease-in-out translate-x-4"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Waveform Editor Display -->
+                    <div class="md:col-span-3 border border-[#F5F1E8]/5 bg-[#0A0A0B] p-4 relative flex flex-col justify-between min-h-[300px]">
+                        <!-- Spectral Graph Mesh Grid Overlay -->
+                        <div class="absolute inset-0 bg-[linear-gradient(to_right,#f5f1e802_1px,transparent_1px),linear-gradient(to_bottom,#f5f1e802_1px,transparent_1px)] bg-[size:2rem_2rem] pointer-events-none"></div>
+
+                        <div class="relative z-10 flex items-center justify-between text-[9px] text-[#F5F1E8]/40">
+                            <span>REPRESENTATIONAL MATRIX SPECTRAL OUTPUT</span>
+                            <span class="text-[#7DF9FF] animate-pulse">● LIVE NODE LINKED</span>
+                        </div>
+
+                        <!-- Main Interactive Screen Area -->
+                        <div class="relative flex-1 w-full my-4 flex items-center justify-center">
+                            <!-- SVG Waveforms that are modified by JS -->
+                            <svg class="w-full h-48 opacity-90" viewBox="0 0 800 200" preserveAspectRatio="none">
+                                <!-- Amber Main Timbral Wave -->
+                                <path id="amber-wave" d="M0,100" stroke="#FF7A1A" stroke-width="1.5" fill="none" class="transition-all duration-300"></path>
+                                <!-- Cyan Subharmonic Wave -->
+                                <path id="cyan-wave" d="M0,100" stroke="#7DF9FF" stroke-width="1" fill="none" stroke-dasharray="3 3" class="transition-all duration-300"></path>
+                            </svg>
+                            <!-- Highlight Interactive Tracker Line -->
+                            <div id="scrub-line" class="absolute top-0 bottom-0 w-[1px] bg-[#FF7A1A]/40 left-[42%] pointer-events-none">
+                                <span class="absolute top-0 -translate-x-1/2 bg-[#FF7A1A] text-[#0A0A0B] text-[8px] px-1 font-mono-precise">NODE_X_0.42</span>
+                            </div>
+                        </div>
+
+                        <!-- Keyboard Shortcut Pills Info -->
+                        <div class="relative z-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#F5F1E8]/5 pt-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[9px] text-[#F5F1E8]/40 uppercase">CONSOLE HOTKEYS:</span>
+                                <div class="flex items-center gap-1.5">
+                                    <kbd class="px-1.5 py-0.5 text-[8px] font-mono-precise bg-[#F5F1E8]/5 border border-[#F5F1E8]/20 text-[#F5F1E8]/80">SPACE</kbd>
+                                    <span class="text-[8px] text-[#F5F1E8]/40">AUDITION</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <kbd class="px-1.5 py-0.5 text-[8px] font-mono-precise bg-[#F5F1E8]/5 border border-[#F5F1E8]/20 text-[#F5F1E8]/80">⌘ ⌥ S</kbd>
+                                    <span class="text-[8px] text-[#F5F1E8]/40">BOUNCE MATRIX</span>
+                                </div>
+                            </div>
+                            <div class="text-[9px] text-[#FF7A1A]/80 tracking-widest uppercase">
+                                TAP SOUNDWAVE TO AUDITION ENGINE DRONE
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. MANIFESTO PULL-QUOTE -->
+    <section class="border-b border-[#F5F1E8]/10 bg-[#0C0C0E] px-4 md:px-12 py-32 z-10 relative overflow-hidden">
+        <!-- Huge subtle background branding characters -->
+        <div class="absolute -right-16 -bottom-16 text-[24rem] font-serif-editorial text-[#F5F1E8]/5 pointer-events-none leading-none select-none">
+            Ω
+        </div>
+        
+        <div class="max-w-5xl mx-auto flex flex-col items-start">
+            <div class="text-xs text-[#FF7A1A] uppercase tracking-[0.2em] mb-12">
+                // 04 — THE PHILOSOPHY
+            </div>
+            
+            <blockquote class="text-4xl md:text-7xl font-serif-editorial text-[#F5F1E8]/95 leading-[1.05] italic tracking-tight mb-8">
+                “We don't render audio. We remember it.”
+            </blockquote>
+            
+            <cite class="not-italic text-xs tracking-widest text-[#F5F1E8]/40 uppercase font-mono-precise">
+                — FOUNDER // AURALIS COGNITIVE SYSTEMS LABS
+            </cite>
+        </div>
+    </section>
+
+    <!-- 6. PRICING -->
+    <section id="pricing" class="border-b border-[#F5F1E8]/10 px-4 md:px-12 py-24 z-10 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-xs text-[#FF7A1A] uppercase tracking-[0.2em] mb-4">
+                // 05 — ALLOCATIONS
+            </div>
+            
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+                <h2 class="text-3xl md:text-5xl font-light text-[#F5F1E8] font-serif-editorial tracking-tight">
+                    Architectural Licensing.
+                </h2>
+                <p class="max-w-md text-xs text-[#F5F1E8]/60 leading-relaxed font-mono-precise">
+                    No tiered bloat. Straightforward options crafted specifically for individual production systems or world-class post-production houses.
+                </p>
+            </div>
+
+            <!-- Blueprint Pricing Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#F5F1E8]/15 border border-[#F5F1E8]/15">
+                
+                <!-- Blueprint Tier 1 -->
+                <div class="p-8 md:p-12 flex flex-col justify-between bg-[#0A0A0B] relative overflow-hidden">
+                    <!-- Tech grid design motif in corners -->
+                    <div class="absolute top-0 left-0 w-2 h-2 border-b border-r border-[#F5F1E8]/30"></div>
+                    <div class="absolute top-0 right-0 w-2 h-2 border-b border-l border-[#F5F1E8]/30"></div>
+                    <div class="absolute bottom-0 left-0 w-2 h-2 border-t border-r border-[#F5F1E8]/30"></div>
+                    <div class="absolute bottom-0 right-0 w-2 h-2 border-t border-l border-[#F5F1E8]/30"></div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-8">
+                            <span class="text-xs text-[#F5F1E8]/40 uppercase tracking-widest font-mono-precise">TIER 01 / INDIVIDUAL</span>
+                            <span class="text-[9px] border border-[#F5F1E8]/20 px-2 py-0.5 text-[#F5F1E8]/60 uppercase tracking-widest font-mono-precise">SINGLE USER</span>
+                        </div>
+
+                        <h3 class="text-3xl font-light font-serif-editorial text-[#F5F1E8] mb-4">Auralis Studio</h3>
+                        <p class="text-xs text-[#F5F1E8]/50 mb-12 max-w-sm font-mono-precise leading-relaxed">
+                            For freelance composers, sound designers, and independent studios seeking to completely overhaul their custom asset design workflow.
+                        </p>
+
+                        <!-- Price Indicator -->
+                        <div class="text-4xl font-light font-serif-editorial text-[#F5F1E8] mb-12">
+                            $490 <span class="text-xs text-[#F5F1E8]/40 font-mono-precise uppercase">/ ONCE-OFF INITIAL DEPLOYMENT</span>
+                        </div>
+
+                        <!-- Technical Spec List -->
+                        <ul class="space-y-4 border-t border-[#F5F1E8]/10 pt-8 mb-12 text-[11px] font-mono-precise text-[#F5F1E8]/70">
+                            <li class="flex items-center justify-between">
+                                <span>TIMBRES SYNTHESIZED PER SESS.</span>
+                                <span class="text-[#F5F1E8]">UNLIMITED</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>COGNITIVE CO-PILOT CHANNELS</span>
+                                <span class="text-[#F5F1E8]">2 ACTIVE</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>MAX RESOLUTION AUDIO EXPORT</span>
+                                <span class="text-[#F5F1E8]">96KHZ / 32-BIT FLOAT</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>VIRTUAL MONITORS &amp; SPATIAL MATRIX</span>
+                                <span class="text-[#F5F1E8]">STEREO / BINAURAL</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="#demo" class="w-full flex items-center justify-center border border-[#F5F1E8]/20 py-4 text-xs tracking-widest uppercase text-[#F5F1E8] transition-all duration-300 hover:border-[#FF7A1A] hover:bg-[#FF7A1A]/10">
+                        License Studio System
+                    </a>
+                </div>
+
+                <!-- Blueprint Tier 2 (Score) -->
+                <div class="p-8 md:p-12 flex flex-col justify-between bg-[#0C0C0E] relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-2 border-b border-r border-[#F5F1E8]/30"></div>
+                    <div class="absolute top-0 right-0 w-2 h-2 border-b border-l border-[#F5F1E8]/30"></div>
+                    <div class="absolute bottom-0 left-0 w-2 h-2 border-t border-r border-[#F5F1E8]/30"></div>
+                    <div class="absolute bottom-0 right-0 w-2 h-2 border-t border-l border-[#F5F1E8]/30"></div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-8">
+                            <span class="text-xs text-[#FF7A1A] uppercase tracking-widest font-mono-precise">TIER 02 / ENTERPRISE SYSTEM</span>
+                            <span class="text-[9px] border border-[#FF7A1A]/30 bg-[#FF7A1A]/5 px-2 py-0.5 text-[#FF7A1A] uppercase tracking-widest font-mono-precise">MULTI-STATION</span>
+                        </div>
+
+                        <h3 class="text-3xl font-light font-serif-editorial text-[#F5F1E8] mb-4">Auralis Score</h3>
+                        <p class="text-xs text-[#F5F1E8]/50 mb-12 max-w-sm font-mono-precise leading-relaxed">
+                            For international theatrical scoring houses, game developers, and film design agencies that need unified vector generation pipelines.
+                        </p>
+
+                        <!-- Price Indicator -->
+                        <div class="text-4xl font-light font-serif-editorial text-[#F5F1E8] mb-12">
+                            $2,450 <span class="text-xs text-[#F5F1E8]/40 font-mono-precise uppercase">/ ANNUALLY DEPLOYED</span>
+                        </div>
+
+                        <!-- Technical Spec List -->
+                        <ul class="space-y-4 border-t border-[#F5F1E8]/10 pt-8 mb-12 text-[11px] font-mono-precise text-[#F5F1E8]/70">
+                            <li class="flex items-center justify-between">
+                                <span>TIMBRES SYNTHESIZED PER SESS.</span>
+                                <span class="text-[#FF7A1A]">COGNITIVE INFINITY</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>COGNITIVE CO-PILOT CHANNELS</span>
+                                <span class="text-[#F5F1E8]">UNLIMITED SIMULTANEOUS</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>MAX RESOLUTION AUDIO EXPORT</span>
+                                <span class="text-[#F5F1E8]">384KHZ / DXD FLOATING</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>VIRTUAL MONITORS &amp; SPATIAL MATRIX</span>
+                                <span class="text-[#7DF9FF]">ATMOS / 7.1.4 / VECTORIAL</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="#demo" class="w-full flex items-center justify-center bg-[#FF7A1A] text-[#0A0A0B] font-semibold py-4 text-xs tracking-widest uppercase transition-all duration-300 hover:bg-[#FF7A1A]/90">
+                        Acquire System Score License
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. FOOTER -->
+    <footer class="relative bg-[#050506] border-t border-[#F5F1E8]/10 py-16 px-4 md:px-12 overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 relative z-10">
+            <!-- Left Info Block -->
+            <div class="space-y-6 max-w-xs">
+                <span class="text-lg font-medium tracking-tight text-[#F5F1E8] uppercase font-serif-editorial">AURALIS.</span>
+                <p class="text-xs text-[#F5F1E8]/40 leading-relaxed font-mono-precise">
+                    Designing the future of temporal consciousness synthesis. Powered by high-fidelity hardware nodes.
+                </p>
+                <div class="text-[10px] text-[#F5F1E8]/30 font-mono-precise">
+                    ©2026 Auralis Inc. All rights reserved. Registered vectors proprietary.
+                </div>
+            </div>
+
+            <!-- Right Nav Links / Layout Map -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-[11px] font-mono-precise text-[#F5F1E8]/50">
+                <div class="space-y-3">
+                    <span class="text-[#F5F1E8]/80 block font-medium uppercase tracking-wider">// SYSTEM MAP</span>
+                    <a href="#features" class="block hover:text-[#FF7A1A] transition-colors duration-200">The Neural Engine</a>
+                    <a href="#demo" class="block hover:text-[#FF7A1A] transition-colors duration-200">Console Sandbox</a>
+                    <a href="#pricing" class="block hover:text-[#FF7A1A] transition-colors duration-200">Allocations Grid</a>
+                </div>
+                <div class="space-y-3">
+                    <span class="text-[#F5F1E8]/80 block font-medium uppercase tracking-wider">// COMPATIBILITY</span>
+                    <span class="block text-[#F5F1E8]/30">VST3 / CLAP / AAX</span>
+                    <span class="block text-[#F5F1E8]/30">APPLE SILICON NATIVE</span>
+                    <span class="block text-[#F5F1E8]/30">ASIO SYSTEM READY</span>
+                </div>
+                <!-- Hidden Easter Egg Trigger Play Box -->
+                <div class="col-span-2 md:col-span-1 border border-[#F5F1E8]/15 p-4 flex flex-col justify-between min-h-[100px] bg-[#0A0A0B]">
+                    <span class="text-[9px] text-[#FF7A1A] tracking-wider uppercase font-mono-precise block">EASTER EGG MODULE</span>
+                    <button onclick="playDrone()" class="flex items-center gap-2 group text-left cursor-pointer mt-4">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-none border border-[#FF7A1A]/30 group-hover:bg-[#FF7A1A] group-hover:text-[#0A0A0B] transition-all duration-300">
+                            <iconify-icon icon="solar:play-bold" class="text-xs"></iconify-icon>
+                        </span>
+                        <div>
+                            <span class="block text-[10px] text-[#F5F1E8] tracking-widest uppercase">AUDITION NOISE</span>
+                            <span class="block text-[8px] text-[#F5F1E8]/40">Trigger 4s Ambient Drone</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Molten Amber Graphic Sign-off Line -->
+        <div class="absolute bottom-0 inset-x-0 h-1 bg-[#FF7A1A]"></div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT MECHANICS -->
+    <script>
+        // 1. SYSTEM CLOCK / REC TIME PULSATOR
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            document.getElementById('rec-time').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
+
+        // 2. GENERATIVE HERO WAVEFORM CANVAS
+        const canvas = document.getElementById('hero-waveform');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let animationFrameId;
+
+        function resizeCanvas() {
+            width = canvas.width = canvas.parentElement.clientWidth;
+            height = canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let time = 0;
+        let scrollVelocity = 0;
+        let lastScrollY = window.scrollY;
+
+        // Monitor scroll velocity to expand the waveform dynamically
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            scrollVelocity = Math.abs(currentScroll - lastScrollY);
+            lastScrollY = currentScroll;
+        });
+
+        function drawWaveform() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Decelerating velocity factor
+            scrollVelocity *= 0.95; 
+
+            // Waveform parameters
+            const amplitude = 40 + (scrollVelocity * 4);
+            const frequency = 0.003;
+
+            // Draw Layer 1: Cool Plasma Cyan Wave
+            ctx.strokeStyle = 'rgba(125, 249, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let x = 0; x < width; x += 5) {
+                const y = (height / 2) + Math.sin(x * frequency + time) * amplitude * Math.cos(x * 0.001);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Draw Layer 2: Molten Amber Wave
+            ctx.strokeStyle = 'rgba(255, 122, 26, 0.35)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            for (let x = 0; x < width; x += 5) {
+                const y = (height / 2.05) + Math.cos(x * (frequency * 1.5) - time) * (amplitude * 1.2) * Math.sin(x * 0.0008);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            time += 0.015;
+            animationFrameId = requestAnimationFrame(drawWaveform);
+        }
+        drawWaveform();
+
+        // 3. INTERACTIVE WAVEFORM SANDBOX GENERATION
+        let timbreValue = 0.42;
+        let densityValue = 0.78;
+        let vectorValue = 0.15;
+
+        const amberWavePath = document.getElementById('amber-wave');
+        const cyanWavePath = document.getElementById('cyan-wave');
+
+        function updateMockWaveforms() {
+            let amberD = "M0,100 ";
+            let cyanD = "M0,100 ";
+
+            for (let i = 0; i <= 800; i += 10) {
+                // Compose multi-phase equations modified by sliders
+                const angle = (i / 800) * Math.PI * 8;
+                const wave1 = Math.sin(angle * timbreValue) * 40 * densityValue;
+                const wave2 = Math.cos(angle * 2.5 * vectorValue) * 20;
+                const finalY = 100 + wave1 + wave2;
+
+                amberD += `L${i},${finalY} `;
+
+                // Subharmonic dashline wave
+                const finalY2 = 100 + Math.sin((angle + Math.PI) * (timbreValue * 1.5)) * 30 * (1 - vectorValue);
+                cyanD += `L${i},${finalY2} `;
+            }
+
+            amberWavePath.setAttribute('d', amberD);
+            cyanWavePath.setAttribute('d', cyanD);
+        }
+
+        // Initialize Waveform
+        updateMockWaveforms();
+
+        // Interactive Sliders Event Processing
+        function setupSlider(sliderId, barId, thumbId, valId, min, max, initial, updateFn) {
+            const bg = document.getElementById(sliderId);
+            const bar = document.getElementById(barId);
+            const thumb = document.getElementById(thumbId);
+            const valSpan = document.getElementById(valId);
+
+            function updateSliderPosition(clientX) {
+                const rect = bg.getBoundingClientRect();
+                let pct = (clientX - rect.left) / rect.width;
+                pct = Math.max(0, Math.min(1, pct));
+                
+                bar.style.width = `${pct * 100}%`;
+                thumb.style.left = `calc(${pct * 100}% - 6px)`;
+                
+                const finalVal = (pct * (max - min) + min).toFixed(2);
+                valSpan.innerText = finalVal;
+                
+                updateFn(parseFloat(finalVal));
+            }
+
+            bg.addEventListener('mousedown', (e) => {
+                updateSliderPosition(e.clientX);
+                
+                function onMouseMove(moveEvent) {
+                    updateSliderPosition(moveEvent.clientX);
+                }
+                
+                function onMouseUp() {
+                    window.removeEventListener('mousemove', onMouseMove);
+                    window.removeEventListener('mouseup', onMouseUp);
+                }
+                
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
+            });
+        }
+
+        setupSlider('timbre-slider-bg', 'timbre-slider-bar', 'timbre-thumb', 'timbre-val', 0.1, 1.5, timbreValue, (v) => {
+            timbreValue = v;
+            document.getElementById('scrub-line').style.left = `${(v / 1.5) * 100}%`;
+            document.getElementById('scrub-line').querySelector('span').innerText = `NODE_X_${v.toFixed(2)}`;
+            updateMockWaveforms();
+        });
+
+        setupSlider('density-slider-bg', 'density-slider-bar', 'density-thumb', 'density-val', 0.2, 2.0, densityValue, (v) => {
+            densityValue = v;
+            updateMockWaveforms();
+        });
+
+        setupSlider('vector-slider-bg', 'vector-slider-bar', 'vector-thumb', 'vector-val', 0.05, 1.0, vectorValue, (v) => {
+            vectorValue = v;
+            updateMockWaveforms();
+        });
+
+        // Toggle Actions
+        const binauralToggle = document.getElementById('binaural-toggle');
+        const binauralDot = document.getElementById('binaural-dot');
+        let binauralActive = false;
+        binauralToggle.addEventListener('click', () => {
+            binauralActive = !binauralActive;
+            binauralDot.style.transform = binauralActive ? 'translateX(1rem)' : 'translateX(0)';
+            binauralDot.style.backgroundColor = binauralActive ? '#7DF9FF' : '#FF7A1A';
+        });
+
+        const residueToggle = document.getElementById('residue-toggle');
+        const residueDot = document.getElementById('residue-dot');
+        let residueActive = true;
+        residueToggle.addEventListener('click', () => {
+            residueActive = !residueActive;
+            residueDot.style.transform = residueActive ? 'translateX(1rem)' : 'translateX(0)';
+            residueDot.style.backgroundColor = residueActive ? '#7DF9FF' : '#FF7A1A';
+        });
+
+        // 4. EMBEDDED REALTIME AUDIO DRONE (WEB AUDIO API EASTER EGG)
+        let audioCtx;
+        function playDrone() {
+            try {
+                // Initialize Web Audio API on click
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                // Complex multi-node deep cinematic drone
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const filter = audioCtx.createBiquadFilter();
+                const gainNode = audioCtx.createGain();
+
+                osc1.type = 'sawtooth';
+                osc2.type = 'triangle';
+
+                // Pitch modulation (cinematic deep sub bass vector)
+                osc1.frequency.setValueAtTime(55, audioCtx.currentTime); // Low A1
+                osc2.frequency.setValueAtTime(55.4, audioCtx.currentTime); // Detuned relative
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(90, audioCtx.currentTime);
+                filter.Q.setValueAtTime(5, audioCtx.currentTime);
+
+                // Attack Decay Sustain Release (ADSR) envelope for drone simulation
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 1.2); // Envelope Attack
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 4.0); // Release
+
+                osc1.connect(filter);
+                osc2.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc1.start();
+                osc2.start();
+
+                osc1.stop(audioCtx.currentTime + 4.2);
+                osc2.stop(audioCtx.currentTime + 4.2);
+
+            } catch (err) {
+                console.warn("Web Audio API not supported on this framework/browser configuration", err);
+            }
+        }
+        
+        // Also bind the interactive soundwave itself to test triggers
+        document.getElementById('demo').querySelector('svg').addEventListener('click', playDrone);
+    </script>
+</body>
+</html>

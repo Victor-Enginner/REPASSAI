@@ -1,0 +1,73 @@
+{
+  "slug": "aura-template-birka-outdoor-21",
+  "titulo": "Outdoor Sales Agency Landing Page Template",
+  "descricao": "A high-end, dark-themed template designed for sales agencies, B2B services, and premium outdoor brand distribution partners. Fonte: https://www.aura.build/templates/birka-outdoor-21",
+  "arquivo": "77lib/aura-template-birka-outdoor-21.html",
+  "tamanho_html": 28095,
+  "paleta": [
+    {
+      "cor": "#d8b485",
+      "usos": 49
+    },
+    {
+      "cor": "#0c0c0e",
+      "usos": 10
+    },
+    {
+      "cor": "#09090b",
+      "usos": 8
+    },
+    {
+      "cor": "#c2a277",
+      "usos": 4
+    },
+    {
+      "cor": "#111114",
+      "usos": 4
+    },
+    {
+      "cor": "#27272a",
+      "usos": 1
+    },
+    {
+      "cor": "#3f3f46",
+      "usos": 1
+    },
+    {
+      "cor": "rgba(216,180,133,.25)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter"
+  ],
+  "secoes": [
+    "BIRKA",
+    "Sales Agency",
+    "We help outdoor brands grow in the right way.",
+    "Trusted by premium outdoor brands.",
+    "The Adriatic Region.",
+    "Ready to grow your brand?"
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "CSS Animations",
+    "IntersectionObserver"
+  ],
+  "imagens": 1,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-birka-outdoor-21?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Outdoor Sales Agency Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-birka-outdoor-21`\n\n## Objetivo\nA high-end, dark-themed template designed for sales agencies, B2B services, and premium outdoor brand distribution partners. Fonte: https://www.aura.build/templates/birka-outdoor-21\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #d8b485  (49x)\n- #0c0c0e  (10x)\n- #09090b  (8x)\n- #c2a277  (4x)\n- #111114  (4x)\n- #27272a  (1x)\n- #3f3f46  (1x)\n- rgba(216,180,133,.25)  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- BIRKA\n- Sales Agency\n- We help outdoor brands grow in the right way.\n- Trusted by premium outdoor brands.\n- The Adriatic Region.\n- Ready to grow your brand?\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Outdoor Sales Agency Landing Page Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Outdoor Sales Agency Landing Page Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-birka-outdoor-21`\n\n## Objetivo\nA high-end, dark-themed template designed for sales agencies, B2B services, and premium outdoor brand distribution partners. Fonte: https://www.aura.build/templates/birka-outdoor-21\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #d8b485  (49x)\n- #0c0c0e  (10x)\n- #09090b  (8x)\n- #c2a277  (4x)\n- #111114  (4x)\n- #27272a  (1x)\n- #3f3f46  (1x)\n- rgba(216,180,133,.25)  (1x)\n\n## Tipografia detectada\n- Inter\n\n## Estrutura de seções\n- BIRKA\n- Sales Agency\n- We help outdoor brands grow in the right way.\n- Trusted by premium outdoor brands.\n- The Adriatic Region.\n- Ready to grow your brand?\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:23"
+}

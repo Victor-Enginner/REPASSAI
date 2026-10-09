@@ -1,0 +1,247 @@
+{
+  "origem": "biblioteca autenticada 77lib, Templates Free",
+  "total": 60,
+  "importados": [
+    {
+      "slug": "aura-template-soluna-yoga-studio-43",
+      "titulo": "Soluna Premium Yoga Studio Template"
+    },
+    {
+      "slug": "aura-template-enterprise-digital-6",
+      "titulo": "Niteco Enterprise Agency Landing Page Template"
+    },
+    {
+      "slug": "aura-template-a-full-service-62",
+      "titulo": "Living Culture Studios Retreat Template"
+    },
+    {
+      "slug": "aura-template-neapolitan-pizzeria-28",
+      "titulo": "Pizza Delivery and Restaurant Website Template"
+    },
+    {
+      "slug": "aura-template-auralis-neural-0",
+      "titulo": "Auralis Neural Audio Engine Landing Page Template"
+    },
+    {
+      "slug": "aura-template-holistic-physiother-13",
+      "titulo": "Holistic Health  Physiotherapy Landing Page Template"
+    },
+    {
+      "slug": "aura-template-ai-native-software-9",
+      "titulo": "AI-Native Software Agency Template"
+    },
+    {
+      "slug": "aura-template-artisanal-specialty-91",
+      "titulo": "Artisanal Coffee  Roastery Landing Page Template"
+    },
+    {
+      "slug": "aura-template-luxury-real-estate-34",
+      "titulo": "Luxury Real Estate Landing Page Template"
+    },
+    {
+      "slug": "aura-template-digital-creative-30",
+      "titulo": "Creative Design Studio Landing Page Template"
+    },
+    {
+      "slug": "aura-template-vidalli-andrea-60",
+      "titulo": "Luxury Jewelry E-commerce Template"
+    },
+    {
+      "slug": "aura-template-personal-trainer-97",
+      "titulo": "Personal Trainer Professional Template"
+    },
+    {
+      "slug": "aura-template-digitalobscura",
+      "titulo": "Digital Obscura Visual Archive Template"
+    },
+    {
+      "slug": "aura-template-auralis-immersive-14",
+      "titulo": "Auralis Immersive Tech Landing Page Template"
+    },
+    {
+      "slug": "aura-template-clintoncoheniii",
+      "titulo": "STRIDE Personal Growth Landing Page Template"
+    },
+    {
+      "slug": "aura-template-electria-electrical-57",
+      "titulo": "Electria Electrical Services Landing Page Template - home"
+    },
+    {
+      "slug": "aura-template-testimagedesoi",
+      "titulo": "Beauty Institute  Wellness Landing Page Template"
+    },
+    {
+      "slug": "aura-template-kavaandcocoffee",
+      "titulo": "KÁVA Coffee Shop Landing Page Template"
+    },
+    {
+      "slug": "aura-template-mon-histoire-31",
+      "titulo": "Sacha D'Houwer - Système nerveux équin  entreprenariat"
+    },
+    {
+      "slug": "aura-template-cafelittlelatte",
+      "titulo": "Little Latte Cafe Landing Page Template"
+    },
+    {
+      "slug": "aura-template-aura-estates",
+      "titulo": "Aura Estates Real Estate Template"
+    },
+    {
+      "slug": "aura-template-the-code-company-35",
+      "titulo": "TheCodeCompany"
+    },
+    {
+      "slug": "aura-template-pixelcraft-dj",
+      "titulo": "PixelCraft Professional DJ Services Landing Page Template"
+    },
+    {
+      "slug": "aura-template-nexura-creative",
+      "titulo": "Nexura Creative Agency Landing Page Template"
+    },
+    {
+      "slug": "aura-template-lumina-spatial-74",
+      "titulo": "Lumina AI  Spatial Computing Landing Page Template"
+    },
+    {
+      "slug": "aura-template-beauty-studio-72",
+      "titulo": "Ina Beauty Studio Plovdiv"
+    },
+    {
+      "slug": "aura-template-auralis-neural-52",
+      "titulo": "Auralis Neural Audio Synthesis Template"
+    },
+    {
+      "slug": "aura-template-empire-owl-salon",
+      "titulo": "Beauty Salon  Stylist Landing Page Template"
+    },
+    {
+      "slug": "aura-template-medical-spa-landing-30",
+      "titulo": "Medical Aesthetics  Wellness Landing Page Template"
+    },
+    {
+      "slug": "aura-template-birka-outdoor-21",
+      "titulo": "Outdoor Sales Agency Landing Page Template"
+    },
+    {
+      "slug": "aura-template-automotive-wrap-33",
+      "titulo": "Automotive Detailing and Wrapping Landing Page Template"
+    },
+    {
+      "slug": "aura-template-proposta-site-instituto-mi",
+      "titulo": "Proposta Instituto Mineiro de Serviços Odontologia"
+    },
+    {
+      "slug": "aura-template-legal-services-81",
+      "titulo": "Legal Litigation Support Template"
+    },
+    {
+      "slug": "aura-template-automotive-e-25",
+      "titulo": "Automotive Parts E-commerce Landing Page Template"
+    },
+    {
+      "slug": "aura-template-workspace-notes-68",
+      "titulo": "Notebook Workspace App Template"
+    },
+    {
+      "slug": "aura-template-arcade-game-landing-70",
+      "titulo": "Arcade Game Landing Page Template"
+    },
+    {
+      "slug": "aura-template-fluxa-fintech",
+      "titulo": "Fluxa AI Finance Landing Page Template"
+    },
+    {
+      "slug": "aura-template-industrial-constructi-38",
+      "titulo": "Construction  Steel Reinforcement Landing Page Template"
+    },
+    {
+      "slug": "aura-template-nova-studio-ai-28",
+      "titulo": "Kindling AI Operations Landing Page"
+    },
+    {
+      "slug": "aura-template-promptless-studio-60",
+      "titulo": "Promptless Studio Marketing Agency Template"
+    },
+    {
+      "slug": "aura-template-creative-agency-72",
+      "titulo": "Creative Studio  Digital Agency Template"
+    },
+    {
+      "slug": "aura-template-artisan-burger-23",
+      "titulo": "Artisan Burger Restaurant Landing Page Template"
+    },
+    {
+      "slug": "aura-template-fj-tech-constructi-69",
+      "titulo": "Architecture  Construction Firm Portfolio Template"
+    },
+    {
+      "slug": "aura-template-emerald-law-sprinkler-3",
+      "titulo": "Smart Irrigation  Landscape Lighting Template"
+    },
+    {
+      "slug": "aura-template-ai-automation-84",
+      "titulo": "AI Automation Agency Landing Page Template"
+    },
+    {
+      "slug": "aura-template-macos-physics-46",
+      "titulo": "macOS Physics Simulation Template"
+    },
+    {
+      "slug": "aura-template-emerald-law-sprinkler-4",
+      "titulo": "Emerald Lawn Sprinklers Irrigation Services Template"
+    },
+    {
+      "slug": "aura-template-luxury-eco-lodge-66",
+      "titulo": "Luxury Nature Lodge Landing Page Template"
+    },
+    {
+      "slug": "aura-template-built-in-chess-on-aura",
+      "titulo": "Minimalist Chess Engine Template"
+    },
+    {
+      "slug": "aura-template-auden-fx-trading-58",
+      "titulo": "Auden FX Trading  Mentorship Template"
+    },
+    {
+      "slug": "aura-template-fluxora-ai-infrastruc-44",
+      "titulo": "Fluxora AI Infrastructure Landing Page Template"
+    },
+    {
+      "slug": "aura-template-luxury-barbershop-47",
+      "titulo": "Luxury Barbershop Landing Page Template"
+    },
+    {
+      "slug": "aura-template-designer-studio-6",
+      "titulo": "Designer Studio SaaS Landing Page Template"
+    },
+    {
+      "slug": "aura-template-gold-pearl-resort-oyugis-k",
+      "titulo": "Luxury Resort  Spa Landing Page Template"
+    },
+    {
+      "slug": "aura-template-contractor-landing-58",
+      "titulo": "Handy Prime Contractor Landing Page Template"
+    },
+    {
+      "slug": "aura-template-cybersecur-advisory-69",
+      "titulo": "Trace0 Cybersecurity Advisory Landing Page Template"
+    },
+    {
+      "slug": "aura-template-women-s-community-0",
+      "titulo": "Women's Empowerment Networking Template"
+    },
+    {
+      "slug": "aura-template-vectorline-saas",
+      "titulo": "Vectorline SaaS Landing Page Template"
+    },
+    {
+      "slug": "aura-template-lumio-botanical",
+      "titulo": "Lumio Botanical Landing Page Template"
+    },
+    {
+      "slug": "aura-template-velocity-performanc",
+      "titulo": "CIRON Performance Bicycle Landing Page Template"
+    }
+  ],
+  "falhas": []
+}

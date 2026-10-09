@@ -205,13 +205,14 @@ def montar_prompts(ficha):
 def analisar(slug, dados_registry):
     """Monta a ficha completa a partir da resposta do registry."""
     arquivos = dados_registry.get("files") or [{}]
-    html = arquivos[0].get("content", "") or ""
+    principal = next((f for f in arquivos if str(f.get("path", "")).lower().endswith(".html")), arquivos[0])
+    html = principal.get("content", "") or ""
 
     ficha = {
         "slug": slug,
         "titulo": (dados_registry.get("title") or slug).strip(),
         "descricao": (dados_registry.get("description") or "").strip(),
-        "arquivo": arquivos[0].get("path", f"{slug}.html"),
+        "arquivo": principal.get("path", f"{slug}.html"),
         "tamanho_html": len(html),
         "paleta": _extrair_paleta(html),
         "fontes": _extrair_fontes(html),
@@ -228,6 +229,9 @@ def analisar(slug, dados_registry):
         ],
     }
     ficha["design_md"] = montar_design_md(ficha)
+    original_design = next((f.get("content") for f in arquivos if str(f.get("path", "")).lower().endswith("design.md")), None)
+    if original_design:
+        ficha["design_md"] = original_design
     ficha["prompts"] = montar_prompts(ficha)
     return ficha, html
 
@@ -303,8 +307,10 @@ def importar(entrada, forcar=False):
     try:
         with urllib.request.urlopen(req, timeout=30) as res:
             dados = json.loads(res.read().decode("utf-8"))
-    except Exception as e:
-        raise RuntimeError(f"Falha ao buscar '{slug}' no registry: {e}")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"Falha ao buscar '{slug}' no registry (HTTP {e.code}).") from None
+    except Exception:
+        raise RuntimeError(f"Falha de conexão ao buscar '{slug}' no registry.") from None
 
     ficha, html = analisar(slug, dados)
     ficha["importado_em"] = time.strftime("%Y-%m-%dT%H:%M:%S")

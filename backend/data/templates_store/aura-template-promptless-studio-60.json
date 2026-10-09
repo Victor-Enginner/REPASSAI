@@ -1,0 +1,110 @@
+{
+  "slug": "aura-template-promptless-studio-60",
+  "titulo": "Promptless Studio Marketing Agency Template",
+  "descricao": "A high-end, dark-themed agency landing page template focused on trust-based marketing, video content strategy, and AI-driven creative automation. Fonte: https://www.aura.build/templates/promptless-studio-60",
+  "arquivo": "77lib/aura-template-promptless-studio-60.html",
+  "tamanho_html": 58717,
+  "paleta": [
+    {
+      "cor": "#ffbd76",
+      "usos": 83
+    },
+    {
+      "cor": "#fff6e9",
+      "usos": 69
+    },
+    {
+      "cor": "#0a171d",
+      "usos": 30
+    },
+    {
+      "cor": "rgba(255,246,233,0.08)",
+      "usos": 10
+    },
+    {
+      "cor": "rgba(255,246,233,0.1)",
+      "usos": 10
+    },
+    {
+      "cor": "#b85c3a",
+      "usos": 8
+    },
+    {
+      "cor": "rgba(10,23,29,0.08)",
+      "usos": 6
+    },
+    {
+      "cor": "rgba(255,246,233,0.02)",
+      "usos": 6
+    },
+    {
+      "cor": "rgba(255,246,233,0.12)",
+      "usos": 5
+    },
+    {
+      "cor": "#f4e9d2",
+      "usos": 3
+    },
+    {
+      "cor": "rgba(255,246,233,0.15)",
+      "usos": 3
+    },
+    {
+      "cor": "rgba(255,189,118,0.35)",
+      "usos": 3
+    },
+    {
+      "cor": "rgba(255,189,118,0.07)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,246,233,1)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(255,189,118,0.12)",
+      "usos": 2
+    },
+    {
+      "cor": "rgba(10,23,29,0.7)",
+      "usos": 1
+    }
+  ],
+  "fontes": [
+    "Inter",
+    "Caveat"
+  ],
+  "secoes": [
+    "Lidi nekupují od těch, kdo tlačí.Kupují od těch, kterým věří.",
+    "Pozornost se dá koupit. Důvěra ne.",
+    "Točíte dobrý obsah. A stejně to neprodává.",
+    "Věříme v pravý opak.",
+    "Jeden systém vás přitáhne. Druhý vás rozšíří.",
+    "Pozornost neumíme věštit. Umíme ji číst.",
+    "Obsah, který se nedá odscrollovat.",
+    "Nejsme pro každého. A je to tak dobře.",
+    "Tři kroky a systém běží za vás.",
+    "Vaše značka si zaslouží růst, aniž by musela tlačit."
+  ],
+  "tecnologias": [
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "GSAP",
+    "CSS Animations"
+  ],
+  "imagens": 4,
+  "preco_centavos": 0,
+  "comando_instalacao": "npx shadcn@latest add https://77lib.dev/r/aura-template-promptless-studio-60?token=SEU_TOKEN",
+  "requisitos": [
+    "Navegador moderno",
+    "Personalizar textos, imagens e links antes de publicar"
+  ],
+  "design_md": "# DESIGN.md — Promptless Studio Marketing Agency Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-promptless-studio-60`\n\n## Objetivo\nA high-end, dark-themed agency landing page template focused on trust-based marketing, video content strategy, and AI-driven creative automation. Fonte: https://www.aura.build/templates/promptless-studio-60\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #ffbd76  (83x)\n- #fff6e9  (69x)\n- #0a171d  (30x)\n- rgba(255,246,233,0.08)  (10x)\n- rgba(255,246,233,0.1)  (10x)\n- #b85c3a  (8x)\n- rgba(10,23,29,0.08)  (6x)\n- rgba(255,246,233,0.02)  (6x)\n- rgba(255,246,233,0.12)  (5x)\n- #f4e9d2  (3x)\n- rgba(255,246,233,0.15)  (3x)\n- rgba(255,189,118,0.35)  (3x)\n- rgba(255,189,118,0.07)  (2x)\n- rgba(255,246,233,1)  (2x)\n- rgba(255,189,118,0.12)  (2x)\n- rgba(10,23,29,0.7)  (1x)\n\n## Tipografia detectada\n- Inter\n- Caveat\n\n## Estrutura de seções\n- Lidi nekupují od těch, kdo tlačí.Kupují od těch, kterým věří.\n- Pozornost se dá koupit. Důvěra ne.\n- Točíte dobrý obsah. A stejně to neprodává.\n- Věříme v pravý opak.\n- Jeden systém vás přitáhne. Druhý vás rozšíří.\n- Pozornost neumíme věštit. Umíme ji číst.\n- Obsah, který se nedá odscrollovat.\n- Nejsme pro každého. A je to tak dobře.\n- Tři kroky a systém běží za vás.\n- Vaše značka si zaslouží růst, aniž by musela tlačit.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n",
+  "prompts": {
+    "integracao": "Recrie o template \"Promptless Studio Marketing Agency Template\" como uma landing page responsiva fiel ao original. Use o index.html e o DESIGN.md como fonte de verdade. Preserve layout, hierarquia visual, tipografia, espaçamento, paleta, posicionamento de imagens, gradientes, sombras, cards, navegação, estrutura de CTA, animações e direção de arte. Mantenha a ordem das seções e o estilo da copy, salvo pedido explícito de adaptação. Ao reconstruir em React, Next.js ou HTML/CSS puro, entregue código pronto para produção e mantenha a maior fidelidade visual possível em desktop e mobile.",
+    "customizacao": "Use o DESIGN.md para preservar o estilo original e adaptar marca, copy, imagens e CTAs ao novo negócio. Substitua apenas o que for necessário para o cliente. Não invente números sobre o negócio (avaliação, tempo de mercado, quantidade de clientes) — use apenas dados verificados ou omita.",
+    "design_md": "# DESIGN.md — Promptless Studio Marketing Agency Template\n\nOrigem: registry privado 77lib\nSlug: `aura-template-promptless-studio-60`\n\n## Objetivo\nA high-end, dark-themed agency landing page template focused on trust-based marketing, video content strategy, and AI-driven creative automation. Fonte: https://www.aura.build/templates/promptless-studio-60\n\n## Direção visual\n- Manter a composição original: proporções, ritmo vertical, blocos de\n  conteúdo e atmosfera.\n- Preservar hierarquia tipográfica, contraste, espaçamento, estados\n  visuais e tratamento de imagens.\n- Adaptar responsivamente sem descaracterizar o layout.\n\n## Paleta detectada\n- #ffbd76  (83x)\n- #fff6e9  (69x)\n- #0a171d  (30x)\n- rgba(255,246,233,0.08)  (10x)\n- rgba(255,246,233,0.1)  (10x)\n- #b85c3a  (8x)\n- rgba(10,23,29,0.08)  (6x)\n- rgba(255,246,233,0.02)  (6x)\n- rgba(255,246,233,0.12)  (5x)\n- #f4e9d2  (3x)\n- rgba(255,246,233,0.15)  (3x)\n- rgba(255,189,118,0.35)  (3x)\n- rgba(255,189,118,0.07)  (2x)\n- rgba(255,246,233,1)  (2x)\n- rgba(255,189,118,0.12)  (2x)\n- rgba(10,23,29,0.7)  (1x)\n\n## Tipografia detectada\n- Inter\n- Caveat\n\n## Estrutura de seções\n- Lidi nekupují od těch, kdo tlačí.Kupují od těch, kterým věří.\n- Pozornost se dá koupit. Důvěra ne.\n- Točíte dobrý obsah. A stejně to neprodává.\n- Věříme v pravý opak.\n- Jeden systém vás přitáhne. Druhý vás rozšíří.\n- Pozornost neumíme věštit. Umíme ji číst.\n- Obsah, který se nedá odscrollovat.\n- Nejsme pro každého. A je to tak dobře.\n- Tři kroky a systém běží za vás.\n- Vaše značka si zaslouží růst, aniž by musela tlačit.\n\n## Regras de implementação\n- O `index.html` do template é a fonte principal de verdade.\n- Não simplificar a identidade visual: manter imagens, gradientes, cards,\n  overlays, efeitos e ritmo da copy.\n- Ao converter para React, chegar ao resultado fiel antes de refatorar\n  em componentes.\n- Trocar apenas textos, links e imagens necessários ao novo negócio.\n- Nunca inserir número que o negócio não tenha (avaliação, anos de\n  mercado, nº de clientes). Dado não verificado não vai para o site.\n"
+  },
+  "importado_em": "2026-10-05T18:31:33"
+}
